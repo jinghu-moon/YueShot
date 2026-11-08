@@ -30,7 +30,11 @@ def select_packages(metadata, tree):
             raise RuntimeError(f'cargo tree package identity is ambiguous or unsupported: {label}')
         package = candidates[0]
         entry = selected.setdefault(package['id'], {**package, 'selected_features': set()})
-        entry['selected_features'].update(feature_text.split(',') if feature_text else [])
+        features = feature_text.split(',') if feature_text else []
+        if any(not feature or any(char.isspace() or ord(char) < 32 for char in feature)
+               for feature in features):
+            raise RuntimeError('cargo tree returned an invalid feature record')
+        entry['selected_features'].update(features)
     if not any(p['name'] == 'yue-shot' for p in selected.values()):
         raise RuntimeError('cargo tree omitted the YueShot product root')
     return [{**p, 'selected_features': sorted(p['selected_features'])}
@@ -43,6 +47,6 @@ def resolve_product(metadata=None, root=ROOT):
             'cargo', 'metadata', '--locked', '--offline', '--format-version', '1',
             '--filter-platform', TARGET], cwd=root))
     tree = subprocess.check_output([
-        'cargo', 'tree', '-p', 'yue-shot', '--locked', '--offline', '--target', TARGET,
+        'cargo', 'tree', '--color', 'never', '-p', 'yue-shot', '--locked', '--offline', '--target', TARGET,
         '-e', 'normal,build', '--prefix', 'none', '--format', '{p}|{f}'], cwd=root, text=True)
     return select_packages(metadata, tree)

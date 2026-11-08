@@ -36,6 +36,14 @@ class ProductGraphTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 select_packages({'packages': []}, tree)
 
+    def test_terminal_decorations_cannot_be_recorded_as_features(self):
+        app = Path('controlled-app').resolve()
+        metadata = {'packages': [{'id': 'app', 'name': 'yue-shot', 'version': '0.1.1',
+                                 'source': None, 'manifest_path': str(app / 'Cargo.toml')}]}
+        for features in ('std \x1b[33m(*)\x1b[0m', 'std extra', '\x1b[0m'):
+            with self.subTest(features=features), self.assertRaisesRegex(RuntimeError, 'feature'):
+                select_packages(metadata, f'yue-shot v0.1.1 ({app})|{features}\n')
+
 
 class OriginalLicenseTests(unittest.TestCase):
     def setUp(self):

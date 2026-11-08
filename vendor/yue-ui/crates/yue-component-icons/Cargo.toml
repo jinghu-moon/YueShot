@@ -1,0 +1,11 @@
+[package]
+name = "yue-component-icons"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+description = "Tabler SVG icons rendered with GPUI Kit"
+build = "build.rs"
+
+[dependencies]
+gpui-kit.workspace = true
+

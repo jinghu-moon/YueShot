@@ -1,0 +1,452 @@
+[
+  {
+    "name": "zenpixels",
+    "version": "0.2.16",
+    "commit": "640dcedf1ee3f828c66dd19c0a08f08a68da9685",
+    "url": "https://raw.githubusercontent.com/imazen/zenpixels/640dcedf1ee3f828c66dd19c0a08f08a68da9685/LICENSE-MIT",
+    "file": "tools/codec-bench/license-texts/zenpixels-0.2.16/LICENSE-MIT",
+    "sha256": "0de4ab3c18082a8d99ab08a1b3340ccd48a254049371699142e009322621f315",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "zenpixels",
+    "version": "0.2.16",
+    "commit": "640dcedf1ee3f828c66dd19c0a08f08a68da9685",
+    "url": "https://raw.githubusercontent.com/imazen/zenpixels/640dcedf1ee3f828c66dd19c0a08f08a68da9685/LICENSE-APACHE",
+    "file": "tools/codec-bench/license-texts/zenpixels-0.2.16/LICENSE-APACHE",
+    "sha256": "f83f4043677a20322cbb22a4896039c4fec5d7a5bb26a2a1cac83efce22b0a8e",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "enough",
+    "version": "0.4.5",
+    "commit": "ca2a13c48e270aba990b11d96879b7774d799c92",
+    "url": "https://raw.githubusercontent.com/imazen/enough/ca2a13c48e270aba990b11d96879b7774d799c92/LICENSE-MIT",
+    "file": "tools/codec-bench/license-texts/enough-0.4.5/LICENSE-MIT",
+    "sha256": "ffa509f359743823fe3cdba2c4dc8feee00be8f07ab299fbbe2b5a50d6ed1ecf",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "enough",
+    "version": "0.4.5",
+    "commit": "ca2a13c48e270aba990b11d96879b7774d799c92",
+    "url": "https://raw.githubusercontent.com/imazen/enough/ca2a13c48e270aba990b11d96879b7774d799c92/LICENSE-APACHE",
+    "file": "tools/codec-bench/license-texts/enough-0.4.5/LICENSE-APACHE",
+    "sha256": "870d879e82d57b10ed54a364c985f4a1483092ef44ab53a0a845e14b0dbae815",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "almost-enough",
+    "version": "0.4.5",
+    "commit": "ca2a13c48e270aba990b11d96879b7774d799c92",
+    "url": "https://raw.githubusercontent.com/imazen/enough/ca2a13c48e270aba990b11d96879b7774d799c92/LICENSE-MIT",
+    "file": "tools/codec-bench/license-texts/almost-enough-0.4.5/LICENSE-MIT",
+    "sha256": "ffa509f359743823fe3cdba2c4dc8feee00be8f07ab299fbbe2b5a50d6ed1ecf",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "almost-enough",
+    "version": "0.4.5",
+    "commit": "ca2a13c48e270aba990b11d96879b7774d799c92",
+    "url": "https://raw.githubusercontent.com/imazen/enough/ca2a13c48e270aba990b11d96879b7774d799c92/LICENSE-APACHE",
+    "file": "tools/codec-bench/license-texts/almost-enough-0.4.5/LICENSE-APACHE",
+    "sha256": "870d879e82d57b10ed54a364c985f4a1483092ef44ab53a0a845e14b0dbae815",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "profiling",
+    "version": "1.0.18",
+    "commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+    "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT",
+    "file": "tools/codec-bench/license-texts/profiling-1.0.18/LICENSE-MIT",
+    "sha256": "c8167fdeeed46d3f244d3f85c5bf998ce889343691c32be2c61a8bc4b5c08333",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "profiling",
+    "version": "1.0.18",
+    "commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+    "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE",
+    "file": "tools/codec-bench/license-texts/profiling-1.0.18/LICENSE-APACHE",
+    "sha256": "10d30a673cd5e9349bdc02aeb48f14b3386d27d0da32df8f0a555d4aa16aa551",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "profiling-procmacros",
+    "version": "1.0.18",
+    "commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+    "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-MIT",
+    "file": "tools/codec-bench/license-texts/profiling-procmacros-1.0.18/LICENSE-MIT",
+    "sha256": "c8167fdeeed46d3f244d3f85c5bf998ce889343691c32be2c61a8bc4b5c08333",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "profiling-procmacros",
+    "version": "1.0.18",
+    "commit": "8271551172eb6fa4cba47369aedd93790c623df9",
+    "url": "https://raw.githubusercontent.com/aclysma/profiling/8271551172eb6fa4cba47369aedd93790c623df9/LICENSE-APACHE",
+    "file": "tools/codec-bench/license-texts/profiling-procmacros-1.0.18/LICENSE-APACHE",
+    "sha256": "10d30a673cd5e9349bdc02aeb48f14b3386d27d0da32df8f0a555d4aa16aa551",
+    "origin": "existing codec source evidence"
+  },
+  {
+    "name": "accesskit",
+    "version": "0.24.1",
+    "commit": "a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/accesskit-0.24.1/LICENSE-APACHE",
+    "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+  },
+  {
+    "name": "accesskit",
+    "version": "0.24.1",
+    "commit": "a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/accesskit-0.24.1/LICENSE-MIT",
+    "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+  },
+  {
+    "name": "accesskit",
+    "version": "0.24.1",
+    "commit": "a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/a55d3e1a18bb9ef0e4bccc9083fb13c3e0ad8969/LICENSE.chromium",
+    "file": "tools/delivery/dependency-notices/accesskit-0.24.1/LICENSE.chromium",
+    "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308"
+  },
+  {
+    "name": "accesskit_consumer",
+    "version": "0.38.0",
+    "commit": "c88605b96d04431f9c3c792464a0f2f253480e94",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/accesskit_consumer-0.38.0/LICENSE-APACHE",
+    "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+  },
+  {
+    "name": "accesskit_consumer",
+    "version": "0.38.0",
+    "commit": "c88605b96d04431f9c3c792464a0f2f253480e94",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/accesskit_consumer-0.38.0/LICENSE-MIT",
+    "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+  },
+  {
+    "name": "accesskit_consumer",
+    "version": "0.38.0",
+    "commit": "c88605b96d04431f9c3c792464a0f2f253480e94",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE.chromium",
+    "file": "tools/delivery/dependency-notices/accesskit_consumer-0.38.0/LICENSE.chromium",
+    "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308"
+  },
+  {
+    "name": "accesskit_windows",
+    "version": "0.34.0",
+    "commit": "c88605b96d04431f9c3c792464a0f2f253480e94",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/accesskit_windows-0.34.0/LICENSE-APACHE",
+    "sha256": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a"
+  },
+  {
+    "name": "accesskit_windows",
+    "version": "0.34.0",
+    "commit": "c88605b96d04431f9c3c792464a0f2f253480e94",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/accesskit_windows-0.34.0/LICENSE-MIT",
+    "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+  },
+  {
+    "name": "accesskit_windows",
+    "version": "0.34.0",
+    "commit": "c88605b96d04431f9c3c792464a0f2f253480e94",
+    "url": "https://raw.githubusercontent.com/AccessKit/accesskit/c88605b96d04431f9c3c792464a0f2f253480e94/LICENSE.chromium",
+    "file": "tools/delivery/dependency-notices/accesskit_windows-0.34.0/LICENSE.chromium",
+    "sha256": "845022e0c1db1abb41a6ba4cd3c4b674ec290f3359d9d3c78ae558d4c0ed9308"
+  },
+  {
+    "name": "gpui-kit",
+    "version": "0.8.0",
+    "commit": "1676826d9d49b90f4d7b6808b69924f58796f6f1",
+    "url": "https://raw.githubusercontent.com/longbridge/gpui-kit/1676826d9d49b90f4d7b6808b69924f58796f6f1/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/gpui-kit-0.8.0/LICENSE-APACHE",
+    "sha256": "d1b0449e5478c574ba4f686c2656df7fe77d66821a61f8b6ed3378a58ed9a811"
+  },
+  {
+    "name": "lyon",
+    "version": "1.0.19",
+    "commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/lyon-1.0.19/LICENSE-APACHE",
+    "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06"
+  },
+  {
+    "name": "lyon",
+    "version": "1.0.19",
+    "commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/lyon-1.0.19/LICENSE-MIT",
+    "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e"
+  },
+  {
+    "name": "lyon_geom",
+    "version": "1.0.19",
+    "commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/lyon_geom-1.0.19/LICENSE-APACHE",
+    "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06"
+  },
+  {
+    "name": "lyon_geom",
+    "version": "1.0.19",
+    "commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/lyon_geom-1.0.19/LICENSE-MIT",
+    "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e"
+  },
+  {
+    "name": "lyon_path",
+    "version": "1.0.19",
+    "commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/lyon_path-1.0.19/LICENSE-APACHE",
+    "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06"
+  },
+  {
+    "name": "lyon_path",
+    "version": "1.0.19",
+    "commit": "56219c95c658d4f39de7b190d98e57d5773ba241",
+    "url": "https://raw.githubusercontent.com/nical/lyon/56219c95c658d4f39de7b190d98e57d5773ba241/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/lyon_path-1.0.19/LICENSE-MIT",
+    "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e"
+  },
+  {
+    "name": "lyon_algorithms",
+    "version": "1.0.21",
+    "commit": "994526f2766c7e9bc5bb16687232fd7e8999dbdf",
+    "url": "https://raw.githubusercontent.com/nical/lyon/994526f2766c7e9bc5bb16687232fd7e8999dbdf/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/lyon_algorithms-1.0.21/LICENSE-APACHE",
+    "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06"
+  },
+  {
+    "name": "lyon_algorithms",
+    "version": "1.0.21",
+    "commit": "994526f2766c7e9bc5bb16687232fd7e8999dbdf",
+    "url": "https://raw.githubusercontent.com/nical/lyon/994526f2766c7e9bc5bb16687232fd7e8999dbdf/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/lyon_algorithms-1.0.21/LICENSE-MIT",
+    "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e"
+  },
+  {
+    "name": "lyon_tessellation",
+    "version": "1.0.22",
+    "commit": "b456b143215a1942a617c4672776b68b9a30feee",
+    "url": "https://raw.githubusercontent.com/nical/lyon/b456b143215a1942a617c4672776b68b9a30feee/LICENSE-APACHE",
+    "file": "tools/delivery/dependency-notices/lyon_tessellation-1.0.22/LICENSE-APACHE",
+    "sha256": "216486f29671a4262efe32af6d84a75bef398127f8c5f369b5c8305983887a06"
+  },
+  {
+    "name": "lyon_tessellation",
+    "version": "1.0.22",
+    "commit": "b456b143215a1942a617c4672776b68b9a30feee",
+    "url": "https://raw.githubusercontent.com/nical/lyon/b456b143215a1942a617c4672776b68b9a30feee/LICENSE-MIT",
+    "file": "tools/delivery/dependency-notices/lyon_tessellation-1.0.22/LICENSE-MIT",
+    "sha256": "80f275e90d799911ed3830a7f242a2ef5a4ade2092fe0aa07bfb2d2cf2f2b95e"
+  },
+  {
+    "name": "pulp-wasm-simd-flag",
+    "version": "0.1.1",
+    "commit": "5eb07fd7b68edf0a5e19f71737d315f72a510295",
+    "url": "https://raw.githubusercontent.com/sarah-quinones/pulp/5eb07fd7b68edf0a5e19f71737d315f72a510295/LICENSE",
+    "file": "tools/delivery/dependency-notices/pulp-wasm-simd-flag-0.1.1/LICENSE",
+    "sha256": "d64f878c89bd5f1e5ada7e4aad57690b122727cf5229b7b87ea1980c188da1d9"
+  },
+  {
+    "name": "svg_fmt",
+    "version": "0.4.5",
+    "commit": "93f414cd572b5c2781df93dbdc068ed13443d05a",
+    "url": "https://raw.githubusercontent.com/nical/rust_debug/93f414cd572b5c2781df93dbdc068ed13443d05a/LICENSE",
+    "file": "tools/delivery/dependency-notices/svg_fmt-0.4.5/LICENSE",
+    "sha256": "7e98bed7f100747aaae7d82ab94fbe6b76fd6b84b09a3aaa413bff8196d0fbb1"
+  },
+  {
+    "name": "taffy",
+    "version": "0.13.0",
+    "commit": "45a56299d366ddb383e593a1f0372158d00e8530",
+    "url": "https://raw.githubusercontent.com/DioxusLabs/taffy/45a56299d366ddb383e593a1f0372158d00e8530/LICENSE",
+    "file": "tools/delivery/dependency-notices/taffy-0.13.0/LICENSE",
+    "sha256": "f97daf1a0124413dccf399a4e6626b4b74acd05282f80b6d64ac82225650b77a"
+  },
+  {
+    "name": "ultrahdr-core",
+    "version": "0.4.1",
+    "commit": "269061c2fda55ce219b27c5e6df89628c35e4e76",
+    "url": "https://raw.githubusercontent.com/imazen/ultrahdr/269061c2fda55ce219b27c5e6df89628c35e4e76/LICENSE",
+    "file": "tools/delivery/dependency-notices/ultrahdr-core-0.4.1/LICENSE",
+    "sha256": "5606c88619560255d815cfee3e932b06254ed98ed31fe9278c90f78660914e63"
+  },
+  {
+    "name": "zenwebp",
+    "version": "0.4.4",
+    "commit": "d7c8336b2ec69823e29d04e47f006cd30c0de8cd",
+    "url": "https://raw.githubusercontent.com/imazen/zenwebp/d7c8336b2ec69823e29d04e47f006cd30c0de8cd/LICENSE-AGPL3",
+    "file": "tools/delivery/dependency-notices/zenwebp-0.4.4/LICENSE-AGPL3",
+    "sha256": "5cd8b729dc3d04c903e51393d1c202ad4df115f77c271a32f8b656a2e7a65d6a"
+  },
+  {
+    "name": "zenwebp",
+    "version": "0.4.4",
+    "commit": "d7c8336b2ec69823e29d04e47f006cd30c0de8cd",
+    "url": "https://raw.githubusercontent.com/imazen/zenwebp/d7c8336b2ec69823e29d04e47f006cd30c0de8cd/LICENSE-COMMERCIAL",
+    "file": "tools/delivery/dependency-notices/zenwebp-0.4.4/LICENSE-COMMERCIAL",
+    "sha256": "24867264b7d3cd9b70114667486717a47f184bb09d4786a6bf9a69eab068d8d9"
+  },
+  {
+    "name": "zenjpeg",
+    "version": "0.8.4",
+    "commit": "c6b940bacb3a3797b7e287d11a13fb17c6e1d689",
+    "url": "https://raw.githubusercontent.com/imazen/zenjpeg/c6b940bacb3a3797b7e287d11a13fb17c6e1d689/LICENSE-AGPL3",
+    "file": "tools/delivery/dependency-notices/zenjpeg-0.8.4/LICENSE-AGPL3",
+    "sha256": "5cd8b729dc3d04c903e51393d1c202ad4df115f77c271a32f8b656a2e7a65d6a",
+    "source_files_identical_at_license_commit": {
+      "src/lib.rs": "64dee862699b33e77dd5faa92b99e9e208e72e1d10833abb71b3fb3193c4ae06"
+    }
+  },
+  {
+    "name": "zenjpeg",
+    "version": "0.8.4",
+    "commit": "c6b940bacb3a3797b7e287d11a13fb17c6e1d689",
+    "url": "https://raw.githubusercontent.com/imazen/zenjpeg/c6b940bacb3a3797b7e287d11a13fb17c6e1d689/LICENSE-COMMERCIAL",
+    "file": "tools/delivery/dependency-notices/zenjpeg-0.8.4/LICENSE-COMMERCIAL",
+    "sha256": "24867264b7d3cd9b70114667486717a47f184bb09d4786a6bf9a69eab068d8d9",
+    "source_files_identical_at_license_commit": {
+      "src/lib.rs": "64dee862699b33e77dd5faa92b99e9e208e72e1d10833abb71b3fb3193c4ae06"
+    }
+  },
+  {
+    "name": "zune-inflate",
+    "version": "0.2.54",
+    "commit": "69502ce83fdfecdd0beefd677e2abb3781b29d98",
+    "url": "https://raw.githubusercontent.com/etemesi254/zune-image/69502ce83fdfecdd0beefd677e2abb3781b29d98/LICENSE-ZLIB",
+    "file": "tools/delivery/dependency-notices/zune-inflate-0.2.54/LICENSE-ZLIB",
+    "sha256": "7fa429541e55b1509909e058f2d21a37467e4958ec713b357f6e0cf9dc4ee352"
+  },
+  {
+    "name": "zune-inflate",
+    "version": "0.2.54",
+    "commit": "69502ce83fdfecdd0beefd677e2abb3781b29d98",
+    "url": "https://raw.githubusercontent.com/etemesi254/zune-image/69502ce83fdfecdd0beefd677e2abb3781b29d98/LICENSE.md",
+    "file": "tools/delivery/dependency-notices/zune-inflate-0.2.54/LICENSE.md",
+    "sha256": "e870d7fd7819a9f0453c62798cb52ae95d148a8c91dc2de1d983f997143c72de"
+  },
+  {
+    "name": "mac",
+    "version": "0.1.1",
+    "evidenceType": "downstream-curated",
+    "license": "MIT or Apache-2.0",
+    "copyrightFile": "tools/delivery/dependency-notices/mac-0.1.1/DEBIAN-COPYRIGHT.txt",
+    "copyrightSha256": "0AC68658A0B05DA7A618A2362C6472381BEC6A4F91D2A1CD9501CF34FE41118B",
+    "copyrightUrl": "https://sources.debian.org/src/rust-mac/0.1.1-1/debian/copyright/",
+    "sourceArchive": {
+      "file": "tools/delivery/dependency-notices/source-archives/rust-mac_0.1.1.orig.tar.gz",
+      "sha256": "6a1db0ca69b5680b99b58c8cb39421999ce7de52266f47ac56afe5acbca49199",
+      "url": "https://deb.debian.org/debian/pool/main/r/rust-mac/rust-mac_0.1.1.orig.tar.gz",
+      "expectedDifferences": {
+        "mismatched": [
+          "Cargo.toml"
+        ],
+        "missing": [],
+        "extra": [
+          "Cargo.toml.orig"
+        ]
+      }
+    },
+    "licenseTexts": [
+      {
+        "file": "tools/delivery/dependency-notices/Apache-2.0.txt",
+        "sha256": "074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff",
+        "commit": "60e0de29cbcf3e83bf9d5e299972a1969516d918",
+        "url": "https://github.com/spdx/license-list-data/blob/60e0de29cbcf3e83bf9d5e299972a1969516d918/text/Apache-2.0.txt"
+      },
+      {
+        "file": "tools/delivery/dependency-notices/MIT.txt",
+        "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+        "commit": "60e0de29cbcf3e83bf9d5e299972a1969516d918",
+        "url": "https://github.com/spdx/license-list-data/blob/60e0de29cbcf3e83bf9d5e299972a1969516d918/text/MIT.txt"
+      }
+    ]
+  },
+  {
+    "name": "seahash",
+    "version": "4.1.0",
+    "evidenceType": "downstream-curated",
+    "license": "MIT",
+    "copyrightFile": "tools/delivery/dependency-notices/seahash-4.1.0/UBUNTU-COPYRIGHT.txt",
+    "copyrightSha256": "268296361F3EC03E3DFB8A893C35318226119C818F5E8B7866D209E24BEDA60F",
+    "copyrightUrl": "https://sources.debian.org/src/rust-seahash/4.1.0-1/debian/copyright/",
+    "sourceArchive": {
+      "file": "tools/delivery/dependency-notices/source-archives/rust-seahash_4.1.0.orig.tar.gz",
+      "sha256": "1c107b6f4780854c8b126e228ea8869f4d7b71260f962fefb57b996b8959ba6b",
+      "url": "https://deb.debian.org/debian/pool/main/r/rust-seahash/rust-seahash_4.1.0.orig.tar.gz",
+      "expectedDifferences": {
+        "mismatched": [],
+        "missing": [],
+        "extra": []
+      }
+    },
+    "licenseTexts": [
+      {
+        "file": "tools/delivery/dependency-notices/MIT.txt",
+        "sha256": "b05785f9f18e6716bab63424b11454513b9943a222595b70411009202fc592b5",
+        "commit": "60e0de29cbcf3e83bf9d5e299972a1969516d918",
+        "url": "https://github.com/spdx/license-list-data/blob/60e0de29cbcf3e83bf9d5e299972a1969516d918/text/MIT.txt"
+      }
+    ]
+  },
+  {
+    "name": "vswhom-sys",
+    "version": "0.1.3",
+    "evidenceType": "source-header",
+    "sourceFile": "ext/vswhom.cpp",
+    "sourceSha256": "b25ba082c54a9546ed1f20c63105bf189e18c6fa3a7d0ae6c57dad41ca099166",
+    "byteRange": [
+      0,
+      300
+    ],
+    "sha256": "6b4a34cd118c87cdde40d3c22f7939275ce920ce8b78e926da136c5c544b2a72",
+    "review": "Original native attribution/public-domain declaration retained verbatim from the checksummed published crate; not a synthesized license."
+  },
+  {
+    "name": "libsqlite3-sys",
+    "version": "0.30.1",
+    "evidenceType": "source-header",
+    "sourceFile": "sqlite3/sqlite3.c",
+    "sourceSha256": "c01235302fe80da901fb70c7622c39147e29d9f29b7f6eb746b23517f320c90d",
+    "byteRange": [
+      1541,
+      1967
+    ],
+    "sha256": "39fc4986b224f2f5575dec58ae66c7c9ee2d5d3884ba4971c932f1fd5b40b033",
+    "review": "Original native attribution/public-domain declaration retained verbatim from the checksummed published crate; not a synthesized license."
+  },
+  {
+    "name": "gpui-pre-windows",
+    "version": "0.3.9",
+    "commit": "7cb76fce2f52de818b3da497af646af1ec16ce27",
+    "url": "https://raw.githubusercontent.com/NVIDIA/nvapi/7cb76fce2f52de818b3da497af646af1ec16ce27/nvapi_lite_common.h",
+    "file": "tools/delivery/dependency-notices/gpui-pre-windows/NVIDIA-NVAPI-MIT.txt",
+    "sha256": "8ff6b7758f46f33172eb18235ee5e80344051bc418adc071ebcf7b3b019d98c1",
+    "origin": "Pinned upstream API header attribution: GPUI driver-version FFI declarations reference this upstream commit; no GPU driver DLL is bundled.",
+    "evidenceType": "referenced-api-notice",
+    "implementationFile": "src/directx_renderer.rs",
+    "implementationSha256": "883d3c1939b670f5dd47ede9a85af1b01ab4c89ce6e3c48697b9cf7555bf04be"
+  },
+  {
+    "name": "gpui-pre-windows",
+    "version": "0.3.9",
+    "commit": "5d8812d703d0335741b6f7ffc37838eeb8b967f7",
+    "url": "https://raw.githubusercontent.com/GPUOpen-LibrariesAndSDKs/AGS_SDK/5d8812d703d0335741b6f7ffc37838eeb8b967f7/LICENSE.txt",
+    "file": "tools/delivery/dependency-notices/gpui-pre-windows/AMD-AGS-MIT.txt",
+    "sha256": "23a6e8fc35de67d8c703134a6539736317438a5d9f90ab9ca9d04236ebf6ac81",
+    "origin": "Pinned upstream API header attribution: GPUI driver-version FFI declarations reference this upstream commit; no GPU driver DLL is bundled.",
+    "evidenceType": "referenced-api-notice",
+    "implementationFile": "src/directx_renderer.rs",
+    "implementationSha256": "883d3c1939b670f5dd47ede9a85af1b01ab4c89ce6e3c48697b9cf7555bf04be"
+  }
+]

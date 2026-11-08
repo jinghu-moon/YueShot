@@ -1,0 +1,44 @@
+name: YueShot Windows
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.98.1
+          components: clippy, rustfmt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/delivery/package-lock.json
+      - run: npm ci --prefix tools/delivery
+      - run: cargo install cargo-deny --version 0.20.2 --locked
+      - run: cargo install cargo-audit --version 0.22.1 --locked
+      - run: cargo xtask check
+      - run: python tools/yueshot_security.py --output target/yueshot-security
+      - run: cargo xtask package --profile release
+      - name: Smoke test the installed payload
+        run: |
+          $candidates = @(Get-ChildItem target/yueshot-delivery -Directory -Filter '*-release')
+          if ($candidates.Count -ne 1) { throw 'Expected one release candidate in this clean job.' }
+          ./tools/test-yueshot-install.ps1 -Candidate $candidates[0].FullName
+          ./tools/test-yueshot-installer-policy.ps1 -Candidate $candidates[0].FullName
+          ./tools/test-yueshot-channel-install.ps1 -Candidate $candidates[0].FullName
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yueshot-unsigned-windows-x64-candidate
+          path: target/yueshot-delivery
+          if-no-files-found: error
+          retention-days: 14

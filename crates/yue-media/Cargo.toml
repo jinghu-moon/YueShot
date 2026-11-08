@@ -1,0 +1,15 @@
+[package]
+name = "yue-media"
+version = "0.1.0"
+description = "Validated pixel buffers, image dimensions and explicit color transforms for Yue Windows apps"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+
+[dependencies]
+half = { version = "2.7", default-features = false, features = ["std"] }
+serde = { version = "1", features = ["derive"] }
+yue-color = { path = "../../vendor/yue-ui/crates/yue-color" }
+
+[dev-dependencies]
+serde_json = "1"

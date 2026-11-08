@@ -1,0 +1,104 @@
+[package]
+name = "yue-component"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+description = "Yue design system components for GPUI Kit"
+
+[dependencies]
+yue-color = { path = "../yue-color" }
+gpui-kit.workspace = true
+# Only for `LineCap` / `LineJoin`, which GPUI does not re-export from its own
+# path builder. Switch glyphs stroke their icon paths, so they need round caps.
+lyon.workspace = true
+yue-component-icons.workspace = true
+# Static raster preparation, shared with GPUI's locked image version. I/O stays
+# with the host; no default AVIF/video/animation codecs are added here.
+image = { version = "0.25.10", default-features = false, features = ["png", "jpeg", "webp", "bmp"] }
+png = "0.18.1"
+moxcms = { version = "0.8.1", features = ["extended_range"] }
+half = { version = "2.7.1", default-features = false, features = ["std"] }
+# Headless tests use Base observations directly. This now composes with every
+# workspace member (all consumers are Base-only). Keep instrumentation opt-in.
+# Kit's test-support also enables the optional Fast backend with conflicting pins.
+gpui-base = { version = "0.8.0", optional = true, features = ["test-support"] }
+
+[target.'cfg(windows)'.dev-dependencies]
+windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_Devices_Display", "Win32_Graphics_Dxgi_Common", "Win32_Graphics_Gdi"] }
+
+[features]
+default = []
+headless-tests = ["dep:gpui-base"]
+
+[[test]]
+name = "controls"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "input"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "field"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "radio"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "checkbox"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "dropdown"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "segmented"
+required-features = ["headless-tests"]
+
+
+[[test]]
+name = "color_picker"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "link"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "slider"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "tag"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "tabs"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "loading"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "collapse"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "image_preview"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "virtual_list"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "list"
+required-features = ["headless-tests"]
+
+[[test]]
+name = "list_grid"
+required-features = ["headless-tests"]

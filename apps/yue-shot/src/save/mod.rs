@@ -1,0 +1,26 @@
+//! Saving a finished capture to the user's disk (`docs/41` S1).
+//!
+//! The save step is deliberately **dumb**: capture produces exactly one lossless PNG master,
+//! and saving either copies it (PNG) or hands it to the transcoder for another format. Nothing
+//! here knows how to capture, and nothing here decides what the panel shows.
+//!
+//! The path rules (validation, template expansion, conflict) are separate from the bytes,
+//! because a changed name must not force a re-encode (`docs/42` D9).
+
+pub mod assemble;
+#[cfg(feature = "avif")]
+pub(crate) mod avif;
+pub mod bands;
+pub mod caps;
+pub mod copy;
+// Where the path field points before the user says otherwise. It is the shell's answer to
+// "where is the desktop", so it lives beside the panel that shows it rather than in the UI crate,
+// which must not ask Windows anything a drawing cannot explain.
+pub mod dirs;
+// What a save would weigh and how to make it fit. The policy lives here; the measurement itself
+// is `assemble::weigh`, because only that module knows how a save builds its bytes.
+pub mod estimate;
+pub mod scale;
+pub mod service;
+pub mod template;
+pub mod transcode;

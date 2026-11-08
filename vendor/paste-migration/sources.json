@@ -1,0 +1,38 @@
+[
+  {
+    "name": "pulp",
+    "version": "0.22.3",
+    "sourceArchive": "vendor/paste-migration/archives/pulp-0.22.3.crate",
+    "sourceArchiveSha256": "046aa45b989642ec2e4717c8e72d677b13edd831a4d3b6cf37d9a3e54912496a",
+    "directory": "vendor/pulp",
+    "upstreamMigration": "https://github.com/sarah-quinones/pulp/commit/601de0c071ba32df3fd7ff33fc4218c9bd712aba",
+    "replacements": {
+      "Cargo.toml": [
+        "[dependencies.paste]\nversion = \"1\"",
+        "[dependencies.paste]\nversion = \"=0.2.3\"\npackage = \"pastey\""
+      ],
+      "Cargo.toml.orig": [
+        "paste = \"1\"",
+        "paste = { package = \"pastey\", version = \"=0.2.3\" }"
+      ]
+    }
+  },
+  {
+    "name": "garb",
+    "version": "0.2.8",
+    "sourceArchive": "vendor/paste-migration/archives/garb-0.2.8.crate",
+    "sourceArchiveSha256": "8b968bb36272be4662f264fd123e96915e7dd51c8ca529c2d35f621817ff4207",
+    "directory": "vendor/garb",
+    "upstreamMigration": "https://github.com/imazen/garb/commit/7356e8f17776bf408b73bb958982e79aa2b9cac1",
+    "replacements": {
+      "Cargo.toml": [
+        "[dependencies.paste]\nversion = \"1.0.15\"",
+        "[dependencies.paste]\nversion = \"=0.2.3\"\npackage = \"pastey\""
+      ],
+      "Cargo.toml.orig": [
+        "paste = { version = \"1.0.15\", optional = true }",
+        "paste = { package = \"pastey\", version = \"=0.2.3\", optional = true }"
+      ]
+    }
+  }
+]

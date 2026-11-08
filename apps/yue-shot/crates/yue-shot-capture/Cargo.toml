@@ -1,0 +1,99 @@
+[package]
+name = "yue-shot-capture"
+version = "0.1.0"
+description = "Windows screenshot capture for YueShot: providers, overlay and selection state machine"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+
+# Measurement only: exposes `scroll::probe`, which lets `tools/codec-bench --scroll` drive the real
+# stitcher without a window (docs/34 §12). Off by default, and nothing in the product enables it.
+[features]
+test-support = []
+# Development qualification only. Default/product builds still request SDR.
+# Advanced Color acquisition never silently falls back to eight-bit BitBlt.
+hdr-capture = []
+# Development only: `SEAL_FAULT_AT=<n>` makes the nth seal of a scroll capture fail the way a full
+# disk would, so the `Storage` path can be walked in a release build without filling a disk
+# (docs/35 §19). Off by default, and nothing in the product enables it.
+seal-faults = []
+
+[dependencies]
+log = "0.4"
+yue-shot-model = { path = "../yue-shot-model" }
+yue-media = { path = "../../../../crates/yue-media" }
+yue-shot-overlay-ui = { path = "../yue-shot-overlay-ui" }
+blake3 = "1.5"
+half = "2.7"
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+
+# The crate is Windows-only by construction (WGC/D3D11/D2D/WinRT OCR of the screen,
+# UIA/MSAA window detection, `RegisterHotKey`). The CI and the workspace still build on
+# this machine only; `#![cfg(windows)]` in lib.rs states it explicitly instead of
+# letting a non-Windows build fail with a hundred unrelated errors.
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.61", features = [
+  "Foundation",
+  "Foundation_Numerics",
+  "Graphics_Capture",
+  "Graphics_DirectX",
+  "Graphics_DirectX_Direct3D11",
+  "Graphics_Imaging",
+  "Storage",
+  "Storage_Streams",
+  "Win32_Devices_Display",
+  "Win32_Graphics_Direct2D",
+  "Win32_Graphics_Direct2D_Common",
+  "Win32_Graphics_Direct3D",
+  "Win32_Graphics_Direct3D11",
+  "Win32_Graphics_DirectComposition",
+  "Win32_Graphics_DirectWrite",
+  "Win32_Graphics_Dwm",
+  "Win32_Graphics_Dxgi",
+  "Win32_Graphics_Dxgi_Common",
+  "Win32_Graphics_Gdi",
+  "Win32_Graphics_Imaging",
+  "Win32_Security",
+  "Win32_System_Com",
+  "Win32_System_LibraryLoader",
+  "Win32_System_Threading",
+  "Win32_System_Variant",
+  "Win32_System_Ole",
+  "Win32_System_Com",
+  "Win32_System_Performance",
+  "Win32_System_WinRT",
+  "Win32_System_WinRT_Direct3D11",
+  "Win32_System_WinRT_Graphics_Capture",
+  "Win32_UI_Accessibility",
+  "Win32_UI_Controls",
+  "Win32_UI_HiDpi",
+  "Win32_UI_Input_Ime",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_UI_WindowsAndMessaging",
+] }
+windows-sys = { version = "0.59", features = [
+  "Win32_Foundation",
+  "Win32_Graphics_Gdi",
+  "Win32_Storage_FileSystem",
+  "Win32_System_DataExchange",
+  "Win32_System_Com",
+  "Win32_System_LibraryLoader",
+  "Win32_System_Memory",
+  "Win32_System_Ole",
+  "Win32_System_Threading",
+  "Win32_UI_Controls",
+  "Win32_UI_HiDpi",
+  "Win32_UI_Input_Ime",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_UI_Shell",
+  "Win32_UI_WindowsAndMessaging",
+] }
+# `windows` 0.61 hands Direct2D geometry to and from this crate but does not
+# re-export it, so it has to be a direct dependency to name `Vector2`.
+windows-numerics = "0.2"
+
+[dev-dependencies]
+# Test-only: two test modules parse/serialise JSON (annotation round-trips, the UIA
+# probe's fixture payloads). The crate itself does not depend on a JSON library.
+serde_json = "1"

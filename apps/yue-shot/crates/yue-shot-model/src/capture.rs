@@ -1,0 +1,161 @@
+//! The capture domain: what a finished screenshot session produces, and the frozen
+//! state names it reports while it runs.
+//!
+//! These values are what the capture crate hands to the rest of the process. They are
+//! deliberately free of clipboard handles, database handles, GPU resources and Tauri
+//! types, so they can live here beside the other shared value objects.
+
+/// Lifecycle of one capture session.
+///
+/// The value set is the frozen Phase 0 contract from
+/// `docs/11-screenshot-fullflow-ui-refactor-tasklist.md` §2.2:
+/// Idle → Preparing → Armed → Selecting → Selected → Annotating → Exporting → Idle.
+/// `Annotating` is emitted once its phase introduces it. `Exporting` is entered when a
+/// selection is confirmed and covers the region readback on the overlay thread plus the
+/// encode/write on the export worker.
+///
+/// `Adjusting` used to sit between `Selected` and `Annotating`. Nothing could reach it, so it
+/// was deleted (`docs/30` §33.1 `D-2`, task `P6.03`): a declared state with no producer is a
+/// liability, because every guard over this enum then has to be read as "and not the one that
+/// cannot happen anyway".
+#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CaptureState {
+    Idle,
+    Preparing,
+    Armed,
+    Selecting,
+    Selected,
+    Annotating,
+    Exporting,
+}
+
+impl CaptureState {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Idle => "idle",
+            Self::Preparing => "preparing",
+            Self::Armed => "armed",
+            Self::Selecting => "selecting",
+            Self::Selected => "selected",
+            Self::Annotating => "annotating",
+            Self::Exporting => "exporting",
+        }
+    }
+
+    /// Whether a session owns resources that still have to be released.
+    ///
+    /// `Exporting` is active even though the overlay has stopped painting: the frozen
+    /// frame and the artifact are still owned by the session until the result lands.
+    pub fn is_active(self) -> bool {
+        self != Self::Idle
+    }
+}
+
+/// How the captured pixels are handed to the application layer.
+///
+/// SDR may be stored losslessly as PNG8. High-precision captures use a source-format
+/// pixel master; PNG/HDR PNG are derived exports. Neither payload retains a GPU object.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CapturePayload {
+    /// Absolute path to a PNG file inside the application artifact directory.
+    PngFile { path: std::path::PathBuf },
+    /// Lossless source-format pixel master; exported images are derived artifacts.
+    PixelMaster { reference: crate::ArtifactRef },
+}
+
+/// Domain result of a finished capture session.
+///
+/// Deliberately free of clipboard handles, database handles, OCR objects and Tauri
+/// types: consumers in the application layer decide what to do with it.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CaptureArtifact {
+    pub session_id: String,
+    pub width: u32,
+    pub height: u32,
+    pub dpi: u32,
+    pub source: yue_media::pixels::PixelSource,
+    pub captured_at_unix_ms: i64,
+    pub monitor_device_name: Option<String>,
+    pub payload: CapturePayload,
+}
+
+impl CaptureArtifact {
+    pub fn artifact_path(&self) -> &std::path::Path {
+        match &self.payload {
+            CapturePayload::PngFile { path } => path,
+            CapturePayload::PixelMaster { reference } => &reference.absolute_path,
+        }
+    }
+    pub fn png_path(&self) -> Option<&std::path::Path> {
+        match &self.payload {
+            CapturePayload::PngFile { path } => Some(path.as_path()),
+            CapturePayload::PixelMaster { .. } => None,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{CaptureArtifact, CapturePayload, CaptureState};
+    use yue_media::pixels::{PixelDescriptor, PixelSource};
+
+    #[test]
+    fn capture_state_reports_activity() {
+        assert!(!CaptureState::Idle.is_active());
+        for state in [
+            CaptureState::Preparing,
+            CaptureState::Armed,
+            CaptureState::Selecting,
+            CaptureState::Selected,
+            CaptureState::Annotating,
+            CaptureState::Exporting,
+        ] {
+            assert!(state.is_active(), "{state:?} should be active");
+        }
+    }
+
+    #[test]
+    fn artifact_serializes_without_clipboard_or_store_objects() {
+        // Compile-time guarantee: `CaptureArtifact` must be constructible from
+        // primitives and a file path alone, with no store/clipboard/OCR handle.
+        let artifact = CaptureArtifact {
+            session_id: "session-1".into(),
+            width: 100,
+            height: 50,
+            dpi: 96,
+            source: PixelSource::new(PixelDescriptor::bgra8(), 0),
+            captured_at_unix_ms: 7,
+            monitor_device_name: None,
+            payload: CapturePayload::PngFile {
+                path: std::path::PathBuf::from(r"C:\artifacts\session-1.png"),
+            },
+        };
+        assert_eq!(artifact.width * artifact.height, 5000);
+        assert!(artifact.png_path().is_some());
+    }
+
+    /// The front end and the stored rows both key off these strings, so they are part
+    /// of the contract: `docs/11` §2.2 froze the state names, and `as_str` is what the
+    /// store writes.
+    #[test]
+    fn capture_state_names_are_the_frozen_contract_strings() {
+        let states = [
+            (CaptureState::Idle, "idle"),
+            (CaptureState::Preparing, "preparing"),
+            (CaptureState::Armed, "armed"),
+            (CaptureState::Selecting, "selecting"),
+            (CaptureState::Selected, "selected"),
+            (CaptureState::Annotating, "annotating"),
+            (CaptureState::Exporting, "exporting"),
+        ];
+        for (state, name) in states {
+            assert_eq!(state.as_str(), name);
+            // …and the serde spelling matches, which is what crosses the IPC boundary.
+            assert_eq!(
+                serde_json::to_value(state).unwrap(),
+                serde_json::Value::String(name.to_string())
+            );
+        }
+    }
+}

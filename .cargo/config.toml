@@ -1,0 +1,4 @@
+[alias]
+xtask = "run -p xtask --"
+dev = "run -p yue-shot"
+dev-release = "run -p yue-shot --release"

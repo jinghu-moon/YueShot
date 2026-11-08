@@ -1,0 +1,39 @@
+[package]
+name = "yue-pin"
+version = "0.1.0"
+description = "Shared Windows pin-window presentation"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+
+[dependencies]
+yue-pin-model = { path = "../yue-pin-model" }
+anyhow = "1"
+gpui-kit = { version = "0.8", default-features = false, features = ["assets"] }
+yue-component = { path = "../../vendor/yue-ui/crates/yue-component", default-features = false }
+async-channel = "2.5"
+raw-window-handle = "0.6"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "bmp"] }
+half = { version = "2.7", default-features = false, features = ["std"] }
+yue-geometry = { path = "../yue-geometry" }
+yue-media = { path = "../yue-media" }
+yue-avif = { path = "../yue-avif", optional = true }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Shell",
+    "Win32_Graphics_Dwm",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[dev-dependencies]
+# PQ/cICP fixtures exercise the same PNG decoding route as production.
+png = "0.18"
+
+[features]
+headless-tests = ["gpui-kit/test-support"]
+avif = ["dep:yue-avif"]

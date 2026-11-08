@@ -1,0 +1,98 @@
+[package]
+name = "codec-bench"
+version = "0.1.0"
+description = "Measures PNG, JPEG and WebP encoders on synthetic screenshot material (docs/34 §10)"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+
+# Development-time only: no product crate depends on any of this. The point of the crate is to
+# decide **which** encoder earns a place in `apps/snapclip`, so the codecs live here first and the
+# product's Cargo.toml stays untouched until a measurement says otherwise.
+#
+# Two pins are deliberate:
+#   * `zenjpeg` default features are `decoder` + `yuv` and do **not** include `trellis`, so the
+#     feature list says so explicitly (crates.io metadata, docs/34 §9).
+#   * `zenwebp 0.4.5` is yanked, so the version is `=0.4.4`.
+[dependencies]
+# `decoder` is needed by the quality run: JPEG is lossy, so its output has to be decoded before
+# SSIM/PSNR can be computed against the lossless PNG the same asset produced (docs/34 §11).
+zenjpeg = { version = "=0.8.4", default-features = false, features = ["trellis", "decoder"] }
+mozjpeg-rs = { version = "=0.9.2", default-features = false }
+zenwebp = "=0.4.4"
+png = "0.18.1"
+# Independent JPEG decoder for the `optimize_huffman` A/B: decoding with the encoding library
+# alone would let a bug mirror itself (docs/34 §14).
+image = { version = "0.25", default-features = false, features = ["jpeg"] }
+# zenjpeg re-exports `Stop` but not `Unstoppable`; the decoder asks for `impl Stop`.
+enough = "0.4.5"
+# The scroll pipeline is measured through the real tracker, not a copy of it, so the bench depends
+# on the capture crate with its `test-support` feature. The dependency only goes this way: nothing
+# in the product ever depends on the bench or on its codec dependencies.
+yue-shot-capture = { path = "../../apps/yue-shot/crates/yue-shot-capture", features = ["test-support"] }
+yue-media = { path = "../../crates/yue-media" }
+
+# The attribution run reports the process working set next to the counting allocator's peak: the
+# first is what the process held, the second is what the code asked for, and their gap is the
+# allocator's retention. Both versions are already in the workspace lock through the capture crate,
+# so this adds no new download.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+  "Win32_Foundation",
+  "Win32_System_ProcessStatus",
+  "Win32_System_Threading",
+] }
+miniz_oxide = "0.9"
+
+[features]
+avif-asm = ["hdr-avif-probe", "yue-avif/asm"]
+# Qualification only. The application and MIT Yue library do not enable this.
+hdr-avif-probe = ["dep:zenavif", "dep:zenavif-parse", "dep:zenavif-serialize", "dep:imgref", "dep:rgb", "dep:almost-enough", "dep:moxcms", "dep:yue-shot-model", "dep:yue-shot-storage", "dep:yue-avif"]
+
+[dependencies.yue-avif]
+path = "../../crates/yue-avif"
+optional = true
+default-features = false
+
+[dependencies.yue-shot-model]
+path = "../../apps/yue-shot/crates/yue-shot-model"
+optional = true
+
+[dependencies.yue-shot-storage]
+path = "../../apps/yue-shot/crates/yue-shot-storage"
+optional = true
+
+[dependencies.zenavif-parse]
+version = "=0.6.2"
+optional = true
+
+[dependencies.zenavif-serialize]
+version = "=0.1.4"
+optional = true
+
+[dependencies.zenavif]
+version = "=0.1.6"
+default-features = false
+features = ["encode"]
+optional = true
+
+[dependencies.imgref]
+version = "1.12"
+optional = true
+
+[dependencies.rgb]
+version = "0.8"
+optional = true
+
+[dependencies.almost-enough]
+version = "0.4.5"
+optional = true
+
+[dependencies.moxcms]
+version = "=0.8.1"
+optional = true
+
+[[bin]]
+name = "hdr-avif-probe"
+path = "src/bin/hdr_avif_probe.rs"
+required-features = ["hdr-avif-probe"]

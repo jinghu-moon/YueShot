@@ -1,0 +1,65 @@
+//! Native screenshot capture: hotkey, overlay window, frame providers, window
+//! detection and the selection state machine.
+//!
+//! # Independent by construction
+//!
+//! This crate is deliberately free of everything that is not capture: no clipboard,
+//! no SQLite, no OCR, no Tauri, no GPUI. It produces exactly one domain result —
+//! [`CaptureArtifact`] — and talks to the rest of the process through the traits in
+//! [`ports`], which the composition root implements. `cargo tree -p yue-shot-capture`
+//! must never show `tauri`, `wry` or `gpui-kit`; `tools/check-dependency-direction.ps1`
+//! is the gate that holds it (docs/31 §4.2).
+//!
+//! # Seam (what is public API)
+//!
+//! Public and stable (once the move lands): the error type (`CaptureError` /
+//! `CaptureResult`), the domain values (`CaptureArtifact`, `CapturePayload`,
+//! `CaptureState` and geometry value objects re-exported from `yue-shot-model`,
+//! `PixelFormat` from `yue-media`, the ports in `ports`, `CaptureRuntime`, and the artifact service
+//! in `artifact`.
+//!
+//! **Not** public API: painter internals (render views, frame state, ring options),
+//! the window-decision state machine's internals, and anything under `windows` other
+//! than the concrete overlay the composition root constructs. Keep it that way: every
+//! type that crosses the seam has to be justified, and `pub` fields are not allowed on
+//! seam types (docs/22 §10.1).
+//!
+#![cfg(windows)]
+
+pub mod annotation;
+pub mod artifact;
+pub mod diagnostics;
+pub mod error;
+pub mod events;
+pub mod geometry;
+pub mod keymap;
+pub mod monitor_cache;
+// Shared font resources belong to yue-shot-overlay-ui, alongside the other native UI primitives.
+pub mod ports;
+pub mod preferences;
+// The custom-region panel's values and rules: four numbers, a unit, a delay, and the three things
+// the size badge can show. Pure — the window and the drawing are in `windows::overlay`.
+pub mod region;
+pub mod ring_contrast;
+pub mod runtime;
+pub mod sampler;
+pub mod save_format;
+// Scroll capture's pure half (`docs/33`); the capture thread is `windows::scroll_worker`. Nothing
+// under `scroll/` references `windows`.
+pub mod scroll;
+pub mod session;
+// The length unit the overlay's size/coordinate readouts are measured in.
+pub mod units;
+pub mod window_detection;
+pub mod windows;
+
+pub use artifact::{CaptureService, PixelSliceSource, SelectionPixels};
+pub use error::{CaptureError, CaptureResult};
+pub use ports::{ArtifactWriter, CaptureEventSink, ClipboardWriter, OverlayPlatform};
+pub use runtime::CaptureRuntime;
+
+pub use yue_media::ImageDimensions;
+pub use yue_media::PixelFormat;
+pub use yue_shot_model::capture::{CaptureArtifact, CapturePayload, CaptureState};
+pub use yue_shot_model::error::ErrorCode;
+pub use yue_shot_model::geometry::{Point, Rect};

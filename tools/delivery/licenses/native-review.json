@@ -1,0 +1,128 @@
+{
+  "format": 1,
+  "reviewDate": "2026-11-08",
+  "scope": "Default Windows x64 product native/build-source review; not AVIF/HDR extras or native vulnerability clearance",
+  "reviewedPackages": [
+    {
+      "name": "blake3",
+      "version": "1.8.7",
+      "sourceArchiveSha256": "6d9e454fc11f76977dc803893aff6304ed33d6a26efae8696573bea74baa27ae",
+      "licenseReview": "Apache-2.0",
+      "scope": "Runtime SIMD assembly; no pure/prefer_intrinsics feature in current product.",
+      "selectedFeatures": [
+        "default",
+        "std"
+      ],
+      "files": {
+        "c/blake3.c": "b118ddf7cf9e6e5ef3fded72dcb1acf9dfdc4ea923cbe4605900ad6ee9afe1af",
+        "c/blake3.h": "81bbb11ad1909341565dce4914cc0e5c29718eca27e6950b28f9226a91aaf8c5",
+        "c/blake3_avx2.c": "8b3516a8e42d981a9868ef670b1698f6d10207283086bd810b11cdaac1aca8f1",
+        "c/blake3_avx2_x86-64_unix.S": "a2d95519fd9845cf80252110e21a93124e81c03da836eaac0bca0537be4f8324",
+        "c/blake3_avx2_x86-64_windows_gnu.S": "c5b5e561f8fbbd252492a52f9a09da8e9e99a6ecccb88e2d1bfa2ebc7961f425",
+        "c/blake3_avx2_x86-64_windows_msvc.asm": "2aad514ac8fb748accc8c0c0426606c91e6d404cff9c8499b2052e8108cbf67a",
+        "c/blake3_avx512.c": "46653e718211d883e56d5caa9ded6d9450f2f5b44ebfa81372b3c0be538e9e3c",
+        "c/blake3_avx512_x86-64_unix.S": "c641987dd82fabed59d527f1a3413c4a2ff3df919af6d13ff2788c95e4035c0d",
+        "c/blake3_avx512_x86-64_windows_gnu.S": "b5c94f9201ab86dc1d5170b43aea440fe2a7cdbe2bec03fa1efd7c16dde1ddfb",
+        "c/blake3_avx512_x86-64_windows_msvc.asm": "10a46aee705ad10a41db286c56030e3aa2456d293272029f6e5a71b218d4aac3",
+        "c/blake3_dispatch.c": "134f21550138c0af6312925c988aeee35df287e4119e8ad1d206fccdb2238fe3",
+        "c/blake3_impl.h": "d388dca3574602c8849805ea3c8c0a12d082ac0e428756f305e111942f099af4",
+        "c/blake3_neon.c": "67e88d017a82df1b76d5f841e7b7215135a007486ac14c5be1407e1bca5201b0",
+        "c/blake3_portable.c": "2bc25b0dad67b4329d0b49cfa075ab2b0d04e424addbddc4e9c389c52a192524",
+        "c/blake3_sse2.c": "51194fff1b0e9cb79f4db6fc148a3b34f683ca6ec3a260d66166e0f7d5b7012e",
+        "c/blake3_sse2_x86-64_unix.S": "94baa998f4114bf57b99e1791a21e9f0bcdc4bd5803864eb30a2477440b7380c",
+        "c/blake3_sse2_x86-64_windows_gnu.S": "cf719d08059efee4bafecea32ef8fba46ed1f41f60782461f5047046c5e405ec",
+        "c/blake3_sse2_x86-64_windows_msvc.asm": "27bf95d5611dca1530f85106748208a6d7a68f9a4f7f61670aa680bcc9a5e436",
+        "c/blake3_sse41.c": "1f38e2ca58aa59af094f492f1326957b423d7a25e32daaae159fcc1966949f58",
+        "c/blake3_sse41_x86-64_unix.S": "135048e4a81a6f9e86960b115141874a55954dbfd2cd1e8e9818837b46b498ad",
+        "c/blake3_sse41_x86-64_windows_gnu.S": "f41da21f411bbf3920feb9e5e34e3fcc66274b02edb930882eeae2d0aba74a08",
+        "c/blake3_sse41_x86-64_windows_msvc.asm": "c3e218899b6b52e22c1d552392bf972e7ac513addc2c247635cf60325dc39724",
+        "c/blake3_tbb.cpp": "56a9fc1145c496121bb2acea3234a8e85a727126132137575e3f3f854177b1f0",
+        "c/example.c": "280e37e4afa96a97d1cf31411bb6d956352f561d2d10893f413eb2cdfa003121",
+        "c/example_tbb.c": "a9fd204dab2bb4a1470a6062ac5a04d58a68821610246057b237c63bdb1e3ad6",
+        "c/main.c": "2638e68647ba36dcacf9dbdb4d87d53a94356c34ee8ee41f32030b25418bebea",
+        "build.rs": "9ec9b359db417071b525a459a191b810e3dd79b9708ae66be4085b2efd2ba7d9"
+      }
+    },
+    {
+      "name": "libsqlite3-sys",
+      "version": "0.30.1",
+      "sourceArchiveSha256": "2e99fb7a497b1e3339bc746195567ed8d3e24945ecd636e3619d20b9de9e9149",
+      "licenseReview": "MIT wrapper; SQLite public domain",
+      "scope": "Runtime bundled SQLite 3.46.0; sqlcipher/OpenSSL features absent.",
+      "selectedFeatures": [
+        "bundled",
+        "bundled_bindings",
+        "cc",
+        "default",
+        "min_sqlite_version_3_14_0",
+        "pkg-config",
+        "vcpkg"
+      ],
+      "files": {
+        "sqlcipher/sqlite3.c": "943812115199728aee17b9c0a740b692be9337b5e59693333158bf4755df18fe",
+        "sqlcipher/sqlite3.h": "6ca976709285f1410025d68feaf0237d8f87df9021cdb069c4dd9cf57c69972f",
+        "sqlcipher/sqlite3ext.h": "b184dd1586d935133d37ad76fa353faf0a1021ff2fdedeedcc3498fff74bbb94",
+        "sqlite3/sqlite3.c": "c01235302fe80da901fb70c7622c39147e29d9f29b7f6eb746b23517f320c90d",
+        "sqlite3/sqlite3.h": "d088aa96aa70db50f02acc5c86eca61a5d17556e4c363b9c06079239bf7f87b1",
+        "sqlite3/sqlite3ext.h": "b184dd1586d935133d37ad76fa353faf0a1021ff2fdedeedcc3498fff74bbb94",
+        "sqlite3/wasm32-wasi-vfs.c": "b95842044da2b8777876b7d3fef8c9711e8c201fb4a4255dbac98729a456bb5d",
+        "wrapper.h": "b78f576f7eeabf316e183d476b0f16344b6897680b4df47628d3ce38c0aa979a",
+        "wrapper_ext.h": "fa7a53fea99318ee29d75e6d5fab4d7ed26e9599803268e6a24396265f2a6f3a",
+        "build.rs": "11bebc3787657749279375ab2e875e52259f995dce8916b4907103975e2a76ee"
+      }
+    },
+    {
+      "name": "vswhom-sys",
+      "version": "0.1.3",
+      "sourceArchiveSha256": "fb067e4cbd1ff067d1df46c9194b5de0e98efd2810bbc95c5d5e5f25a3231150",
+      "licenseReview": "MIT",
+      "scope": "Build-host C++ Visual Studio discovery; original Jonathan Blow source header now retained.",
+      "selectedFeatures": [],
+      "files": {
+        "ext/vswhom.cpp": "b25ba082c54a9546ed1f20c63105bf189e18c6fa3a7d0ae6c57dad41ca099166",
+        "build.rs": "3adb4b0f64aa6af4ca91aa3b0bacf81eb75e98b5587a625568ed825eb18a6f17"
+      }
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.48.5",
+      "sourceArchiveSha256": "ed94fce61571a4006852b7389a063ab983c02eb1bb37b47f8272ce92d06d9538",
+      "licenseReview": "MIT OR Apache-2.0",
+      "scope": "Windows import library, OS DLL object code is not copied.",
+      "selectedFeatures": [],
+      "files": {
+        "lib/windows.0.48.5.lib": "6ebeba999507cb792a7220b6fe751324d05564fc8e867d5804496c6e733a4468",
+        "build.rs": "c801bf00de0978fd5252930993878c0b0eed65336c82c89289efaf9a9ad5ac22"
+      }
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.52.6",
+      "sourceArchiveSha256": "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec",
+      "licenseReview": "MIT OR Apache-2.0",
+      "scope": "Windows import library, OS DLL object code is not copied.",
+      "selectedFeatures": [],
+      "files": {
+        "lib/windows.0.52.0.lib": "24d8cbc445955b0d48041948a3c71ce2cddb948c089b25ec7106fadd9f3efde0",
+        "build.rs": "6d40bd2c0ed4cbea5126dfcd89d72f229c7d986540cbf0dc34acc1017f1de20f"
+      }
+    },
+    {
+      "name": "windows_x86_64_msvc",
+      "version": "0.53.1",
+      "sourceArchiveSha256": "d6bbff5f0aada427a1e5a6da5f1f98158182f26556f345ac9e04d36d0ebed650",
+      "licenseReview": "MIT OR Apache-2.0",
+      "scope": "Windows import library, OS DLL object code is not copied.",
+      "selectedFeatures": [],
+      "files": {
+        "lib/windows.0.53.0.lib": "34b8a86432177dc82c1fe0d34a941502e27a3b3f36bd7e54d6b96a70530bb285",
+        "build.rs": "6d40bd2c0ed4cbea5126dfcd89d72f229c7d986540cbf0dc34acc1017f1de20f"
+      }
+    }
+  ],
+  "remaining": [
+    "Microsoft downstream terms/System Libraries assessment",
+    "Dynamic vendor driver APIs and source header attribution",
+    "Optional AVIF/HDR feature-native closures separately governed"
+  ]
+}

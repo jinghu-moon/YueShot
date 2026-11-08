@@ -1,0 +1,709 @@
+use archmage::SimdToken;
+use criterion::{BenchmarkGroup, Criterion, Throughput, measurement::WallTime};
+
+// === SIMD tier detection ===
+
+fn probe<T: SimdToken>() -> &'static str {
+    if T::summon().is_some() {
+        "available"
+    } else {
+        "not available"
+    }
+}
+
+fn print_cpu_name() {
+    #[cfg(target_os = "linux")]
+    {
+        // /proc/cpuinfo has "model name" on x86, but not on aarch64
+        if let Ok(cpuinfo) = std::fs::read_to_string("/proc/cpuinfo") {
+            for line in cpuinfo.lines() {
+                if let Some(name) = line.strip_prefix("model name")
+                    && let Some(name) = name.trim_start().strip_prefix(':')
+                {
+                    eprintln!("  CPU: {}", name.trim());
+                    return;
+                }
+            }
+        }
+        // Fallback: lscpu works on both x86 and aarch64
+        if let Ok(out) = std::process::Command::new("lscpu").output()
+            && out.status.success()
+            && let Ok(text) = std::str::from_utf8(&out.stdout)
+        {
+            for line in text.lines() {
+                if let Some(name) = line
+                    .strip_prefix("Model name:")
+                    .or_else(|| line.strip_prefix("Nom de modèle"))
+                {
+                    eprintln!("  CPU: {}", name.trim_start_matches(':').trim());
+                    return;
+                }
+            }
+        }
+    }
+    #[cfg(target_os = "macos")]
+    {
+        if let Ok(out) = std::process::Command::new("sysctl")
+            .args(["-n", "machdep.cpu.brand_string"])
+            .output()
+        {
+            if out.status.success() {
+                if let Ok(name) = std::str::from_utf8(&out.stdout) {
+                    eprintln!("  CPU: {}", name.trim());
+                    return;
+                }
+            }
+        }
+    }
+    #[cfg(target_os = "windows")]
+    {
+        if let Ok(name) = std::env::var("PROCESSOR_IDENTIFIER") {
+            eprintln!("  CPU: {}", name);
+            return;
+        }
+    }
+    let _ = (); // suppress "unreachable" on wasm
+}
+
+fn print_simd_info() {
+    eprintln!("=== SIMD Tier Detection ===");
+    print_cpu_name();
+    #[cfg(target_arch = "x86_64")]
+    {
+        eprintln!(
+            "  AVX-512 (x86-64-v4):     {}",
+            probe::<archmage::X64V4Token>()
+        );
+        eprintln!(
+            "  AVX2+FMA (x86-64-v3):    {}",
+            probe::<archmage::X64V3Token>()
+        );
+        eprintln!(
+            "  SSE4.2 (x86-64-v2):      {}",
+            probe::<archmage::X64V2Token>()
+        );
+        eprintln!(
+            "  SSE2 (x86-64-v1):        {}",
+            probe::<archmage::X64V1Token>()
+        );
+    }
+    #[cfg(target_arch = "aarch64")]
+    {
+        eprintln!(
+            "  Arm64-v3:                {}",
+            probe::<archmage::Arm64V3Token>()
+        );
+        eprintln!(
+            "  Arm64-v2:                {}",
+            probe::<archmage::Arm64V2Token>()
+        );
+        eprintln!(
+            "  NEON:                    {}",
+            probe::<archmage::NeonToken>()
+        );
+    }
+    #[cfg(target_arch = "wasm32")]
+    {
+        eprintln!(
+            "  WASM SIMD128:            {}",
+            probe::<archmage::Wasm128Token>()
+        );
+    }
+    eprintln!("  Scalar:                  always available");
+    eprintln!("===========================");
+}
+
+// === Scalar disable/enable via archmage ===
+
+fn disable_all_simd() {
+    let _ = archmage::dangerously_disable_tokens_except_wasm(true);
+}
+
+fn enable_all_simd() {
+    let _ = archmage::dangerously_disable_tokens_except_wasm(false);
+}
+
+// === Naive scalar baselines ===
+
+fn naive_rgba_bgra_inplace(buf: &mut [u8]) {
+    for px in buf.chunks_exact_mut(4) {
+        px.swap(0, 2);
+    }
+}
+
+fn naive_rgb_bgr_inplace(buf: &mut [u8]) {
+    for px in buf.chunks_exact_mut(3) {
+        px.swap(0, 2);
+    }
+}
+
+fn naive_rgb_bgr_copy(src: &[u8], dst: &mut [u8]) {
+    for (s, d) in src.chunks_exact(3).zip(dst.chunks_exact_mut(3)) {
+        d[0] = s[2];
+        d[1] = s[1];
+        d[2] = s[0];
+    }
+}
+
+fn naive_rgba_to_rgb(src: &[u8], dst: &mut [u8]) {
+    for (s, d) in src.chunks_exact(4).zip(dst.chunks_exact_mut(3)) {
+        d[0] = s[0];
+        d[1] = s[1];
+        d[2] = s[2];
+    }
+}
+
+fn naive_bgra_to_rgb(src: &[u8], dst: &mut [u8]) {
+    for (s, d) in src.chunks_exact(4).zip(dst.chunks_exact_mut(3)) {
+        d[0] = s[2];
+        d[1] = s[1];
+        d[2] = s[0];
+    }
+}
+
+fn naive_rgb_to_rgba(src: &[u8], dst: &mut [u8]) {
+    for (s, d) in src.chunks_exact(3).zip(dst.chunks_exact_mut(4)) {
+        d[0] = s[0];
+        d[1] = s[1];
+        d[2] = s[2];
+        d[3] = 255;
+    }
+}
+
+fn naive_fill_alpha(buf: &mut [u8]) {
+    for px in buf.chunks_exact_mut(4) {
+        px[3] = 255;
+    }
+}
+
+// === Benchmark helpers ===
+
+const W: usize = 1920;
+const H: usize = 1080;
+
+/// Benchmark an in-place operation with 3 variants: garb (best SIMD), garb_scalar, naive.
+fn bench_inplace(
+    group: &mut BenchmarkGroup<WallTime>,
+    garb_fn: fn(&mut [u8]) -> Result<(), garb::SizeError>,
+    naive_fn: fn(&mut [u8]),
+    buf: &[u8],
+) {
+    group.bench_function("garb", |b| {
+        let mut v = buf.to_vec();
+        b.iter(|| garb_fn(&mut v).unwrap());
+    });
+
+    disable_all_simd();
+    group.bench_function("garb_scalar", |b| {
+        let mut v = buf.to_vec();
+        b.iter(|| garb_fn(&mut v).unwrap());
+    });
+    enable_all_simd();
+
+    group.bench_function("naive", |b| {
+        let mut v = buf.to_vec();
+        b.iter(|| naive_fn(&mut v));
+    });
+}
+
+/// Benchmark a copy operation with 3 variants: garb (best SIMD), garb_scalar, naive.
+fn bench_copy(
+    group: &mut BenchmarkGroup<WallTime>,
+    garb_fn: fn(&[u8], &mut [u8]) -> Result<(), garb::SizeError>,
+    naive_fn: fn(&[u8], &mut [u8]),
+    src: &[u8],
+    dst_len: usize,
+) {
+    group.bench_function("garb", |b| {
+        let mut dst = vec![0u8; dst_len];
+        b.iter(|| garb_fn(src, &mut dst).unwrap());
+    });
+
+    disable_all_simd();
+    group.bench_function("garb_scalar", |b| {
+        let mut dst = vec![0u8; dst_len];
+        b.iter(|| garb_fn(src, &mut dst).unwrap());
+    });
+    enable_all_simd();
+
+    group.bench_function("naive", |b| {
+        let mut dst = vec![0u8; dst_len];
+        b.iter(|| naive_fn(src, &mut dst));
+    });
+}
+
+// === Benchmark groups ===
+
+fn bench_4bpp_inplace_swap(c: &mut Criterion) {
+    let mut group = c.benchmark_group("4bpp_inplace_swap");
+    let n = W * H * 4;
+    group.throughput(Throughput::Bytes(n as u64));
+    let buf: Vec<u8> = (0..n).map(|i| (i % 251) as u8).collect();
+    bench_inplace(
+        &mut group,
+        garb::bytes::rgba_to_bgra_inplace,
+        naive_rgba_bgra_inplace,
+        &buf,
+    );
+    group.finish();
+}
+
+fn bench_3bpp_inplace_swap(c: &mut Criterion) {
+    let mut group = c.benchmark_group("3bpp_inplace_swap");
+    let n = W * H * 3;
+    group.throughput(Throughput::Bytes(n as u64));
+    let buf: Vec<u8> = (0..n).map(|i| (i % 251) as u8).collect();
+    bench_inplace(
+        &mut group,
+        garb::bytes::rgb_to_bgr_inplace,
+        naive_rgb_bgr_inplace,
+        &buf,
+    );
+    group.finish();
+}
+
+fn bench_3bpp_copy_swap(c: &mut Criterion) {
+    let mut group = c.benchmark_group("3bpp_copy_swap");
+    let n = W * H * 3;
+    group.throughput(Throughput::Bytes(n as u64));
+    let src: Vec<u8> = (0..n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::rgb_to_bgr,
+        naive_rgb_bgr_copy,
+        &src,
+        n,
+    );
+    group.finish();
+}
+
+fn bench_4to3_strip(c: &mut Criterion) {
+    let mut group = c.benchmark_group("4to3_strip_rgba_to_rgb");
+    let src_n = W * H * 4;
+    let dst_n = W * H * 3;
+    group.throughput(Throughput::Bytes(src_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::rgba_to_rgb,
+        naive_rgba_to_rgb,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+fn bench_4to3_strip_swap(c: &mut Criterion) {
+    let mut group = c.benchmark_group("4to3_strip_swap_bgra_to_rgb");
+    let src_n = W * H * 4;
+    let dst_n = W * H * 3;
+    group.throughput(Throughput::Bytes(src_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::bgra_to_rgb,
+        naive_bgra_to_rgb,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+fn bench_3to4_expand(c: &mut Criterion) {
+    let mut group = c.benchmark_group("3to4_expand_rgb_to_rgba");
+    let src_n = W * H * 3;
+    let dst_n = W * H * 4;
+    group.throughput(Throughput::Bytes(dst_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::rgb_to_rgba,
+        naive_rgb_to_rgba,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+fn bench_fill_alpha(c: &mut Criterion) {
+    let mut group = c.benchmark_group("fill_alpha");
+    let n = W * H * 4;
+    group.throughput(Throughput::Bytes(n as u64));
+    let buf: Vec<u8> = (0..n).map(|i| (i % 251) as u8).collect();
+    bench_inplace(
+        &mut group,
+        garb::bytes::fill_alpha_rgba,
+        naive_fill_alpha,
+        &buf,
+    );
+    group.finish();
+}
+
+// === Naive baselines for new operations ===
+
+#[cfg(feature = "experimental")]
+fn naive_u8_to_f32(src: &[u8], dst: &mut [u8]) {
+    let dst_f: &mut [f32] = bytemuck::cast_slice_mut(dst);
+    for (s, d) in src.iter().zip(dst_f.iter_mut()) {
+        *d = *s as f32 / 255.0;
+    }
+}
+
+#[cfg(feature = "experimental")]
+fn naive_f32_to_u8(src: &[u8], dst: &mut [u8]) {
+    let src_f: &[f32] = bytemuck::cast_slice(src);
+    for (s, d) in src_f.iter().zip(dst.iter_mut()) {
+        *d = (s.clamp(0.0, 1.0) * 255.0 + 0.5) as u8;
+    }
+}
+
+#[cfg(feature = "experimental")]
+fn naive_rgba_to_gray_bt709(src: &[u8], dst: &mut [u8]) {
+    for (px, d) in src.chunks_exact(4).zip(dst.iter_mut()) {
+        *d = ((px[0] as u16 * 54 + px[1] as u16 * 183 + px[2] as u16 * 19 + 128) >> 8) as u8;
+    }
+}
+
+#[cfg(feature = "experimental")]
+fn naive_premul_f32(buf: &mut [u8]) {
+    let floats: &mut [f32] = bytemuck::cast_slice_mut(buf);
+    for px in floats.chunks_exact_mut(4) {
+        let a = px[3];
+        px[0] *= a;
+        px[1] *= a;
+        px[2] *= a;
+    }
+}
+
+#[cfg(feature = "experimental")]
+fn naive_unpremul_f32(buf: &mut [u8]) {
+    let floats: &mut [f32] = bytemuck::cast_slice_mut(buf);
+    for px in floats.chunks_exact_mut(4) {
+        let a = px[3];
+        if a == 0.0 {
+            px[0] = 0.0;
+            px[1] = 0.0;
+            px[2] = 0.0;
+        } else {
+            let inv = 1.0 / a;
+            px[0] *= inv;
+            px[1] *= inv;
+            px[2] *= inv;
+        }
+    }
+}
+
+// === New benchmark groups ===
+
+#[cfg(feature = "experimental")]
+fn bench_depth_u8_to_f32(c: &mut Criterion) {
+    let mut group = c.benchmark_group("depth_u8_to_f32");
+    let src_n = W * H * 4; // 4 channels
+    let dst_n = src_n * 4; // f32 is 4× bigger
+    group.throughput(Throughput::Bytes(src_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 256) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::convert_u8_to_f32,
+        naive_u8_to_f32,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+#[cfg(feature = "experimental")]
+fn bench_depth_f32_to_u8(c: &mut Criterion) {
+    let mut group = c.benchmark_group("depth_f32_to_u8");
+    let n = W * H * 4; // number of elements
+    let src_n = n * 4; // f32 bytes
+    group.throughput(Throughput::Bytes(src_n as u64));
+    let src_f: Vec<f32> = (0..n).map(|i| (i % 256) as f32 / 255.0).collect();
+    let src: Vec<u8> = bytemuck::cast_slice(&src_f).to_vec();
+    bench_copy(
+        &mut group,
+        garb::bytes::convert_f32_to_u8,
+        naive_f32_to_u8,
+        &src,
+        n,
+    );
+    group.finish();
+}
+
+#[cfg(feature = "experimental")]
+fn bench_rgba_to_gray_bt709(c: &mut Criterion) {
+    let mut group = c.benchmark_group("rgba_to_gray_bt709");
+    let src_n = W * H * 4;
+    let dst_n = W * H;
+    group.throughput(Throughput::Bytes(src_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::rgba_to_gray_bt709,
+        naive_rgba_to_gray_bt709,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+#[cfg(feature = "experimental")]
+fn bench_premul_f32(c: &mut Criterion) {
+    let mut group = c.benchmark_group("premul_f32_inplace");
+    let n = W * H * 16; // 4 f32 per pixel
+    group.throughput(Throughput::Bytes(n as u64));
+    let buf: Vec<u8> = {
+        let floats: Vec<f32> = (0..W * H * 4).map(|i| (i % 256) as f32 / 255.0).collect();
+        bytemuck::cast_slice(&floats).to_vec()
+    };
+    bench_inplace(
+        &mut group,
+        garb::bytes::premultiply_alpha_f32,
+        naive_premul_f32,
+        &buf,
+    );
+    group.finish();
+}
+
+#[cfg(feature = "experimental")]
+fn bench_unpremul_f32(c: &mut Criterion) {
+    let mut group = c.benchmark_group("unpremul_f32_inplace");
+    let n = W * H * 16;
+    group.throughput(Throughput::Bytes(n as u64));
+    let buf: Vec<u8> = {
+        let floats: Vec<f32> = (0..W * H * 4)
+            .map(|i| {
+                let v = (i % 256) as f32 / 255.0;
+                if i % 4 == 3 { v.max(0.01) } else { v * 0.5 }
+            })
+            .collect();
+        bytemuck::cast_slice(&floats).to_vec()
+    };
+    bench_inplace(
+        &mut group,
+        garb::bytes::unpremultiply_alpha_f32,
+        naive_unpremul_f32,
+        &buf,
+    );
+    group.finish();
+}
+
+// === Naive baselines for packed formats ===
+
+#[cfg(feature = "experimental")]
+fn naive_rgb565_to_rgba(src: &[u8], dst: &mut [u8]) {
+    for (s, d) in src.chunks_exact(2).zip(dst.chunks_exact_mut(4)) {
+        let v = u16::from_le_bytes([s[0], s[1]]);
+        let r5 = (v >> 11) & 0x1F;
+        let g6 = (v >> 5) & 0x3F;
+        let b5 = v & 0x1F;
+        d[0] = (r5 << 3 | r5 >> 2) as u8;
+        d[1] = (g6 << 2 | g6 >> 4) as u8;
+        d[2] = (b5 << 3 | b5 >> 2) as u8;
+        d[3] = 0xFF;
+    }
+}
+
+#[cfg(feature = "experimental")]
+fn naive_rgba4444_to_rgba(src: &[u8], dst: &mut [u8]) {
+    for (s, d) in src.chunks_exact(2).zip(dst.chunks_exact_mut(4)) {
+        let v = u16::from_le_bytes([s[0], s[1]]);
+        let r4 = (v >> 12) & 0xF;
+        let g4 = (v >> 8) & 0xF;
+        let b4 = (v >> 4) & 0xF;
+        let a4 = v & 0xF;
+        d[0] = (r4 << 4 | r4) as u8;
+        d[1] = (g4 << 4 | g4) as u8;
+        d[2] = (b4 << 4 | b4) as u8;
+        d[3] = (a4 << 4 | a4) as u8;
+    }
+}
+
+#[cfg(feature = "experimental")]
+fn bench_rgb565_to_rgba(c: &mut Criterion) {
+    let mut group = c.benchmark_group("rgb565_to_rgba");
+    let src_n = W * H * 2;
+    let dst_n = W * H * 4;
+    group.throughput(Throughput::Bytes(dst_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::rgb565_to_rgba,
+        naive_rgb565_to_rgba,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+#[cfg(feature = "experimental")]
+fn bench_rgba4444_to_rgba(c: &mut Criterion) {
+    let mut group = c.benchmark_group("rgba4444_to_rgba");
+    let src_n = W * H * 2;
+    let dst_n = W * H * 4;
+    group.throughput(Throughput::Bytes(dst_n as u64));
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+    bench_copy(
+        &mut group,
+        garb::bytes::rgba4444_to_rgba,
+        naive_rgba4444_to_rgba,
+        &src,
+        dst_n,
+    );
+    group.finish();
+}
+
+// === Unaligned buffer benchmarks ===
+// These benchmark the exact code paths changed in the alignment fix (issue #2).
+// Each group tests {simd, scalar} × {aligned, unaligned}.
+
+/// Create a buffer of `len` bytes at an address that is NOT 4-byte aligned.
+fn make_unaligned(len: usize) -> (Vec<u8>, usize) {
+    let mut buf = vec![0u8; len + 4];
+    let base = buf.as_ptr() as usize;
+    let offset = match base % 4 {
+        0 => 1,
+        1 => 0,
+        2 => 1,
+        3 => 2,
+        _ => unreachable!(),
+    };
+    for i in 0..len {
+        buf[offset + i] = (i % 251) as u8;
+    }
+    (buf, offset)
+}
+
+/// Benchmark an in-place op at each tier × alignment.
+fn bench_inplace_tiers(
+    group: &mut BenchmarkGroup<WallTime>,
+    garb_fn: fn(&mut [u8]) -> Result<(), garb::SizeError>,
+    n: usize,
+) {
+    let aligned: Vec<u8> = (0..n).map(|i| (i % 251) as u8).collect();
+
+    group.bench_function("simd/aligned", |b| {
+        let mut v = aligned.clone();
+        b.iter(|| garb_fn(&mut v).unwrap());
+    });
+    group.bench_function("simd/unaligned", |b| {
+        let (mut buf, off) = make_unaligned(n);
+        b.iter(|| garb_fn(&mut buf[off..off + n]).unwrap());
+    });
+
+    disable_all_simd();
+    group.bench_function("scalar/aligned", |b| {
+        let mut v = aligned.clone();
+        b.iter(|| garb_fn(&mut v).unwrap());
+    });
+    group.bench_function("scalar/unaligned", |b| {
+        let (mut buf, off) = make_unaligned(n);
+        b.iter(|| garb_fn(&mut buf[off..off + n]).unwrap());
+    });
+    enable_all_simd();
+}
+
+/// Benchmark a copy op at each tier × alignment (dst unaligned).
+fn bench_copy_tiers(
+    group: &mut BenchmarkGroup<WallTime>,
+    garb_fn: fn(&[u8], &mut [u8]) -> Result<(), garb::SizeError>,
+    src_n: usize,
+    dst_n: usize,
+) {
+    let src: Vec<u8> = (0..src_n).map(|i| (i % 251) as u8).collect();
+
+    group.bench_function("simd/aligned", |b| {
+        let mut dst = vec![0u8; dst_n];
+        b.iter(|| garb_fn(&src, &mut dst).unwrap());
+    });
+    group.bench_function("simd/unaligned", |b| {
+        let (mut buf, off) = make_unaligned(dst_n);
+        b.iter(|| garb_fn(&src, &mut buf[off..off + dst_n]).unwrap());
+    });
+
+    disable_all_simd();
+    group.bench_function("scalar/aligned", |b| {
+        let mut dst = vec![0u8; dst_n];
+        b.iter(|| garb_fn(&src, &mut dst).unwrap());
+    });
+    group.bench_function("scalar/unaligned", |b| {
+        let (mut buf, off) = make_unaligned(dst_n);
+        b.iter(|| garb_fn(&src, &mut buf[off..off + dst_n]).unwrap());
+    });
+    enable_all_simd();
+}
+
+fn bench_alignment_swap_inplace(c: &mut Criterion) {
+    let n = W * H * 4;
+    let mut group = c.benchmark_group("alignment/4bpp_swap_inplace");
+    group.throughput(Throughput::Bytes(n as u64));
+    bench_inplace_tiers(&mut group, garb::bytes::rgba_to_bgra_inplace, n);
+    group.finish();
+}
+
+fn bench_alignment_swap_copy(c: &mut Criterion) {
+    let n = W * H * 4;
+    let mut group = c.benchmark_group("alignment/4bpp_swap_copy");
+    group.throughput(Throughput::Bytes(n as u64));
+    bench_copy_tiers(&mut group, garb::bytes::rgba_to_bgra, n, n);
+    group.finish();
+}
+
+fn bench_alignment_fill_alpha(c: &mut Criterion) {
+    let n = W * H * 4;
+    let mut group = c.benchmark_group("alignment/fill_alpha");
+    group.throughput(Throughput::Bytes(n as u64));
+    bench_inplace_tiers(&mut group, garb::bytes::fill_alpha_rgba, n);
+    group.finish();
+}
+
+fn bench_alignment_rgb_to_rgba(c: &mut Criterion) {
+    let src_n = W * H * 3;
+    let dst_n = W * H * 4;
+    let mut group = c.benchmark_group("alignment/rgb_to_rgba");
+    group.throughput(Throughput::Bytes(dst_n as u64));
+    bench_copy_tiers(&mut group, garb::bytes::rgb_to_rgba, src_n, dst_n);
+    group.finish();
+}
+
+fn bench_alignment_gray_to_rgba(c: &mut Criterion) {
+    let src_n = W * H;
+    let dst_n = W * H * 4;
+    let mut group = c.benchmark_group("alignment/gray_to_rgba");
+    group.throughput(Throughput::Bytes(dst_n as u64));
+    bench_copy_tiers(&mut group, garb::bytes::gray_to_rgba, src_n, dst_n);
+    group.finish();
+}
+
+// === Custom main for tier detection before criterion runs ===
+
+fn main() {
+    print_simd_info();
+
+    let mut criterion = Criterion::default().configure_from_args();
+    bench_4bpp_inplace_swap(&mut criterion);
+    bench_3bpp_inplace_swap(&mut criterion);
+    bench_3bpp_copy_swap(&mut criterion);
+    bench_4to3_strip(&mut criterion);
+    bench_4to3_strip_swap(&mut criterion);
+    bench_3to4_expand(&mut criterion);
+    bench_fill_alpha(&mut criterion);
+    #[cfg(feature = "experimental")]
+    {
+        bench_depth_u8_to_f32(&mut criterion);
+        bench_depth_f32_to_u8(&mut criterion);
+        bench_rgba_to_gray_bt709(&mut criterion);
+        bench_premul_f32(&mut criterion);
+        bench_unpremul_f32(&mut criterion);
+        bench_rgb565_to_rgba(&mut criterion);
+        bench_rgba4444_to_rgba(&mut criterion);
+    }
+    // Aligned vs unaligned × SIMD tier comparisons (issue #2)
+    bench_alignment_swap_inplace(&mut criterion);
+    bench_alignment_swap_copy(&mut criterion);
+    bench_alignment_fill_alpha(&mut criterion);
+    bench_alignment_rgb_to_rgba(&mut criterion);
+    bench_alignment_gray_to_rgba(&mut criterion);
+
+    criterion.final_summary();
+}

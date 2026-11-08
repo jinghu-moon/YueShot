@@ -1,0 +1,73 @@
+//! Prepared-content pins: inspectable F3 viewers and chrome-free F6 GPUI/Yue surfaces.
+#![cfg(windows)]
+mod feedback;
+mod image_preview;
+mod manager;
+mod platform;
+mod screenshot;
+mod screenshot_geometry;
+mod table;
+mod view;
+pub use image_preview::decode_image;
+pub use manager::{CopyTarget, PinCommand, PinHandle, PinManager, PinPlacement};
+use yue_geometry::Rect;
+pub use yue_pin_model::*;
+/// The most recently confirmed screenshot, in virtual-desktop physical pixels.
+///
+/// The image shares validated original pixels with the capture result. Placement
+/// is separate from pixel encoding; moving between owners never quantizes it.
+#[derive(Debug, Clone)]
+pub struct PinSelection {
+    region: Rect,
+    image: PinImage,
+    radius: i32,
+}
+
+impl PinSelection {
+    /// Create a selection with square corners. Validation happens when it is consumed.
+    pub fn new(region: Rect, image: PinImage) -> Self {
+        Self {
+            region,
+            image,
+            radius: 0,
+        }
+    }
+
+    /// Set the captured corner radius in source-image physical pixels; negative values become 0.
+    pub fn radius(mut self, radius: i32) -> Self {
+        self.radius = radius.max(0);
+        self
+    }
+
+    /// Position and bounds in virtual-desktop physical pixels (negative origins are valid).
+    pub fn region(&self) -> Rect {
+        self.region
+    }
+
+    /// Immutable pixels and their acquisition definition, shared without copying.
+    pub fn image(&self) -> &PinImage {
+        &self.image
+    }
+
+    /// Captured corner radius in source-image physical pixels.
+    pub fn corner_radius(&self) -> i32 {
+        self.radius
+    }
+}
+
+/// Bind pin-window commands once after GPUI/Yue initialization.
+pub fn init(cx: &mut gpui_kit::App) {
+    table::init(cx);
+    view::init(cx);
+}
+
+/// A transient reading result near the command's origin; never enters the live pin registry.
+pub fn show_feedback(message: impl Into<String>, position: (i32, i32), cx: &mut gpui_kit::App) {
+    feedback::show(
+        message.into(),
+        position,
+        None,
+        std::time::Duration::from_secs(3),
+        cx,
+    );
+}

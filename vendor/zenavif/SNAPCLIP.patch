@@ -1,0 +1,753 @@
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -19,6 +19,8 @@
+     pub(crate) parser_total_megapixels_limit: Option<u32>,
+     /// Parser max animation frames (forwarded to zenavif-parse).
+     pub(crate) parser_max_animation_frames: Option<u32>,
++    /// Optional tile-count limit; absent retains the parser's default of 1000.
++    pub(crate) parser_max_grid_tiles: Option<u32>,
+     /// When true, 10/12-bit AV1 content is downscaled to 8-bit RGB output.
+     /// Most AVIF encoders (including zenravif) default to 10-bit encoding
+     /// even for 8-bit input. This option returns 8-bit output for those files.
+@@ -38,6 +40,7 @@
+             parser_peak_memory_limit: None,
+             parser_total_megapixels_limit: None,
+             parser_max_animation_frames: None,
++            parser_max_grid_tiles: None,
+             prefer_8bit: false,
+         }
+     }
+@@ -75,6 +78,19 @@
+         self
+     }
+ 
++    /// Bound the number of independently coded grid tiles accepted by the parser.
++    /// This does not change the pixel or per-tile decode limits.
++    pub fn grid_tile_limit(mut self, limit: u32) -> Self {
++        self.parser_max_grid_tiles = Some(limit);
++        self
++    }
++
++    /// Bound parser metadata allocations independently of decoded pixel limits.
++    pub fn parser_memory_limit(mut self, bytes: u64) -> Self {
++        self.parser_peak_memory_limit = Some(bytes);
++        self
++    }
++
+     /// Set CPU feature flags mask.
+     ///
+     /// Controls which SIMD code paths are used by masking detected CPU features.
+--- a/src/convert.rs
++++ b/src/convert.rs
+@@ -2,10 +2,57 @@
+ 
+ use crate::error::{Error, Result};
+ use crate::image::ColorRange;
++use enough::Stop;
+ use rgb::prelude::*;
+ use rgb::{Rgb, Rgba};
+ use whereat::at;
+ use zenpixels::{PixelBuffer, PixelDescriptor};
++
++/// Identity planes contain G, B, R, without a chroma midpoint or YUV matrix.
++/// All three components use the same luma range when the stream is limited.
++pub(crate) fn identity_to_full(value: u16, bit_depth: u8, range: ColorRange) -> u16 {
++    if range == ColorRange::Full {
++        return value;
++    }
++    let maximum = (1u32 << bit_depth) - 1;
++    let minimum = 16u32 << (bit_depth - 8);
++    let extent = 219u32 << (bit_depth - 8);
++    ((u32::from(value).saturating_sub(minimum) * maximum + extent / 2) / extent).min(maximum) as u16
++}
++
++/// Copy strided GBR planes into a single interleaved output allocation.
++/// The caller chooses RGB/RGBA and native channel depth. Padding is never read
++/// as image content; cancellation is checked before allocation and on every row.
++pub(crate) fn copy_identity_planes<'a, T: Copy + 'a, P>(
++    mut planes: [impl Iterator<Item = &'a [T]>; 3],
++    width: usize,
++    height: usize,
++    stop: &(impl Stop + ?Sized),
++    pixel: impl Fn(T, T, T) -> P,
++) -> Result<Vec<P>> {
++    stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++    let count = width
++        .checked_mul(height)
++        .ok_or_else(|| at!(Error::OutOfMemory))?;
++    let mut output = Vec::new();
++    output
++        .try_reserve_exact(count)
++        .map_err(|_| at!(Error::OutOfMemory))?;
++    for _ in 0..height {
++        stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++        let mut rows = [&[][..]; 3];
++        for (row, plane) in rows.iter_mut().zip(planes.iter_mut()) {
++            *row = plane
++                .next()
++                .and_then(|row| row.get(..width))
++                .ok_or_else(|| at!(Error::Unsupported("Identity plane dimensions mismatch")))?;
++        }
++        for x in 0..width {
++            output.push(pixel(rows[2][x], rows[0][x], rows[1][x]));
++        }
++    }
++    Ok(output)
++}
+ 
+ /// Scale a limited-range Y value to full range (8-bit)
+ #[inline]
+--- a/src/decoder_managed.rs
++++ b/src/decoder_managed.rs
+@@ -6,7 +6,10 @@
+ #![deny(unsafe_code)]
+ 
+ use crate::config::DecoderConfig;
+-use crate::convert::{add_alpha8, add_alpha16, downscale_to_8bit, scale_pixels_to_u16};
++use crate::convert::{
++    add_alpha8, add_alpha16, copy_identity_planes, downscale_to_8bit, identity_to_full,
++    scale_pixels_to_u16,
++};
+ use crate::error::{Error, Result};
+ use crate::image::{
+     ChromaSampling, ColorPrimaries, ColorRange, DecodedAnimation, DecodedAnimationInfo,
+@@ -128,6 +131,13 @@
+ impl ManagedAvifDecoder {
+     /// Create new decoder with AVIF data and configuration
+     pub fn new(data: &[u8], config: &DecoderConfig) -> Result<Self> {
++        Self::new_with_stop(data, config, &enough::Unstoppable)
++    }
++
++    /// Create a decoder with cancellation before input copying and during grid indexing.
++    /// The copy itself is synchronous; callers must bound compressed input size.
++    pub fn new_with_stop(data: &[u8], config: &DecoderConfig, stop: &impl Stop) -> Result<Self> {
++        stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
+         // Use zero-copy AvifParser — primary/alpha data returned as Cow::Borrowed
+         let mut parse_config = zenavif_parse::DecodeConfig::default().lenient(true);
+         // Forward resource limits to the parser when configured.
+@@ -140,12 +150,17 @@
+         if let Some(frames) = config.parser_max_animation_frames {
+             parse_config = parse_config.with_max_animation_frames(frames);
+         }
++        if let Some(tiles) = config.parser_max_grid_tiles {
++            parse_config = parse_config.with_max_grid_tiles(tiles);
++        }
+         let parser = zenavif_parse::AvifParser::from_owned_with_config(
+             data.to_vec(),
+             &parse_config,
+-            &enough::Unstoppable,
++            stop,
+         )
+         .map_err(|e| at!(Error::from(e)))?;
++
++        stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
+ 
+         let mut settings = Settings::default();
+         settings.threads = config.threads;
+@@ -268,9 +283,7 @@
+         stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
+ 
+         if self.parser.grid_config().is_some() {
+-            let pixels = self.decode_grid(stop)?;
+-            let info = self.probe_info()?;
+-            return Ok((pixels, info));
++            return self.decode_grid_full(stop);
+         }
+ 
+         let primary_data = self
+@@ -352,6 +365,7 @@
+         let display_height = info.height as usize;
+ 
+         let can_strip = bit_depth == 8
++            && info.matrix_coefficients != MatrixCoefficients::IDENTITY
+             && !matches!(chroma_sampling, ChromaSampling::Monochrome)
+             && buffer_width == display_width
+             && buffer_height == display_height;
+@@ -484,7 +498,9 @@
+         let has_alpha = self.parser.alpha_metadata().is_some();
+ 
+         // AV1 config for bit depth
+-        let bit_depth = self.parser.av1_config().map(|c| c.bit_depth).unwrap_or(8);
++        let sequence = self.parser.primary_metadata().ok();
++        let bit_depth = sequence.as_ref().map(|m| m.bit_depth)
++            .or_else(|| self.parser.av1_config().map(|c| c.bit_depth)).unwrap_or(8);
+ 
+         // CICP from container (colr box) or AV1 config fallback
+         let (
+@@ -540,7 +556,13 @@
+                     ChromaSampling::Cs444
+                 }
+             })
+-            .unwrap_or(ChromaSampling::Cs420);
++            .unwrap_or_else(|| match sequence.as_ref() {
++                Some(m) if m.monochrome => ChromaSampling::Monochrome,
++                Some(m) if m.chroma_subsampling.horizontal && m.chroma_subsampling.vertical => ChromaSampling::Cs420,
++                Some(m) if m.chroma_subsampling.horizontal => ChromaSampling::Cs422,
++                Some(_) => ChromaSampling::Cs444,
++                None => ChromaSampling::Cs420,
++            });
+ 
+         Ok(ImageInfo {
+             width,
+@@ -687,124 +709,122 @@
+         }))
+     }
+ 
+-    /// Decode a grid-based AVIF (tiled image)
++    /// Decode a grid one tile at a time in row-major order.
++    ///
++    /// `max_tile_pixels` is enforced against both ispe and the AV1 sequence
++    /// header BEFORE submitting any tile to the codec. Only one color frame,
++    /// one alpha frame and one converted tile are retained internally. The
++    /// input container is still owned by this decoder; callers must separately
++    /// bound compressed input size and avoid retaining tiles in `consume`.
++    ///
++    /// Edge tiles are cropped to output coverage. The callback receives the
++    /// output x/y and a borrowed pixel buffer valid only during that callback.
++    /// Returned metadata describes the whole image and comes from the decoded
++    /// sequence header plus primary-container metadata, never an 8-bit default.
++    /// Cancellation and sink errors stop delivery immediately; a sink may have
++    /// received partial output and must publish only after this returns `Ok`.
++    pub fn decode_grid_tiles(
++        &mut self,
++        stop: &(impl Stop + ?Sized),
++        max_tile_pixels: u32,
++        mut consume: impl FnMut(u32, u32, &PixelBuffer) -> Result<()>,
++    ) -> Result<ImageInfo> {
++        let grid = self.parser.grid_config().cloned()
++            .ok_or_else(|| at!(Error::Unsupported("expected a grid image")))?;
++        let dimensions = self.parser.tile_dimensions(0)
++            .ok_or_else(|| at!(Error::Unsupported("grid tile dimensions missing")))?;
++        let mut image_info: Option<ImageInfo> = None;
++        for index in 0..self.parser.grid_tile_count() {
++            stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++            let data = self.parser.tile_data(index).map_err(|e| at!(Error::from(e)))?;
++            let metadata = zenavif_parse::AV1Metadata::parse_av1_bitstream(&data)
++                .map_err(|e| at!(Error::from(e)))?;
++            let actual = (metadata.max_frame_width.get(), metadata.max_frame_height.get());
++            if actual != dimensions || self.parser.tile_dimensions(index) != Some(actual) {
++                return Err(at!(Error::Unsupported("grid ispe and AV1 tile dimensions differ")));
++            }
++            if u64::from(actual.0) * u64::from(actual.1) > u64::from(max_tile_pixels) {
++                return Err(at!(Error::ResourceLimit("grid tile pixel limit exceeded".into())));
++            }
++            let primary = Self::decode_frame(&mut self.decoder, &data, "Failed to decode grid tile")?;
++            if (primary.width(), primary.height()) != actual {
++                return Err(at!(Error::Unsupported("grid frame dimensions differ from sequence header")));
++            }
++            stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++            let alpha = if let Some(result) = self.parser.alpha_tile_data(index) {
++                let data = result.map_err(|e| at!(Error::from(e)))?;
++                let alpha_meta = zenavif_parse::AV1Metadata::parse_av1_bitstream(&data)
++                    .map_err(|e| at!(Error::from(e)))?;
++                if (alpha_meta.max_frame_width.get(), alpha_meta.max_frame_height.get()) != actual
++                    || alpha_meta.bit_depth != metadata.bit_depth || !alpha_meta.monochrome {
++                    return Err(at!(Error::Unsupported("alpha tile dimensions, depth or layout differ")));
++                }
++                let frame = Self::decode_frame(&mut self.decoder, &data, "Failed to decode grid alpha tile")?;
++                if (frame.width(), frame.height()) != actual {
++                    return Err(at!(Error::Unsupported("grid alpha frame dimensions differ")));
++                }
++                Some(frame)
++            } else { None };
++            stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++            let (mut pixels, mut info) = self.convert_to_image(primary, alpha, stop)?;
++            info.width = grid.output_width;
++            info.height = grid.output_height;
++            if let Some(first) = &image_info {
++                if (info.bit_depth, info.has_alpha, info.chroma_sampling, info.matrix_coefficients, info.color_range)
++                    != (first.bit_depth, first.has_alpha, first.chroma_sampling, first.matrix_coefficients, first.color_range)
++                    || info.color_primaries != first.color_primaries
++                    || info.transfer_characteristics != first.transfer_characteristics {
++                    return Err(at!(Error::Unsupported("grid tile pixel formats differ")));
++                }
++            } else { image_info = Some(info); }
++            let x = (index as u32 % u32::from(grid.columns)) * dimensions.0;
++            let y = (index as u32 / u32::from(grid.columns)) * dimensions.1;
++            let width = dimensions.0.min(grid.output_width - x);
++            let height = dimensions.1.min(grid.output_height - y);
++            if width != dimensions.0 || height != dimensions.1 {
++                pixels = Self::crop_image(pixels, width as usize, height as usize)?;
++            }
++            stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++            consume(x, y, &pixels)?;
++        }
++        stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++        image_info.ok_or_else(|| at!(Error::Unsupported("empty grid")))
++    }
++
++    /// Full-image convenience API, sharing the validated single-tile path.
+     fn decode_grid(&mut self, stop: &(impl Stop + ?Sized)) -> Result<PixelBuffer> {
+-        let grid_config = self
+-            .parser
+-            .grid_config()
+-            .ok_or_else(|| {
+-                at!(Error::Decode {
+-                    code: -1,
+-                    msg: "Expected grid config but found none",
+-                })
+-            })?
+-            .clone();
+-
+-        // Decode all tiles
+-        let mut tile_frames = Vec::new();
+-        for i in 0..self.parser.grid_tile_count() {
+-            stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
+-
+-            let tile_data = self.parser.tile_data(i).map_err(|e| at!(Error::from(e)))?;
+-            let frame =
+-                Self::decode_frame(&mut self.decoder, &tile_data, "Failed to decode grid tile")?;
+-
+-            tile_frames.push(frame);
+-        }
+-
+-        stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
+-
+-        // Stitch tiles together
+-        self.stitch_tiles(tile_frames, &grid_config, stop)
+-    }
+-
+-    /// Stitch decoded tile frames into a single image
+-    fn stitch_tiles(
+-        &self,
+-        tiles: Vec<Frame>,
+-        grid_config: &zenavif_parse::GridConfig,
+-        stop: &(impl Stop + ?Sized),
+-    ) -> Result<PixelBuffer> {
+-        if tiles.is_empty() {
+-            return Err(at!(Error::Decode {
+-                code: -1,
+-                msg: "No tiles to stitch",
+-            }));
+-        }
+-
+-        let rows = grid_config.rows as usize;
+-        let cols = grid_config.columns as usize;
+-
+-        if tiles.len() != rows * cols {
+-            return Err(at!(Error::Decode {
+-                code: -1,
+-                msg: "Tile count doesn't match grid dimensions",
+-            }));
+-        }
+-
+-        // Get dimensions from first tile (all tiles should be same size)
+-        let tile_width = tiles[0].width() as usize;
+-        let tile_height = tiles[0].height() as usize;
+-
+-        // Calculate output dimensions
+-        let output_width = if grid_config.output_width > 0 {
+-            grid_config.output_width as usize
+-        } else {
+-            tile_width * cols
+-        };
+-        let output_height = if grid_config.output_height > 0 {
+-            grid_config.output_height as usize
+-        } else {
+-            tile_height * rows
+-        };
+-
+-        // Convert each tile to RGB/RGBA
+-        let mut tile_images = Vec::new();
+-        for tile in tiles {
+-            let (img, _info) = self.convert_to_image(tile, None, stop)?;
+-            tile_images.push(img);
+-        }
+-
+-        stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
+-
+-        // Stitch tiles using byte-level row access (format-agnostic)
+-        let descriptor = tile_images[0].descriptor();
+-        let bpp = descriptor.bytes_per_pixel();
+-        let alloc_size = output_width
+-            .checked_mul(output_height)
+-            .and_then(|n| n.checked_mul(bpp))
+-            .ok_or_else(|| at!(Error::OutOfMemory))?;
+-        let data = vec![0u8; alloc_size];
+-        let mut output =
+-            PixelBuffer::from_vec(data, output_width as u32, output_height as u32, descriptor)
+-                .map_err(|_| {
+-                    at!(Error::Decode {
+-                        code: -1,
+-                        msg: "failed to create output buffer for grid stitch",
+-                    })
+-                })?;
+-
+-        for (tile_idx, tile) in tile_images.iter().enumerate() {
+-            let row = tile_idx / cols;
+-            let col = tile_idx % cols;
+-            let tile_w = tile.width() as usize;
+-            let tile_h = tile.height() as usize;
+-            let dst_x = col * tile_w;
+-            let dst_y = row * tile_h;
+-
+-            let tile_slice = tile.as_slice();
+-            let mut out_slice = output.as_slice_mut();
+-            for y in 0..tile_h.min(output_height - dst_y) {
+-                let src = tile_slice.row(y as u32);
+-                let copy_w = tile_w.min(output_width - dst_x);
+-                let copy_bytes = copy_w * bpp;
+-                let dst_row = out_slice.row_mut((dst_y + y) as u32);
+-                let dst_start = dst_x * bpp;
+-                dst_row[dst_start..dst_start + copy_bytes].copy_from_slice(&src[..copy_bytes]);
+-            }
+-        }
+-
+-        Ok(output)
++        self.decode_grid_full(stop).map(|(pixels, _)| pixels)
++    }
++
++    fn decode_grid_full(&mut self, stop: &(impl Stop + ?Sized)) -> Result<(PixelBuffer, ImageInfo)> {
++        let grid = self.parser.grid_config().cloned()
++            .ok_or_else(|| at!(Error::Unsupported("expected a grid image")))?;
++        let mut output: Option<PixelBuffer> = None;
++        let info = self.decode_grid_tiles(stop, u32::MAX, |x, y, pixels| {
++            if output.is_none() {
++                let size = (grid.output_width as usize).checked_mul(grid.output_height as usize)
++                    .and_then(|n| n.checked_mul(pixels.descriptor().bytes_per_pixel()))
++                    .ok_or_else(|| at!(Error::OutOfMemory))?;
++                output = Some(PixelBuffer::from_vec(vec![0; size], grid.output_width,
++                    grid.output_height, pixels.descriptor())
++                    .map_err(|_| at!(Error::OutOfMemory))?);
++            }
++            let output = output.as_mut().unwrap();
++            if output.descriptor() != pixels.descriptor() {
++                return Err(at!(Error::Unsupported("grid tile descriptors differ")));
++            }
++            let bpp = pixels.descriptor().bytes_per_pixel();
++            let source = pixels.as_slice();
++            let mut target = output.as_slice_mut();
++            for row in 0..pixels.height() {
++                stop.check().map_err(|e| at!(Error::Cancelled(e)))?;
++                let start = x as usize * bpp;
++                let count = pixels.width() as usize * bpp;
++                target.row_mut(y + row)[start..start + count].copy_from_slice(&source.row(row)[..count]);
++            }
++            Ok(())
++        })?;
++        Ok((output.ok_or_else(|| at!(Error::Unsupported("empty grid")))?, info))
+     }
+ 
+     /// Crop an image to the specified dimensions
+@@ -938,7 +958,7 @@
+         Ok((pixels, info_clone))
+     }
+ 
+-    /// Convert 8-bit frame to RGB using yuv crate bulk conversion (zero-copy)
++    /// Convert 8-bit frame to RGB, keeping Identity/GBR out of YUV conversion.
+     fn convert_8bit(
+         &self,
+         primary: Frame,
+@@ -968,6 +988,49 @@
+             .ok_or_else(|| at!(Error::OutOfMemory))?;
+ 
+         let mut image = match info.chroma_sampling {
++            ChromaSampling::Cs444 if info.matrix_coefficients == MatrixCoefficients::IDENTITY => {
++                let green = planes.y();
++                let blue = planes
++                    .u()
++                    .ok_or_else(|| at!(Error::Unsupported("Missing B plane")))?;
++                let red = planes
++                    .v()
++                    .ok_or_else(|| at!(Error::Unsupported("Missing R plane")))?;
++                let channel =
++                    |value: u8| identity_to_full(u16::from(value), 8, info.color_range) as u8;
++                if has_alpha {
++                    let out = copy_identity_planes(
++                        [green.rows(), blue.rows(), red.rows()],
++                        buffer_width,
++                        buffer_height,
++                        stop,
++                        |r, g, b| Rgba {
++                            r: channel(r),
++                            g: channel(g),
++                            b: channel(b),
++                            a: u8::MAX,
++                        },
++                    )?;
++                    PixelBuffer::from_pixels(out, buffer_width as u32, buffer_height as u32)
++                        .map_err(|_| at!(Error::OutOfMemory))?
++                        .into()
++                } else {
++                    let out = copy_identity_planes(
++                        [green.rows(), blue.rows(), red.rows()],
++                        buffer_width,
++                        buffer_height,
++                        stop,
++                        |r, g, b| Rgb {
++                            r: channel(r),
++                            g: channel(g),
++                            b: channel(b),
++                        },
++                    )?;
++                    PixelBuffer::from_pixels(out, buffer_width as u32, buffer_height as u32)
++                        .map_err(|_| at!(Error::OutOfMemory))?
++                        .into()
++                }
++            }
+             ChromaSampling::Monochrome => {
+                 let y_view = planes.y();
+                 let gray = YuvGrayImage {
+@@ -1175,7 +1238,7 @@
+         Ok(image)
+     }
+ 
+-    /// Convert 10/12-bit frame to RGB using yuv crate bulk conversion (zero-copy)
++    /// Convert 10/12-bit frame to RGB, keeping Identity/GBR out of YUV conversion.
+     fn convert_16bit(
+         &self,
+         primary: Frame,
+@@ -1205,6 +1268,48 @@
+             .ok_or_else(|| at!(Error::OutOfMemory))?;
+ 
+         let mut image = match info.chroma_sampling {
++            ChromaSampling::Cs444 if info.matrix_coefficients == MatrixCoefficients::IDENTITY => {
++                let green = planes.y();
++                let blue = planes
++                    .u()
++                    .ok_or_else(|| at!(Error::Unsupported("Missing B plane")))?;
++                let red = planes
++                    .v()
++                    .ok_or_else(|| at!(Error::Unsupported("Missing R plane")))?;
++                let channel = |value| identity_to_full(value, info.bit_depth, info.color_range);
++                if has_alpha {
++                    let out = copy_identity_planes(
++                        [green.rows(), blue.rows(), red.rows()],
++                        buffer_width,
++                        buffer_height,
++                        stop,
++                        |r, g, b| Rgba {
++                            r: channel(r),
++                            g: channel(g),
++                            b: channel(b),
++                            a: (1u16 << info.bit_depth) - 1,
++                        },
++                    )?;
++                    PixelBuffer::from_pixels(out, buffer_width as u32, buffer_height as u32)
++                        .map_err(|_| at!(Error::OutOfMemory))?
++                        .into()
++                } else {
++                    let out = copy_identity_planes(
++                        [green.rows(), blue.rows(), red.rows()],
++                        buffer_width,
++                        buffer_height,
++                        stop,
++                        |r, g, b| Rgb {
++                            r: channel(r),
++                            g: channel(g),
++                            b: channel(b),
++                        },
++                    )?;
++                    PixelBuffer::from_pixels(out, buffer_width as u32, buffer_height as u32)
++                        .map_err(|_| at!(Error::OutOfMemory))?
++                        .into()
++                }
++            }
+             ChromaSampling::Monochrome => {
+                 let y_view = planes.y();
+                 let gray = YuvGrayImage {
+--- a/src/encoder.rs
++++ b/src/encoder.rs
+@@ -738,16 +738,15 @@
+     let enc = build_ravif_encoder(config, stop, true);
+     let width = img.width();
+     let height = img.height();
+-    let pixels: Vec<[u16; 3]> = img
+-        .pixels()
+-        .map(|p| {
+-            [
+-                scale_from_u16(p.r, 10),
+-                scale_from_u16(p.g, 10),
+-                scale_from_u16(p.b, 10),
+-            ]
+-        })
+-        .collect();
++    // Raw Identity planes are G, B, R, not packed RGB. Feed the iterator
++    // directly into the codec; no full-image interleaved copy is necessary.
++    let pixels = img.pixels().map(|p| {
++        [
++            scale_from_u16(p.g, 10),
++            scale_from_u16(p.b, 10),
++            scale_from_u16(p.r, 10),
++        ]
++    });
+     let pixel_range = match config.pixel_range {
+         Some(EncodePixelRange::Limited) => ravif::PixelRange::Limited,
+         _ => ravif::PixelRange::Full,
+@@ -790,17 +789,16 @@
+     let enc = build_ravif_encoder(config, stop, true);
+     let width = img.width();
+     let height = img.height();
+-    let pixels: Vec<[u16; 3]> = img
+-        .pixels()
+-        .map(|p| {
+-            [
+-                scale_from_u16(p.r, 10),
+-                scale_from_u16(p.g, 10),
+-                scale_from_u16(p.b, 10),
+-            ]
+-        })
+-        .collect();
+-    let alpha: Vec<u16> = img.pixels().map(|p| scale_from_u16(p.a, 10)).collect();
++    // Identity plane order is G, B, R. Alpha remains a separate coverage
++    // iterator and is never transformed with the color transfer function.
++    let pixels = img.pixels().map(|p| {
++        [
++            scale_from_u16(p.g, 10),
++            scale_from_u16(p.b, 10),
++            scale_from_u16(p.r, 10),
++        ]
++    });
++    let alpha = img.pixels().map(|p| scale_from_u16(p.a, 10));
+     let pixel_range = match config.pixel_range {
+         Some(EncodePixelRange::Limited) => ravif::PixelRange::Limited,
+         _ => ravif::PixelRange::Full,
+--- a/src/yuv_convert.rs
++++ b/src/yuv_convert.rs
+@@ -125,23 +125,23 @@
+     let vg = -2.0 * kr * (1.0 - kr) / kg;
+     let ub = 2.0 * (1.0 - kb);
+ 
+-    let vr_vec = f32x8::splat(token, vr);
+-    let ug_vec = f32x8::splat(token, ug);
+-    let vg_vec = f32x8::splat(token, vg);
+-    let ub_vec = f32x8::splat(token, ub);
+-    let scale_255 = f32x8::splat(token, 255.0);
+-    let zero = f32x8::zero(token);
+-    let max_val = f32x8::splat(token, 255.0);
++    let vr_vec = f32x8::splat_t(token, vr);
++    let ug_vec = f32x8::splat_t(token, ug);
++    let vg_vec = f32x8::splat_t(token, vg);
++    let ub_vec = f32x8::splat_t(token, ub);
++    let scale_255 = f32x8::splat_t(token, 255.0);
++    let zero = f32x8::zero_t(token);
++    let max_val = f32x8::splat_t(token, 255.0);
+ 
+     // Range normalization constants
+     let (y_offset, y_scale, uv_center, uv_scale) = match range {
+         YuvRange::Full => (0.0f32, 1.0 / 255.0, 128.0, 1.0 / 255.0),
+         YuvRange::Limited => (16.0, 1.0 / 219.0, 128.0, 1.0 / 224.0),
+     };
+-    let y_off = f32x8::splat(token, y_offset);
+-    let y_sc = f32x8::splat(token, y_scale);
+-    let uv_cen = f32x8::splat(token, uv_center);
+-    let uv_sc = f32x8::splat(token, uv_scale);
++    let y_off = f32x8::splat_t(token, y_offset);
++    let y_sc = f32x8::splat_t(token, y_scale);
++    let uv_cen = f32x8::splat_t(token, uv_center);
++    let uv_sc = f32x8::splat_t(token, uv_scale);
+ 
+     for y_pos in 0..height {
+         let row_start = y_pos * width;
+@@ -188,9 +188,9 @@
+                 v_vals[i] = v00 * fx1 * fy1 + v01 * fx * fy1 + v10 * fx1 * fy + v11 * fx * fy;
+             }
+ 
+-            let y_vec = f32x8::from_array(token, y_vals);
+-            let u_vec = f32x8::from_array(token, u_vals);
+-            let v_vec = f32x8::from_array(token, v_vals);
++            let y_vec = f32x8::from_array_t(token, y_vals);
++            let u_vec = f32x8::from_array_t(token, u_vals);
++            let v_vec = f32x8::from_array_t(token, v_vals);
+ 
+             // Normalize
+             let y_norm = (y_vec - y_off) * y_sc;
+@@ -313,21 +313,21 @@
+     }
+ 
+     // Load into SIMD vectors
+-    let fx = f32x8::from_array(token, fx_vals);
+-    let u00 = f32x8::from_array(token, u00_vals);
+-    let u01 = f32x8::from_array(token, u01_vals);
+-    let u10 = f32x8::from_array(token, u10_vals);
+-    let u11 = f32x8::from_array(token, u11_vals);
+-    let v00 = f32x8::from_array(token, v00_vals);
+-    let v01 = f32x8::from_array(token, v01_vals);
+-    let v10 = f32x8::from_array(token, v10_vals);
+-    let v11 = f32x8::from_array(token, v11_vals);
++    let fx = f32x8::from_array_t(token, fx_vals);
++    let u00 = f32x8::from_array_t(token, u00_vals);
++    let u01 = f32x8::from_array_t(token, u01_vals);
++    let u10 = f32x8::from_array_t(token, u10_vals);
++    let u11 = f32x8::from_array_t(token, u11_vals);
++    let v00 = f32x8::from_array_t(token, v00_vals);
++    let v01 = f32x8::from_array_t(token, v01_vals);
++    let v10 = f32x8::from_array_t(token, v10_vals);
++    let v11 = f32x8::from_array_t(token, v11_vals);
+ 
+     // Precompute weights
+-    let one = f32x8::splat(token, 1.0);
++    let one = f32x8::splat_t(token, 1.0);
+     let fx1 = one - fx;
+-    let fy_vec = f32x8::splat(token, fy);
+-    let fy1_vec = f32x8::splat(token, 1.0 - fy);
++    let fy_vec = f32x8::splat_t(token, fy);
++    let fy1_vec = f32x8::splat_t(token, 1.0 - fy);
+ 
+     // Bilinear interpolation using FMA
+     let u_top = u01.mul_add(fx, u00 * fx1);
+@@ -401,15 +401,15 @@
+ ) -> (f32x8, f32x8, f32x8) {
+     let (y_norm, u_norm, v_norm) = match range {
+         YuvRange::Full => {
+-            let scale = f32x8::splat(token, 1.0 / 255.0);
+-            let center = f32x8::splat(token, 128.0);
++            let scale = f32x8::splat_t(token, 1.0 / 255.0);
++            let center = f32x8::splat_t(token, 128.0);
+             (y * scale, (u - center) * scale, (v - center) * scale)
+         }
+         YuvRange::Limited => {
+-            let y_offset = f32x8::splat(token, 16.0);
+-            let uv_center = f32x8::splat(token, 128.0);
+-            let y_scale = f32x8::splat(token, 1.0 / 219.0);
+-            let uv_scale = f32x8::splat(token, 1.0 / 224.0);
++            let y_offset = f32x8::splat_t(token, 16.0);
++            let uv_center = f32x8::splat_t(token, 128.0);
++            let y_scale = f32x8::splat_t(token, 1.0 / 219.0);
++            let uv_scale = f32x8::splat_t(token, 1.0 / 224.0);
+             (
+                 (y - y_offset) * y_scale,
+                 (u - uv_center) * uv_scale,
+@@ -423,17 +423,17 @@
+     let vg = -2.0 * kr * (1.0 - kr) / kg;
+     let ub = 2.0 * (1.0 - kb);
+ 
+-    let vr_vec = f32x8::splat(token, vr);
+-    let ug_vec = f32x8::splat(token, ug);
+-    let vg_vec = f32x8::splat(token, vg);
+-    let ub_vec = f32x8::splat(token, ub);
++    let vr_vec = f32x8::splat_t(token, vr);
++    let ug_vec = f32x8::splat_t(token, ug);
++    let vg_vec = f32x8::splat_t(token, vg);
++    let ub_vec = f32x8::splat_t(token, ub);
+ 
+     let r = v_norm.mul_add(vr_vec, y_norm);
+     let g_temp = u_norm * ug_vec;
+     let g = v_norm.mul_add(vg_vec, g_temp + y_norm);
+     let b = u_norm.mul_add(ub_vec, y_norm);
+ 
+-    let scale_255 = f32x8::splat(token, 255.0);
++    let scale_255 = f32x8::splat_t(token, 255.0);
+     (r * scale_255, g * scale_255, b * scale_255)
+ }
+ 
+@@ -884,8 +884,8 @@
+     let chroma_width = width.div_ceil(2);
+     let chroma_height = total_height.div_ceil(2);
+ 
+-    let zero = f32x8::splat(token, 0.0);
+-    let max_val = f32x8::splat(token, 255.0);
++    let zero = f32x8::splat_t(token, 0.0);
++    let max_val = f32x8::splat_t(token, 255.0);
+ 
+     for row in 0..strip_height {
+         let y_pos = y_start + row;
+@@ -911,7 +911,7 @@
+                 v_stride,
+             );
+ 
+-            let y_vec = f32x8::from_array(token, y_vals);
++            let y_vec = f32x8::from_array_t(token, y_vals);
+             let (r_vec, g_vec, b_vec) =
+                 yuv_to_rgb_simd(token, y_vec, u_vec, v_vec, kr, kg, kb, range);
+ 

@@ -1,0 +1,1772 @@
+//! D3D11 device, DirectComposition swap chain and texture helpers.
+//!
+//! The overlay owns exactly one device for the lifetime of the process (unless the
+//! device is removed) and reuses it across capture sessions. Only the swap chain is
+//! recreated when the overlay moves to a monitor with different dimensions.
+
+use ::windows::Win32::Foundation::HWND;
+use ::windows::Win32::Graphics::Direct2D::Common::{
+    D2D1_ALPHA_MODE, D2D1_ALPHA_MODE_PREMULTIPLIED, D2D1_PIXEL_FORMAT,
+};
+use ::windows::Win32::Graphics::Direct2D::{
+    D2D1_BITMAP_OPTIONS, D2D1_BITMAP_OPTIONS_CANNOT_DRAW, D2D1_BITMAP_OPTIONS_TARGET,
+    D2D1_BITMAP_PROPERTIES1, D2D1_DEVICE_CONTEXT_OPTIONS_NONE, D2D1CreateDevice, ID2D1Bitmap1,
+    ID2D1Device, ID2D1DeviceContext,
+};
+use ::windows::Win32::Graphics::Direct3D::D3D_DRIVER_TYPE_HARDWARE;
+use ::windows::Win32::Graphics::Direct3D11::{
+    D3D11_BIND_SHADER_RESOURCE, D3D11_BOX, D3D11_CPU_ACCESS_READ, D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+    D3D11_MAP_FLAG_DO_NOT_WAIT, D3D11_MAP_READ, D3D11_MAPPED_SUBRESOURCE, D3D11_SDK_VERSION,
+    D3D11_SUBRESOURCE_DATA, D3D11_TEXTURE2D_DESC, D3D11_USAGE_DEFAULT, D3D11_USAGE_STAGING,
+    D3D11CreateDevice, ID3D11Device, ID3D11DeviceContext, ID3D11Texture2D,
+};
+use ::windows::Win32::Graphics::DirectComposition::{
+    DCompositionCreateDevice, IDCompositionDevice, IDCompositionTarget, IDCompositionVisual,
+};
+use ::windows::Win32::Graphics::Dxgi::Common::{
+    DXGI_ALPHA_MODE_PREMULTIPLIED, DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_SAMPLE_DESC,
+};
+use ::windows::Win32::Graphics::Dxgi::{
+    DXGI_ERROR_WAS_STILL_DRAWING, DXGI_PRESENT, DXGI_SCALING_STRETCH, DXGI_SWAP_CHAIN_DESC1,
+    DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL, DXGI_USAGE_RENDER_TARGET_OUTPUT, IDXGIDevice, IDXGIFactory2,
+    IDXGISurface, IDXGISwapChain1,
+};
+use ::windows::core::{Interface, Result as WinResult};
+use std::sync::{Arc, OnceLock};
+use std::thread::ThreadId;
+use yue_media::{
+    PixelFormat,
+    pixels::{AlphaMode, PixelBuffer, PixelDescriptor, PixelEncoding},
+};
+
+/// A captured or uploaded frame together with the texture that holds it.
+#[derive(Debug)]
+pub struct GpuFrame {
+    pub texture: ID3D11Texture2D,
+    /// Texture dimensions, kept so callers can cross-check the monitor geometry.
+    #[cfg_attr(not(test), allow(dead_code))]
+    pub width: u32,
+    #[cfg_attr(not(test), allow(dead_code))]
+    pub height: u32,
+}
+
+pub(crate) fn dxgi_format(
+    format: PixelFormat,
+) -> ::windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT {
+    use ::windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R16G16B16A16_FLOAT;
+    match format {
+        PixelFormat::Bgra8Unorm => DXGI_FORMAT_B8G8R8A8_UNORM,
+        PixelFormat::Rgba16Float => DXGI_FORMAT_R16G16B16A16_FLOAT,
+    }
+}
+
+/// One D3D11 device plus the D2D device derived from it.
+///
+/// The device is intentionally not tied to a window: the same device backs the WGC
+/// frame pool, the composition swap chain and the D2D device context.
+///
+/// **One immediate context, one user thread** (`docs/30` §21.3, R-6). `D3D11CreateDevice`
+/// runs on the capture worker, but that thread never touches the context afterwards —
+/// everything capture does (`CreateTexture2D`, the WGC frame pool, the frame copies) goes
+/// through the free-threaded `ID3D11Device`. The context's user is therefore *whoever uses
+/// it first*, and `owned_context` records that claim and asserts it on every later use.
+/// The check has to exist because D3D11 serialises the commands *inside* a context, not the
+/// calls made to it from outside: two threads driving one immediate context is a race the
+/// compiler cannot see.
+#[derive(Clone)]
+pub struct GraphicsDevice {
+    d3d: ID3D11Device,
+    context: ID3D11DeviceContext,
+    /// The thread that has used `context`. Behind an `Arc` because `GraphicsDevice` is
+    /// `Clone` and every clone has to share the one claim.
+    context_owner: Arc<OnceLock<ThreadId>>,
+    d2d: ID2D1Device,
+    dxgi_factory: IDXGIFactory2,
+}
+
+impl GraphicsDevice {
+    pub fn create() -> Result<Self, String> {
+        let mut d3d: Option<ID3D11Device> = None;
+        let mut context: Option<ID3D11DeviceContext> = None;
+        unsafe {
+            D3D11CreateDevice(
+                None,
+                D3D_DRIVER_TYPE_HARDWARE,
+                Default::default(),
+                D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+                None,
+                D3D11_SDK_VERSION,
+                Some(&mut d3d),
+                None,
+                Some(&mut context),
+            )
+        }
+        .map_err(|error| super::hresult("D3D11CreateDevice", &error))?;
+        let d3d = d3d.ok_or_else(|| "D3D11CreateDevice returned no device".to_string())?;
+        let context = context.ok_or_else(|| "D3D11CreateDevice returned no context".to_string())?;
+
+        let dxgi_device: IDXGIDevice = d3d
+            .cast()
+            .map_err(|error| super::hresult("IDXGIDevice::cast", &error))?;
+        let adapter = unsafe { dxgi_device.GetAdapter() }
+            .map_err(|error| super::hresult("IDXGIDevice::GetAdapter", &error))?;
+        let dxgi_factory: IDXGIFactory2 = unsafe { adapter.GetParent() }
+            .map_err(|error| super::hresult("IDXGIAdapter::GetParent", &error))?;
+        let d2d = unsafe { D2D1CreateDevice(&dxgi_device, None) }
+            .map_err(|error| super::hresult("D2D1CreateDevice", &error))?;
+
+        Ok(Self {
+            d3d,
+            context,
+            context_owner: Arc::new(OnceLock::new()),
+            d2d,
+            dxgi_factory,
+        })
+    }
+
+    pub fn device(&self) -> &ID3D11Device {
+        &self.d3d
+    }
+
+    /// The immediate device context, asserting §21.3's single-user invariant.
+    ///
+    /// Deliberately private: handing out an unchecked `ID3D11DeviceContext` is exactly how
+    /// a second thread ends up driving the same context, so this is the only door to it.
+    /// The first caller claims the context, every later call has to come from that same
+    /// thread. `what` names the operation in the panic message.
+    fn owned_context(&self, what: &str) -> &ID3D11DeviceContext {
+        let owner = *self
+            .context_owner
+            .get_or_init(|| std::thread::current().id());
+        assert_eq!(
+            std::thread::current().id(),
+            owner,
+            "{what} ran on a thread that does not own the immediate context; \
+             one ID3D11DeviceContext has exactly one user thread (docs/30 §21.3)"
+        );
+        &self.context
+    }
+
+    /// A fresh D2D device context. The overlay keeps one per session.
+    pub fn create_d2d_context(&self) -> Result<ID2D1DeviceContext, String> {
+        unsafe {
+            self.d2d
+                .CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_NONE)
+        }
+        .map_err(|error| super::hresult("ID2D1Device::CreateDeviceContext", &error))
+    }
+
+    /// Create a flip-model composition swap chain sized to the monitor.
+    pub fn create_composition_swap_chain(
+        &self,
+        width: u32,
+        height: u32,
+        format: PixelFormat,
+    ) -> Result<IDXGISwapChain1, String> {
+        let description = DXGI_SWAP_CHAIN_DESC1 {
+            Width: width,
+            Height: height,
+            Format: dxgi_format(format),
+            Stereo: false.into(),
+            SampleDesc: DXGI_SAMPLE_DESC {
+                Count: 1,
+                Quality: 0,
+            },
+            BufferUsage: DXGI_USAGE_RENDER_TARGET_OUTPUT,
+            BufferCount: 2,
+            Scaling: DXGI_SCALING_STRETCH,
+            SwapEffect: DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL,
+            AlphaMode: DXGI_ALPHA_MODE_PREMULTIPLIED,
+            Flags: 0,
+        };
+        let chain = unsafe {
+            self.dxgi_factory
+                .CreateSwapChainForComposition(&self.d3d, &description, None)
+        }
+        .map_err(|error| super::hresult("CreateSwapChainForComposition", &error))?;
+        use ::windows::Win32::Graphics::Dxgi::Common::{
+            DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709, DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709,
+        };
+        use ::windows::Win32::Graphics::Dxgi::{
+            DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT, IDXGISwapChain3,
+        };
+        let space = if format == PixelFormat::Rgba16Float {
+            DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709
+        } else {
+            DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709
+        };
+        let color_chain: IDXGISwapChain3 = chain
+            .cast()
+            .map_err(|e| super::hresult("IDXGISwapChain3", &e))?;
+        let support = unsafe { color_chain.CheckColorSpaceSupport(space) }
+            .map_err(|e| super::hresult("CheckColorSpaceSupport", &e))?;
+        if support & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT.0 as u32 == 0 {
+            return Err("composition swap chain cannot present its required color space".into());
+        }
+        unsafe { color_chain.SetColorSpace1(space) }
+            .map_err(|e| super::hresult("SetColorSpace1", &e))?;
+        Ok(chain)
+    }
+
+    /// Wrap a swap chain back buffer as a D2D render target.
+    pub fn create_target_bitmap(
+        &self,
+        d2d_context: &ID2D1DeviceContext,
+        swap_chain: &IDXGISwapChain1,
+    ) -> Result<ID2D1Bitmap1, String> {
+        let surface: IDXGISurface = unsafe { swap_chain.GetBuffer(0) }
+            .map_err(|error| super::hresult("IDXGISwapChain::GetBuffer", &error))?;
+        let texture: ID3D11Texture2D = surface
+            .cast()
+            .map_err(|e| super::hresult("target texture", &e))?;
+        create_bitmap_from_texture(
+            d2d_context,
+            &texture,
+            D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+            D2D1_ALPHA_MODE_PREMULTIPLIED,
+        )
+        .map_err(|error| super::hresult("CreateBitmapFromDxgiSurface", &error))
+    }
+
+    /// Create a shader-resource BGRA texture and upload `bgra` into it.
+    pub fn create_bgra_texture(
+        &self,
+        width: u32,
+        height: u32,
+        bgra: &[u8],
+    ) -> Result<GpuFrame, String> {
+        self.upload_texture(width, height, PixelFormat::Bgra8Unorm, bgra)
+    }
+
+    /// Upload a validated, tightly packed pixel buffer without changing its bits.
+    pub fn create_pixel_texture(&self, pixels: &PixelBuffer) -> Result<GpuFrame, String> {
+        let [width, height] = pixels.size();
+        self.upload_texture(
+            width,
+            height,
+            pixels.descriptor().format(),
+            pixels.as_bytes(),
+        )
+    }
+
+    fn upload_texture(
+        &self,
+        width: u32,
+        height: u32,
+        format: PixelFormat,
+        bytes: &[u8],
+    ) -> Result<GpuFrame, String> {
+        let pitch = width
+            .checked_mul(format.bytes_per_pixel())
+            .ok_or("texture upload pitch overflow")?;
+        let expected = (pitch as usize)
+            .checked_mul(height as usize)
+            .ok_or("texture upload size overflow")?;
+        if width == 0 || height == 0 || bytes.len() != expected {
+            return Err(format!(
+                "pixel upload of {} bytes does not match {width}x{height} {format:?}",
+                bytes.len()
+            ));
+        }
+        let description = D3D11_TEXTURE2D_DESC {
+            Width: width,
+            Height: height,
+            MipLevels: 1,
+            ArraySize: 1,
+            Format: dxgi_format(format),
+            SampleDesc: DXGI_SAMPLE_DESC {
+                Count: 1,
+                Quality: 0,
+            },
+            Usage: D3D11_USAGE_DEFAULT,
+            BindFlags: D3D11_BIND_SHADER_RESOURCE.0 as u32,
+            CPUAccessFlags: 0,
+            MiscFlags: 0,
+        };
+        let initial = D3D11_SUBRESOURCE_DATA {
+            pSysMem: bytes.as_ptr() as *const _,
+            SysMemPitch: pitch,
+            SysMemSlicePitch: 0,
+        };
+        let mut texture: Option<ID3D11Texture2D> = None;
+        unsafe {
+            self.d3d
+                .CreateTexture2D(&description, Some(&initial), Some(&mut texture))
+        }
+        .map_err(|error| super::hresult("CreateTexture2D", &error))?;
+        Ok(GpuFrame {
+            texture: texture.ok_or_else(|| "CreateTexture2D returned no texture".to_string())?,
+            width,
+            height,
+        })
+    }
+
+    /// Create a texture that Direct2D can use as a render target.
+    ///
+    /// Used by the offscreen composition harness and by the annotated export path:
+    /// the real overlay renders into a composition swap chain, which D2D already
+    /// accepts as a target, so a CPU-readable offscreen target is only needed when
+    /// pixels must be captured back rather than presented.
+    pub fn create_render_target_texture(
+        &self,
+        width: u32,
+        height: u32,
+        format: PixelFormat,
+    ) -> Result<GpuFrame, String> {
+        let description = D3D11_TEXTURE2D_DESC {
+            Width: width,
+            Height: height,
+            MipLevels: 1,
+            ArraySize: 1,
+            Format: dxgi_format(format),
+            SampleDesc: DXGI_SAMPLE_DESC {
+                Count: 1,
+                Quality: 0,
+            },
+            Usage: D3D11_USAGE_DEFAULT,
+            BindFlags: (::windows::Win32::Graphics::Direct3D11::D3D11_BIND_RENDER_TARGET.0
+                | D3D11_BIND_SHADER_RESOURCE.0) as u32,
+            CPUAccessFlags: 0,
+            MiscFlags: 0,
+        };
+        let mut texture: Option<ID3D11Texture2D> = None;
+        unsafe {
+            self.d3d
+                .CreateTexture2D(&description, None, Some(&mut texture))
+        }
+        .map_err(|error| super::hresult("CreateTexture2D(render target)", &error))?;
+        Ok(GpuFrame {
+            texture: texture.ok_or_else(|| "CreateTexture2D returned no texture".to_string())?,
+            width,
+            height,
+        })
+    }
+
+    /// Copy `texture` into a CPU-readable staging texture and return its pixels.
+    ///
+    /// The whole-frame readback. Production reaches it only through the CPU fallback in
+    /// [`crate::windows::renderer`] (taken when the frozen frame carries no texture);
+    /// everything a session actually reads back goes through
+    /// [`Self::read_back_region_bgra`], which copies just the region.
+    pub fn read_back_bgra(&self, texture: &ID3D11Texture2D) -> Result<Vec<u8>, String> {
+        let mut description = D3D11_TEXTURE2D_DESC::default();
+        unsafe { texture.GetDesc(&mut description) };
+        self.read_back_region_bgra(texture, 0, 0, description.Width, description.Height)
+    }
+
+    /// Present the current back buffer.
+    pub fn present(&self, swap_chain: &IDXGISwapChain1) -> Result<(), String> {
+        unsafe { swap_chain.Present(1, DXGI_PRESENT(0)) }
+            .ok()
+            .map_err(|error| super::hresult("IDXGISwapChain::Present", &error))
+    }
+
+    /// Copy a **sub-region** of `texture` into a region-sized staging texture and
+    /// return its tightly-packed BGRA pixels.
+    ///
+    /// This is the Phase 3 optimization: instead of copying the whole monitor frame to
+    /// CPU and cropping (readback_bytes = frame_w × frame_h × 4), we ask the GPU to
+    /// transfer only the selection rectangle (`CopySubresourceRegion`). The staging
+    /// texture is sized to the selection, so the Map/row-copy touches only the pixels
+    /// the artifact actually needs.
+    ///
+    /// `x`/`y` are the top-left corner of the region in texture coordinates.
+    /// `width`/`height` are the region dimensions. The caller must ensure the region
+    /// stays within the texture bounds.
+    pub fn read_back_region_bgra(
+        &self,
+        texture: &ID3D11Texture2D,
+        x: u32,
+        y: u32,
+        width: u32,
+        height: u32,
+    ) -> Result<Vec<u8>, String> {
+        let descriptor = PixelDescriptor::new(
+            PixelFormat::Bgra8Unorm,
+            PixelEncoding::Srgb,
+            AlphaMode::Straight,
+        )
+        .map_err(str::to_owned)?;
+        self.read_back_pixels(texture, [x, y, width, height], descriptor)
+            .map(PixelBuffer::into_bytes)
+    }
+
+    /// Typed, region-sized readback. The caller supplies the source's retained
+    /// color/alpha definition; the texture's actual format is cross-checked.
+    /// A current monitor setting is never used to reinterpret an old frame.
+    pub fn read_back_pixels(
+        &self,
+        texture: &ID3D11Texture2D,
+        [x, y, width, height]: [u32; 4],
+        descriptor: PixelDescriptor,
+    ) -> Result<PixelBuffer, String> {
+        use ::windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R16G16B16A16_FLOAT;
+        let mut source = D3D11_TEXTURE2D_DESC::default();
+        unsafe {
+            texture.GetDesc(&mut source);
+        }
+        let format = match descriptor.format() {
+            PixelFormat::Bgra8Unorm => DXGI_FORMAT_B8G8R8A8_UNORM,
+            PixelFormat::Rgba16Float => DXGI_FORMAT_R16G16B16A16_FLOAT,
+        };
+        if source.Format != format
+            || source.SampleDesc.Count != 1
+            || width == 0
+            || height == 0
+            || x.checked_add(width)
+                .is_none_or(|right| right > source.Width)
+            || y.checked_add(height)
+                .is_none_or(|bottom| bottom > source.Height)
+        {
+            return Err(
+                "readback source format or region does not match the pixel descriptor".into(),
+            );
+        }
+        let row_bytes = descriptor.row_bytes(width).ok_or("readback row overflow")?;
+        let staging = self.create_staging_texture_for_format(
+            width,
+            height,
+            format,
+            "CreateTexture2D(typed staging)",
+        )?;
+        let src_box = D3D11_BOX {
+            left: x,
+            top: y,
+            front: 0,
+            right: x + width,
+            bottom: y + height,
+            back: 1,
+        };
+        let mut pixels = Vec::new();
+        unsafe {
+            let context = self.owned_context("read_back_pixels");
+            context.CopySubresourceRegion(&staging, 0, 0, 0, 0, texture, 0, Some(&src_box));
+            let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+            context
+                .Map(&staging, 0, D3D11_MAP_READ, 0, Some(&mut mapped))
+                .map_err(|error| super::hresult("Map(region staging)", &error))?;
+            let copied = copy_mapped_rows(&mapped, row_bytes, height, &mut pixels);
+            context.Unmap(&staging, 0);
+            copied?;
+        }
+        PixelBuffer::from_bytes(width, height, row_bytes, descriptor, pixels).map_err(str::to_owned)
+    }
+
+    /// A CPU-readable staging texture sized `width`×`height` BGRA.
+    #[cfg(test)]
+    fn create_staging_texture(
+        &self,
+        width: u32,
+        height: u32,
+        what: &str,
+    ) -> Result<ID3D11Texture2D, String> {
+        self.create_staging_texture_for_format(width, height, DXGI_FORMAT_B8G8R8A8_UNORM, what)
+    }
+
+    fn create_staging_texture_for_format(
+        &self,
+        width: u32,
+        height: u32,
+        format: ::windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT,
+        what: &str,
+    ) -> Result<ID3D11Texture2D, String> {
+        let staging_desc = D3D11_TEXTURE2D_DESC {
+            Width: width,
+            Height: height,
+            MipLevels: 1,
+            ArraySize: 1,
+            Format: format,
+            SampleDesc: DXGI_SAMPLE_DESC {
+                Count: 1,
+                Quality: 0,
+            },
+            Usage: D3D11_USAGE_STAGING,
+            BindFlags: 0,
+            CPUAccessFlags: D3D11_CPU_ACCESS_READ.0 as u32,
+            MiscFlags: 0,
+        };
+        let mut staging: Option<ID3D11Texture2D> = None;
+        unsafe {
+            self.d3d
+                .CreateTexture2D(&staging_desc, None, Some(&mut staging))
+        }
+        .map_err(|error| super::hresult(what, &error))?;
+        staging.ok_or_else(|| format!("{what} returned nothing"))
+    }
+
+    /// Detect `DXGI_ERROR_DEVICE_REMOVED` / `DEVICE_RESET` / `DEVICE_HUNG`.
+    pub fn is_device_lost(message: &str) -> bool {
+        const DEVICE_REMOVED: i32 = 0x887A_0005u32 as i32;
+        const DEVICE_HUNG: i32 = 0x887A_0006u32 as i32;
+        const DEVICE_RESET: i32 = 0x887A_0007u32 as i32;
+        message
+            .rsplit('#')
+            .next()
+            .and_then(|tail| tail.strip_prefix("code="))
+            .and_then(|value| value.parse::<i32>().ok())
+            .is_some_and(|code| {
+                code == DEVICE_REMOVED || code == DEVICE_HUNG || code == DEVICE_RESET
+            })
+    }
+
+    /// Build the DirectComposition target that hosts the swap chain on an HWND.
+    pub fn create_composition_target(&self, window: HWND) -> Result<CompositionTarget, String> {
+        let dxgi_device: IDXGIDevice = self
+            .d3d
+            .cast()
+            .map_err(|error| super::hresult("IDXGIDevice::cast", &error))?;
+        let device: IDCompositionDevice = unsafe { DCompositionCreateDevice(&dxgi_device) }
+            .map_err(|error| super::hresult("DCompositionCreateDevice", &error))?;
+        let target: IDCompositionTarget = unsafe { device.CreateTargetForHwnd(window, true) }
+            .map_err(|error| super::hresult("CreateTargetForHwnd", &error))?;
+        let visual: IDCompositionVisual = unsafe { device.CreateVisual() }
+            .map_err(|error| super::hresult("IDCompositionDevice::CreateVisual", &error))?;
+        unsafe {
+            target
+                .SetRoot(&visual)
+                .map_err(|error| super::hresult("IDCompositionTarget::SetRoot", &error))?;
+        }
+        Ok(CompositionTarget {
+            device,
+            target,
+            visual,
+        })
+    }
+}
+
+/// DirectComposition objects that bind one swap chain to one HWND.
+pub struct CompositionTarget {
+    device: IDCompositionDevice,
+    target: IDCompositionTarget,
+    visual: IDCompositionVisual,
+}
+
+impl CompositionTarget {
+    /// Point the composition visual at a (new) swap chain.
+    pub fn attach(&self, swap_chain: &IDXGISwapChain1) -> Result<(), String> {
+        unsafe {
+            self.visual
+                .SetContent(swap_chain)
+                .map_err(|error| super::hresult("IDCompositionVisual::SetContent", &error))?;
+            self.device
+                .Commit()
+                .map_err(|error| super::hresult("IDCompositionDevice::Commit", &error))?;
+        }
+        Ok(())
+    }
+
+    pub fn commit(&self) -> Result<(), String> {
+        unsafe { self.device.Commit() }
+            .map_err(|error| super::hresult("IDCompositionDevice::Commit", &error))
+    }
+}
+
+impl Drop for CompositionTarget {
+    fn drop(&mut self) {
+        // Release the visual before the target and the device.
+        let _ = unsafe { self.target.SetRoot(None) };
+        let _ = unsafe { self.device.Commit() };
+    }
+}
+
+/// Copy a mapped staging row band into a tightly packed BGRA buffer.
+///
+/// # Safety
+/// `mapped.pData` must point at `height` readable rows of at least `width * 4` bytes each.
+#[cfg(test)]
+unsafe fn copy_rows(mapped: &D3D11_MAPPED_SUBRESOURCE, width: u32, height: u32, out: &mut Vec<u8>) {
+    unsafe { copy_mapped_rows(mapped, width as usize * 4, height, out) }
+        .expect("valid mapped BGRA rows");
+}
+
+/// # Safety
+/// `pData` points at `height` readable mapped rows. The caller must unmap even
+/// if this returns an error. Pitch is checked before any raw slice is created.
+unsafe fn copy_mapped_rows(
+    mapped: &D3D11_MAPPED_SUBRESOURCE,
+    row_bytes: usize,
+    height: u32,
+    out: &mut Vec<u8>,
+) -> Result<(), String> {
+    let bytes = row_bytes
+        .checked_mul(height as usize)
+        .ok_or("readback byte count overflow")?;
+    let mapped_bytes = (mapped.RowPitch as usize)
+        .checked_mul(height as usize)
+        .ok_or("readback pitch overflow")?;
+    if mapped.pData.is_null()
+        || (mapped.RowPitch as usize) < row_bytes
+        || mapped_bytes > isize::MAX as usize
+    {
+        return Err("invalid mapped readback data or row pitch".into());
+    }
+    out.clear();
+    out.try_reserve_exact(bytes)
+        .map_err(|e| format!("cannot allocate readback: {e}"))?;
+    for row in 0..height as usize {
+        unsafe {
+            let source = (mapped.pData as *const u8).add(row * mapped.RowPitch as usize);
+            out.extend_from_slice(std::slice::from_raw_parts(source, row_bytes));
+        }
+    }
+    Ok(())
+}
+
+/// Three-slot async GPU staging sampler for magnifier color extraction.
+///
+/// Each slot owns a 32×32 staging texture with the declared source format.
+/// Polling always produces an explicit eight-bit SDR derivative for HEX/RGB/HSL;
+/// source texture bits are never modified. Only a small tile crosses the CPU boundary.
+/// `submit` copies a tile into the next slot (queued, non-blocking).
+/// `poll` uses `Map(DO_NOT_WAIT)` to check if the GPU finished without blocking.
+///
+/// It holds the whole `GraphicsDevice` rather than a bare `ID3D11DeviceContext` so that
+/// both operations go through `owned_context`: the sampler is exactly the object whose
+/// clone of the context (capture worker → overlay thread) used to be the way a
+/// non-owner thread could drive it.
+pub struct AsyncSampleBuffer {
+    device: GraphicsDevice,
+    slots: [ID3D11Texture2D; 3],
+    next_slot: usize,
+    pending: [bool; 3],
+    descriptor: PixelDescriptor,
+    source_peak_nits: f64,
+}
+
+const SAMPLE_TILE: u32 = 32;
+const SLOT_COUNT: usize = 3;
+
+impl AsyncSampleBuffer {
+    /// Allocate staging textures. Call once per overlay session.
+    pub fn new(device: &GraphicsDevice) -> Result<Self, String> {
+        Self::for_source(device, PixelDescriptor::bgra8(), 100.)
+    }
+
+    /// Declare the acquisition encoding and a fixed SDR-mapping source peak.
+    /// The peak is a mapping policy, not a measured monitor/content peak. It
+    /// must stay fixed through a session, never adapt to each sampled tile.
+    pub fn for_source(
+        device: &GraphicsDevice,
+        descriptor: PixelDescriptor,
+        source_peak_nits: f64,
+    ) -> Result<Self, String> {
+        validate_sample_peak(source_peak_nits)?;
+        let staging_desc = D3D11_TEXTURE2D_DESC {
+            Width: SAMPLE_TILE,
+            Height: SAMPLE_TILE,
+            MipLevels: 1,
+            ArraySize: 1,
+            Format: dxgi_format(descriptor.format()),
+            SampleDesc: DXGI_SAMPLE_DESC {
+                Count: 1,
+                Quality: 0,
+            },
+            Usage: D3D11_USAGE_STAGING,
+            BindFlags: 0,
+            CPUAccessFlags: D3D11_CPU_ACCESS_READ.0 as u32,
+            MiscFlags: 0,
+        };
+        let mut slot_vec: Vec<ID3D11Texture2D> = Vec::with_capacity(SLOT_COUNT);
+        for _ in 0..SLOT_COUNT {
+            let mut tex: Option<ID3D11Texture2D> = None;
+            unsafe {
+                device
+                    .device()
+                    .CreateTexture2D(&staging_desc, None, Some(&mut tex))
+            }
+            .map_err(|e| super::hresult("CreateTexture2D(sample staging)", &e))?;
+            slot_vec.push(tex.ok_or_else(|| "CreateTexture2D returned null".to_string())?);
+        }
+        let arr: [ID3D11Texture2D; 3] = slot_vec
+            .try_into()
+            .map_err(|_| "slot count mismatch".to_string())?;
+        Ok(Self {
+            device: device.clone(),
+            slots: arr,
+            next_slot: 0,
+            pending: [false; SLOT_COUNT],
+            descriptor,
+            source_peak_nits,
+        })
+    }
+
+    /// A source rebind invalidates every old completion, including when only
+    /// encoding/alpha/mapping changes while the DXGI storage format stays equal.
+    pub fn set_source(&mut self, descriptor: PixelDescriptor, peak: f64) -> Result<(), String> {
+        validate_sample_peak(peak)?;
+        if self.descriptor.format() != descriptor.format() {
+            *self = Self::for_source(&self.device, descriptor, peak)?;
+        } else {
+            self.reset();
+            self.descriptor = descriptor;
+            self.source_peak_nits = peak;
+        }
+        Ok(())
+    }
+
+    /// Copy a `tile_size × tile_size` region starting at `(x, y)` from `source`
+    /// into the next free staging slot. Returns the slot index.
+    ///
+    /// Non-blocking: the GPU operation is queued to the immediate context.
+    /// Must run on the context's user thread (the overlay thread in production);
+    /// `owned_context` asserts that rather than documenting it.
+    pub fn submit(
+        &mut self,
+        source: &ID3D11Texture2D,
+        x: u32,
+        y: u32,
+        tile_size: u32,
+    ) -> Result<usize, String> {
+        let mut description = D3D11_TEXTURE2D_DESC::default();
+        unsafe { source.GetDesc(&mut description) };
+        if description.Format != dxgi_format(self.descriptor.format()) {
+            return Err("color sampler texture format differs from its declared source".into());
+        }
+        // The cache contract is a complete 32x32 tile. Reading uninitialized
+        // staging rows after a smaller copy would report invented colors.
+        if tile_size != SAMPLE_TILE
+            || x.checked_add(tile_size)
+                .is_none_or(|end| end > description.Width)
+            || y.checked_add(tile_size)
+                .is_none_or(|end| end > description.Height)
+        {
+            return Err("color sample region is outside its source or staging tile".into());
+        }
+        let slot = (0..SLOT_COUNT)
+            .map(|offset| (self.next_slot + offset) % SLOT_COUNT)
+            .find(|slot| !self.pending[*slot])
+            .ok_or("all color sample slots are still in flight")?;
+        self.next_slot = (slot + 1) % SLOT_COUNT;
+        let src_box = D3D11_BOX {
+            left: x,
+            top: y,
+            front: 0,
+            right: x.saturating_add(tile_size),
+            bottom: y.saturating_add(tile_size),
+            back: 1,
+        };
+        unsafe {
+            let context = self.device.owned_context("AsyncSampleBuffer::submit");
+            context.CopySubresourceRegion(&self.slots[slot], 0, 0, 0, 0, source, 0, Some(&src_box));
+            // Map(DO_NOT_WAIT) only ever reports a *completed* copy once the
+            // command list has actually been submitted to the GPU; without this
+            // Flush the queued copy can sit in the driver buffer indefinitely and
+            // every poll just returns STILL_DRAWING.
+            context.Flush();
+        }
+        self.pending[slot] = true;
+        Ok(slot)
+    }
+
+    /// Non-blocking poll: attempts `Map(DO_NOT_WAIT)` on the staging texture.
+    /// Returns a full 32×32 SDR BGRA derivative (tightly packed) on success.
+    /// Returns `None` if still in flight, `Some(Err(...))` on failure.
+    pub fn poll(&mut self, slot: usize) -> Option<Result<Vec<u8>, String>> {
+        if slot >= SLOT_COUNT || !self.pending[slot] {
+            return None;
+        }
+        let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+        let map_result = unsafe {
+            self.device.owned_context("AsyncSampleBuffer::poll").Map(
+                &self.slots[slot],
+                0,
+                D3D11_MAP_READ,
+                D3D11_MAP_FLAG_DO_NOT_WAIT.0 as u32,
+                Some(&mut mapped),
+            )
+        };
+        match map_result {
+            Ok(()) => {
+                let row_bytes = SAMPLE_TILE as usize * self.descriptor.bytes_per_pixel();
+                let mut pixels = Vec::new();
+                let copied =
+                    unsafe { copy_mapped_rows(&mapped, row_bytes, SAMPLE_TILE, &mut pixels) };
+                unsafe {
+                    self.device
+                        .owned_context("AsyncSampleBuffer::poll")
+                        .Unmap(&self.slots[slot], 0)
+                };
+                self.pending[slot] = false;
+                Some(copied.and_then(|()| {
+                    let source =
+                        PixelBuffer::from_tight(SAMPLE_TILE, SAMPLE_TILE, self.descriptor, pixels)
+                            .map_err(str::to_owned)?;
+                    yue_media::pixel_color::to_sdr_bgra8(&source, self.source_peak_nits)
+                        .map(PixelBuffer::into_bytes)
+                        .map_err(str::to_owned)
+                }))
+            }
+            Err(e) => {
+                // "Copy not finished yet" arrives as either S_FALSE (documented)
+                // or DXGI_ERROR_WAS_STILL_DRAWING — real drivers return the
+                // latter. Both are in-flight; treating them as terminal failures
+                // would leave the info panel on "......" forever.
+                let code = e.code().0;
+                if code == 1 || code == DXGI_ERROR_WAS_STILL_DRAWING.0 {
+                    return None;
+                }
+                self.pending[slot] = false;
+                Some(Err(super::hresult("Map(sample staging)", &e)))
+            }
+        }
+    }
+
+    /// Abort all pending requests (e.g. on device lost or session reset).
+    pub fn reset(&mut self) {
+        self.pending = [false; SLOT_COUNT];
+        self.next_slot = 0;
+    }
+}
+
+fn validate_sample_peak(peak: f64) -> Result<(), String> {
+    if !peak.is_finite() || !(0.0..=10_000.).contains(&peak) || peak == 0. {
+        return Err("sample SDR mapping source peak must be finite and in (0,10000] nit".into());
+    }
+    Ok(())
+}
+
+/// Create a D2D bitmap over an existing texture.
+///
+/// `options` decides whether the bitmap can be drawn into
+/// (`D2D1_BITMAP_OPTIONS_TARGET`, for tests and readback harnesses) or only sampled
+/// (`D2D1_BITMAP_OPTIONS_CANNOT_DRAW`, for the magnifier's zoom source).
+#[cfg_attr(not(test), allow(dead_code))]
+/// Wrap an existing GPU texture as a D2D bitmap.
+///
+/// `alpha_mode` is explicit because the two callers differ: the composition back buffer
+/// is premultiplied, while the captured desktop is opaque and must be blended with
+/// alpha ignored.
+pub fn create_bitmap_from_texture(
+    d2d_context: &ID2D1DeviceContext,
+    texture: &ID3D11Texture2D,
+    options: D2D1_BITMAP_OPTIONS,
+    alpha_mode: D2D1_ALPHA_MODE,
+) -> WinResult<ID2D1Bitmap1> {
+    let mut description = D3D11_TEXTURE2D_DESC::default();
+    unsafe { texture.GetDesc(&mut description) };
+    use ::windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R16G16B16A16_FLOAT;
+    if description.Format != DXGI_FORMAT_B8G8R8A8_UNORM
+        && description.Format != DXGI_FORMAT_R16G16B16A16_FLOAT
+    {
+        return Err(::windows::core::Error::from_hresult(
+            ::windows::core::HRESULT(0x80070057u32 as i32),
+        ));
+    }
+    let surface: IDXGISurface = texture.cast()?;
+    let mut properties = D2D1_BITMAP_PROPERTIES1 {
+        pixelFormat: D2D1_PIXEL_FORMAT {
+            format: description.Format,
+            alphaMode: alpha_mode,
+        },
+        dpiX: 96.0,
+        dpiY: 96.0,
+        bitmapOptions: options,
+        ..Default::default()
+    };
+    if description.Format == DXGI_FORMAT_R16G16B16A16_FLOAT {
+        use ::windows::Win32::Graphics::Direct2D::D2D1_COLOR_SPACE_SCRGB;
+        properties.colorContext = std::mem::ManuallyDrop::new(Some(unsafe {
+            d2d_context.CreateColorContext(D2D1_COLOR_SPACE_SCRGB, None)?
+        }));
+    }
+    let result = unsafe { d2d_context.CreateBitmapFromDxgiSurface(&surface, Some(&properties)) };
+    // windows-rs mirrors the C ABI with ManuallyDrop; the property struct does not
+    // release its COM member. The bitmap retains its own reference on success.
+    unsafe { std::mem::ManuallyDrop::drop(&mut properties.colorContext) };
+    result
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn sample_mapping_peak_must_be_finite_positive_and_within_pq_range() {
+        for peak in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY, -1., 0., 10_001.] {
+            assert!(super::validate_sample_peak(peak).is_err());
+        }
+        for peak in [80., 100., 1000., 10_000.] {
+            assert!(super::validate_sample_peak(peak).is_ok());
+        }
+    }
+    #[test]
+    #[ignore = "L4: real GPU FP16 tile readback; no desktop capture or clipboard writes"]
+    fn hdr_sampler_returns_explicit_sdr_tiles_without_changing_the_source() {
+        use super::*;
+        use std::time::{Duration, Instant};
+        let device = GraphicsDevice::create().unwrap();
+        for alpha in [AlphaMode::Straight, AlphaMode::Premultiplied] {
+            let descriptor =
+                PixelDescriptor::new(PixelFormat::Rgba16Float, PixelEncoding::ScRgb, alpha)
+                    .unwrap();
+            let values = if alpha == AlphaMode::Straight {
+                [-0.25_f32, 12.5, 0.5, 0.5]
+            } else {
+                [-0.125, 6.25, 0.25, 0.5]
+            };
+            let bytes = values
+                .into_iter()
+                .flat_map(|v| half::f16::from_f32(v).to_le_bytes())
+                .collect::<Vec<_>>()
+                .repeat(32 * 32);
+            let source = PixelBuffer::from_tight(32, 32, descriptor, bytes.clone()).unwrap();
+            let texture = device.create_pixel_texture(&source).unwrap();
+            let mut sampler = AsyncSampleBuffer::for_source(&device, descriptor, 1000.).unwrap();
+            let slots: Vec<_> = (0..3)
+                .map(|_| sampler.submit(&texture.texture, 0, 0, 32).unwrap())
+                .collect();
+            assert!(
+                sampler.submit(&texture.texture, 0, 0, 32).is_err(),
+                "in-flight slots must not be overwritten"
+            );
+            assert!(
+                sampler.submit(&texture.texture, 0, 0, 16).is_err(),
+                "a partial tile has no valid full-tile cache contract"
+            );
+            for slot in slots {
+                let deadline = Instant::now() + Duration::from_secs(5);
+                let mapped = loop {
+                    if let Some(result) = sampler.poll(slot) {
+                        break result.unwrap();
+                    }
+                    assert!(Instant::now() < deadline, "async HDR sample did not land");
+                    std::thread::yield_now();
+                };
+                let expected = yue_media::pixel_color::to_sdr_bgra8(&source, 1000.).unwrap();
+                assert_eq!(mapped, expected.as_bytes());
+                assert!(
+                    sampler.poll(slot).is_none(),
+                    "each completed slot is consumed once"
+                );
+            }
+            let original = device
+                .read_back_pixels(&texture.texture, [0, 0, 32, 32], descriptor)
+                .unwrap();
+            assert_eq!(original.as_bytes(), bytes);
+            let slot = sampler.submit(&texture.texture, 0, 0, 32).unwrap();
+            sampler.reset();
+            assert!(sampler.poll(slot).is_none());
+            let slot = sampler.submit(&texture.texture, 0, 0, 32).unwrap();
+            assert!(sampler.set_source(descriptor, f64::NAN).is_err());
+            assert!(
+                sampler.pending[slot],
+                "a rejected rebind must preserve the pending request"
+            );
+            sampler.set_source(descriptor, 2000.).unwrap();
+            assert!(
+                sampler.poll(slot).is_none(),
+                "a policy rebind invalidates old completions"
+            );
+            let slot = sampler.submit(&texture.texture, 0, 0, 32).unwrap();
+            let deadline = Instant::now() + Duration::from_secs(5);
+            let mapped = loop {
+                if let Some(result) = sampler.poll(slot) {
+                    break result.unwrap();
+                }
+                assert!(Instant::now() < deadline);
+                std::thread::yield_now();
+            };
+            assert_eq!(
+                mapped,
+                yue_media::pixel_color::to_sdr_bgra8(&source, 2000.)
+                    .unwrap()
+                    .as_bytes()
+            );
+            let sdr = device
+                .create_pixel_texture(
+                    &PixelBuffer::from_tight(32, 32, PixelDescriptor::bgra8(), vec![0; 4096])
+                        .unwrap(),
+                )
+                .unwrap();
+            assert!(
+                sampler.submit(&sdr.texture, 0, 0, 32).is_err(),
+                "typed staging must reject a different DXGI source format"
+            );
+            sampler.set_source(PixelDescriptor::bgra8(), 100.).unwrap();
+            let slot = sampler.submit(&sdr.texture, 0, 0, 32).unwrap();
+            let deadline = Instant::now() + Duration::from_secs(5);
+            loop {
+                if let Some(result) = sampler.poll(slot) {
+                    assert_eq!(result.unwrap(), vec![0; 4096]);
+                    break;
+                }
+                assert!(Instant::now() < deadline);
+                std::thread::yield_now();
+            }
+        }
+    }
+    use super::{GraphicsDevice, ID3D11Texture2D, copy_rows};
+    use ::windows::Win32::Foundation::{HWND, LPARAM, LRESULT, WPARAM};
+    use ::windows::Win32::Graphics::Direct3D11::{
+        D3D11_MAP_FLAG_DO_NOT_WAIT, D3D11_MAP_READ, D3D11_MAPPED_SUBRESOURCE,
+    };
+    use ::windows::Win32::Graphics::Dxgi::DXGI_ERROR_WAS_STILL_DRAWING;
+    use ::windows::Win32::System::LibraryLoader::GetModuleHandleW;
+    use ::windows::Win32::UI::WindowsAndMessaging::{
+        CreateWindowExW, DefWindowProcW, DestroyWindow, RegisterClassW, UnregisterClassW,
+        WNDCLASSW, WS_EX_NOREDIRECTIONBITMAP, WS_EX_TOOLWINDOW, WS_POPUP,
+    };
+
+    #[test]
+    fn typed_copy_strips_padding_and_refuses_short_pitch_before_reading() {
+        let mut source = [0xcc; 32];
+        source[..8].copy_from_slice(&[0x00, 0xb4, 0x40, 0x4a, 0, 0x80, 0, 0x3c]);
+        source[16..24].copy_from_slice(&[0x00, 0xb4, 0x40, 0x4a, 1, 0x80, 0, 0x3c]);
+        let mut mapped = D3D11_MAPPED_SUBRESOURCE {
+            pData: source.as_mut_ptr().cast(),
+            RowPitch: 16,
+            DepthPitch: 32,
+        };
+        let mut result = vec![];
+        unsafe { super::copy_mapped_rows(&mapped, 8, 2, &mut result) }.unwrap();
+        assert_eq!(result, [&source[..8], &source[16..24]].concat());
+        mapped.RowPitch = 7;
+        assert!(unsafe { super::copy_mapped_rows(&mapped, 8, 2, &mut result) }.is_err());
+        mapped.pData = std::ptr::null_mut();
+        assert!(unsafe { super::copy_mapped_rows(&mapped, 8, 2, &mut result) }.is_err());
+    }
+
+    #[test]
+    #[ignore = "L4: opt-in D3D11 FP16 upload/readback, no window or display changes"]
+    fn fp16_region_readback_is_typed_and_keeps_exact_source_bits() {
+        use super::*;
+        use ::windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_R16G16B16A16_FLOAT;
+        use yue_media::{
+            PixelFormat,
+            pixels::{AlphaMode, PixelDescriptor, PixelEncoding},
+        };
+        let device = GraphicsDevice::create().unwrap();
+        let descriptor = PixelDescriptor::new(
+            PixelFormat::Rgba16Float,
+            PixelEncoding::ScRgb,
+            AlphaMode::Straight,
+        )
+        .unwrap();
+        let mut bytes = Vec::new();
+        for i in 0..20u16 {
+            for v in [0xb400, 0x4a40, 0x8000 | i, 0x3c00] {
+                bytes.extend(v.to_le_bytes());
+            }
+        }
+        let desc = D3D11_TEXTURE2D_DESC {
+            Width: 5,
+            Height: 4,
+            MipLevels: 1,
+            ArraySize: 1,
+            Format: DXGI_FORMAT_R16G16B16A16_FLOAT,
+            SampleDesc: DXGI_SAMPLE_DESC {
+                Count: 1,
+                Quality: 0,
+            },
+            Usage: D3D11_USAGE_DEFAULT,
+            BindFlags: D3D11_BIND_SHADER_RESOURCE.0 as u32,
+            ..Default::default()
+        };
+        let initial = D3D11_SUBRESOURCE_DATA {
+            pSysMem: bytes.as_ptr().cast(),
+            SysMemPitch: 40,
+            ..Default::default()
+        };
+        let mut texture = None;
+        unsafe {
+            device
+                .d3d
+                .CreateTexture2D(&desc, Some(&initial), Some(&mut texture))
+                .unwrap();
+        }
+        let texture = texture.unwrap();
+        let pixels = device
+            .read_back_pixels(&texture, [1, 1, 3, 2], descriptor)
+            .unwrap();
+        assert_eq!(pixels.size(), [3, 2]);
+        assert_eq!(pixels.row_stride(), 24);
+        assert_eq!(pixels.descriptor(), descriptor);
+        let expected = [&bytes[48..72], &bytes[88..112]].concat();
+        assert_eq!(pixels.as_bytes(), expected);
+        assert!(
+            device.read_back_bgra(&texture).is_err(),
+            "SDR entry must reject FP16 rather than reinterpret it"
+        );
+        assert!(device.read_back_region_bgra(&texture, 1, 1, 3, 2).is_err());
+        assert!(
+            device
+                .read_back_pixels(&texture, [4, 3, 2, 2], descriptor)
+                .is_err()
+        );
+        assert!(
+            device
+                .read_back_pixels(&texture, [u32::MAX, 0, 1, 1], descriptor)
+                .is_err()
+        );
+        assert!(
+            device
+                .read_back_pixels(&texture, [0, 0, 0, 1], descriptor)
+                .is_err()
+        );
+    }
+
+    /// Create a hidden popup window shaped exactly like the capture overlay.
+    ///
+    /// Returns `None` when the process has no window station (headless test run).
+    fn hidden_overlay_window() -> Option<(HWND, ::windows::core::HSTRING)> {
+        let class_name = ::windows::core::HSTRING::from("SnapClipCompositionTest");
+        let title = ::windows::core::HSTRING::from("SnapClip");
+        unsafe extern "system" fn window_proc(
+            window: HWND,
+            message: u32,
+            wparam: WPARAM,
+            lparam: LPARAM,
+        ) -> LRESULT {
+            unsafe { DefWindowProcW(window, message, wparam, lparam) }
+        }
+
+        let instance = unsafe { GetModuleHandleW(None) }.ok()?;
+        let class = WNDCLASSW {
+            lpfnWndProc: Some(window_proc),
+            hInstance: instance.into(),
+            lpszClassName: ::windows::core::PCWSTR(class_name.as_ptr()),
+            ..Default::default()
+        };
+        if unsafe { RegisterClassW(&class) } == 0 {
+            return None;
+        }
+        let window = unsafe {
+            CreateWindowExW(
+                WS_EX_TOOLWINDOW | WS_EX_NOREDIRECTIONBITMAP,
+                ::windows::core::PCWSTR(class_name.as_ptr()),
+                ::windows::core::PCWSTR(title.as_ptr()),
+                WS_POPUP,
+                0,
+                0,
+                320,
+                200,
+                None,
+                None,
+                Some(instance.into()),
+                None,
+            )
+        }
+        .ok()?;
+        Some((window, class_name))
+    }
+
+    /// The overlay's real presentation path: a DirectComposition target on a popup
+    /// window, a monitor-sized flip-model swap chain and a drawn frame.
+    #[test]
+    #[ignore = "L3 (docs/31 D-14): creates a popup window and presents through DirectComposition; run with --ignored --test-threads=1 on a live desktop"]
+    fn composition_target_accepts_the_overlay_swap_chain_and_presents() {
+        let (window, class_name) = hidden_overlay_window().expect(
+            "this test needs an interactive window station to create a popup window (docs/31 D-14)",
+        );
+        let device = GraphicsDevice::create().unwrap_or_else(|error| {
+            unsafe {
+                let _ = DestroyWindow(window);
+                let _ = UnregisterClassW(
+                    ::windows::core::PCWSTR(class_name.as_ptr()),
+                    Some(GetModuleHandleW(None).unwrap().into()),
+                );
+            }
+            panic!("this test needs a D3D11 device (docs/31 D-14): {error}")
+        });
+
+        let composition = device.create_composition_target(window).unwrap();
+        let swap_chain = device
+            .create_composition_swap_chain(320, 200, yue_media::PixelFormat::Bgra8Unorm)
+            .unwrap();
+        composition.attach(&swap_chain).unwrap();
+
+        let context = device.create_d2d_context().unwrap();
+        let target = device.create_target_bitmap(&context, &swap_chain).unwrap();
+        let pixel_size = unsafe { target.GetPixelSize() };
+        assert_eq!((pixel_size.width, pixel_size.height), (320, 200));
+
+        // One present cycle: this is what the overlay does on every repaint.
+        device.present(&swap_chain).unwrap();
+        composition.commit().unwrap();
+
+        let instance = unsafe { GetModuleHandleW(None) }.unwrap();
+        unsafe {
+            let _ = DestroyWindow(window);
+            let _ = UnregisterClassW(
+                ::windows::core::PCWSTR(class_name.as_ptr()),
+                Some(instance.into()),
+            );
+        }
+    }
+
+    #[test]
+    fn device_lost_codes_are_recognised_from_tagged_messages() {
+        assert!(GraphicsDevice::is_device_lost(
+            "Present failed #code=-2005270523"
+        ));
+        assert!(GraphicsDevice::is_device_lost(
+            "Map failed #code=-2005270521"
+        ));
+        assert!(!GraphicsDevice::is_device_lost("Present failed #code=0"));
+        assert!(!GraphicsDevice::is_device_lost("no code here"));
+    }
+
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU"]
+    fn device_creation_and_texture_round_trip() {
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        let pixels: Vec<u8> = (0..(4 * 3 * 4)).map(|index| index as u8).collect();
+        let frame = device.create_bgra_texture(4, 3, &pixels).unwrap();
+        assert_eq!((frame.width, frame.height), (4, 3));
+        let read_back = device.read_back_bgra(&frame.texture).unwrap();
+        assert_eq!(read_back, pixels);
+
+        let wrong = device.create_bgra_texture(4, 3, &[0u8; 8]).unwrap_err();
+        assert!(wrong.contains("does not match"));
+    }
+
+    /// Phase 0 baseline (docs/11): the export readback is always frame-sized today,
+    /// whatever selection `confirm()` later crops out. Records bytes and duration
+    /// for the reference sizes so Phase 3 region readback can be judged against it.
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU"]
+    fn readback_always_copies_the_whole_frame() {
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        for (width, height) in [(1920u32, 1080u32), (3840u32, 2160u32)] {
+            let frame = device
+                .create_bgra_texture(width, height, &vec![0u8; (width * height * 4) as usize])
+                .unwrap();
+            let started_at = std::time::Instant::now();
+            let pixels = device.read_back_bgra(&frame.texture).unwrap();
+            log::debug!(
+                "[yue-shot][bench] readback frame={}x{} selection=300x200 selection_bytes=240000 readback_bytes={} elapsed_ms={}",
+                width,
+                height,
+                pixels.len(),
+                started_at.elapsed().as_millis()
+            );
+            assert_eq!(pixels.len(), (width * height * 4) as usize);
+        }
+    }
+
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device and a swap chain; run with --ignored on a machine with a GPU"]
+    fn swap_chain_can_be_created_and_presented() {
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        let swap_chain = device
+            .create_composition_swap_chain(64, 48, yue_media::PixelFormat::Bgra8Unorm)
+            .unwrap();
+        let context = device.create_d2d_context().unwrap();
+        let target = device.create_target_bitmap(&context, &swap_chain).unwrap();
+        let pixel_size = unsafe { target.GetPixelSize() };
+        assert_eq!((pixel_size.width, pixel_size.height), (64, 48));
+        // Present on an unattached swap chain is allowed and must not error.
+        device.present(&swap_chain).unwrap();
+    }
+
+    /// Cost evidence for the scrolling path's per-frame readback (`docs/33` §4.1).
+    ///
+    /// One frame step is `read_back_region_bgra` of the selection out of a monitor-sized
+    /// frame: `CreateTexture2D(staging)` + `CopySubresourceRegion` + a **blocking**
+    /// `Map(READ)` + row copy, once per frame. Reported, not asserted.
+    ///
+    /// Read the number with this caveat: the source texture here is idle, so the blocking
+    /// `Map` has no GPU work to wait for. In the capture thread the frame was just produced,
+    /// so the real map waits *at least* this long — the probe is a floor, not the field cost.
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device; run with --include-ignored --nocapture"]
+    fn the_cost_of_one_region_readback_at_the_field_selection_size() {
+        use std::time::Instant;
+
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        let (frame_w, frame_h, sel_w, sel_h) = (3840u32, 2160u32, 2148u32, 1344u32);
+        let frame = device
+            .create_bgra_texture(
+                frame_w,
+                frame_h,
+                &vec![0x5au8; (frame_w * frame_h * 4) as usize],
+            )
+            .unwrap();
+        let (x, y) = ((frame_w - sel_w) / 2, (frame_h - sel_h) / 2);
+        let mut costs = Vec::new();
+        for _ in 0..30 {
+            let started = Instant::now();
+            let pixels = device
+                .read_back_region_bgra(&frame.texture, x, y, sel_w, sel_h)
+                .unwrap();
+            costs.push(started.elapsed().as_micros());
+            assert_eq!(pixels.len(), (sel_w * sel_h * 4) as usize);
+        }
+
+        // The parts of that call a session-scoped reader would and would not remove, so the
+        // reader is not reinvented from intuition:
+        //   create  — `CreateTexture2D(staging)` once per call. This is what a reusable
+        //             staging texture would amortize away.
+        //   re-read — the same copy+map+row-copy against one staging texture that is never
+        //             recreated: the floor if the texture were free.
+        //   copy    — the host-side row copy of the 11.5 MB region on its own.
+        //   polled  — `Map(DO_NOT_WAIT)` retried instead of a blocking `Map`.
+        let mut created = Vec::new();
+        for _ in 0..30 {
+            let started = Instant::now();
+            let texture = device
+                .create_staging_texture(sel_w, sel_h, "probe staging")
+                .unwrap();
+            std::hint::black_box(&texture);
+            created.push(started.elapsed().as_micros());
+        }
+        let staging = device
+            .create_staging_texture(sel_w, sel_h, "probe staging")
+            .unwrap();
+        let src_box = ::windows::Win32::Graphics::Direct3D11::D3D11_BOX {
+            left: x,
+            top: y,
+            front: 0,
+            right: x.saturating_add(sel_w),
+            bottom: y.saturating_add(sel_h),
+            back: 1,
+        };
+        let mut reused = Vec::new();
+        let mut copied = Vec::new();
+        let mut polled = Vec::new();
+        let mut polls = Vec::new();
+        let mut pixels = Vec::new();
+        for _ in 0..30 {
+            let started = Instant::now();
+            unsafe {
+                let context = device.owned_context("readback probe");
+                context.CopySubresourceRegion(
+                    &staging,
+                    0,
+                    0,
+                    0,
+                    0,
+                    &frame.texture,
+                    0,
+                    Some(&src_box),
+                );
+                let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+                context
+                    .Map(&staging, 0, D3D11_MAP_READ, 0, Some(&mut mapped))
+                    .unwrap();
+                copy_rows(&mapped, sel_w, sel_h, &mut pixels);
+                context.Unmap(&staging, 0);
+            }
+            reused.push(started.elapsed().as_micros());
+
+            let started = Instant::now();
+            let flat = vec![0u8; (sel_w * sel_h * 4) as usize];
+            let mut out = Vec::with_capacity(flat.len());
+            for row in flat.as_chunks::<4096>().0 {
+                out.extend_from_slice(row);
+            }
+            std::hint::black_box(&out);
+            copied.push(started.elapsed().as_micros());
+
+            let started = Instant::now();
+            let mut count = 0u32;
+            unsafe {
+                let context = device.owned_context("readback probe");
+                // The copy is queued once; re-queueing it would restart the work every poll
+                // and the map would never report a finished copy.
+                context.CopySubresourceRegion(
+                    &staging,
+                    0,
+                    0,
+                    0,
+                    0,
+                    &frame.texture,
+                    0,
+                    Some(&src_box),
+                );
+                context.Flush();
+                let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+                loop {
+                    count += 1;
+                    match context.Map(
+                        &staging,
+                        0,
+                        D3D11_MAP_READ,
+                        D3D11_MAP_FLAG_DO_NOT_WAIT.0 as u32,
+                        Some(&mut mapped),
+                    ) {
+                        Ok(()) => {
+                            copy_rows(&mapped, sel_w, sel_h, &mut pixels);
+                            context.Unmap(&staging, 0);
+                            break;
+                        }
+                        // S_FALSE or DXGI_ERROR_WAS_STILL_DRAWING: not landed yet.
+                        Err(error)
+                            if matches!(error.code().0, 1)
+                                || error.code() == DXGI_ERROR_WAS_STILL_DRAWING =>
+                        {
+                            std::thread::sleep(std::time::Duration::from_micros(50));
+                        }
+                        Err(error) => panic!("Map(DO_NOT_WAIT) failed: {error}"),
+                    }
+                }
+            }
+            polled.push(started.elapsed().as_micros());
+            polls.push(count);
+        }
+
+        costs.sort_unstable();
+        let sorted = &costs;
+        println!(
+            "region readback {sel_w}x{sel_h} out of {frame_w}x{frame_h}: \
+             first_us={} p50_us={} p95_us={} max_us={} bytes={}",
+            costs[0],
+            sorted[sorted.len() / 2],
+            sorted[sorted.len() * 95 / 100],
+            sorted[sorted.len() - 1],
+            sel_w as usize * sel_h as usize * 4,
+        );
+        created.sort_unstable();
+        reused.sort_unstable();
+        copied.sort_unstable();
+        polled.sort_unstable();
+        polls.sort_unstable();
+        println!(
+            "region readback parts: create_p50_us={} reused_texture_p50_us={} \
+             host_copy_p50_us={} polled_p50_us={} polled_max_us={} polls_p50={} polls_max={}",
+            created[created.len() / 2],
+            reused[reused.len() / 2],
+            copied[copied.len() / 2],
+            polled[polled.len() / 2],
+            polled[polled.len() - 1],
+            polls[polls.len() / 2],
+            polls[polls.len() - 1],
+        );
+    }
+
+    /// Would a pool of staging textures with `Map(DO_NOT_WAIT)` buy the capture thread anything?
+    ///
+    /// The parts probe above answered the *atomic* question (a reused texture is cheaper than
+    /// creating one: `create_p50_us=37` of a 2474 µs call) and showed that polling a copy the CPU
+    /// has nothing else to do during is *slower* than blocking, because a poll loop can only sleep
+    /// in 50 µs steps. Neither of those is the pooling question, which is about **overlap**: the
+    /// capture thread always has a previous frame to measure, and the point of a pool is to keep
+    /// the GPU copying frame N+1 while the CPU measures frame N.
+    ///
+    /// So each variant below runs a whole frame step: queue the copy, spend `CPU_US` on the
+    /// previous frame's pixels (the field's `push` is 11.6 ms), then take the copy. Whatever the
+    /// readback costs the loop is reported as `read_wait_us` — for the pooled row that is only the
+    /// part the CPU work did not cover.
+    ///
+    /// The load is **synthetic**: `black_box` row copies instead of hashing and stitching, chosen
+    /// because the probe measures waiting, not the tracker. Read the *differences* between the
+    /// rows, not any one of them as a field number.
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device; run with --include-ignored --nocapture"]
+    fn the_latency_a_staging_pool_would_hide_at_the_field_selection_size() {
+        use std::time::{Duration, Instant};
+
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        let (frame_w, frame_h, sel_w, sel_h) = (3840u32, 2160u32, 2148u32, 1344u32);
+        let frame = device
+            .create_bgra_texture(
+                frame_w,
+                frame_h,
+                &vec![0x5au8; (frame_w * frame_h * 4) as usize],
+            )
+            .unwrap();
+        let (x, y) = ((frame_w - sel_w) / 2, (frame_h - sel_h) / 2);
+        let src_box = ::windows::Win32::Graphics::Direct3D11::D3D11_BOX {
+            left: x,
+            top: y,
+            front: 0,
+            right: x.saturating_add(sel_w),
+            bottom: y.saturating_add(sel_h),
+            back: 1,
+        };
+        // What the capture thread does with a frame it has already read back (`tracker.push`
+        // measured 11631 µs mean on a live desktop). The probe's stand-in is 11.6 ms of row copies.
+        const CPU_US: u64 = 11_600;
+        const STEPS: usize = 20;
+        let source_rows = vec![0u8; (sel_w * sel_h * 4) as usize];
+        let mut scratch = Vec::with_capacity(source_rows.len());
+        let burn_cpu = |scratch: &mut Vec<u8>| {
+            scratch.clear();
+            for row in source_rows.as_chunks::<4096>().0 {
+                scratch.extend_from_slice(row);
+            }
+            std::hint::black_box(&scratch);
+        };
+
+        // Today's path, exactly as `read_back_region_bgra` runs it: a texture created per frame, a
+        // copy, then a blocking `Map` right where the copy was queued. `read_wait_us` is what the
+        // loop spends inside the readback; `frame_us` is the whole step.
+        let mut today = Vec::new();
+        for _ in 0..STEPS {
+            let started = Instant::now();
+            let read_started = Instant::now();
+            let staging = device
+                .create_staging_texture(sel_w, sel_h, "pool probe")
+                .unwrap();
+            unsafe {
+                let context = device.owned_context("staging pool probe");
+                context.CopySubresourceRegion(
+                    &staging,
+                    0,
+                    0,
+                    0,
+                    0,
+                    &frame.texture,
+                    0,
+                    Some(&src_box),
+                );
+                let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+                context
+                    .Map(&staging, 0, D3D11_MAP_READ, 0, Some(&mut mapped))
+                    .unwrap();
+                copy_rows(&mapped, sel_w, sel_h, &mut scratch);
+                context.Unmap(&staging, 0);
+            }
+            let read_wait = read_started.elapsed().as_micros();
+            burn_cpu(&mut scratch);
+            today.push((read_wait, started.elapsed().as_micros()));
+        }
+
+        // A pool of two, polled: while the CPU burns `CPU_US`, the copy for the frame just arrived
+        // is in flight, so the poll after the work either succeeds at once or waits out the rest.
+        let slots = [
+            device
+                .create_staging_texture(sel_w, sel_h, "pool probe")
+                .unwrap(),
+            device
+                .create_staging_texture(sel_w, sel_h, "pool probe")
+                .unwrap(),
+        ];
+        let mut pooled = Vec::new();
+        let mut polls_per_step = Vec::new();
+        for step in 0..STEPS {
+            let started = Instant::now();
+            let slot = &slots[step % slots.len()];
+            unsafe {
+                let context = device.owned_context("staging pool probe");
+                context.CopySubresourceRegion(slot, 0, 0, 0, 0, &frame.texture, 0, Some(&src_box));
+                context.Flush();
+            }
+            // The previous frame is measured *now*, which is the whole idea of a pool.
+            burn_cpu(&mut scratch);
+            let read_started = Instant::now();
+            let mut polls = 0u32;
+            let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+            loop {
+                polls += 1;
+                let map = unsafe {
+                    device.owned_context("staging pool probe").Map(
+                        slot,
+                        0,
+                        D3D11_MAP_READ,
+                        D3D11_MAP_FLAG_DO_NOT_WAIT.0 as u32,
+                        Some(&mut mapped),
+                    )
+                };
+                match map {
+                    Ok(()) => {
+                        unsafe {
+                            let context = device.owned_context("staging pool probe");
+                            copy_rows(&mapped, sel_w, sel_h, &mut scratch);
+                            context.Unmap(slot, 0);
+                        }
+                        break;
+                    }
+                    // S_FALSE or DXGI_ERROR_WAS_STILL_DRAWING: the copy has not landed yet.
+                    Err(error)
+                        if matches!(error.code().0, 1)
+                            || error.code() == DXGI_ERROR_WAS_STILL_DRAWING =>
+                    {
+                        std::thread::sleep(Duration::from_micros(50));
+                    }
+                    Err(error) => panic!("Map(DO_NOT_WAIT) failed: {error}"),
+                }
+            }
+            let read_wait = read_started.elapsed().as_micros();
+            burn_cpu(&mut scratch);
+            pooled.push((read_wait, started.elapsed().as_micros()));
+            polls_per_step.push(polls);
+        }
+
+        // The same pool with nothing to overlap: the copy's own landing time, which is the part a
+        // blocking `Map` pays in full and a pool can only hide behind other work.
+        let mut tight = Vec::new();
+        for step in 0..STEPS {
+            let started = Instant::now();
+            let read_started = Instant::now();
+            let slot = &slots[step % slots.len()];
+            let mut mapped = D3D11_MAPPED_SUBRESOURCE::default();
+            unsafe {
+                let context = device.owned_context("staging pool probe");
+                context.CopySubresourceRegion(slot, 0, 0, 0, 0, &frame.texture, 0, Some(&src_box));
+                context.Flush();
+                loop {
+                    let map = context.Map(
+                        slot,
+                        0,
+                        D3D11_MAP_READ,
+                        D3D11_MAP_FLAG_DO_NOT_WAIT.0 as u32,
+                        Some(&mut mapped),
+                    );
+                    match map {
+                        Ok(()) => {
+                            copy_rows(&mapped, sel_w, sel_h, &mut scratch);
+                            context.Unmap(slot, 0);
+                            break;
+                        }
+                        Err(error)
+                            if matches!(error.code().0, 1)
+                                || error.code() == DXGI_ERROR_WAS_STILL_DRAWING =>
+                        {
+                            std::thread::sleep(Duration::from_micros(50));
+                        }
+                        Err(error) => panic!("Map(DO_NOT_WAIT) failed: {error}"),
+                    }
+                }
+            }
+            let read_wait = read_started.elapsed().as_micros();
+            tight.push((read_wait, started.elapsed().as_micros()));
+        }
+
+        fn median(mut values: Vec<(u128, u128)>) -> (u128, u128) {
+            values.sort_unstable();
+            values[values.len() / 2]
+        }
+        fn worst(values: &mut [(u128, u128)]) -> u128 {
+            values.sort_unstable();
+            values[values.len() - 1].1
+        }
+        let (today_wait, today_total) = median(today.clone());
+        let (pooled_wait, pooled_total) = median(pooled.clone());
+        let (tight_wait, tight_total) = median(tight.clone());
+        let polls_mean = polls_per_step.iter().copied().sum::<u32>() as f64 / STEPS as f64;
+        println!(
+            "staging pool ({CPU_US} us of CPU work per frame, {STEPS} steps, 11.5 MB region):"
+        );
+        println!(
+            "  today   read_wait_p50_us={today_wait} frame_p50_us={today_total} \
+             frame_max_us={}",
+            worst(&mut today)
+        );
+        println!(
+            "  pooled  read_wait_p50_us={pooled_wait} frame_p50_us={pooled_total} \
+             frame_max_us={} polls_mean={polls_mean:.1} polls_max={}",
+            worst(&mut pooled),
+            polls_per_step.iter().copied().max().unwrap_or(0)
+        );
+        println!(
+            "  no_cpu  read_wait_p50_us={tight_wait} frame_p50_us={tight_total} \
+             frame_max_us={}",
+            worst(&mut tight)
+        );
+    }
+
+    /// The magnifier colour path, end to end: a tile copy queued on the immediate
+    /// context must land in its staging slot within a few *non-blocking* polls —
+    /// the overlay polls once per 15 ms render tick and keeps the info panel on
+    /// "......" until a tile arrives. If a submitted copy never flushes, this
+    /// probe fails exactly where the real overlay shows "......" forever.
+    fn probe_async_sample(device: &GraphicsDevice, source: &ID3D11Texture2D) {
+        use super::{AsyncSampleBuffer, SAMPLE_TILE};
+        use std::time::{Duration, Instant};
+
+        let mut buffer = AsyncSampleBuffer::new(device).unwrap();
+        let slot = buffer.submit(source, 64, 64, SAMPLE_TILE).unwrap();
+        let deadline = Instant::now() + Duration::from_millis(1_000);
+        loop {
+            if let Some(result) = buffer.poll(slot) {
+                let pixels = result.expect("sample staging map failed");
+                assert_eq!(pixels.len(), (SAMPLE_TILE * SAMPLE_TILE * 4) as usize);
+                return;
+            }
+            assert!(
+                Instant::now() < deadline,
+                "async sample never completed: the queued copy is not being flushed"
+            );
+            std::thread::sleep(Duration::from_millis(15));
+        }
+    }
+
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU"]
+    fn async_sample_from_an_uploaded_texture_lands_within_a_few_ticks() {
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        let frame = device
+            .create_bgra_texture(256, 256, &vec![7u8; 256 * 256 * 4])
+            .unwrap();
+        probe_async_sample(&device, &frame.texture);
+    }
+
+    #[test]
+    #[ignore = "L3 (docs/31 D-14): needs a monitor at the cursor and a WGC-capturable desktop; run with --ignored --test-threads=1 on a live desktop"]
+    fn async_sample_from_a_wgc_frame_lands_within_a_few_ticks() {
+        use crate::windows::monitor;
+
+        assert!(
+            super::super::wgc::is_supported(),
+            "this test needs Windows Graphics Capture, which this system does not expose"
+        );
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        // The monitor under the cursor is the cheapest way to get a real one, which is why this
+        // test is `#[ignore]`d: `GetCursorPos` fails with `ERROR_ACCESS_DENIED` whenever the
+        // process is not on the input desktop (`docs/31` R-20), and `--ignored` on a live desktop
+        // is the only way to know the difference between that and a broken probe.
+        let monitor = monitor::captured_monitor_at_cursor()
+            .expect("this test needs a readable cursor position (docs/31 D-14)");
+        let frame = super::super::wgc::capture_monitor(
+            &device,
+            &monitor,
+            yue_media::pixels::PixelDescriptor::bgra8(),
+        )
+        .unwrap();
+        probe_async_sample(&device, &frame.texture);
+    }
+
+    /// `T-THREAD-1`'s conclusion as an invariant instead of a note (`docs/30` §21.3, R-6).
+    ///
+    /// The device is created on the capture worker and the context is used on the overlay
+    /// thread. The creating thread never touches the context afterwards, because everything
+    /// capture does (`CreateTexture2D`, the WGC pool, the frame copies) goes through the
+    /// **free-threaded** `ID3D11Device`. So the invariant this code actually holds is not
+    /// "the creator is the user" — it is "**exactly one user thread**, claimed by the first
+    /// caller". Both halves are asserted here: the handoff must stay legal (a guard that
+    /// rejected it would reject the only production path there is), and a second thread
+    /// must fail loudly instead of racing the GPU.
+    #[test]
+    #[ignore = "L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU"]
+    fn the_context_owner_assertion_is_the_invariant_we_actually_hold() {
+        let device =
+            GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
+        let frame = device.create_bgra_texture(4, 3, &[0u8; 48]).unwrap();
+
+        // Created here (the capture worker), first used over there (the overlay thread).
+        let handed_over = std::thread::scope(|scope| {
+            scope
+                .spawn(|| device.read_back_bgra(&frame.texture).is_ok())
+                .join()
+                .unwrap()
+        });
+        assert!(
+            handed_over,
+            "the handoff from the creating thread to the first user must succeed"
+        );
+
+        // The second user is the violation: one immediate context, one user thread.
+        let second_user_allowed = std::thread::scope(|scope| {
+            scope
+                .spawn(|| {
+                    std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        device.read_back_bgra(&frame.texture)
+                    }))
+                    .is_ok()
+                })
+                .join()
+                .unwrap()
+        });
+        assert!(
+            !second_user_allowed,
+            "a second thread used the immediate context without panicking: \
+             the guard is not wired to the accessor"
+        );
+    }
+}

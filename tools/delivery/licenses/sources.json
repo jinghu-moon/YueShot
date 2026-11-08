@@ -1,0 +1,73 @@
+{
+  "format": 1,
+  "firaCode": {
+    "version": "6.002",
+    "release": "https://github.com/tonsky/FiraCode/releases/download/6.2/Fira_Code_v6.2.zip",
+    "archiveSha256": "0949915ba8eb24d89fd93d10a7ff623f42830d7c5ffc3ecbf960e4ecad3e3e79",
+    "member": "ttf/FiraCode-Regular.ttf",
+    "fontSha256": "5992ab9640e2df491b2f609467b1de60e8bc39b2c28db184342a0592d98f6117",
+    "licenseSource": "https://raw.githubusercontent.com/tonsky/FiraCode/eee6db993696aba61ff4eef03698e2987d79910c/LICENSE",
+    "fontPath": "assets/font/FiraCode-Regular.ttf"
+  },
+  "harmonyOS": {
+    "officialPage": "https://developer.huawei.com/consumer/cn/design/resource",
+    "pageSha256": "fc0c29efc376c22d40f81fd8960235329e69335583e177951351f570b1b62510",
+    "download": "https://alliance-communityfile-drcn.dbankcdn.com/FileServer/getFile/cmtyManage/011/111/111/0000000000011111111.20260627152129.89276966309836366526585265125586:50001231000000:2800:A0161E048334FE0271F9F5ECBBD5070D17381C7846125F4D7109DBC7B532C715.zip?needInitFileName=true",
+    "archiveSha256": "5440a3d9337828eda72e35f48fbb246873bca26e89644d433a8b01b85e45ef85",
+    "licenseMember": "HarmonyOS Sans/LICENSE-update.txt",
+    "review": "Official downloaded agreement forbids modification. YueShot overlay uses user-authorized Noto Sans SC instead. Unused upstream component HarmonyOS/TCloudNumber/full Fira files and the bundled-font capability are removed from the product snapshot; original file hashes and exclusion reasons remain in vendor/yue-ui/snapshot.json. No modification or redistribution permission for excluded fonts is inferred."
+  },
+  "tabler": {
+    "noticeSource": "vendor/yue-ui/crates/yue-component-icons/LICENSE.tabler",
+    "scope": "Pinned vendor SVG tree and baked overlay derivatives; vendor snapshot integrity is checked separately."
+  },
+  "noticeFiles": {
+    "FiraCode-LICENSE.txt": "1d41e10031ab125302780a05ec4c91d218e47db0c7e37cf315cce5e608cdc25c",
+    "HarmonyOS-Sans-LICENSE-original.txt": "7d7acf8e3ac928ae7f34aaa9f8e348dd0476dbb52caaa058e402894d4f6efe73",
+    "Tabler-LICENSE.txt": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db",
+    "NotoSansSC-OFL.txt": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+    "Lucide-LICENSE.txt": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+  },
+  "notoSansSC": {
+    "commit": "a85815a42757630ce188fdad368c2dfc444d4773",
+    "source": "https://raw.githubusercontent.com/google/fonts/a85815a42757630ce188fdad368c2dfc444d4773/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+    "fontSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "licenseSource": "https://raw.githubusercontent.com/google/fonts/a85815a42757630ce188fdad368c2dfc444d4773/ofl/notosanssc/OFL.txt",
+    "modification": "Subset and freeze wght=400; retain copyright and OFL metadata. Reserved Font Name Source is not used as the derivative family name.",
+    "fontPath": "assets/font/NotoSansSC[wght].ttf"
+  },
+  "lucide": {
+    "packageVersion": "0.8.0",
+    "noticeSource": "gpui-kit-assets 0.8.0 / LICENSE-LUCIDE",
+    "version": "1.43.0",
+    "archive": "https://api.github.com/repos/lucide-icons/lucide/tarball/1.43.0",
+    "archiveSha256": "d57793fa27a720cf487249940c8d68544c7a0d2ed2a046baad65012a902536ed"
+  },
+  "embeddedFonts": {
+    "noto-sans-sc-subset.ttf": {
+      "source": "notoSansSC",
+      "license": "SIL OFL 1.1",
+      "sha256": "0692b6260d372cc42945d1b7747b59919b28c78feadd012deae6800fbe5e0a60"
+    },
+    "fira-code-numbers-subset.ttf": {
+      "source": "firaCode",
+      "license": "SIL OFL 1.1",
+      "sha256": "7ae52853e332410c3dc3515f46e6ce1e22e00544e234b2af449d547dd500eb21"
+    }
+  },
+  "applicationIcon": {
+    "path": "apps/yue-shot/packaging/YueShot.ico",
+    "sha256": "da28e6ec295182ffb0e5759fff15af6760fd85bec06d837afa888ef0ddee1323",
+    "source": "User-provided refer/yue-shot.ico, explicitly designated for YueShot on 2026-11-08. Copied byte-for-byte into the controlled packaging directory; refer is not required for build or distribution.",
+    "rightsStatus": "user-designated-product-asset; no third-party license or authorship inferred",
+    "sizes": [
+      16,
+      24,
+      32,
+      48,
+      64,
+      128,
+      256
+    ]
+  }
+}

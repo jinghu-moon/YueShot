@@ -1,0 +1,43 @@
+# YueShot Windows workspace. Members are explicit.
+
+[workspace]
+resolver = "2"
+members = [
+    "xtask",
+    "crates/yue-media",
+    "crates/yue-image-codec",
+    "crates/yue-geometry",
+    "crates/yue-avif",
+    "apps/yue-shot/crates/yue-shot-model",
+    "apps/yue-shot/crates/yue-shot-overlay-ui",
+    "apps/yue-shot/crates/yue-shot-capture",
+    "apps/yue-shot/crates/yue-shot-storage",
+    "apps/yue-shot",
+    "crates/yue-clipboard",
+    "crates/yue-shell",
+    "crates/yue-pin",
+    "crates/yue-pin-model",
+    "tools/icon-bake",
+    "tools/codec-bench",
+]
+exclude = ["vendor/yue-ui", "crates/rapid-ocr-rs", "vendor/zenavif", "vendor/zenavif-parse", "vendor/zenavif-serialize", "vendor/pulp", "vendor/garb"]
+
+# YueShot uses one GPUI/Base graph. Cargo patches
+# belong to the consuming workspace, not the path dependency's workspace.
+[patch.crates-io]
+pulp = { path = "vendor/pulp" }
+garb = { path = "vendor/garb" }
+zenavif = { path = "vendor/zenavif" }
+zenavif-parse = { path = "vendor/zenavif-parse" }
+zenavif-serialize = { path = "vendor/zenavif-serialize" }
+gpui-base = { path = "vendor/yue-ui/vendor/gpui-base" }
+gpui-pre = { path = "vendor/yue-ui/vendor/gpui-pre" }
+gpui-pre-windows = { path = "vendor/yue-ui/vendor/gpui-pre-windows" }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+debug = "line-tables-only"
+strip = "none"

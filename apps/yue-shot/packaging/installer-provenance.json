@@ -1,0 +1,11 @@
+{
+  "source": "https://crates.io/api/v1/crates/cargo-packager/0.11.2/download",
+  "upstreamFile": "src/package/nsis/installer.nsi",
+  "upstreamSha256": "c9b9ff6c520de8621d9fa76ed12663f0161f5f2c088d683c3a2765c91785fb59",
+  "license": "MIT OR Apache-2.0",
+  "changes": [
+    "reject running YueShot instead of force-kill",
+    "all launch shortcuts and uninstall cleanup explicitly use the isolated delivery-test data root"
+  ],
+  "scope": "development delivery experiment only; not selected production installer"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "yueshot-windows-delivery-tools",
+  "private": true,
+  "version": "1.0.0",
+  "devDependencies": {
+    "@crabnebula/packager": "0.11.2"
+  }
+}

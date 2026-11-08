@@ -1,0 +1,83 @@
+{
+  "generator": "tools/generate-hdr-fixtures.py",
+  "license": "MIT (original synthetic data; project LICENSE)",
+  "pq": [
+    {
+      "label_nits": 0,
+      "code_u16": 0,
+      "decoded_nits": 0.0
+    },
+    {
+      "label_nits": 80,
+      "code_u16": 31841,
+      "decoded_nits": 80.00465737036112
+    },
+    {
+      "label_nits": 100,
+      "code_u16": 33297,
+      "decoded_nits": 100.0012261290206
+    },
+    {
+      "label_nits": 203,
+      "code_u16": 38055,
+      "decoded_nits": 202.98678823087127
+    },
+    {
+      "label_nits": 1000,
+      "code_u16": 49271,
+      "decoded_nits": 1000.0015744055038
+    },
+    {
+      "label_nits": 10000,
+      "code_u16": 65535,
+      "decoded_nits": 10000.0
+    }
+  ],
+  "files": [
+    {
+      "name": "cicp-over-icc.png",
+      "bytes": 317,
+      "sha256": "962cb0506407e2c6e1b2c8a8739054d3f33ea117f9e986d6d1ec08fdaff0e055"
+    },
+    {
+      "name": "icc-srgb16.png",
+      "bytes": 283,
+      "sha256": "040a42c6995376524cbb590429e3af0fe3481e5e96a7148f184ba164c658a7c5"
+    },
+    {
+      "name": "invalid-matrix.png",
+      "bytes": 110,
+      "sha256": "3071109ede8fc62eb1001e7d94f3e38588b28189c6a8c3c3d718a1c5b300cda8"
+    },
+    {
+      "name": "pq-alpha.png",
+      "bytes": 91,
+      "sha256": "afbbad2d89806118972904ecd16597fa171bde520a3daa0d4c8ffa27e0608a54"
+    },
+    {
+      "name": "pq-gray.png",
+      "bytes": 110,
+      "sha256": "937a4142475f2e95c609217d08bf2136da79058d9c68ed0be8e666b3b6347ea7"
+    },
+    {
+      "name": "sdr-vectors.rs",
+      "bytes": 683,
+      "sha256": "ba0fb9d5bff4b7d20d81fd4bdbdbfcbd6c141dec08eed961c82794d0834b7285"
+    },
+    {
+      "name": "srgb-matrix.icc",
+      "bytes": 416,
+      "sha256": "cb8fd47e803a3505e01a4d0381266a8fee1f702c0e91d580bbfdb6d31fff7678"
+    },
+    {
+      "name": "srgb16-gray.png",
+      "bytes": 92,
+      "sha256": "a948bb8b5e030d64b98fa0ff6d98bc1c5c85c1b42c094fb05702ec685603a458"
+    },
+    {
+      "name": "unsupported-hlg.png",
+      "bytes": 110,
+      "sha256": "d6115c407a6772484b8df6ab1119af8b3f50d683ec2f4ba17a5125fad6c8eea6"
+    }
+  ]
+}

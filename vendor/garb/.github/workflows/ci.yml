@@ -1,0 +1,138 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  CI: "1"
+
+jobs:
+  # Native test matrix
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux x86_64
+          - os: ubuntu-24.04-arm
+            name: Linux aarch64
+          - os: macos-latest
+            name: macOS aarch64
+          - os: macos-26-intel
+            name: macOS x86_64
+          - os: windows-latest
+            name: Windows x86_64
+          - os: windows-11-arm
+            name: Windows aarch64
+    name: test (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test --all-features -- --test-threads=1
+      - run: cargo test --no-default-features -- --test-threads=1
+
+  # Windows 32-bit cross test
+  test-win32:
+    name: test (Windows i686)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: i686-pc-windows-msvc
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test --all-features --target i686-pc-windows-msvc -- --test-threads=1
+      - run: cargo test --no-default-features --target i686-pc-windows-msvc -- --test-threads=1
+
+  # Linux 32-bit cross test (catches glibc-specific 32-bit bugs the
+  # Windows i686 job misses; required by repo policy).
+  test-linux-i686:
+    name: test (Linux i686)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install cross
+        run: cargo install cross --locked
+      - run: cross test --target i686-unknown-linux-gnu --all-features -- --test-threads=1
+      - run: cross test --target i686-unknown-linux-gnu --no-default-features -- --test-threads=1
+
+  # WASM tests via wasmtime
+  wasm:
+    name: test (wasm32-wasip1)
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TARGET_WASM32_WASIP1_RUNNER: "wasmtime run --dir . --"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1, wasm32-unknown-unknown
+      - name: Install wasmtime
+        run: |
+          curl https://wasmtime.dev/install.sh -sSf | bash
+          echo "$HOME/.wasmtime/bin" >> $GITHUB_PATH
+      - uses: Swatinem/rust-cache@v2
+      - name: Check wasm32-unknown-unknown (no SIMD)
+        run: cargo check --target wasm32-unknown-unknown --no-default-features
+      - name: Test wasm32-wasip1 (no SIMD)
+        run: cargo test --target wasm32-wasip1 --no-default-features -- --test-threads=1
+      - name: Test wasm32-wasip1 (simd128)
+        run: cargo test --target wasm32-wasip1 --no-default-features -- --test-threads=1
+        env:
+          RUSTFLAGS: "-C target-feature=+simd128"
+
+  # Lint
+  lint:
+    name: clippy + fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo fmt --check
+      - run: cargo clippy --all-features -- -D warnings
+      - run: cargo clippy --no-default-features -- -D warnings
+      - name: Doc build (warnings as errors)
+        run: cargo doc --all-features --no-deps
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+
+  # Code coverage
+  coverage:
+    name: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@cargo-llvm-cov
+      - run: cargo llvm-cov --all-features --codecov --output-path codecov.json -- --test-threads=1
+      - uses: codecov/codecov-action@v5
+        with:
+          files: codecov.json
+          fail_ci_if_error: false
+
+  # MSRV check
+  msrv:
+    name: MSRV (1.89)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.89"
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --all-features
+      - run: cargo check --no-default-features

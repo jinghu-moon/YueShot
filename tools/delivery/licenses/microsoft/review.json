@@ -1,0 +1,32 @@
+{
+  "format": 1,
+  "reviewDate": "2026-11-08",
+  "builderConfirmation": "User explicitly confirmed official Microsoft Visual Studio/Build Tools and use under its terms on 2026-11-08.",
+  "observedEdition": "Microsoft.VisualStudio.Product.Community",
+  "observedInstallationVersion": "17.14.36202.13",
+  "runtime": {
+    "file": "vcruntime140.dll",
+    "redistVersion": "14.44.35112",
+    "source": "Visual Studio VC/Redist/MSVC/14.44.35112/x64/Microsoft.VC143.CRT",
+    "sha256": "0205071c36c17f1efbd70178c852cb7d49985c484202752b8704b7ac6b184e60"
+  },
+  "evidence": [
+    {
+      "file": "tools/delivery/licenses/microsoft/Visual-Studio-2022-Community-License-EN.docx",
+      "sha256": "41a207b10c8ab91d0d2f10a854715f73dca54509581692d2fe179aa3ffcb8540",
+      "source": "https://visualstudio.microsoft.com/wp-content/uploads/2021/11/Visual-Studio-2022-Community-License-EN.docx"
+    },
+    {
+      "file": "tools/delivery/licenses/microsoft/Visual-Studio-2022-Community-License-EN.txt",
+      "sha256": "a38d10afc3ef8fb2e64af972a9c64d998ef964de8101b9f7a59703f72fa3a5ab",
+      "source": "XML paragraph text extracted from the original docx; formatting/numbering not reproduced"
+    },
+    {
+      "file": "tools/delivery/licenses/microsoft/visual-studio-2022-redistribution.html",
+      "sha256": "f87f37f85eec6ce17b8d30357968a31ac95cdc406a240c2ce8a62f5d5e2a7420",
+      "source": "https://learn.microsoft.com/en-us/visualstudio/releases/2022/redistribution"
+    }
+  ],
+  "finding": "Official VS 2022 redistribution list includes unmodified VC/redist contents except debug_nonredist; user confirmed licensed build environment. Community EULA section 4 separately requires protected downstream terms and forbids source redistribution under an Excluded License. DLL is not relicensed under AGPL.",
+  "status": "source-and-eligibility-recorded; end-user distribution terms and AGPL System Libraries treatment remain for release review"
+}

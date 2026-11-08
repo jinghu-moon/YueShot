@@ -1,0 +1,13 @@
+[package]
+name = "yue-pin-model"
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+description = "Immutable prepared content consumed by Windows pin presenters"
+
+[dependencies]
+yue-media = { path = "../yue-media" }
+
+[dev-dependencies]
+half = { version = "2.7", default-features = false, features = ["std"] }

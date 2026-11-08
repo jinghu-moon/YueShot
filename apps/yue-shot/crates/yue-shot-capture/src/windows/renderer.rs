@@ -1,0 +1,485 @@
+//! Overlay renderer: owns the D3D11 device, the DirectComposition swap chain and
+//! the Direct2D draw calls.
+//!
+//! One device and one swap chain live for as long as the overlay window does. When
+//! the overlay moves to a monitor with different dimensions only the swap chain and
+//! its render target are recreated.
+//!
+//! The frozen frame is uploaded as an L0 bitmap for one session. The renderer is
+//! destroyed when that session ends, so no selection or captured pixels survive into
+//! the next F5 invocation.
+
+use std::sync::Arc;
+
+use crate::annotation::{AnnotationDocument, AnnotationId, AnnotationItem};
+use crate::geometry::{LevelReach, MonitorLayout, Point, Rect};
+
+use super::providers::FrozenFrame;
+use super::win::d2d::{
+    ChainRingView, GuideView, OverlayRenderer as D2dRenderer, RegionPanelView, RenderMetrics,
+    RenderView,
+};
+use super::win::d3d11::{AsyncSampleBuffer, CompositionTarget, GraphicsDevice};
+use crate::keymap::{GuideGroup, LoupeHint};
+use crate::units::LabelDisplay;
+use ::windows::Win32::Graphics::Direct3D11::ID3D11Texture2D;
+
+/// Everything the overlay needs to draw one frame.
+#[derive(Debug, Clone)]
+pub struct OverlayFrameState {
+    pub selection: Rect,
+    pub cursor: Point,
+    pub cursor_visible: bool,
+    pub show_chrome: bool,
+    /// Show the eight edit grips. A draft selection deliberately hides them.
+    pub show_handles: bool,
+    /// Rounding of the frame in physical pixels (docs/23 §14.55.21); grips ride its arcs.
+    pub corner_radius: i32,
+    /// Show the live size/coordinate label for a draft or committed selection.
+    pub show_size_label: bool,
+    /// How that label reads, from the session's preferences — the same value the badge's own menu
+    /// changes while the session runs.
+    pub label: LabelDisplay,
+    /// Whether the pointer is on the badge, so it is painted as the control it is (docs/23 §14.53).
+    pub label_hovered: bool,
+    /// 自定义截图面板（docs/23 §14.54）；`None` 表示这次会话没打开它。
+    pub region_panel: Option<RegionPanelView>,
+    /// 延时倒计时的剩余秒数；`Some` 时在选区正中画大号数字（docs/23 §14.55.9）。
+    pub countdown: Option<u32>,
+    /// Show the screenshot loupe. Annotation mode owns the pointer instead.
+    pub show_magnifier: bool,
+    /// Brief feedback that the keyboard nudged the sampling cursor.
+    pub precision_feedback: bool,
+    /// Current color sample RGB from the magnifier sampler.
+    pub magnifier_rgb: Option<(u8, u8, u8)>,
+    /// The sampled colour rendered in the current `ColorFormat` (`#RRGGBB` /
+    /// `rgb(...)` / `hsl(...)`), shown in the info panel's primary slot.
+    /// `S` cycles the format; there is no secondary slot any more.
+    pub magnifier_color_text: Option<String>,
+    /// Info-panel coordinate is relative to the selection origin (P toggle).
+    pub magnifier_relative: bool,
+    /// Current loupe zoom (`Z` + wheel). `0.1..=40.0`.
+    pub magnifier_zoom: f32,
+    // ── Annotations ───────────────────────────────────────────────────────────
+    /// Committed annotation items to render at L2 (after mask, before chrome).
+    pub annotation_items: Vec<AnnotationItem>,
+    /// Id of the currently selected annotation (shows selection box).
+    pub annotation_selected_id: Option<AnnotationId>,
+    /// Item currently being drawn (not yet committed).
+    pub annotation_draft: Option<AnnotationItem>,
+    /// Window under the cursor, in monitor-local coordinates (paint-only hint).
+    pub hover_bounds: Option<Rect>,
+    /// Automatic-snap preview, in monitor-local coordinates.
+    pub preview_bounds: Option<Rect>,
+    /// Deep-selection ancestor levels (frame → deepest), monitor-local.
+    /// Which rings those are is decided by `chain_rings` (docs/21 §5.22); this is the paint-ready
+    /// form, monitor-local, with the selected level already removed (the preview paints it).
+    pub chain_rings: Vec<ChainRingView>,
+    /// Text drawn beside the automatic-snap preview (docs/21 §5.21); `None` = no label.
+    ///
+    /// Built by the overlay, which is the side that knows the level chain, the target kind and
+    /// whether the last query was answered at all; the renderer only places and draws it.
+    pub preview_label: Option<String>,
+    /// Whether the previewed box is the whole window rather than an element (docs/21 §5.21) — the
+    /// renderer then uses a neutral wash and a thin outline instead of the accent preview.
+    pub preview_is_window: bool,
+    /// How "walking" the level chain is right now, `0.0..=1.0` (docs/21 §5.24, A3).
+    ///
+    /// Drives the capture box's colour and wash: brand blue at rest, the capture green while the
+    /// walk is live. The box itself is identified by the mask hole, which the renderer derives from
+    /// `preview_bounds`/`selection`.
+    pub capture_green: f32,
+    /// How visible the preview box is, `0.0..=1.0` (docs/21 §5.24, ②): the box eases in when it
+    /// appears, and is 1 from then on. The mask hole is not part of it — the content is already at
+    /// its own brightness while the outline is still arriving.
+    pub preview_alpha: f32,
+    /// How many wheel stops the level walk still has in each direction, while it is above the answer
+    /// (docs/21 §5.24, A1).
+    pub level_badge: Option<LevelReach>,
+    /// A one-shot hint in monitor-local coordinates (docs/21 §5.21): the level walk has to be
+    /// explained once, or nobody finds it.
+    pub hint: Option<(Point, String)>,
+    /// The scroll session's panel and toolbar, while one runs (`docs/33`).
+    pub(crate) scroll: Option<super::win::d2d::ScrollPanelView>,
+    /// Blur the frame outside the mask hole (the `mask_blur` preference).
+    pub mask_blur: bool,
+    /// The loupe's hint row, with the keys as bound.
+    pub loupe_hints: Arc<[LoupeHint]>,
+    /// The bottom-left shortcut guide while it is (fading) on screen.
+    pub(crate) guide: Option<GuideView>,
+}
+
+impl OverlayFrameState {
+    pub fn new() -> Self {
+        Self {
+            selection: Rect::default(),
+            cursor: Point::default(),
+            cursor_visible: false,
+            show_chrome: false,
+            show_handles: true,
+            corner_radius: 0,
+            show_size_label: true,
+            // Match `OverlayPreferences::default()`: a state built without preferences reads the
+            // same numbers the overlay would show before anyone changed anything.
+            label: LabelDisplay::default(),
+            label_hovered: false,
+            region_panel: None,
+            countdown: None,
+            show_magnifier: true,
+            precision_feedback: false,
+            magnifier_rgb: None,
+            magnifier_color_text: None,
+            magnifier_relative: false,
+            magnifier_zoom: 20.0,
+            annotation_items: Vec::new(),
+            annotation_selected_id: None,
+            annotation_draft: None,
+            hover_bounds: None,
+            preview_bounds: None,
+            chain_rings: Vec::new(),
+            preview_label: None,
+            preview_is_window: false,
+            capture_green: 0.0,
+            preview_alpha: 1.0,
+            level_badge: None,
+            hint: None,
+            scroll: None,
+            mask_blur: false,
+            loupe_hints: Arc::from(Vec::new()),
+            guide: None,
+        }
+    }
+}
+
+impl Default for OverlayFrameState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Owns the graphics stack behind one overlay window.
+pub struct Win32Renderer {
+    d2d: D2dRenderer,
+    composition: CompositionTarget,
+    layout: MonitorLayout,
+    frame: Rect,
+    sample_buffer: AsyncSampleBuffer,
+}
+
+impl Win32Renderer {
+    pub(crate) fn update_scroll_preview(
+        &mut self,
+        preview: &crate::scroll::Preview,
+    ) -> Result<(), String> {
+        self.d2d.update_scroll_preview(preview)
+    }
+
+    /// Create the device stack and bind a composition target to `window`.
+    ///
+    /// The window handle comes from the typed `windows` bindings because that is what
+    /// DirectComposition and Direct2D expect.
+    pub fn new(
+        window: ::windows::Win32::Foundation::HWND,
+        layout: &MonitorLayout,
+        device: Arc<GraphicsDevice>,
+    ) -> Result<Self, String> {
+        let sample_buffer = AsyncSampleBuffer::new(&device)?;
+        let d2d = D2dRenderer::new(device, layout.dpi)?;
+        let composition = d2d.composition_target(window)?;
+        let mut renderer = Self {
+            d2d,
+            composition,
+            layout: layout.clone(),
+            frame: layout.local_bounds(),
+            sample_buffer,
+        };
+        renderer.resize(layout)?;
+        Ok(renderer)
+    }
+
+    /// DPI-dependent chrome metrics.
+    /// DPI-dependent chrome metrics.
+    #[allow(dead_code)]
+    pub fn metrics(&self) -> RenderMetrics {
+        self.d2d.metrics()
+    }
+
+    /// Current monitor layout.
+    pub fn layout(&self) -> &MonitorLayout {
+        &self.layout
+    }
+
+    /// Local frame rectangle (origin at the monitor's top-left).
+    pub fn frame(&self) -> Rect {
+        self.frame
+    }
+
+    /// Recreate the back buffer for a monitor geometry change.
+    pub fn resize(&mut self, layout: &MonitorLayout) -> Result<(), String> {
+        let width = layout.bounds.width().max(1) as u32;
+        let height = layout.bounds.height().max(1) as u32;
+        self.d2d.set_dpi(layout.dpi);
+        self.d2d.ensure_back_buffer(width, height)?;
+        if let Some(swap_chain) = self.d2d.swap_chain() {
+            self.composition.attach(swap_chain)?;
+        }
+        self.layout = layout.clone();
+        self.frame = layout.local_bounds();
+        Ok(())
+    }
+
+    /// Bind the frozen frame as the L0 layer.
+    ///
+    /// When the provider produced a GPU texture the bitmap is created directly over it,
+    /// so no pixels cross the PCIe bus; GPU-less frames fall back to a one-off upload.
+    pub fn set_frame(&mut self, frozen: &FrozenFrame) -> Result<(), String> {
+        // This fixed 1000-nit mapping policy produces only the info-strip SDR
+        // numbers. It is not a measured peak, and never varies with the tile.
+        // The loupe itself continues sampling the original HDR GPU texture.
+        let descriptor = frozen.frame.source.descriptor();
+        let peak = if descriptor.encoding() == yue_media::pixels::PixelEncoding::ScRgb {
+            1000.
+        } else {
+            100.
+        };
+        self.sample_buffer.set_source(descriptor, peak)?;
+        // Source encoding stays frozen. UI white belongs to the output *now*,
+        // not the source snapshot taken before acquisition.
+        let output = super::color_output::ColorSnapshot::query(frozen.monitor.handle).ok();
+        self.d2d.configure_source(
+            frozen.frame.source.descriptor(),
+            output.as_ref().and_then(|v| v.sdr_white_nits()),
+        )?;
+        // A color-contract change recreates the swap chain. Bind the new target
+        // before presenting rather than leaving composition on the old SDR one.
+        if let Some(swap_chain) = self.d2d.swap_chain() {
+            self.composition.attach(swap_chain)?;
+        }
+        if let Some(texture) = frozen.render_source() {
+            return self.d2d.set_frame_texture(
+                frozen.frame.width,
+                frozen.frame.height,
+                texture,
+                frozen.frame.source.descriptor(),
+            );
+        }
+        let pixels = frozen
+            .pixels()
+            .map_err(|error| format!("frozen frame pixels unavailable: {error}"))?;
+        self.d2d.update_pixels(pixels)
+    }
+
+    /// Draw and present one frame.
+    ///
+    /// `annotations` is borrowed from the overlay controller so we can avoid
+    /// cloning the item list every tick; `OverlayFrameState.annotation_items`
+    /// carries the data when the controller wants to decouple.
+    /// Prepare the overlay panel's icons. **Outside a frame only** (see `d2d::panel_icon`).
+    /// 量出两处分段器的选项宽度（详见 `d2d::segment_widths`）。控制器存一份，绘制与命中共用。
+    pub fn segment_widths(&mut self) -> Result<crate::geometry::SegmentWidths, String> {
+        self.d2d.segment_widths()
+    }
+
+    pub fn prepare_panel_icons(&mut self) -> Result<(), String> {
+        self.d2d.prepare_panel_icons()
+    }
+
+    /// 倒计时遮罩层的内容（模糊 + 压暗，已读回 CPU）。见
+    /// [`crate::windows::win::d2d::OverlayRenderer::countdown_dim_source`]。
+    pub(crate) fn countdown_dim_source(
+        &mut self,
+        divisor: u32,
+    ) -> Result<crate::windows::win::d2d::DimSource, String> {
+        self.d2d.countdown_dim_source(divisor)
+    }
+
+    /// Draw the countdown on the GPU and bind it above a transparent input host.
+    /// A layered HWND can own a DirectComposition tree independently of its DIB.
+    pub(crate) fn countdown_composition(
+        &mut self,
+        window: ::windows::Win32::Foundation::HWND,
+    ) -> Result<
+        (
+            CompositionTarget,
+            ::windows::Win32::Graphics::Dxgi::IDXGISwapChain1,
+        ),
+        String,
+    > {
+        let chain = self.d2d.countdown_swap_chain()?;
+        let composition = self.d2d.composition_target(window)?;
+        composition.attach(&chain)?;
+        Ok((composition, chain))
+    }
+
+    pub fn render(
+        &mut self,
+        state: &OverlayFrameState,
+        annotations: Option<&AnnotationDocument>,
+    ) -> Result<(), String> {
+        let view = self.view(state, annotations);
+        self.d2d.render(&view)?;
+        self.d2d.present()?;
+        self.composition.commit()
+    }
+
+    /// The one description of a frame: the paint pass draws exactly this, and the pointer pass
+    /// hit-tests the badge from exactly this.
+    ///
+    /// The badge's rectangle is the pointer's way into the custom-region panel (docs/23 §14.54), so
+    /// "the badge the user aims at" and "the badge the user sees" being the same rectangle has to be
+    /// structural, not two pieces of arithmetic that happen to agree today.
+    fn view(
+        &self,
+        state: &OverlayFrameState,
+        annotations: Option<&AnnotationDocument>,
+    ) -> RenderView {
+        // Build the RenderView. Prefer live borrow when available.
+        let live_items: Vec<AnnotationItem> = annotations
+            .map(|d| d.items().to_vec())
+            .unwrap_or_else(|| state.annotation_items.clone());
+        let live_selected = annotations
+            .and_then(|d| d.selected_id())
+            .or(state.annotation_selected_id);
+        let live_draft = annotations
+            .and_then(|d| d.draft.clone())
+            .or(state.annotation_draft.clone());
+
+        RenderView {
+            frame: self.frame,
+            selection: state.selection,
+            cursor: state.cursor,
+            screen_origin: Point::new(self.layout.bounds.left, self.layout.bounds.top),
+            cursor_visible: state.cursor_visible,
+            show_chrome: state.show_chrome,
+            show_handles: state.show_handles,
+            corner_radius: state.corner_radius,
+            show_size_label: state.show_size_label,
+            label: state.label,
+            label_hovered: state.label_hovered,
+            region_panel: state.region_panel.clone(),
+            countdown: state.countdown,
+            show_magnifier: state.show_magnifier,
+            precision_feedback: state.precision_feedback,
+            work_area: self.layout.local_work_area(),
+            magnifier_rgb: state.magnifier_rgb,
+            magnifier_color_text: state.magnifier_color_text.clone(),
+            magnifier_relative: state.magnifier_relative,
+            magnifier_zoom: state.magnifier_zoom,
+            annotation_items: live_items,
+            annotation_selected_id: live_selected,
+            annotation_draft: live_draft,
+            hover_bounds: state.hover_bounds,
+            preview_bounds: state.preview_bounds,
+            chain_rings: state.chain_rings.clone(),
+            preview_label: state.preview_label.clone(),
+            preview_is_window: state.preview_is_window,
+            capture_green: state.capture_green,
+            preview_alpha: state.preview_alpha,
+            level_badge: state.level_badge,
+            hint: state.hint.clone(),
+            scroll: state.scroll.clone(),
+            mask_blur: state.mask_blur,
+            loupe_hints: state.loupe_hints.clone(),
+            guide: state.guide.clone(),
+        }
+    }
+
+    /// Produce the annotated export for `state.selection`.
+    ///
+    /// Replays the same [`AnnotationDocument`] the preview drew, but with chrome,
+    /// cursor, the selection box and the draft suppressed, and reads the selected
+    /// region back to typed CPU pixels. This is what keeps the artifact pixel-identical to the
+    /// screen crop (docs/11 §8.2 "导出和预览重放同一份文档").
+    pub fn render_export(
+        &mut self,
+        state: &OverlayFrameState,
+        annotations: Option<&AnnotationDocument>,
+    ) -> Result<yue_media::pixels::PixelBuffer, String> {
+        // An artifact carries the selection, its annotations and nothing else: no chrome, no cursor,
+        // no badge, no loupe, no hints, no panel. The overrides below repeat
+        // what `OverlayRenderer::render_export` and `Win32Renderer::render_export` already clear one
+        // layer down, so the pixels cannot come to depend on those invariants holding.
+        let view = RenderView {
+            cursor_visible: false,
+            show_chrome: false,
+            show_handles: false,
+            show_size_label: false,
+            label_hovered: false,
+            // The panel is UI, so the artifact gets none of it.
+            region_panel: None,
+            countdown: None,
+            show_magnifier: false,
+            precision_feedback: false,
+            magnifier_rgb: None,
+            magnifier_color_text: None,
+            magnifier_relative: false,
+            magnifier_zoom: 20.0,
+            annotation_selected_id: None,
+            annotation_draft: None,
+            preview_label: None,
+            preview_is_window: false,
+            preview_alpha: 1.0,
+            capture_green: 0.0,
+            level_badge: None,
+            hint: None,
+            // The panel is UI, so the artifact gets none of it.
+            scroll: None,
+            mask_blur: false,
+            guide: None,
+            ..self.view(state, annotations)
+        };
+        self.d2d.render_export(&view)
+    }
+
+    /// Where the shortcut guide for `groups` sits on this monitor; `None` when it shows nothing.
+    pub(crate) fn guide_bounds(
+        &mut self,
+        groups: &Arc<[GuideGroup]>,
+    ) -> Result<Option<Rect>, String> {
+        self.d2d.guide_bounds(groups, self.frame)
+    }
+
+    /// Where the size badge sits on this monitor, or `None` when this state shows no badge.
+    ///
+    /// The badge's rectangle is what the pointer's hover test and the panel's trigger both run
+    /// against, so both the paint pass and the pointer pass have to agree — which is why the view they
+    /// are given is built by one function ([`Self::view`]). Annotations are deliberately not resolved: the
+    /// badge's rectangle depends on the selection, the cursor, the work area and the display, never
+    /// on what has been drawn inside the selection.
+    pub(crate) fn size_label_bounds(
+        &mut self,
+        state: &OverlayFrameState,
+    ) -> Result<Option<Rect>, String> {
+        let view = self.view(state, None);
+        self.d2d.size_label_bounds(&view)
+    }
+
+    /// Whether a failure message indicates a lost graphics device.
+    pub fn is_device_lost(message: &str) -> bool {
+        GraphicsDevice::is_device_lost(message)
+    }
+
+    /// Submit a non-blocking tile copy for async color sampling.
+    /// Returns the slot index on success.
+    pub fn request_sample(
+        &mut self,
+        texture: &ID3D11Texture2D,
+        x: u32,
+        y: u32,
+        tile_size: u32,
+    ) -> Result<usize, String> {
+        self.sample_buffer.submit(texture, x, y, tile_size)
+    }
+
+    /// Poll a previously-submitted slot. Returns Some(Ok(tile_data)) when the GPU
+    /// copy is complete, None if still in-flight, Some(Err) on failure.
+    pub fn poll_sample(&mut self, slot: usize) -> Option<Result<Vec<u8>, String>> {
+        self.sample_buffer.poll(slot)
+    }
+
+    /// Reset all pending sample slots.
+    #[allow(dead_code)]
+    pub fn reset_samples(&mut self) {
+        self.sample_buffer.reset();
+    }
+}

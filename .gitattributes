@@ -1,0 +1,2 @@
+# Preserve exact reviewed source and license bytes on every checkout.
+* -text

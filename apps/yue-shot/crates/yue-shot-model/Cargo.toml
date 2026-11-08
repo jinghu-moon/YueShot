@@ -1,0 +1,15 @@
+[package]
+name = "yue-shot-model"
+version = "0.1.0"
+description = "Screenshot domain values owned by YueShot"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+yue-geometry = { path = "../../../../crates/yue-geometry" }
+yue-media = { path = "../../../../crates/yue-media" }
+
+[dev-dependencies]
+serde_json = "1"

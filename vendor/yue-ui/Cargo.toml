@@ -1,0 +1,28 @@
+[workspace]
+members = ["crates/yue-color", "crates/yue-component", "crates/yue-component-icons"]
+resolver = "2"
+exclude = ["vendor/gpui-base", "vendor/gpui-pre", "vendor/gpui-pre-windows"]
+
+[patch.crates-io]
+# Maintained behavior, paint snapshots and D3D11 backdrop filters; see vendor patch records.
+gpui-base = { path = "vendor/gpui-base" }
+gpui-pre = { path = "vendor/gpui-pre" }
+gpui-pre-windows = { path = "vendor/gpui-pre-windows" }
+
+[workspace.package]
+edition = "2024"
+license = "MIT"
+
+[workspace.dependencies]
+gpui-kit = { version = "0.8.0", default-features = false }
+# Same major series GPUI's own path tessellation is locked to, so `LineCap` and
+# `StrokeOptions` stay the same types GPUI reads.
+lyon = "1.0.19"
+yue-component = { path = "crates/yue-component", default-features = false }
+yue-component-icons = { path = "crates/yue-component-icons" }
+
+[profile.dev]
+debug = 0
+
+[profile.dev.package."*"]
+debug = 0

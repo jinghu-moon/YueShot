@@ -1,0 +1,155 @@
+//! Window lifetime: showing, hiding, focus and foreground restoration (docs/23 D3 / T1.6.5).
+//!
+//! Split out of `overlay.rs`. Everything that makes the overlay *be* a window on screen and
+//! gives the user's keyboard back when it goes away — including the IME and foreground
+//! handling, which are the two things a borderless full-screen window gets wrong by default.
+//! `pub(super)` because the parent module's message loop drives them.
+
+use super::*;
+
+impl OverlayController {
+    pub(super) fn prepare_overlay(
+        &mut self,
+        monitor: &CapturedMonitor,
+        frozen: &FrozenFrame,
+    ) -> CaptureResult<()> {
+        if self.renderer.is_none() {
+            // `self.window` uses the `windows-sys` bindings; the renderer needs the
+            // typed handle. Both are the same `*mut c_void` at the ABI level.
+            let window = ::windows::Win32::Foundation::HWND(self.window);
+            // The renderer must share the capture worker's device: the frozen
+            // texture it displays was created there and D2D cannot cross devices.
+            let device = frozen.device().ok_or_else(|| {
+                CaptureError::ProviderUnavailable(
+                    "frozen frame carries no device to render with".into(),
+                )
+            })?;
+            self.renderer = Some(
+                Win32Renderer::new(window, &monitor.layout, device.clone()).map_err(|message| {
+                    if Win32Renderer::is_device_lost(&message) {
+                        CaptureError::DeviceRemoved(message)
+                    } else {
+                        CaptureError::RenderFailed(message)
+                    }
+                })?,
+            );
+        }
+        let renderer = self
+            .renderer
+            .as_mut()
+            .ok_or_else(|| CaptureError::RenderFailed("renderer was not created".into()))?;
+        renderer
+            .resize(&monitor.layout)
+            .and_then(|()| renderer.set_frame(frozen))
+            .map_err(|message| {
+                if Win32Renderer::is_device_lost(&message) {
+                    CaptureError::DeviceRemoved(message)
+                } else {
+                    CaptureError::RenderFailed(message)
+                }
+            })
+    }
+
+    /// Show the overlay and give it keyboard focus.
+    ///
+    /// Focus is not cosmetic: `Esc` and `Enter` arrive as `WM_KEYDOWN`, and a window
+    /// that is never activated never receives them. The previously focused window is
+    /// remembered so it can be restored when the session ends.
+    pub(super) fn show_overlay(&mut self, layout: &MonitorLayout) {
+        unsafe {
+            if self.previous_foreground.is_null() {
+                self.previous_foreground = GetForegroundWindow();
+            }
+            // Both Win32 bindings use the same raw HWND representation.
+            SetWindowPos(
+                self.window,
+                HWND_TOPMOST,
+                layout.bounds.left,
+                layout.bounds.top,
+                layout.bounds.width().max(1),
+                layout.bounds.height().max(1),
+                SWP_SHOWWINDOW,
+            );
+            // `SW_SHOW` (not `SW_SHOWNOACTIVATE`): activation is what routes the
+            // keyboard to the overlay.
+            ShowWindow(self.window, SW_SHOW);
+            self.take_focus();
+        }
+        log::debug!("[yue-shot][capture] overlay focus requested");
+    }
+
+    /// Force the overlay to the foreground so it owns the keyboard.
+    ///
+    /// `SetForegroundWindow` can be refused while another process owns the
+    /// foreground; `SetFocus` inside our own thread still delivers `WM_KEYDOWN`,
+    /// and `WM_MOUSEACTIVATE` re-asserts focus if the user clicks first.
+    pub(super) fn take_focus(&self) {
+        unsafe {
+            let window = self.window;
+            if GetForegroundWindow() != self.window {
+                let _ = SetForegroundWindow(window);
+            }
+            let _ = SetFocus(window);
+        }
+    }
+
+    /// Close the overlay's own IME context so `S`/`C`/`P` (and any future
+    /// letter hotkey) arrive as their real virtual-key codes instead of
+    /// `VK_PROCESSKEY (0xE5)`.
+    ///
+    /// `ImmSetOpenStatus` operates on the per-window input context, not the
+    /// thread- or system-wide IME setting, so the user's active Chinese IME in
+    /// Word/Chrome is untouched: they see their usual state once the overlay
+    /// releases focus. Called from `WM_SETFOCUS`, i.e. every time the overlay
+    /// gains the keyboard (session start, click-back, `WM_MOUSEACTIVATE`).
+    /// 面板打开期间把 IME 从 overlay 窗口上摘掉，并记下原来的 context（幂等）。
+    ///
+    /// `ImmSetOpenStatus(himc, 0)` 只把 IME 切到"英文模式"，是 IMM 时代的兼容垫片：现代 TSF 输入法
+    /// （微软拼音等）经常直接忽略它，数字仍被输入法吃掉（docs/23 §14.55）。摘掉 context 之后这个
+    /// HWND 收到的是普通按键，`WM_CHAR` 也照常产生；只影响我们自己的窗口。
+    pub(super) fn detach_ime_for_panel(&mut self) {
+        if self.saved_ime.is_some() {
+            return;
+        }
+        let previous = unsafe { ImmAssociateContext(self.window, std::ptr::null_mut()) };
+        self.saved_ime = Some(previous);
+    }
+
+    /// 把面板打开前的 IME context 还回去（幂等；没摘过就什么都不做）。
+    pub(super) fn restore_ime_for_panel(&mut self) {
+        if let Some(previous) = self.saved_ime.take() {
+            unsafe { ImmAssociateContext(self.window, previous) };
+        }
+    }
+
+    pub(super) fn disable_ime_for_overlay(&self) {
+        unsafe {
+            let himc = ImmGetContext(self.window);
+            if himc.is_null() {
+                return;
+            }
+            // FALSE = switch this window's IME to alphanumeric ("English") mode.
+            let _ = ImmSetOpenStatus(himc, 0);
+            ImmReleaseContext(self.window, himc);
+        }
+    }
+
+    /// Hand the foreground back to whatever had it before the overlay appeared.
+    pub(super) fn restore_foreground(&self) {
+        let previous = self.previous_foreground;
+        if previous.is_null() {
+            return;
+        }
+        unsafe {
+            let _ = SetForegroundWindow(previous);
+        }
+    }
+
+    pub(super) fn hide_overlay(&mut self) {
+        unsafe {
+            ShowWindow(self.window, SW_HIDE);
+        }
+        self.restore_foreground();
+        self.previous_foreground = null_mut();
+    }
+}

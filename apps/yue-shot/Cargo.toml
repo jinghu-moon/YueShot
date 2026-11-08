@@ -1,0 +1,82 @@
+[package]
+name = "yue-shot"
+version = "0.1.2"
+description = "YueShot screenshot application"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+
+[dependencies]
+log = "0.4"
+yue-image-codec = { path = "../../crates/yue-image-codec" }
+gpui-kit = { version = "0.8", default-features = false, features = ["assets"] }
+yue-component = { path = "../../vendor/yue-ui/crates/yue-component", default-features = false }
+yue-shot-capture = { path = "crates/yue-shot-capture" }
+yue-shot-model = { path = "crates/yue-shot-model" }
+yue-shot-storage = { path = "crates/yue-shot-storage" }
+yue-media = { path = "../../crates/yue-media" }
+yue-shot-overlay-ui = { path = "crates/yue-shot-overlay-ui" }
+yue-clipboard = { path = "../../crates/yue-clipboard" }
+yue-pin-model = { path = "../../crates/yue-pin-model" }
+yue-pin = { path = "../../crates/yue-pin" }
+yue-shell = { path = "../../crates/yue-shell" }
+serde = { version = "1", features = ["derive"] }
+async-channel = "2.5"
+blake3 = "1.5"
+png = "0.18"
+half = { version = "2.7", default-features = false, features = ["std"] }
+image = { version = "0.25", default-features = false, features = ["webp", "png", "jpeg"] }
+serde_json = "1"
+zenjpeg = { version = "=0.8.4", default-features = false, features = ["trellis"] }
+zenwebp = "=0.4.4"
+enough = "0.4"
+yue-avif = { path = "../../crates/yue-avif", optional = true }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+  "Win32_Foundation",
+  "Win32_Security",
+  "Win32_Security_Authorization",
+  "Win32_Storage_FileSystem",
+  "Win32_Graphics_Dwm",
+  "Win32_UI_HiDpi",
+  "Win32_Graphics_Gdi",
+  "Win32_System_Com",
+  "Win32_System_DataExchange",
+  "Win32_System_LibraryLoader",
+  "Win32_System_Memory",
+  "Win32_System_IO",
+  "Win32_System_Pipes",
+  "Win32_System_RemoteDesktop",
+  "Win32_System_Registry",
+  "Win32_System_Ole",
+  "Win32_System_SystemInformation",
+  "Win32_System_Threading",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_UI_Controls",
+  "Win32_UI_Controls_Dialogs",
+  "Win32_UI_Shell",
+  "Win32_UI_Shell_Common",
+  "Win32_UI_WindowsAndMessaging",
+] }
+
+[[bin]]
+name = "YueShot"
+path = "src/main.rs"
+
+[features]
+default = []
+hdr-capture = ["yue-shot-capture/hdr-capture"]
+avif = ["dep:yue-avif", "yue-pin/avif"]
+test-support = ["gpui-kit/test-support", "yue-pin/headless-tests"]
+
+[dev-dependencies]
+windows-sys = { version = "0.59", features = ["Wdk_System_Registry", "Win32_UI_Input_KeyboardAndMouse"] }
+windows = { version = "0.61", features = ["Win32_Foundation"] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+gpui-kit = { version = "0.8", default-features = false, features = ["assets", "test-support"] }
+
+
+[[test]]
+name = "settings_ui"
+required-features = ["test-support"]

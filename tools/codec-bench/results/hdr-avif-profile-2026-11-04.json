@@ -1,0 +1,435 @@
+{
+  "date": "2026-11-04",
+  "scope": "CPU release codec only; not end-to-end or display qualification",
+  "seed": "xorshift32-0x941cf17a-pq10-rgba",
+  "quality": 100,
+  "alpha_quality": 100,
+  "speed": 10,
+  "threads": 1,
+  "tile_side": 128,
+  "baseline": {
+    "label": "noasm-baseline",
+    "seed": "xorshift32-0x941cf17a-pq10-rgba",
+    "results": [
+      {
+        "width": 3840,
+        "height": 2160,
+        "tiles": 510,
+        "bytes": 63762570,
+        "extra_heap": 9311844,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 16609.001,
+        "fill_ms": 54.786,
+        "codec_spool_ms": 16554.215,
+        "label": "noasm-baseline",
+        "repeat": 0,
+        "sha256": "69348616f1c958722ac9fead0df1738e0968813a2157cb0ad99581faf93e7bb9",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 54.83,
+            "calls": 510
+          },
+          "encode": {
+            "ms": 16456.921,
+            "calls": 510
+          },
+          "parse": {
+            "ms": 8.951,
+            "calls": 1020
+          },
+          "scratch": {
+            "ms": 36.404,
+            "calls": 510
+          },
+          "header": {
+            "ms": 0.051,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 27.152,
+            "calls": 1
+          }
+        }
+      },
+      {
+        "width": 3840,
+        "height": 2160,
+        "tiles": 510,
+        "bytes": 63762570,
+        "extra_heap": 9311844,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 15884.678,
+        "fill_ms": 54.432,
+        "codec_spool_ms": 15830.246,
+        "label": "noasm-baseline",
+        "repeat": 1,
+        "sha256": "69348616f1c958722ac9fead0df1738e0968813a2157cb0ad99581faf93e7bb9",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 54.474,
+            "calls": 510
+          },
+          "encode": {
+            "ms": 15728.38,
+            "calls": 510
+          },
+          "parse": {
+            "ms": 8.77,
+            "calls": 1020
+          },
+          "scratch": {
+            "ms": 35.422,
+            "calls": 510
+          },
+          "header": {
+            "ms": 0.036,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 28.988,
+            "calls": 1
+          }
+        }
+      },
+      {
+        "width": 3840,
+        "height": 2160,
+        "tiles": 510,
+        "bytes": 63762570,
+        "extra_heap": 9311844,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 16099.723,
+        "fill_ms": 55.313,
+        "codec_spool_ms": 16044.409,
+        "label": "noasm-baseline",
+        "repeat": 2,
+        "sha256": "69348616f1c958722ac9fead0df1738e0968813a2157cb0ad99581faf93e7bb9",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 55.355,
+            "calls": 510
+          },
+          "encode": {
+            "ms": 15949.44,
+            "calls": 510
+          },
+          "parse": {
+            "ms": 8.787,
+            "calls": 1020
+          },
+          "scratch": {
+            "ms": 36.145,
+            "calls": 510
+          },
+          "header": {
+            "ms": 0.037,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 25.372,
+            "calls": 1
+          }
+        }
+      },
+      {
+        "width": 8256,
+        "height": 5504,
+        "tiles": 2795,
+        "bytes": 349436016,
+        "extra_heap": 9330124,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 91419.342,
+        "fill_ms": 303.456,
+        "codec_spool_ms": 91115.886,
+        "label": "noasm-baseline",
+        "repeat": 0,
+        "sha256": "951f164d61222d632ab03852e1b29bed0d712226e725620d34eec2019091a399",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 303.737,
+            "calls": 2795
+          },
+          "encode": {
+            "ms": 90590.551,
+            "calls": 2795
+          },
+          "parse": {
+            "ms": 50.088,
+            "calls": 5590
+          },
+          "scratch": {
+            "ms": 203.289,
+            "calls": 2795
+          },
+          "header": {
+            "ms": 0.301,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 162.771,
+            "calls": 1
+          }
+        }
+      }
+    ],
+    "summary": {
+      "3840": {
+        "median_ms": 16099.723,
+        "runs": 3
+      },
+      "8256": {
+        "median_ms": 91419.342,
+        "runs": 1
+      }
+    }
+  },
+  "encoding_asm": {
+    "label": "asm-candidate",
+    "seed": "xorshift32-0x941cf17a-pq10-rgba",
+    "results": [
+      {
+        "width": 3840,
+        "height": 2160,
+        "tiles": 510,
+        "bytes": 63762570,
+        "extra_heap": 9311932,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 10974.314,
+        "fill_ms": 47.187,
+        "codec_spool_ms": 10927.127,
+        "label": "asm-candidate",
+        "repeat": 0,
+        "sha256": "69348616f1c958722ac9fead0df1738e0968813a2157cb0ad99581faf93e7bb9",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 47.223,
+            "calls": 510
+          },
+          "encode": {
+            "ms": 10837.215,
+            "calls": 510
+          },
+          "parse": {
+            "ms": 7.562,
+            "calls": 1020
+          },
+          "scratch": {
+            "ms": 30.702,
+            "calls": 510
+          },
+          "header": {
+            "ms": 0.044,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 24.273,
+            "calls": 1
+          }
+        }
+      },
+      {
+        "width": 3840,
+        "height": 2160,
+        "tiles": 510,
+        "bytes": 63762570,
+        "extra_heap": 9311932,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 11371.086,
+        "fill_ms": 47.829,
+        "codec_spool_ms": 11323.257,
+        "label": "asm-candidate",
+        "repeat": 1,
+        "sha256": "69348616f1c958722ac9fead0df1738e0968813a2157cb0ad99581faf93e7bb9",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 47.864,
+            "calls": 510
+          },
+          "encode": {
+            "ms": 11241.137,
+            "calls": 510
+          },
+          "parse": {
+            "ms": 7.716,
+            "calls": 1020
+          },
+          "scratch": {
+            "ms": 29.836,
+            "calls": 510
+          },
+          "header": {
+            "ms": 0.056,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 24.379,
+            "calls": 1
+          }
+        }
+      },
+      {
+        "width": 3840,
+        "height": 2160,
+        "tiles": 510,
+        "bytes": 63762570,
+        "extra_heap": 9311932,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 11105.254,
+        "fill_ms": 47.685,
+        "codec_spool_ms": 11057.569,
+        "label": "asm-candidate",
+        "repeat": 2,
+        "sha256": "69348616f1c958722ac9fead0df1738e0968813a2157cb0ad99581faf93e7bb9",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 47.717,
+            "calls": 510
+          },
+          "encode": {
+            "ms": 10975.213,
+            "calls": 510
+          },
+          "parse": {
+            "ms": 7.444,
+            "calls": 1020
+          },
+          "scratch": {
+            "ms": 30.331,
+            "calls": 510
+          },
+          "header": {
+            "ms": 0.033,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 23.298,
+            "calls": 1
+          }
+        }
+      },
+      {
+        "width": 8256,
+        "height": 5504,
+        "tiles": 2795,
+        "bytes": 349436016,
+        "extra_heap": 9330212,
+        "largest_allocation": 1572864,
+        "elapsed_ms": 61546.513,
+        "fill_ms": 262.512,
+        "codec_spool_ms": 61284.001,
+        "label": "asm-candidate",
+        "repeat": 0,
+        "sha256": "951f164d61222d632ab03852e1b29bed0d712226e725620d34eec2019091a399",
+        "stages": {
+          "source_read": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "color_convert": {
+            "ms": 0.0,
+            "calls": 0
+          },
+          "provider_inclusive": {
+            "ms": 262.708,
+            "calls": 2795
+          },
+          "encode": {
+            "ms": 60693.492,
+            "calls": 2795
+          },
+          "parse": {
+            "ms": 45.046,
+            "calls": 5590
+          },
+          "scratch": {
+            "ms": 183.046,
+            "calls": 2795
+          },
+          "header": {
+            "ms": 0.193,
+            "calls": 1
+          },
+          "publish": {
+            "ms": 244.731,
+            "calls": 1
+          }
+        }
+      }
+    ],
+    "summary": {
+      "3840": {
+        "median_ms": 11105.254,
+        "runs": 3
+      },
+      "8256": {
+        "median_ms": 61546.513,
+        "runs": 1
+      }
+    }
+  },
+  "environment": {
+    "cpu": "13th Gen Intel Core i5-13600KF",
+    "cores": 14,
+    "logical_processors": 20,
+    "target": "x86_64-pc-windows-msvc",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "nasm": "3.01",
+    "execution": "sequential Release processes; 4K median of 3 per build; 45MP one sample per build"
+  }
+}

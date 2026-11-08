@@ -1,0 +1,13 @@
+[package]
+name = "yue-image-codec"
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0-only"
+publish = false
+[dependencies]
+yue-media = { path = "../yue-media" }
+png = "0.18"
+half = "2.7"
+image = { version = "0.25", default-features = false, features = ["png"] }
+[dev-dependencies]
+yue-component = { path = "../../vendor/yue-ui/crates/yue-component", default-features = false }

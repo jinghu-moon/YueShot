@@ -4,6 +4,7 @@ Declaration/text presence is evidence, not a license compatibility decision.
 Missing original texts remain explicit release blockers; never synthesize them.
 """
 import argparse
+import difflib
 import hashlib
 import json
 import os
@@ -240,6 +241,15 @@ def main():
     if args.update:
         INVENTORY.write_text(encoded, encoding='utf8')
     elif INVENTORY.read_text(encoding='utf8') != encoded:
+        expected = INVENTORY.read_text(encoding='utf8')
+        review = ROOT / 'target/yueshot-license-review/dependency-licenses.json'
+        review.parent.mkdir(parents=True, exist_ok=True)
+        review.write_text(encoded, encoding='utf8')
+        difference = list(difflib.unified_diff(expected.splitlines(), encoded.splitlines(),
+                                              fromfile='reviewed inventory', tofile='actual inventory', lineterm=''))
+        print('\n'.join(difference[:200]))
+        if len(difference) > 200:
+            print('Further differences omitted; full actual report: ' + str(review))
         raise RuntimeError('product license/source/feature inventory changed; review before --update')
     if args.output:
         write_bundle(args.output, report, notices, archives)

@@ -81,4 +81,16 @@ jobs:
           name: yueshot-unsigned-windows-x64-candidate
           path: target/yueshot-delivery
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 14
+      - name: Download the uploaded candidate for verification
+        uses: actions/download-artifact@v4
+        with:
+          name: yueshot-unsigned-windows-x64-candidate
+          path: target/yueshot-artifact-review
+      - name: Verify the candidate after artifact transport
+        run: |
+          $candidates = @(Get-ChildItem target/yueshot-artifact-review -Directory -Filter '*-release')
+          if ($candidates.Count -ne 1) { throw 'Expected one downloaded release candidate.' }
+          python tools/yueshot-delivery.py verify $candidates[0].FullName
+          if ($LASTEXITCODE -ne 0) { throw 'Downloaded candidate verification failed.' }

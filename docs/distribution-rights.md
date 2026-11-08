@@ -15,7 +15,7 @@
 | 覆盖层字体 | Noto Sans SC Regular / Fira Code 数字子集，OFL | 源字体、衍生哈希、版权/OFL 原文与重建步骤受控 |
 | 不用的组件字体 | 六个原文件与加载分支已移除 | 原始 SHA-256 与排除原因保留；源码分发不再包含它们，不推定其修改权利 |
 | 控件图标 | Tabler MIT、Lucide/Feather ISC/MIT | 原文随包；用户此次提供的新应用 ICO 不按旧 Tabler 临时应用图标认领来源 |
-| 应用 ICO | 用户指定 refer/yue-shot.ico，原样复制 | 产品路径 apps/yue-shot/packaging/YueShot.ico；SHA-256 da28e6ec295182ffb0e5759fff15af6760fd85bec06d837afa888ef0ddee1323；不推定作者或第三方许可 |
+| 应用 ICO | 用户指定 refer/yue-shot.ico，原样复制；2026-11-08 确认为自行创作、持有权利并允许公开源码/安装包分发 | 产品路径 apps/yue-shot/packaging/YueShot.ico；SHA-256 da28e6ec295182ffb0e5759fff15af6760fd85bec06d837afa888ef0ddee1323；记录用户权利声明，不冒充第三方许可或独立权利鉴定 |
 | 微软运行库 | 用户确认使用微软官方 VS/Build Tools 并遵守其条款；本机 Community 17.14.36202.13 | 当前仅额外携带 vcruntime140.dll，来自 Redist 14.44.35112/x64/Microsoft.VC143.CRT，未修改且微软签名有效；资格确认与分发条款分开记录 |
 
 原生审查材料位于 `tools/delivery/licenses/native-review.json`。它锁定审查过的版本、

@@ -11,7 +11,8 @@ permissions:
 
 jobs:
   verify:
-    runs-on: windows-latest
+    # The reviewed app-local runtime contract is VS 2022 / VC143.
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
@@ -23,6 +24,8 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: tools/delivery/package-lock.json
+      - name: Verify the official VC143 redistributable before building
+        run: python -c "import sys; sys.path.insert(0, 'tools'); from yueshot_runtime import find_vc_redist; print(find_vc_redist())"
       - run: npm ci --prefix tools/delivery
       - uses: actions/cache/restore@v4
         id: audit-tools

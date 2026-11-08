@@ -24,4 +24,6 @@
 
 main 推送/PR 触发 Windows CI，只生成未签名 beta 候选和实际安装验证，公开仓库中的 Actions artifact 可被下载。它不是 GitHub Release，也不代表产品已经正式发布。
 
+构建镜像固定 windows-2022，与当前审查的 VS 2022 / VC143 Redist 合同一致；编译前验证官方 x64 Redist 目录。windows-latest 曾漂移到 VS 2026，其 Release 编译虽通过，却不符合该打包合同。更新编译器/运行库须一起核对工具、打包来源和权利材料，不从开发机 System32 猜测补 DLL。
+
 正式 release --check 必须在未满足更新、权利、签名/恢复、干净用户等门槛时拒绝；未签名 stable 打包直接拒绝。不通过忽略公告、放宽断言或强杀进程制造验收通过，不将实验 HDR 自动放入默认发行配置。

@@ -26,4 +26,6 @@ main 推送/PR 触发 Windows CI，只生成未签名 beta 候选和实际安装
 
 构建镜像固定 windows-2022，与当前审查的 VS 2022 / VC143 Redist 合同一致；编译前验证官方 x64 Redist 目录。windows-latest 曾漂移到 VS 2026，其 Release 编译虽通过，却不符合该打包合同。更新编译器/运行库须一起核对工具、打包来源和权利材料，不从开发机 System32 猜测补 DLL。
 
+windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 zenrav1e 汇编构建失败。CI 固定官网 nasm-3.01-win64.zip，使用实际下载计算并记录的 SHA-256 校验归档，再确认版本并加入后续步骤 PATH；不关闭汇编或跳过 AVIF 门禁。此工具仅用于构建，不进入产品安装负载。
+
 正式 release --check 必须在未满足更新、权利、签名/恢复、干净用户等门槛时拒绝；未签名 stable 打包直接拒绝。不通过忽略公告、放宽断言或强杀进程制造验收通过，不将实验 HDR 自动放入默认发行配置。

@@ -8,6 +8,7 @@ Windows x64 截图软件，使用 Rust、GPUI Base 与 Yue 组件库。当前处
 需要 Windows、Rust 1.98.1（含 rustfmt / Clippy）、微软官方 Visual Studio / Build Tools 的 C++ 桌面工具与 Windows SDK。
 所有产品路径依赖均在此仓库中，`vendor/yue-ui` 为带哈希与来源记录的受控组件快照，不需要相邻组件仓库。
 程序运行不需要 Node、Tauri 或 WebView2。Node 仅用于打包工具。
+完整检查还需要 NASM 3.01 位于 PATH，用于现有可选 AVIF 的汇编构建；CI 从 NASM 官网下载固定版本并校验归档 SHA-256。
 
 ```powershell
 cargo run -p yue-shot --locked

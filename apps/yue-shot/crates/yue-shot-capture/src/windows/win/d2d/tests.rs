@@ -1601,6 +1601,46 @@ fn the_embedded_subset_covers_the_strings_the_overlay_draws() {
             );
         }
     }
+    // Validate the complete production set through the actual DirectWrite face,
+    // not an installed full font or only our cmap test reader.
+    let collection = yue_shot_overlay_ui::font::collection_for(yue_shot_overlay_ui::font::FAMILY)
+        .unwrap()
+        .unwrap();
+    let wide = super::to_wide(yue_shot_overlay_ui::font::FAMILY);
+    let mut index = 0;
+    let mut exists = windows::core::BOOL(0);
+    unsafe {
+        collection.FindFamilyName(
+            windows::core::PCWSTR(wide.as_ptr()),
+            &mut index,
+            &mut exists,
+        )
+    }
+    .unwrap();
+    assert!(exists.as_bool());
+    let face = unsafe {
+        collection
+            .GetFontFamily(index)
+            .unwrap()
+            .GetFirstMatchingFont(
+                super::DWRITE_FONT_WEIGHT_NORMAL,
+                super::DWRITE_FONT_STRETCH_NORMAL,
+                super::DWRITE_FONT_STYLE_NORMAL,
+            )
+            .unwrap()
+            .CreateFontFace()
+    }
+    .unwrap();
+    for text in drawn {
+        let codes: Vec<u32> = text.chars().map(u32::from).collect();
+        let mut glyphs = vec![0u16; codes.len()];
+        unsafe { face.GetGlyphIndices(codes.as_ptr(), codes.len() as u32, glyphs.as_mut_ptr()) }
+            .unwrap();
+        assert!(
+            glyphs.iter().all(|glyph| *glyph != 0),
+            "DirectWrite glyph missing in {text:?}"
+        );
+    }
 }
 
 /// The save panel's numeric face is a second embedded subset with the same failure mode as the UI

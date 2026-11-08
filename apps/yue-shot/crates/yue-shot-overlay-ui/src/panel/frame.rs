@@ -1972,10 +1972,11 @@ pub fn text_format_in(
     let mut last: Option<windows::core::Error> = None;
     for family in families {
         let wide = windows::core::HSTRING::from(*family);
+        let collection = crate::font::collection_for(family)?;
         let made = unsafe {
             dwrite.CreateTextFormat(
                 &wide,
-                None,
+                collection.as_ref(),
                 weight,
                 DWRITE_FONT_STYLE_NORMAL,
                 DWRITE_FONT_STRETCH_NORMAL,

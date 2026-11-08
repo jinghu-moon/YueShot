@@ -661,12 +661,8 @@ fn loupe_obstacle(view: &RenderView, metrics: RenderMetrics) -> Option<Rect> {
 impl OverlayRenderer {
     pub fn new(device: Arc<GraphicsDevice>, dpi: u32) -> Result<Self, String> {
         let d2d = device.create_d2d_context()?;
-        // Register the embedded subset *before* the DirectWrite factory is created,
-        // then build an isolated factory whose first enumeration already contains
-        // "Noto Sans SC". windows-rs does not bind
-        // IDWriteFactory::ReloadSystemFonts, and a shared factory may have been
-        // cached earlier by another subsystem, so an isolated factory is what
-        // guarantees the private in-memory font resolves by family name.
+        // Native GDI controls use private registration. DirectWrite formats select
+        // the explicit embedded collection, never the system font enumeration.
         overlay_font::register();
         let dwrite: IDWriteFactory =
             unsafe { DWriteCreateFactory(DWRITE_FACTORY_TYPE_ISOLATED) }
@@ -3267,10 +3263,12 @@ impl OverlayRenderer {
         // The size label uses the same embedded family, then the stock fallbacks.
         for family in overlay_font::FAMILIES {
             let wide = to_wide(family);
+            let collection = overlay_font::collection_for(family)
+                .map_err(|error| super::hresult("embedded font collection", &error))?;
             match unsafe {
                 self.dwrite.CreateTextFormat(
                     PCWSTR(wide.as_ptr()),
-                    None,
+                    collection.as_ref(),
                     DWRITE_FONT_WEIGHT_NORMAL,
                     DWRITE_FONT_STYLE_NORMAL,
                     DWRITE_FONT_STRETCH_NORMAL,

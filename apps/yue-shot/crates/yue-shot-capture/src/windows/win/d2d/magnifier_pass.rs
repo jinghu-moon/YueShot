@@ -571,10 +571,13 @@ impl OverlayRenderer {
         let mut last_err = String::new();
         for family in families {
             let wide = to_wide(family);
+            let collection = overlay_font::collection_for(family).map_err(|error| {
+                crate::windows::win::hresult("embedded font collection", &error)
+            })?;
             match unsafe {
                 self.dwrite.CreateTextFormat(
                     PCWSTR(wide.as_ptr()),
-                    None,
+                    collection.as_ref(),
                     dw_weight,
                     DWRITE_FONT_STYLE_NORMAL,
                     DWRITE_FONT_STRETCH_NORMAL,

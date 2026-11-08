@@ -122,7 +122,8 @@ def inventory(config, bundle):
                         target.write_bytes(local_text(path))
         else:
             checksum = special.get(name, {}).get("checksum") or checksums[(name, version)]
-            archive = next(cache.glob(f"*/{name}-{version}.crate"), None)
+            pinned_archive = special.get(name, {}).get('sourceArchive')
+            archive = ROOT / pinned_archive if pinned_archive else next(cache.glob(f"*/{name}-{version}.crate"), None)
             if not archive or sha(archive.read_bytes()) != checksum:
                 raise RuntimeError(f"{name} {version}: absent or changed original source archive")
             record["source_archive_sha256"] = checksum

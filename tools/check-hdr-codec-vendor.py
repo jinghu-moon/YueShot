@@ -39,7 +39,9 @@ def main():
             continue
         name, version = package["name"], package["version"]
         matches = sorted(args.cache.glob(f"*/{name}-{version}.crate"))
-        if matches:
+        if package.get('sourceArchive'):
+            archive = ROOT / package['sourceArchive']
+        elif matches:
             archive = matches[0]
         elif args.download:
             archive = ROOT / "target/hdr-codec-archives" / f"{name}-{version}.crate"

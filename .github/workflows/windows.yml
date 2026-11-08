@@ -24,8 +24,28 @@ jobs:
           cache: npm
           cache-dependency-path: tools/delivery/package-lock.json
       - run: npm ci --prefix tools/delivery
+      - uses: actions/cache/restore@v4
+        id: audit-tools
+        with:
+          path: |
+            ~/.cargo/bin/cargo-deny.exe
+            ~/.cargo/bin/cargo-audit.exe
+          key: windows-x64-rust-1.98.1-deny-0.20.2-audit-0.22.1
       - run: cargo install cargo-deny --version 0.20.2 --locked
+        if: steps.audit-tools.outputs.cache-hit != 'true'
       - run: cargo install cargo-audit --version 0.22.1 --locked
+        if: steps.audit-tools.outputs.cache-hit != 'true'
+      - name: Verify audit tool versions
+        run: |
+          if ((cargo deny --version) -ne 'cargo-deny 0.20.2') { throw 'Unexpected cargo-deny version' }
+          if ((cargo audit --version) -ne 'cargo-audit-audit 0.22.1') { throw 'Unexpected cargo-audit version' }
+      - uses: actions/cache/save@v4
+        if: steps.audit-tools.outputs.cache-hit != 'true'
+        with:
+          path: |
+            ~/.cargo/bin/cargo-deny.exe
+            ~/.cargo/bin/cargo-audit.exe
+          key: windows-x64-rust-1.98.1-deny-0.20.2-audit-0.22.1
       - name: Fetch locked Windows dependencies for offline audits
         run: cargo fetch --locked --target x86_64-pc-windows-msvc
       - run: cargo xtask check

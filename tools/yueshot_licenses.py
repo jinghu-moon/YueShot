@@ -83,6 +83,9 @@ def local_license(folder, root):
 
 
 def collect(packages, root=ROOT, cache=None):
+    # Windows TEMP may use an 8.3 alias while Cargo/package paths are resolved.
+    # Use the same canonical root for containment checks and recorded paths.
+    root = root.resolve()
     cache = cache or Path(os.environ.get('CARGO_HOME', Path.home() / '.cargo')) / 'registry/cache'
     lock = tomllib.loads((root / 'Cargo.lock').read_text(encoding='utf8'))
     checksums = {(p['name'], p['version'], p.get('source')): p.get('checksum') for p in lock['package']}
@@ -92,7 +95,7 @@ def collect(packages, root=ROOT, cache=None):
         name, version = package['name'], package['version']
         folder = Path(package['manifest_path']).parent.resolve()
         local = package['source'] is None
-        if local and not folder.is_relative_to(root.resolve()):
+        if local and not folder.is_relative_to(root):
             raise RuntimeError('local dependency escapes the controlled source tree')
         archive = None
         archive_files = {}

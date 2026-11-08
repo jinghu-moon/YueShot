@@ -104,6 +104,26 @@ class OriginalLicenseTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, 'native notice'):
                     collect([self.package], self.root, self.cache.parent)
 
+    def test_local_source_root_aliases_share_canonical_paths_and_reject_escape(self):
+        self.archive({'LICENSE': b'wrapper permission'})
+        (self.folder / 'LICENSE').write_bytes(b'local wrapper permission')
+        package = {**self.package, 'source': None}
+        expected = collect([package], self.root, self.cache.parent)
+        aliases = [self.root / 'registry' / '..']
+        if sys.platform == 'win32':
+            import ctypes
+            buffer = ctypes.create_unicode_buffer(32768)
+            length = ctypes.windll.kernel32.GetShortPathNameW(str(self.root), buffer, len(buffer))
+            self.assertGreater(length, 0)
+            self.assertLess(length, len(buffer))
+            aliases.append(Path(buffer.value))
+        for alias in aliases:
+            with self.subTest(alias=str(alias)):
+                self.assertEqual(collect([package], alias, self.cache.parent), expected)
+        outside = {**package, 'manifest_path': str(self.root.parent / 'outside/Cargo.toml')}
+        with self.assertRaisesRegex(RuntimeError, 'escapes the controlled source tree'):
+            collect([outside], aliases[0], self.cache.parent)
+
     def test_referenced_api_notice_is_tied_to_reviewed_local_implementation(self):
         self.archive({'LICENSE': b'wrapper permission'})
         (self.folder / 'LICENSE').write_bytes(b'local wrapper permission')

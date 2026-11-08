@@ -26,6 +26,8 @@ jobs:
       - run: npm ci --prefix tools/delivery
       - run: cargo install cargo-deny --version 0.20.2 --locked
       - run: cargo install cargo-audit --version 0.22.1 --locked
+      - name: Fetch locked Windows dependencies for offline audits
+        run: cargo fetch --locked --target x86_64-pc-windows-msvc
       - run: cargo xtask check
       - run: python tools/yueshot_security.py --output target/yueshot-security
       - run: cargo xtask package --profile release

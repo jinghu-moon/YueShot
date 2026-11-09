@@ -1,12 +1,13 @@
 # 57 · YueShot 默认发行配置授权核验
 
-日期：2026-11-08。范围为 Windows x64、默认 SDR 配置。此文记录工程证据和剩余义务，
+日期：2026-11-09。范围为 Windows x64、默认 SDR 配置。此文记录工程证据和剩余义务，
 不把许可声明收集、静态导入检查或 cargo-deny 通过等同于完成所有发行资格。
 
 | 项目 | 当前核验 | 证据与边界 |
 | --- | --- | --- |
 | 产品代码 | 用户确认 AGPL-3.0-only | 根 LICENSE；zenjpeg / zenwebp 选择 AGPL 分支，不选择商业 LicenseRef |
-| 默认 Rust 图 | 404 包、许可原文材料 0 缺项，cargo-deny 通过 | 逐包发行源码 checksum、原文、下游证据分类和许可选择门禁；未据此声明 native 漏洞全覆盖 |
+| 默认 Rust 图 | 405 包、许可原文材料 0 缺项，cargo-deny 通过 | 逐包发行源码 checksum、原文、下游证据分类和许可选择门禁；未据此声明 native 漏洞全覆盖 |
+| 更新验签 | minisign-verify 0.3.0，MIT | 锁定发行归档 checksum、版权与 LICENSE 原文；无传递依赖或 build.rs，其余 SHA-256/URL/版本库复用既有锁定版本 |
 | BLAKE3 1.8.7 | 默认 x64 MSVC 路径有 SSE/AVX 汇编，选择 Apache-2.0 | 原始归档含 Apache/CC0/LLVM 多许可材料；build.rs 和全部 native 源文件哈希见 native-review.json |
 | SQLite | libsqlite3-sys 0.30.1 的 MIT wrapper，bundled SQLite 3.46.0 为公有领域声明 | 当前不启用 SQLCipher/OpenSSL；现在同时提取 sqlite3.c 中逐字节的原始声明，而非只保留 wrapper LICENSE |
 | VS 查找辅助 | vswhom-sys 0.1.3 为 MIT，C++ 原作者 Jonathan Blow 另有署名 | 原始 ext/vswhom.cpp 开头已加入随包 notices；此代码供构建主机查找 VS，不能误写为单独运行时 DLL |

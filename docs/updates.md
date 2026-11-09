@@ -1,6 +1,6 @@
 # YueShot 在线更新
 
-Windows x64，按 dev / beta / stable 分离。当前已经接入客户端与本地进程回归；用户在 2026-11-09 本机生成带密码的 beta 私钥，并提供公钥，beta 信任根已经配置。尚未上传签名清单或完成真实版本之间的在线 NSIS 升级验收。安装包仍可不做 Authenticode 签名；这里的 Minisign 签名用于更新来源认证，二者独立。
+Windows x64，按 dev / beta / stable 分离。当前已经接入客户端与本地进程回归；用户在 2026-11-09 本机生成带密码的 beta 私钥，并提供公钥，beta 信任根已经配置。0.1.3 beta 清单已由用户在本机签署并通过官方工具与客户端验签库验证；尚未上传签名清单或完成真实版本之间的在线 NSIS 升级验收。安装包仍可不做 Authenticode 签名；这里的 Minisign 签名用于更新来源认证，二者独立。
 
 ## 用户流程与所有权
 
@@ -78,3 +78,17 @@ NSIS 路径回归：官方文档要求 `/D=安装目录` 是最后一项、不�
 修复后的定向回归 `target/update-nsis-spaces-after.log` 为 10 passed / 3 ignored。原生 fixture 验证成功后重启与失败后旧 EXE/数据保留；失败后重启真实旧产品仍包含在后续真实安装器验收中，不以测试 harness EXE 的启动代替。
 
 修复版引导包为 `target/yueshot-delivery/0.1.2-beta-update-bootstrap-fixed`，从干净提交 `1f8b2b8` 构建，buildId `d2c3fd12d0a68d85c8ca5a98e6b46e48892ae245743f6439cb3b0dca9b191960`；Release 打包和候选字节/来源/运行库/许可/安全审计通过。修复后的完整 `cargo xtask check` 亦通过，日志 `target/update-path-fixed-full-check.log`，含 51 项 Python、1,097 次 Rust passed 和 108 次 ignored 出现。没有覆盖现有 beta 安装。0.1.3 仅提升产品版本以准备真实升级目标，禁止新增截图功能的限制继续有效。
+
+## 0.1.3 beta 签署与待审发布（2026-11-09）
+
+升级候选为 `target/yueshot-delivery/0.1.3-beta-authenticated-updater-fixed`，从干净提交 `7f45f34` 构建，buildId `1cfc5cf5db5a822fd7ff43a417d8964af1548493bcff9389e0811db6bef37c31`。Release 打包和完整候选字节校验通过，0.1.3 更新定向回归为 10 passed / 3 ignored。该提交的 [Windows CI 42583080733](https://github.com/jinghu-moon/YueShot/actions/runs/42583080733) 已全部成功，含完整检查与安全审计；普通 push 按设计不执行 delivery，本地 Release 证据另计。
+
+用户在自己的终端完成了密码交互并签署 `target/yueshot-updates/0.1.3-beta/latest.json`。官方 Minisign 0.12 验证签名与 comment 签名通过；以客户端同一 `minisign-verify 0.3.0` 库执行独立探针，接受原始生产清单、拒绝篡改字节，见 `target/update-production-signature-probe/result.log`。此次未读取私钥或获得密码。
+
+| 材料 | 字节数 / SHA-256 |
+| --- | --- |
+| 安装器 | 7,174,510 bytes；`75e8afb1a118628f6eb33562472956696f348fad0876dc57c69223524bf72fbc` |
+| 清单 | `30eb5671f41190758d2a584eb4b953e94e20c23c6dbe3426f2d18e95fb888527` |
+| 新 EXE | `755569a140928e026c8bb8794fe16c0f457435d5a49f7ea4409613413b6690dd` |
+
+本机 `target/yueshot-updates/0.1.3-beta/release-plan.md` 与 `publication-plan.json` 列出待审的两个公开预发布：版本 `yueshot-v0.1.3` 固定上述提交，附安装器、对应源码、依赖源码、许可材料、签名清单与校验和；滚动源 `yueshot-updater-beta` 仅附同一份清单与签名。发布备注已准备，未创建标签、Release 或上传资产。公开预发布会让 beta 客户端发现更新，需要用户确认该发布范围。`readyForRelease=false`、生产密钥恢复、分发条款和剩余设备资格继续保留；签署成功不代表真实在线升级已通过。

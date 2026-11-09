@@ -522,6 +522,7 @@ FunctionEnd
 Var DeployMain
 Var DeployUninstaller
 Var DeployRollbackFailed
+Var DeployOwned
 !define DeployIndex 0
 {{#each resources}}
 Var DeployResource${DeployIndex}
@@ -593,6 +594,43 @@ Var DeployBinary${DeployIndex}
   ${EndIf}
 !macroend
 
+; File can terminate NSIS internally on extraction/write failure, bypassing
+; IfErrors. Both explicit failures and NSIS failure callbacks must release only
+; this invocation's transaction, and preserve backups if restoration fails.
+!macro RollbackDeployment
+  StrCpy $DeployRollbackFailed 0
+  !insertmacro ManagedFiles RestoreManagedFile
+  SetOutPath $INSTDIR
+  ${If} $DeployRollbackFailed == 0
+    ClearErrors
+    RMDir /r "$INSTDIR\.yueshot-install"
+    ${If} ${Errors}
+      StrCpy $DeployRollbackFailed 1
+    ${EndIf}
+  ${EndIf}
+  ; Never retry a partially failed rollback from the failure callback.
+  StrCpy $DeployOwned 0
+!macroend
+
+!macro OnDeploymentFailed
+  ${If} $DeployOwned == 1
+    !insertmacro RollbackDeployment
+    ${If} $DeployRollbackFailed == 1
+      SetErrorLevel 15
+    ${Else}
+      SetErrorLevel 14
+    ${EndIf}
+  ${EndIf}
+!macroend
+
+Function .onInstFailed
+  !insertmacro OnDeploymentFailed
+FunctionEnd
+
+Function un.onUninstFailed
+  !insertmacro OnDeploymentFailed
+FunctionEnd
+
 Section Install
   !insertmacro CheckIfAppIsRunning
   Call CheckInstalledVersion
@@ -605,6 +643,7 @@ Section Install
   ${If} $0 == 0
     Goto deployment_not_started
   ${EndIf}
+  StrCpy $DeployOwned 1
   ClearErrors
   CreateDirectory "$INSTDIR\.yueshot-install\old"
   SetOutPath "$INSTDIR\.yueshot-install\new"
@@ -686,19 +725,17 @@ Section Install
   ${EndIf}
 
   ; File deployment has committed. Only this installer-created directory is removed.
+  StrCpy $DeployOwned 0
   RMDir /r "$INSTDIR\.yueshot-install"
   Goto deployment_done
 
   deployment_failed:
-    StrCpy $DeployRollbackFailed 0
-    !insertmacro ManagedFiles RestoreManagedFile
-    SetOutPath $INSTDIR
+    !insertmacro RollbackDeployment
     ${If} $DeployRollbackFailed == 1
       ; Preserve backup bytes for recovery instead of deleting them on failure.
       SetErrorLevel 15
       Abort "$(SetupRollbackFailed)"
     ${EndIf}
-    RMDir /r "$INSTDIR\.yueshot-install"
   deployment_not_started:
     SetErrorLevel 14
     Abort "$(SetupDeploymentFailed)"
@@ -750,6 +787,7 @@ Section Uninstall
   ${If} $0 == 0
     Goto deployment_not_started
   ${EndIf}
+  StrCpy $DeployOwned 1
   ClearErrors
   CreateDirectory "$INSTDIR\.yueshot-install\old"
   {{#each resources_dirs}}
@@ -774,6 +812,7 @@ Section Uninstall
   {{/each}}
 
   ; All owned files have moved successfully. Unknown files never enter this directory.
+  StrCpy $DeployOwned 0
   RMDir /r "$INSTDIR\.yueshot-install"
 
   {{#each resources_dirs}}
@@ -819,13 +858,11 @@ Section Uninstall
   SetErrorLevel 0
   Goto deployment_done
   deployment_failed:
-    StrCpy $DeployRollbackFailed 0
-    !insertmacro ManagedFiles RestoreManagedFile
+    !insertmacro RollbackDeployment
     ${If} $DeployRollbackFailed == 1
       SetErrorLevel 15
       Abort "$(SetupRollbackFailed)"
     ${EndIf}
-    RMDir /r "$INSTDIR\.yueshot-install"
   deployment_not_started:
     SetErrorLevel 14
     Abort "$(SetupDeploymentFailed)"

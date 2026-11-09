@@ -1,0 +1,90 @@
+{
+  "format": 1,
+  "date": "2026-11-09",
+  "status": "passed-for-recorded-scope",
+  "operator": "agent-executed on local development machine",
+  "environment": {
+    "osBuild": "10.0.26100.0",
+    "elevated": true,
+    "architecture": "x64",
+    "vhdMiB": 128,
+    "powershell": "Windows PowerShell 5.1"
+  },
+  "candidate": {
+    "version": "0.1.3",
+    "channel": "dev",
+    "buildId": "7c2ed93f7016babfb0ac74b26be5c9806bbc39100dcd7a88c32a815539693369",
+    "gitHead": "0fbc0fcfac220674276dbcdcd391e19684c55456",
+    "dirty": true,
+    "readyForRelease": false
+  },
+  "installerSha256": "bc1118a2389bc3225e636e8332630b77e5e407bd7563bc053e1180a72ca2de23",
+  "before": {
+    "candidate": "target/yueshot-delivery/0.1.2-dev-authenticated-updater-release",
+    "version": "0.1.2",
+    "buildId": "2ae6c86d2c50ed13b0f878e68390e3cb7ba11ecafb530c20b9a8a620da499db2",
+    "installerSha256": "9851327a40877e6527632726f31f3c2e6549d0f54aee656d9f2242b874a512f8",
+    "installerExit": 2,
+    "freeBytes": 45056,
+    "incompleteExtractedExecutableBytes": 49152,
+    "oldFileHashesUnchanged": true,
+    "oldExecutableSmokeAfterReclaim": "passed",
+    "transactionRetained": "preserved in original VHD before normal dev uninstall",
+    "evidence": "target/low-space/20261109-nsis-native/"
+  },
+  "after": {
+    "installerExit": 14,
+    "freeBytes": 307200,
+    "checks": [
+      "actual NSIS install and installed EXE smoke on owned VHD",
+      "real VHD write returned Win32 ERROR_DISK_FULL (112)",
+      "NSIS returned 14; old payload, data and registry byte/value snapshot unchanged",
+      "old installed executable still runs after failed reinstall",
+      "space reclaimed; same installer retry and installed EXE smoke succeeded; settings retained",
+      "normal uninstall removed dev payload/registration and preserved isolated user file/data"
+    ],
+    "dismounted": true,
+    "evidence": "target/low-space/20261109-nsis-fixed/"
+  },
+  "baselineDifference": "The old run had 45,056 free bytes. The final test releases 256 KiB after actual ERROR_DISK_FULL to ensure metadata room and a partial-write extraction failure; it had 307,200 free bytes.",
+  "regression": {
+    "installerRuntimeSmoke": "passed",
+    "installerPolicy": "passed",
+    "channelShortcutsAumid": "passed",
+    "nativeWindowClose": "2 branches passed",
+    "updater": "10 passed, 3 ignored; native harness invokes its two subprocess entry points; HTTPS case not rerun",
+    "pythonTools": "51 passed",
+    "powershellAst": "passed",
+    "devOnlyGuard": "beta candidate rejected before creating output or VHD"
+  },
+  "sourceEvidence": {
+    "published013InstallerTemplateSha256": "b370394a8ed15c9f7b488473b9cb58b99e46378d60df7f2e729db81990432d01",
+    "published013TemplateEqualsPreFixHead": true,
+    "nativeInstallerVersion": "NSIS 3.09",
+    "nsisSource": "https://github.com/kichik/nsis/blob/v309/Source/exehead/exec.c",
+    "nsisSourceSha256": "2f483c29cdf6b76e6d6622fb0bc102493b1bfdbeb5fe8d421e530d7972232e45",
+    "fixedInstallerTemplateSha256": "07780acab1a8efeb7695737cbaae8e795eb65b706f74221e89cf2ea6d5d54daa",
+    "lowSpaceTestSha256": "337d3a34ff60086d004550c4dbbb306b624b84cbab4d1e490ba9f78e08b2e9a6"
+  },
+  "logs": [
+    "target/low-space-package.log",
+    "target/low-space-package-final.log",
+    "target/low-space-fixed-20261109.log",
+    "target/low-space-fixed-runtime.log",
+    "target/low-space-fixed-policy.log",
+    "target/low-space-fixed-channel.log",
+    "target/low-space-window-close/report.json",
+    "target/update-failure-regression-20261109.log",
+    "target/low-space-python.log",
+    "target/low-space-guard-beta.log"
+  ],
+  "notQualified": [
+    "real network disconnection; interruption coverage is deterministic fetch fault injection",
+    "power interruption and automatic recovery from an existing interrupted transaction",
+    "registry write failure or download staging volume exhaustion",
+    "new cross-version live upgrade or database schema migration",
+    "ordinary-user clean runtime, all devices/DPI, repeated lifecycle stability or performance",
+    "stable release rights/readiness or publication of this fix"
+  ],
+  "publication": "No existing release, update feed, production trust key or user beta installation was changed."
+}

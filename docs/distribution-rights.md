@@ -6,10 +6,10 @@
 | 项目 | 当前核验 | 证据与边界 |
 | --- | --- | --- |
 | 产品代码 | 用户确认 AGPL-3.0-only | 根 LICENSE；zenjpeg / zenwebp 选择 AGPL 分支，不选择商业 LicenseRef |
-| 默认 Rust 图 | 405 包、许可原文材料 0 缺项，cargo-deny 通过 | 逐包发行源码 checksum、原文、下游证据分类和许可选择门禁；未据此声明 native 漏洞全覆盖 |
+| 默认 Rust 图 | 安全更新后 403 包、许可原文材料 0 缺项，cargo-deny 通过 | 逐包发行源码 checksum、原文、下游证据分类和许可选择门禁；未据此声明 native 漏洞全覆盖 |
 | 更新验签 | minisign-verify 0.3.0，MIT | 锁定发行归档 checksum、版权与 LICENSE 原文；无传递依赖或 build.rs，其余 SHA-256/URL/版本库复用既有锁定版本 |
 | BLAKE3 1.8.7 | 默认 x64 MSVC 路径有 SSE/AVX 汇编，选择 Apache-2.0 | 原始归档含 Apache/CC0/LLVM 多许可材料；build.rs 和全部 native 源文件哈希见 native-review.json |
-| SQLite | libsqlite3-sys 0.30.1 的 MIT wrapper，bundled SQLite 3.46.0 为公有领域声明 | 当前不启用 SQLCipher/OpenSSL；现在同时提取 sqlite3.c 中逐字节的原始声明，而非只保留 wrapper LICENSE |
+| SQLite | libsqlite3-sys 0.39.1 的 MIT wrapper，bundled SQLite 3.54.1 为公有领域声明 | 为修复 RUSTSEC-2026-0459 更新上游依赖；不启用 SQLCipher/OpenSSL，原始公有领域声明与旧版逐字节相同，新源码/构建脚本哈希已复核 |
 | VS 查找辅助 | vswhom-sys 0.1.3 为 MIT，C++ 原作者 Jonathan Blow 另有署名 | 原始 ext/vswhom.cpp 开头已加入随包 notices；此代码供构建主机查找 VS，不能误写为单独运行时 DLL |
 | Windows import libraries | windows_x86_64_msvc 三个锁定版本按 MIT/Apache 原文提供 | 包含的是 import library，不是微软系统 DLL 的再分发权限；不从开发机复制系统 DLL |
 | GPU API 声明 | GPUI driver-version FFI 代码注明 NVIDIA/AMD 的固定上游提交 | 补充对应头文件的 NVIDIA MIT 原文和 AMD MIT；以当前本地实现 hash 绑定审查范围，不声称本地实现来自同一个上游源码树；不随包部署 nvapi/AMD AGS DLL |

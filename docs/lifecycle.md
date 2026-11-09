@@ -220,3 +220,8 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 本地 `cargo xtask check` 完整通过：51 项 Python、1,097 次 Rust passed、109 次 ignored 出现（ignored 不计通过），
 包含严格 AVIF/HDR Clippy、workspace 和依赖边界；日志 `target/update-space-014-full-check-final.log`。
 新增磁盘不足网络资格的两阶段通过单独记录，未并入上述默认检查计数。下一步从干净提交构建 Beta，准备待签署材料；不覆盖公开 0.1.3 资产。
+
+0.1.4 首次 Beta 打包随后被更新后的安全审计拦截，远程 c12b3f9 CI 同样在 RUSTSEC-2026-0459 失败。
+已从根因升级 bundled SQLite 至 3.54.1，重新审查 403 包闭包和原生许可材料，保留原失败报告；修改后安全审计 0 blocking / 0 maintenance，
+存储专项 19 passed；升级后的完整检查再次通过 51 项 Python、1,097 次 Rust passed、109 次 ignored 出现，严格 Clippy 与边界检查通过。
+修复版打包继续另计。详见 [SQLite 安全更新](sqlite-security-update.md)。没有忽略公告或对用户现有数据库进行操作。

@@ -81,7 +81,7 @@ blake2 = "0.10"
 ring = "0.17"
 windows-sys = { version = "0.59", features = ["Wdk_System_Registry", "Win32_UI_Input_KeyboardAndMouse"] }
 windows = { version = "0.61", features = ["Win32_Foundation"] }
-rusqlite = { version = "0.32", features = ["bundled"] }
+rusqlite = { version = "0.41.1", features = ["bundled"] }
 gpui-kit = { version = "0.8", default-features = false, features = ["assets", "test-support"] }
 
 

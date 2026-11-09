@@ -1,0 +1,102 @@
+# YueShot 发布操作手册
+
+适用：Windows x64、默认 SDR、独立渠道安装。2026-11-09。
+当前公开版本为 0.1.3 Beta；本手册不表示稳定发行资格已经完成。
+不新增截图功能，不替换已经公开的版本资产，不将 Authenticode 与更新真实性签名混为一谈。
+
+## 1. 固定版本与源码
+
+1. 更新 `apps/yue-shot/Cargo.toml` 中的产品版本，并核对锁文件及发布说明。不要升级无关依赖。
+2. 提交后记录完整 commit、渠道、目标架构。工作区必须干净；tag 使用 `yueshot-v<实际版本>`。
+3. 核对 [已知限制](known-limitations.md)、[回归基线](regression-baseline.md) 和 [分发权利](distribution-rights.md)。
+4. 更新渠道公钥必须先单独审查。旧客户端只信任其构建时内置的公钥，不会自动读取仓库里的新配置。
+
+## 2. 检查与构建候选
+
+```powershell
+cargo xtask check
+cargo xtask package --profile release --channel beta --output target/yueshot-delivery/<新的候选名>
+python tools/yueshot-delivery.py verify target/yueshot-delivery/<新的候选名>
+```
+
+保留 check/package 日志、`delivery.json`、构建标识、对应源码、依赖源码、许可材料、PDB 和安全审计。
+同名输出目录禁止复用。候选构建后若源码或安装器改变，应重新构建新候选，不改旧清单里的哈希。
+首次准备打包工具及 CI 触发方式见 [README](../README.md#检查与交付) 和 [CI](ci.md)。
+
+普通 push/PR 只执行 verify/security，不代表本次候选已经完成安装测试。
+需在同一提交手动触发 `delivery` 或通过版本 tag 运行完整交付流程；Actions 不自动创建 GitHub Release。
+
+## 3. 安装与失败回归
+
+先正常退出 YueShot。安装回归使用没有既有安装的 dev 渠道候选；不要用脚本覆盖日常 Beta。
+
+```powershell
+./tools/test-yueshot-install.ps1 -Candidate target/yueshot-delivery/<dev候选>
+./tools/test-yueshot-installer-policy.ps1 -Candidate target/yueshot-delivery/<dev候选>
+./tools/test-yueshot-channel-install.ps1 -Candidate target/yueshot-delivery/<dev候选>
+python tools/test-yueshot-window-close.py --binary target/yueshot-delivery/<dev候选>/bin/YueShot.exe --output target/window-close-<新名称>
+```
+
+原生关闭回归指向该候选的 Release EXE 和新的隔离输出目录。
+需要磁盘不足回归时，在管理员 PowerShell 中执行下列独立工具。它只格式化自己新建并核对身份的 128 MiB VHD，
+不会填满宿主磁盘；失败保留 VHD 和结果，禁止直接重跑覆盖现场。
+
+```powershell
+./tools/test-yueshot-low-space.ps1 -Candidate target/yueshot-delivery/<dev候选> -Output target/low-space/<新名称>
+```
+
+普通用户验收按 [干净用户步骤](clean-user-acceptance.md) 使用全新解压目录执行，保存原始输出。
+自动脚本返回 `manualQualification=pending` 时，人工结论另记；不能编辑成自动通过。
+截图、长截图、Ctrl+S、X 关闭到托盘、再打开、正常退出、真实登录自启、Explorer 重启、睡眠恢复为固定回归集合。
+旧版本或其他机器的通过只能作为历史基线；更新影响对应路径时，必须复测受影响项。
+
+## 4. 准备并签署更新
+
+仅在候选字节与验收范围确定后生成清单；tag 必须对应实际版本。
+
+```powershell
+python tools/yueshot-update.py prepare --candidate target/yueshot-delivery/<候选> --tag yueshot-v<版本> --output target/yueshot-updates/<新的目录>
+python tools/yueshot-update.py sign target/yueshot-updates/<新的目录> --secret-key D:\YueShot-Release\beta.key --minisign target/update-tools/minisign-win64/x86_64/minisign.exe
+```
+
+私钥由维护者在仓库外保管，密码只在 Minisign 本机提示中输入。签署由维护者执行，不放进 CI secret、参数或日志。
+签署后必须看到渠道公钥验证成功；密码错误、命令非零退出或签名文件存在，都不能当作成功。
+还要以客户端同一验签路径复核原文接受、修改字节拒绝，并核对安装器大小、SHA-256、新 EXE SHA-256、版本、渠道和有效期。
+`prepare/sign` 不上传、不发布，也不会签发候选发行资格。
+
+清单默认有效期 180 天，以 `expires_unix` 为准。安排在到期前重新评估并签署，不能直接修改已签署 JSON。
+当前版本相同的客户端会忽略该版本；有效期续签不能替代新版本发布。
+
+## 5. 审阅并公开
+
+先形成可审阅的发布清单：commit/tag、版本与渠道、资产名称/大小/哈希、签名验证结果、验收范围和未完成项。
+本地准备不等于发布授权；新的公开发布须取得维护者明确授权。
+
+1. 先创建版本 draft，固定 commit，上传安装器、对应源码、依赖源码、原始许可/版权材料、签名清单和校验和。
+2. 逐项核对远端资产，版本资产必须与本地已验证字节一致。Beta 使用 prerelease，不能设为 stable latest。
+3. 授权后公开版本 Release；从**不带 GitHub 登录凭据**的公开 HTTPS 地址重新下载并验签、核对哈希。
+4. 版本安装器公开且回读成功后，最后更新 `yueshot-updater-beta` 的 `latest.json` 与 `latest.json.minisig`。
+5. 客户端会拒绝清单/签名不配对；更新两文件期间允许短暂可重试错误，不得先发布指向尚不可下载安装器的清单。
+6. 从实际已安装旧版测试检查、下载、退出安装、自动重启和设置/截图保留，记录环境、两版本 buildId 和实际结果。
+
+不要依赖仓库的 `releases/latest` 作为各渠道更新源；不要覆盖既有版本安装器或移动既有版本 tag。
+当前 0.1.3 Beta 的授权、公开回读和用户升级结果见 [更新记录](updates.md)。
+
+## 6. 失败处理与收尾
+
+| 故障 | 维护者操作 |
+| --- | --- |
+| 签名/身份/哈希失败 | 停止发布，保留原始字节和错误；核对正确候选，不能关闭验签 |
+| 下载中断或磁盘不足 | 保持旧程序；解决连接/空间后重试，记录是否清理了不可用暂存包 |
+| 安装返回 10 | 正常退出占用的 YueShot，再重试；不强杀进程 |
+| 返回 12/13 | 核对降级或损坏版本登记，不手工降低版本绕过保护 |
+| 返回 14，残留 `.yueshot-install` | 先保留目录与日志；区分本次清理失败和既有中断事务，不能直接删除可能仅存的原文件 |
+| 返回 15 | 回滚失败，保留备份和故障现场，先恢复并验证一致的安装再运行 |
+| 已公开版本有缺陷 | 修复并发布更高版本；现有客户端拒绝降级，不能把旧版写回滚动源当作回滚方案 |
+| 密钥丢失/泄露 | 暂停发布；现有轮换/带外补救尚未演练，不能生成新密钥后假设旧客户端会信任 |
+
+将验收摘要与公开证据入库；本机日志、故障镜像及 PDB 保留在受控存储。不要提交私钥或用户截图/正文。
+本次新安装器行为若未发布，必须明确说明当前公开 0.1.3 安装器仍是旧字节。
+
+稳定发行前仍须完成分发条款、最低系统/运行库等剩余资格；`release --check` 保持失败，不能手改
+`readyForRelease` 或清空 `outstanding` 制造通过。当前工具尚无基于审查记录自动签发正式发行资格的入口。

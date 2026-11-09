@@ -55,3 +55,6 @@ Release 构建、来源/负载/运行库/许可/安全门禁及最终候选字�
 公开结构化范围见 [验收记录](acceptance/2026-11-09-sqlite-security-update.json)，
 本地日志见 `target/update-014-signature-qualification/`。目前未公开 0.1.4，现有公开 Beta 源仍为 0.1.3；
 签署不等于发布，也不等于目标电脑真实安装升级已经通过。
+
+该候选源码的 [Windows CI 42602126904](https://github.com/jinghu-moon/YueShot/actions/runs/42602126904)
+已全部成功，含完整检查、安全审计和缓存收尾；普通 push 的 delivery 按设计跳过，本地实际 Release 打包证据另计。

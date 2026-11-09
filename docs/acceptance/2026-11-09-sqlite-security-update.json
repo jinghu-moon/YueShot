@@ -106,7 +106,7 @@
       "clientAuthentication": "exact extracted production code accepts beta 0.1.3 -> 0.1.4; rejects changed bytes, channel mismatch, expiry and duplicates",
       "installerAndExecutable": "signed size/hash match candidate and publication copies",
       "deliveryVerification": "passed; release readiness remains false",
-      "ci": "verify and security steps passed; job cache/finalization pending",
+      "ci": "completed successfully; check, security and cache passed; ordinary-push delivery skipped as designed",
       "ciUrl": "https://github.com/jinghu-moon/YueShot/actions/runs/42602126904"
     },
     "scope": "local files and unchanged extracted production authentication/check_with; no network download, installation, or live 0.1.3 -> 0.1.4 upgrade",

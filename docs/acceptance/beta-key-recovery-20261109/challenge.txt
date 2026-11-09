@@ -1,0 +1,5 @@
+YueShot beta signing key backup recovery drill
+Created: 2026-11-09
+Purpose: prove a restored backup can sign for the embedded beta public key.
+This is a public test message, not an update manifest or authorization to publish.
+Nonce: fab577186cd741225c1c7abf0dc2f18d578fb8c9c6b838204b6e5b81f27cc207

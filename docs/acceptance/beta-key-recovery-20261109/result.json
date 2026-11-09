@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "reportedOn": "2026-11-09",
+  "product": "YueShot",
+  "channel": "beta",
+  "status": "passed-backup-restore-signing",
+  "scope": [
+    "owner-authorized encrypted-key backup to independently identified removable USB storage",
+    "original/USB backup/restored file hashes compared equal without recording private-key hashes",
+    "owner supplied password locally while signing with the restored private-key path",
+    "Minisign 0.12 verified challenge and comment signature using the original embedded beta public key"
+  ],
+  "publicKey": "RWRPrtKhF/f6lRgLLGrdWRDJ7nekzqDkFWKoD8QPOJrsqWoRcMNhR7ZJ",
+  "publicEvidence": {
+    "challenge.txt": "0416f117dd9b2b456f6b14cfaf620e2fc12e14d51fe42d20f13018026995d5b7",
+    "challenge.txt.minisig": "810bcc02ceab1d1451495aad8ef112c2cd89ef9a7e27070002dcc13b0158b68b"
+  },
+  "verifierOutput": "Signature and comment signature verified",
+  "privateKeyOrPasswordIncluded": false,
+  "remaining": [
+    "physical USB disconnect/reconnect readback not performed",
+    "key rotation not exercised",
+    "loss/compromise recovery not qualified"
+  ],
+  "targetSignatureCommandSource": "User-provided terminal command explicitly used the restored private-key path; agent did not enter password."
+}

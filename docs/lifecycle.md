@@ -123,3 +123,34 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 完整未签名候选 `target/yueshot-delivery/0.1.2-stable-file-transaction` 已通过 Release 构建、负载字节及审计校验。48 项 Python 工具回归通过，PowerShell 验收脚本 AST 解析通过；原生产品热键冲突测试 `tests::a_conflicting_product_hotkey_does_not_disable_the_capture_runtime` 实际执行 1 项通过、0 ignored。日志分别为 `target/installer-transaction-package.log`、`installer-transaction-python-final.log`、`installer-transaction-policy.log`、`installer-transaction-runtime.log`、`installer-transaction-channel.log`、`lifecycle-product-hotkey.log`。
 
 事务是针对当前受管文件集合的失败处理；断电后的自动恢复、磁盘不足、注册表写入故障与真实设备生命周期尚未全部验证，不据此声称完整故障资格。在线更新库 Windows 默认安装路径会直接退出进程，后续整合须走产品保存/退出策略及安装结果检查，不能直接套用 `download_and_install`。尚未接入自动更新，也未创建公开 Release。
+
+
+### 普通用户自动验收回报（2026-11-09）
+
+用户提供另一台 Windows x64 电脑的 `Auto` 控制台结果：OS Build `10.0.19044.0`、`elevated=false`，候选 `0.1.2 stable`，buildId `f7a4f6a9b5dc9369cb4d28aa709f3d03043323fb98a7886ed765b54b03077ca6`，状态 `passed-automated-checks`。安装器及已安装负载哈希、渠道登记、已安装 EXE 运行库加载及配置/存储 smoke、同版本重装保留配置、卸载移除程序和登记并保留测试数据均通过。
+
+[结构化回报](acceptance/2026-11-09-windows-19044-auto.json) 根据用户提供的 JSON 记录，非代理独立执行；未确认该电脑此前是否安装过 VC++ 运行库，因此不据此声称干净运行库或所有最低系统资格。`manualQualification=pending`，截图/长截图、保存、托盘、睡眠、登录自启及 Explorer 恢复仍需人工结果；下一步执行验收脚本 `StartManual`，完成后正常退出，再执行 `FinishManual`。
+
+
+### 人工会话收尾回报与主窗口关闭缺陷（2026-11-09）
+
+用户提供相同 Windows Build 19044、相同 buildId 的 `FinishManual` 成功结果，已安装负载/登记校验、卸载及人工会话所有数据字节保留均通过。[收尾回报](acceptance/2026-11-09-windows-19044-finish-manual.json) 是用户控制台证据，并不表示各人工项目通过；用户报告 X 导致整个进程退出及托盘消失，人工资格仍为 pending。
+
+已用原生独立进程回归复现：`closeToTray=true`、真实托盘可用时，最后一个主窗口的 `WM_CLOSE` 仍导致进程退出。根因是产品未配置 GPUI Windows 默认的 `QuitMode::LastWindowClosed`；现在入口使用 `QuitMode::Explicit`，进程退出由既有 `request_quit` 策略控制。保存中的退出阻止和托盘不可用时的退出策略保留。
+
+回归同时暴露退出分支的原生异常：Windows display DispatcherQueue 在 Platform Drop 中清理，其嵌套消息泵执行延迟的 `DestroyWindow`，此时 AppCell 已释放，窗口关闭回调访问 AsyncApp 引发 panic。调试符号栈确认调用链，修复为 quit observers 完成后、`Application::run` 仍持有 AppCell 时清理该队列；Drop 仅保留未运行平台的平衡释放。仍注销颜色事件和等待 WinRT shutdown，不通过忽略回调、捕获 panic 或泄漏队列绕过。组件快照以 localAdaptations 记录原始哈希、修改哈希及理由。
+
+| 行为 | 修复前实测 | 修复后目标 |
+| --- | --- | --- |
+| 默认 X / 最后窗口关闭 | 进程及托盘一起退出 | 关闭主窗口，进程/托盘保留，可唤醒原实例 |
+| 取消关闭到托盘后 X | 额外回归揭示退出时 AsyncApp panic | 正常退出 0，托盘及窗口移除 |
+| 保存/复制进行中退出 | 产品已有阻止策略 | 保留，相关保存用例回归 |
+
+新增 `tools/test-yueshot-window-close.py` 在真实进程中发送平台 `WM_CLOSE`、检查进程与原生托盘窗口并通过同数据目录 Show 命令唤醒；另启动关闭到托盘为 false 的独立进程检查正常退出。它只终止本脚本创建的存活测试子进程以清场，不能冒充托盘菜单优雅退出验收，也不能代替另一台电脑的 X 按钮人工复测。旧包失败证据 `target/window-close-before`，仅修复退出模式后暴露的异常证据 `target/window-close-debug`；完整修复的调试版原生回归 `target/window-close-debug-fixed` 两个分支均通过。CI 安装门禁后增加此进程测试。
+
+
+最终修复候选 `target/yueshot-delivery/0.1.2-stable-close-to-tray-fixed` 的 Release 构建、负载字节及产品审计通过，buildId `7078e44cdc9ab4893b413e472d0f0271a76658f3d037887eb5c5ced0abc9e2b3`。`test-yueshot-window-close.py` 针对实际 Release EXE 的两个分支均通过（`target/window-close-release-fixed/report.json`）；安装、文件锁/回滚策略与渠道快捷方式三项门禁通过（`target/window-close-final-{runtime,policy,channel}.log`）。
+
+`cargo test -p yue-shot --features test-support --locked --lib -- --test-threads=1` 为 254 passed / 4 ignored / 0 failed；另显式运行既有窗口关闭/托盘健康测试 1 passed / 0 ignored。48 项 Python 测试通过；`cargo clippy -p yue-shot --all-targets --features test-support,avif,hdr-capture --locked -- -D warnings` 通过；产品既有范围 fmt 与修改的 Windows platform 文件 rustfmt 通过。一次扩大到 `cargo fmt --all` 的检查发现历史未格式化的 `yue-image-codec` 和快照 `image_preview` 文件，未将这些无关格式修改混入修复，也不宣称全仓 fmt 通过。
+
+新验收 ZIP 为 `target/yueshot-acceptance/0.1.2-x64-close-to-tray-fixed.zip`，候选字节校验和 ZIP CRC/无 results 的初始清单检查通过。需用户在另一台电脑解压到新目录，用 `StartManual` 重点复测 X 后托盘/热键和重新打开，再正常退出并执行 `FinishManual`；不能复用上轮 buildId 的人工资格。上一轮安装器提交 d674951 的 [Windows CI 42563037473](https://github.com/jinghu-moon/YueShot/actions/runs/42563037473) 已全部通过，本次生命周期修复的 CI 结果另计。

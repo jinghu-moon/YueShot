@@ -898,6 +898,9 @@ fn launch() -> Result<(), String> {
     let command =
         instance::Command::from_launch(options.launch).ok_or("unsupported launch command")?;
     gpui_kit::application()
+        // The product owns process lifetime: removing the last view must keep
+        // capture, IPC and tray services alive until request_quit allows exit.
+        .with_quit_mode(QuitMode::Explicit)
         .with_assets(gpui_kit::assets::Assets)
         .run(move |cx| {
             gpui_kit::init(cx);

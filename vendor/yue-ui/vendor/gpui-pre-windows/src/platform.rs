@@ -51,7 +51,7 @@ impl TrackedWindow {
 }
 
 pub struct WindowsPlatform {
-    display_queue: Option<crate::color_output::DisplayQueueOwner>,
+    display_queue: RefCell<Option<crate::color_output::DisplayQueueOwner>>,
     inner: Rc<WindowsPlatformInner>,
     raw_window_handles: Arc<RwLock<SmallVec<[TrackedWindow; 4]>>>,
     /// The windowing mode to start in, applied when `run` starts. Windowed when unset.
@@ -267,11 +267,11 @@ impl WindowsPlatform {
         };
 
         Ok(Self {
-            display_queue: if headless {
+            display_queue: RefCell::new(if headless {
                 None
             } else {
                 crate::color_output::DisplayQueueOwner::new().log_err()
-            },
+            }),
             inner,
             handle,
             raw_window_handles,
@@ -622,6 +622,10 @@ impl Platform for WindowsPlatform {
                 callback();
             },
         );
+        // Draining the WinRT queue also dispatches pending native window destruction.
+        // Finish it while Application::run still owns AppCell, so window callbacks
+        // cannot re-enter an AsyncApp whose context has already been released.
+        self.shutdown_display_queue();
     }
 
     fn quit(&self) {
@@ -1407,14 +1411,23 @@ impl WindowsPlatformInner {
     }
 }
 
-impl Drop for WindowsPlatform {
-    fn drop(&mut self) {
+impl WindowsPlatform {
+    fn shutdown_display_queue(&self) {
         for entry in self.raw_window_handles.read().iter() {
             if let Some(window) = window_from_hwnd(entry.as_raw()) {
                 window.state.color_watcher.borrow_mut().take();
             }
         }
-        self.display_queue.take();
+        // Release the RefCell borrow before its destructor pumps any callbacks.
+        let queue = self.display_queue.borrow_mut().take();
+        drop(queue);
+    }
+}
+
+impl Drop for WindowsPlatform {
+    fn drop(&mut self) {
+        // Also balance WinRT initialization when the platform was never run.
+        self.shutdown_display_queue();
         if let Some(stop) = self.vsync_stop.borrow_mut().take() {
             stop.store(true, Ordering::Release);
         }

@@ -1,0 +1,24 @@
+{
+  "source": "User-supplied console JSON, reproduced verbatim as structured data; not independently executed by the agent",
+  "reportedOn": "2026-11-09",
+  "report": {
+    "format": 1,
+    "mode": "Auto",
+    "version": "0.1.2",
+    "channel": "stable",
+    "buildId": "f7a4f6a9b5dc9369cb4d28aa709f3d03043323fb98a7886ed765b54b03077ca6",
+    "status": "passed-automated-checks",
+    "checks": [
+      "non-elevated Windows x64 session",
+      "installer bytes verified (integrity check, not update authentication)",
+      "installed payload hashes and channel registration",
+      "installed exe loaded its runtime and read/wrote isolated settings/storage",
+      "installed payload hashes and channel registration",
+      "same-version reinstallation preserved settings",
+      "uninstall removed owned program/registration and retained test data"
+    ],
+    "manualQualification": "pending",
+    "osBuild": "10.0.19044.0",
+    "elevated": false
+  }
+}

@@ -78,6 +78,8 @@ jobs:
           ./tools/test-yueshot-install.ps1 -Candidate $candidates[0].FullName
           ./tools/test-yueshot-installer-policy.ps1 -Candidate $candidates[0].FullName
           ./tools/test-yueshot-channel-install.ps1 -Candidate $candidates[0].FullName
+          python tools/test-yueshot-window-close.py --binary (Join-Path $candidates[0].FullName 'bin/YueShot.exe') --output target/window-close-native
+          if ($LASTEXITCODE -ne 0) { throw 'Native close-to-tray regression failed.' }
       - uses: actions/upload-artifact@v4
         with:
           name: yueshot-unsigned-windows-x64-candidate

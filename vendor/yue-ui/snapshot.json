@@ -7028,6 +7028,11 @@
       "sha256": "cb84dfdd4a034e8946fc583bce2b3e72291663d15fbbfdf4fd46e921dc2bc8cb",
       "upstreamSha256": "708e99eb238202f9f4307a673d65e68882c9ea557cd2fc32f03eb3962f0b6971",
       "reason": "Remove unused component font bundle capability and loading API; retain effective Windows system families and token metrics. Original excluded file hashes are recorded separately."
+    },
+    "vendor/gpui-pre-windows/src/platform.rs": {
+      "upstreamSha256": "d8f26c986c480d3329c9212ddaa24cde7445e946007a095cdecb280ce790f947",
+      "sha256": "89aa9e1c6fa884a355409f474d5777ed3281cdac813b5677c9b49d180923a686",
+      "reason": "Drain the owned display DispatcherQueue after quit observers while AppCell is still alive; keep Drop as fallback for a platform never run. Prevent native destroy callbacks re-entering a released AsyncApp."
     }
   },
   "excludedFiles": {

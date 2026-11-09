@@ -1,0 +1,35 @@
+{
+  "format": 1,
+  "reportedOn": "2026-11-09",
+  "source": "Explicit user confirmation in this conversation; not independently executed by the agent",
+  "product": "YueShot",
+  "channel": "beta",
+  "fromVersion": "0.1.2",
+  "toVersion": "0.1.3",
+  "versionRelease": "https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.3",
+  "feedRelease": "https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-updater-beta",
+  "manualConfirmation": {
+    "statement": "这三项都没问题。",
+    "precedingQuestion": "是否已完成自动升级到 0.1.3、自动重启、设置和截图保留",
+    "status": "passed-for-reported-scope",
+    "checks": [
+      "actual online upgrade to 0.1.3",
+      "automatic restart after installation",
+      "existing settings and screenshots retained"
+    ]
+  },
+  "earlierFailure": {
+    "operation": "check for updates",
+    "winHttpError": 12029,
+    "subsequentUserReport": "测试没有问题。",
+    "rootCause": "not established",
+    "productCodeChangedToResolveFailure": false
+  },
+  "notEstablishedByThisReport": [
+    "OS build, account elevation and clean-runtime status for this specific run",
+    "byte-level before/after data comparison or updater receipt independently inspected by the agent",
+    "custom installation directory retained",
+    "power loss, disk exhaustion or installation failure recovery",
+    "production signing key backup, recovery or rotation"
+  ]
+}

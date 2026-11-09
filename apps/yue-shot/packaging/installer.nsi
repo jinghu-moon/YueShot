@@ -6,16 +6,15 @@
 !endif
 
 Unicode true
+; Native NSIS dialogs scale fonts and controls at the system DPI.
+; Do not opt into per-monitor DPI without WM_DPICHANGED layout handling.
+ManifestDPIAware true
 
 !include MUI2.nsh
+!include nsDialogs.nsh
 !include FileFunc.nsh
 !include x64.nsh
-!include WordFunc.nsh
 !include "FileAssociation.nsh"
-!include "StrFunc.nsh"
-!include "StrFunc.nsh"
-${StrCase}
-${StrLoc}
 
 !define MANUFACTURER "{{manufacturer}}"
 !define PRODUCTNAME "{{product_name}}"
@@ -44,7 +43,10 @@ ${StrLoc}
 !define ESTIMATEDSIZE "{{estimated_size}}"
 
 Name "${PRODUCTNAME}"
-BrandingText "${COPYRIGHT}"
+BrandingText "Yue"
+ShowInstDetails hide
+AutoCloseWindow true
+ShowUninstDetails hide
 OutFile "${OUTFILE}"
 
 VIProductVersion "${VERSIONWITHBUILD}"
@@ -95,234 +97,180 @@ VIAddVersionKey "ProductVersion" "${VERSION}"
   !define MUI_UNICON "${INSTALLERICON}"
 !endif
 
-; installer sidebar image
-!if "${SIDEBARIMAGE}" != ""
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "${SIDEBARIMAGE}"
-!endif
+; The product uses a native, single options page, not the generic wizard.
+; No font, bitmap, WebView, or GPUI runtime is needed to display setup.
+Var PassiveMode
+Var AppStartMenuFolder
+Var SetupDialog
+Var DirectoryInput
+Var DesktopCheckbox
+Var StartMenuCheckbox
+Var DesktopSelected
+Var StartMenuSelected
+Var RunCheckbox
+Var PageIcon
+Var PageIconHandle
+Var HeadingFont
 
-; installer header image
-!if "${HEADERIMAGE}" != ""
-  !define MUI_HEADERIMAGE
-  !define MUI_HEADERIMAGE_BITMAP  "${HEADERIMAGE}"
-!endif
+; Share the dialog body font with the MUI header instead of its default bold font.
+!define MUI_CUSTOMFUNCTION_GUIINIT InitSetupTypography
+!define MUI_CUSTOMFUNCTION_UNGUIINIT un.InitSetupTypography
+!macro InitSetupTypography
+  SendMessage $HWNDPARENT ${WM_GETFONT} 0 0 $0
+  GetDlgItem $1 $HWNDPARENT 1037
+  SendMessage $1 ${WM_SETFONT} $0 1
+!macroend
+Function InitSetupTypography
+  !insertmacro InitSetupTypography
+FunctionEnd
+Function un.InitSetupTypography
+  !insertmacro InitSetupTypography
+FunctionEnd
 
-; Define registry key to store installer language
-!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
-!define MUI_LANGDLL_REGISTRY_KEY "${MANUPRODUCTKEY}"
-!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
+Page custom ShowInstallOptions LeaveInstallOptions
+!define MUI_PAGE_HEADER_TEXT "$(SetupInstalling)"
+!define MUI_PAGE_HEADER_SUBTEXT "$(SetupInstallingDetail)"
+!insertmacro MUI_PAGE_INSTFILES
+Page custom ShowInstallComplete LeaveInstallComplete
 
-; Installer pages, must be ordered as they appear
-; 1. Welcome Page
-!define MUI_PAGE_CUSTOMFUNCTION_PRE SkipIfPassive
-!insertmacro MUI_PAGE_WELCOME
-
-; 2. License Page (if defined)
-!if "${LICENSE}" != ""
-  !define MUI_PAGE_CUSTOMFUNCTION_PRE SkipIfPassive
-  !insertmacro MUI_PAGE_LICENSE "${LICENSE}"
-!endif
-
-; 3. Install mode (if it is set to `both`)
-!if "${INSTALLMODE}" == "both"
-  !define MUI_PAGE_CUSTOMFUNCTION_PRE SkipIfPassive
-  !insertmacro MULTIUSER_PAGE_INSTALLMODE
-!endif
-
-
-; 4. Custom page to ask user if he wants to reinstall/uninstall
-;    only if a previous installtion was detected
-Var ReinstallPageCheck
-Page custom PageReinstall PageLeaveReinstall
-Function PageReinstall
-  ; Uninstall previous WiX installation if exists.
-  ;
-  ; A WiX installer stores the isntallation info in registry
-  ; using a UUID and so we have to loop through all keys under
-  ; `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall`
-  ; and check if `DisplayName` and `Publisher` keys match ${PRODUCTNAME} and ${MANUFACTURER}
-  ;
-  ; This has a potentional issue that there maybe another installation that matches
-  ; our ${PRODUCTNAME} and ${MANUFACTURER} but wasn't installed by our WiX installer,
-  ; however, this should be fine since the user will have to confirm the uninstallation
-  ; and they can chose to abort it if doesn't make sense.
-  StrCpy $0 0
-  wix_loop:
-    EnumRegKey $1 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" $0
-    StrCmp $1 "" wix_done ; Exit loop if there is no more keys to loop on
-    IntOp $0 $0 + 1
-    ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$1" "DisplayName"
-    ReadRegStr $R1 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$1" "Publisher"
-    StrCmp "$R0$R1" "${PRODUCTNAME}${MANUFACTURER}" 0 wix_loop
-    ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$1" "UninstallString"
-    ${StrCase} $R1 $R0 "L"
-    ${StrLoc} $R0 $R1 "msiexec" ">"
-    StrCmp $R0 0 0 wix_done
-    StrCpy $R7 "wix"
-    StrCpy $R6 "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$1"
-    Goto compare_version
-  wix_done:
-
-  ; Check if there is an existing installation, if not, abort the reinstall page
-  ReadRegStr $R0 SHCTX "${UNINSTKEY}" ""
-  ReadRegStr $R1 SHCTX "${UNINSTKEY}" "UninstallString"
-  ${IfThen} "$R0$R1" == "" ${|} Abort ${|}
-
-  ; Compare this installar version with the existing installation
-  ; and modify the messages presented to the user accordingly
-  compare_version:
-  StrCpy $R4 "$(older)"
-  ${If} $R7 == "wix"
-    ReadRegStr $R0 HKLM "$R6" "DisplayVersion"
-  ${Else}
-    ReadRegStr $R0 SHCTX "${UNINSTKEY}" "DisplayVersion"
-  ${EndIf}
-  ${IfThen} $R0 == "" ${|} StrCpy $R4 "$(unknown)" ${|}
-
-  nsis_tauri_utils::SemverCompare "${VERSION}" $R0
-  Pop $R0
-  ; Reinstalling the same version
-  ${If} $R0 == 0
-    StrCpy $R1 "$(alreadyInstalledLong)"
-    StrCpy $R2 "$(addOrReinstall)"
-    StrCpy $R3 "$(uninstallApp)"
-    !insertmacro MUI_HEADER_TEXT "$(alreadyInstalled)" "$(chooseMaintenanceOption)"
-    StrCpy $R5 "2"
-  ; Upgrading
-  ${ElseIf} $R0 == 1
-    StrCpy $R1 "$(olderOrUnknownVersionInstalled)"
-    StrCpy $R2 "$(uninstallBeforeInstalling)"
-    StrCpy $R3 "$(dontUninstall)"
-    !insertmacro MUI_HEADER_TEXT "$(alreadyInstalled)" "$(choowHowToInstall)"
-    StrCpy $R5 "1"
-  ; Downgrading
-  ${ElseIf} $R0 == -1
-    StrCpy $R1 "$(newerVersionInstalled)"
-    StrCpy $R2 "$(uninstallBeforeInstalling)"
-    !if "${ALLOWDOWNGRADES}" == "true"
-      StrCpy $R3 "$(dontUninstall)"
-    !else
-      StrCpy $R3 "$(dontUninstallDowngrade)"
-    !endif
-    !insertmacro MUI_HEADER_TEXT "$(alreadyInstalled)" "$(choowHowToInstall)"
-    StrCpy $R5 "1"
-  ${Else}
+Function ShowInstallOptions
+  Call SkipIfPassive
+  !insertmacro MUI_HEADER_TEXT "$(SetupTitle)" "$(SetupVersion)"
+  nsDialogs::Create 1018
+  Pop $SetupDialog
+  ${If} $SetupDialog == error
     Abort
   ${EndIf}
 
-  Call SkipIfPassive
+  ${NSD_CreateIcon} 0 0 28u 28u ""
+  Pop $PageIcon
+  ${NSD_SetIconFromInstaller} $PageIcon $PageIconHandle
+  ${NSD_CreateLabel} 38u 1u -38u 20u "$(SetupHeading)"
+  Pop $0
+  CreateFont $HeadingFont "$(^Font)" 13 400
+  SendMessage $0 ${WM_SETFONT} $HeadingFont 1
+  ${NSD_CreateLabel} 38u 24u -38u 20u "$(SetupScope)"
+  Pop $0
 
-  nsDialogs::Create 1018
-  Pop $R4
-  ${IfThen} $(^RTL) == 1 ${|} nsDialogs::SetRTL $(^RTL) ${|}
+  ${NSD_CreateLabel} 0 46u 100% 14u "$(SetupLocation)"
+  Pop $0
+  ${NSD_CreateText} 0 63u -58u 18u "$INSTDIR"
+  Pop $DirectoryInput
+  ${NSD_CreateBrowseButton} -52u 62u 52u 20u "$(SetupBrowse)"
+  Pop $0
+  ${NSD_OnClick} $0 BrowseInstallDirectory
 
-  ${NSD_CreateLabel} 0 0 100% 24u $R1
-  Pop $R1
+  ${NSD_CreateCheckbox} 0 86u 100% 14u "$(SetupDesktop)"
+  Pop $DesktopCheckbox
+  ${NSD_SetState} $DesktopCheckbox $DesktopSelected
+  ${NSD_CreateCheckbox} 0 104u 100% 14u "$(SetupStartMenu)"
+  Pop $StartMenuCheckbox
+  ${NSD_SetState} $StartMenuCheckbox $StartMenuSelected
 
-  ${NSD_CreateRadioButton} 30u 50u -30u 8u $R2
-  Pop $R2
-  ${NSD_OnClick} $R2 PageReinstallUpdateSelection
+  ${NSD_CreateLink} 0 125u 85u 14u "$(SetupLicense)"
+  Pop $0
+  ${NSD_OnClick} $0 ShowProductLicense
+  ${NSD_CreateLabel} 95u 125u -95u 14u "$(SetupUnsigned)"
+  Pop $0
 
-  ${NSD_CreateRadioButton} 30u 70u -30u 8u $R3
-  Pop $R3
-  ; disable this radio button if downgrading and downgrades are disabled
-  !if "${ALLOWDOWNGRADES}" == "false"
-    ${IfThen} $R0 == -1 ${|} EnableWindow $R3 0 ${|}
-  !endif
-  ${NSD_OnClick} $R3 PageReinstallUpdateSelection
-
-  ; Check the first radio button if this the first time
-  ; we enter this page or if the second button wasn't
-  ; selected the last time we were on this page
-  ${If} $ReinstallPageCheck != 2
-    SendMessage $R2 ${BM_SETCHECK} ${BST_CHECKED} 0
-  ${Else}
-    SendMessage $R3 ${BM_SETCHECK} ${BST_CHECKED} 0
+  GetDlgItem $0 $HWNDPARENT 1
+  SendMessage $0 ${WM_SETTEXT} 0 "STR:$(SetupInstall)"
+  ReadRegStr $1 SHCTX "${UNINSTKEY}" "DisplayVersion"
+  ${If} $1 == "${VERSION}"
+    SendMessage $0 ${WM_SETTEXT} 0 "STR:$(SetupReinstall)"
+  ${ElseIf} $1 != ""
+    SendMessage $0 ${WM_SETTEXT} 0 "STR:$(SetupUpdate)"
   ${EndIf}
-
-  ${NSD_SetFocus} $R2
+  GetDlgItem $0 $HWNDPARENT 3
+  ShowWindow $0 ${SW_HIDE}
   nsDialogs::Show
+  ${NSD_FreeIcon} $PageIconHandle
+  System::Call 'gdi32::DeleteObject(p $HeadingFont)'
 FunctionEnd
-Function PageReinstallUpdateSelection
-  ${NSD_GetState} $R2 $R1
-  ${If} $R1 == ${BST_CHECKED}
-    StrCpy $ReinstallPageCheck 1
-  ${Else}
-    StrCpy $ReinstallPageCheck 2
+
+Function BrowseInstallDirectory
+  Pop $0
+  ${NSD_GetText} $DirectoryInput $1
+  nsDialogs::SelectFolderDialog "$(SetupChooseFolder)" "$1"
+  Pop $0
+  ${If} $0 != error
+    ${NSD_SetText} $DirectoryInput $0
   ${EndIf}
 FunctionEnd
-Function PageLeaveReinstall
-  ${NSD_GetState} $R2 $R1
 
-  ; $R5 holds whether we are reinstalling the same version or not
-  ; $R5 == "1" -> different versions
-  ; $R5 == "2" -> same version
-  ;
-  ; $R1 holds the radio buttons state. its meaning is dependant on the context
-  StrCmp $R5 "1" 0 +2 ; Existing install is not the same version?
-    StrCmp $R1 "1" reinst_uninstall reinst_done ; $R1 == "1", then user chose to uninstall existing version, otherwise skip uninstalling
-  StrCmp $R1 "1" reinst_done ; Same version? skip uninstalling
-
-  reinst_uninstall:
-    HideWindow
-    ClearErrors
-
-    ${If} $R7 == "wix"
-      ReadRegStr $R1 HKLM "$R6" "UninstallString"
-      ExecWait '$R1' $0
-    ${Else}
-      ReadRegStr $4 SHCTX "${MANUPRODUCTKEY}" ""
-      ReadRegStr $R1 SHCTX "${UNINSTKEY}" "UninstallString"
-      ExecWait '$R1 /P _?=$4' $0
-    ${EndIf}
-
-    BringToFront
-
-    ${IfThen} ${Errors} ${|} StrCpy $0 2 ${|} ; ExecWait failed, set fake exit code
-
-    ${If} $0 <> 0
-    ${OrIf} ${FileExists} "$INSTDIR\${MAINBINARYNAME}.exe"
-      ${If} $0 = 1 ; User aborted uninstaller?
-        StrCmp $R5 "2" 0 +2 ; Is the existing install the same version?
-          Quit ; ...yes, already installed, we are done
-        Abort
-      ${EndIf}
-      MessageBox MB_ICONEXCLAMATION "$(unableToUninstall)"
-      Abort
-    ${Else}
-      StrCpy $0 $R1 1
-      ${IfThen} $0 == '"' ${|} StrCpy $R1 $R1 -1 1 ${|} ; Strip quotes from UninstallString
-      Delete $R1
-      RMDir $INSTDIR
-    ${EndIf}
-  reinst_done:
+Function ShowProductLicense
+  Pop $0
+  InitPluginsDir
+  File /oname=$PLUGINSDIR\YueShot-LICENSE.txt "${LICENSE}"
+  ExecShell "open" "$PLUGINSDIR\YueShot-LICENSE.txt"
 FunctionEnd
 
-; 5. Choose install directoy page
-!define MUI_PAGE_CUSTOMFUNCTION_PRE SkipIfPassive
-!insertmacro MUI_PAGE_DIRECTORY
+Function LeaveInstallOptions
+  ${NSD_GetText} $DirectoryInput $0
+  StrCmp $0 "" invalid_directory
+  ; Reject drive-relative (D:folder) and current-drive (\folder) paths too.
+  StrCpy $1 $0 2
+  StrCmp $1 "\\" normalize_directory
+  StrCpy $1 $0 2 1
+  StrCmp $1 ":\" 0 invalid_directory
+  normalize_directory:
+  ; NSIS GetFullPathName requires an existing path; new install folders need Win32 normalization.
+  System::Call 'kernel32::GetFullPathNameW(w r0,i ${NSIS_MAX_STRLEN},w .r1,p 0)i.r2'
+  IntCmp $2 0 invalid_directory invalid_directory 0
+  IntCmp $2 ${NSIS_MAX_STRLEN} invalid_directory 0 invalid_directory
+  StrCmp $1 "" invalid_directory
+  ${GetRoot} $1 $2
+  StrCmp $1 "$2\" invalid_directory
+  IfFileExists "$1\*" directory_valid 0
+  IfFileExists "$1" invalid_directory directory_valid
+  directory_valid:
+  StrCpy $INSTDIR $1
+  ${NSD_GetState} $DesktopCheckbox $DesktopSelected
+  ${NSD_GetState} $StartMenuCheckbox $StartMenuSelected
+  Return
+  invalid_directory:
+    MessageBox MB_OK|MB_ICONEXCLAMATION "$(SetupInvalidDirectory)"
+    ${NSD_SetFocus} $DirectoryInput
+    Abort
+FunctionEnd
 
-; 6. Start menu shortcut page
-!define MUI_PAGE_CUSTOMFUNCTION_PRE SkipIfPassive
-Var AppStartMenuFolder
-!insertmacro MUI_PAGE_STARTMENU Application $AppStartMenuFolder
+Function ShowInstallComplete
+  Call SkipIfPassive
+  !insertmacro MUI_HEADER_TEXT "$(SetupCompleteTitle)" "$(SetupCompleteDetail)"
+  nsDialogs::Create 1018
+  Pop $SetupDialog
+  ${If} $SetupDialog == error
+    Abort
+  ${EndIf}
+  ${NSD_CreateIcon} 0 8u 28u 28u ""
+  Pop $PageIcon
+  ${NSD_SetIconFromInstaller} $PageIcon $PageIconHandle
+  ${NSD_CreateLabel} 38u 8u -38u 20u "$(SetupCompleteHeading)"
+  Pop $0
+  CreateFont $HeadingFont "$(^Font)" 13 400
+  SendMessage $0 ${WM_SETFONT} $HeadingFont 1
+  ${NSD_CreateLabel} 38u 34u -38u 34u "$(SetupInstalledLocation)"
+  Pop $0
+  ${NSD_CreateCheckbox} 0 86u 100% 14u "$(SetupLaunch)"
+  Pop $RunCheckbox
+  ${NSD_SetState} $RunCheckbox ${BST_CHECKED}
+  ${NSD_CreateLabel} 0 113u 100% 30u "$(SetupDataRetained)"
+  Pop $0
+  GetDlgItem $0 $HWNDPARENT 1
+  SendMessage $0 ${WM_SETTEXT} 0 "STR:$(SetupFinish)"
+  GetDlgItem $0 $HWNDPARENT 3
+  ShowWindow $0 ${SW_HIDE}
+  nsDialogs::Show
+  ${NSD_FreeIcon} $PageIconHandle
+  System::Call 'gdi32::DeleteObject(p $HeadingFont)'
+FunctionEnd
 
-; 7. Installation page
-!insertmacro MUI_PAGE_INSTFILES
-
-; 8. Finish page
-;
-; Don't auto jump to finish page after installation page,
-; because the installation page has useful info that can be used debug any issues with the installer.
-!define MUI_FINISHPAGE_NOAUTOCLOSE
-; Use show readme button in the finish page as a button create a desktop shortcut
-!define MUI_FINISHPAGE_SHOWREADME
-!define MUI_FINISHPAGE_SHOWREADME_TEXT "$(createDesktop)"
-!define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
-; Show run app after installation.
-!define MUI_FINISHPAGE_RUN "$INSTDIR\${MAINBINARYNAME}.exe"
-
-!define MUI_PAGE_CUSTOMFUNCTION_PRE SkipIfPassive
-!insertmacro MUI_PAGE_FINISH
+Function LeaveInstallComplete
+  ${NSD_GetState} $RunCheckbox $0
+  ${If} $0 == ${BST_CHECKED}
+    Exec '"$INSTDIR\${MAINBINARYNAME}.exe"'
+  ${EndIf}
+FunctionEnd
 
 ; Uninstaller Pages
 ; 1. Confirm uninstall page
@@ -333,11 +281,25 @@ Var DeleteAppDataCheckboxState
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW un.ConfirmShow
 Function un.ConfirmShow
     FindWindow $1 "#32770" "" $HWNDPARENT ; Find inner dialog
+    ; Anchor below the native directory field and use dialog units, not fixed pixels.
+    System::Alloc 16
+    Pop $R0
+    GetDlgItem $2 $1 1000
+    System::Call 'user32::GetWindowRect(p r2,p R0)'
+    System::Call 'user32::MapWindowPoints(p 0,p r1,p R0,i 2)'
+    System::Call '*$R0(i,i,i,i.r5)'
+    System::Call 'user32::GetClientRect(p r1,p R0)'
+    System::Call '*$R0(i,i,i.r4,i)'
+    System::Call '*$R0(i 0,i 4,i 0,i 14)'
+    System::Call 'user32::MapDialogRect(p r1,p R0)'
+    System::Call '*$R0(i,i.r3,i,i.r2)'
+    IntOp $3 $5 + $3
+    System::Free $R0
+    StrCpy $0 ${__NSD_CheckBox_EXSTYLE}
     ${If} $(^RTL) == 1
-      System::Call 'USER32::CreateWindowEx(i${__NSD_CheckBox_EXSTYLE}|${WS_EX_LAYOUTRTL},t"${__NSD_CheckBox_CLASS}",t "$(deleteAppData)",i${__NSD_CheckBox_STYLE},i 50,i 100,i 400, i 25,i$1,i0,i0,i0)i.s'
-    ${Else}
-      System::Call 'USER32::CreateWindowEx(i${__NSD_CheckBox_EXSTYLE},t"${__NSD_CheckBox_CLASS}",t "$(deleteAppData)",i${__NSD_CheckBox_STYLE},i 0,i 100,i 400, i 25,i$1,i0,i0,i0)i.s'
+      IntOp $0 $0 | ${WS_EX_LAYOUTRTL}
     ${EndIf}
+    System::Call 'user32::CreateWindowExW(i r0,w "${__NSD_CheckBox_CLASS}",w "$(deleteAppData)",i ${__NSD_CheckBox_STYLE},i 0,i r3,i r4,i r2,p r1,p 0,p 0,p 0)p.s'
     Pop $DeleteAppDataCheckbox
     SendMessage $HWNDPARENT ${WM_GETFONT} 0 0 $1
     SendMessage $DeleteAppDataCheckbox ${WM_SETFONT} $1 1
@@ -357,9 +319,88 @@ FunctionEnd
 !insertmacro MUI_LANGUAGE "{{this}}"
 {{/each}}
 !insertmacro MUI_RESERVEFILE_LANGDLL
+SetFont /LANG=${LANG_ENGLISH} "Segoe UI" 10
+SetFont /LANG=${LANG_SIMPCHINESE} "Microsoft YaHei UI" 10
 {{#each language_files}}
   !include "{{this}}"
 {{/each}}
+
+
+; Application-owned strings use the same selected language as native NSIS pages.
+LangString SetupInstalling ${LANG_ENGLISH} "Installing ${PRODUCTNAME}"
+LangString SetupInstalling ${LANG_SIMPCHINESE} "正在安装 ${PRODUCTNAME}"
+LangString SetupInstallingDetail ${LANG_ENGLISH} "Deploying files and creating your selected shortcuts."
+LangString SetupInstallingDetail ${LANG_SIMPCHINESE} "正在部署程序并创建所选快捷方式。"
+LangString SetupTitle ${LANG_ENGLISH} "Install ${PRODUCTNAME}"
+LangString SetupTitle ${LANG_SIMPCHINESE} "安装 ${PRODUCTNAME}"
+LangString SetupVersion ${LANG_ENGLISH} "Version ${VERSION}  ·  Windows x64"
+LangString SetupVersion ${LANG_SIMPCHINESE} "版本 ${VERSION}  ·  Windows x64"
+LangString SetupHeading ${LANG_ENGLISH} "Capture with YueShot."
+LangString SetupHeading ${LANG_SIMPCHINESE} "让每一次截图，都得心应手。"
+LangString SetupScope ${LANG_ENGLISH} "Install for your account. No administrator rights needed."
+LangString SetupScope ${LANG_SIMPCHINESE} "仅为当前用户安装，无需管理员权限。"
+LangString SetupLocation ${LANG_ENGLISH} "Install location"
+LangString SetupLocation ${LANG_SIMPCHINESE} "安装位置"
+LangString SetupBrowse ${LANG_ENGLISH} "Browse…"
+LangString SetupBrowse ${LANG_SIMPCHINESE} "浏览…"
+LangString SetupDesktop ${LANG_ENGLISH} "Create a desktop shortcut"
+LangString SetupDesktop ${LANG_SIMPCHINESE} "创建桌面快捷方式"
+LangString SetupStartMenu ${LANG_ENGLISH} "Add to the Start menu"
+LangString SetupStartMenu ${LANG_SIMPCHINESE} "添加到开始菜单"
+LangString SetupLicense ${LANG_ENGLISH} "Open-source license"
+LangString SetupLicense ${LANG_SIMPCHINESE} "查看开源许可"
+LangString SetupUnsigned ${LANG_ENGLISH} "Unsigned test build."
+LangString SetupUnsigned ${LANG_SIMPCHINESE} "此测试版本尚未进行代码签名。"
+LangString SetupInstall ${LANG_ENGLISH} "Install"
+LangString SetupInstall ${LANG_SIMPCHINESE} "安装"
+LangString SetupReinstall ${LANG_ENGLISH} "Reinstall"
+LangString SetupReinstall ${LANG_SIMPCHINESE} "重新安装"
+LangString SetupUpdate ${LANG_ENGLISH} "Update"
+LangString SetupUpdate ${LANG_SIMPCHINESE} "更新"
+LangString SetupChooseFolder ${LANG_ENGLISH} "Choose an install location"
+LangString SetupChooseFolder ${LANG_SIMPCHINESE} "选择安装位置"
+LangString SetupInvalidDirectory ${LANG_ENGLISH} "Choose an absolute program directory, such as D:\Apps\YueShot. Do not use a drive root or an existing file."
+LangString SetupInvalidDirectory ${LANG_SIMPCHINESE} "请选择完整的程序安装目录，例如 D:\Apps\YueShot。请勿使用磁盘根目录或现有文件。"
+LangString SetupCompleteTitle ${LANG_ENGLISH} "${PRODUCTNAME} is installed"
+LangString SetupCompleteTitle ${LANG_SIMPCHINESE} "${PRODUCTNAME} 已安装"
+LangString SetupCompleteDetail ${LANG_ENGLISH} "You are ready to capture."
+LangString SetupCompleteDetail ${LANG_SIMPCHINESE} "准备就绪，可以开始截图了。"
+LangString SetupCompleteHeading ${LANG_ENGLISH} "Installation complete"
+LangString SetupCompleteHeading ${LANG_SIMPCHINESE} "安装完成"
+LangString SetupInstalledLocation ${LANG_ENGLISH} "Installed to:$\r$\n$INSTDIR"
+LangString SetupInstalledLocation ${LANG_SIMPCHINESE} "程序已安装到：$\r$\n$INSTDIR"
+LangString SetupLaunch ${LANG_ENGLISH} "Launch ${PRODUCTNAME}"
+LangString SetupLaunch ${LANG_SIMPCHINESE} "启动 ${PRODUCTNAME}"
+LangString SetupDataRetained ${LANG_ENGLISH} "Updates and reinstalls keep your captures, history and settings.$\r$\nUninstalling also keeps this data by default."
+LangString SetupDataRetained ${LANG_SIMPCHINESE} "升级和重新安装会保留截图、历史及设置。$\r$\n卸载时也会默认保留这些数据。"
+LangString SetupFinish ${LANG_ENGLISH} "Finish"
+LangString SetupFinish ${LANG_SIMPCHINESE} "完成"
+LangString SetupAppRunning ${LANG_ENGLISH} "Exit YueShot normally from its tray menu before installing or uninstalling."
+LangString SetupAppRunning ${LANG_SIMPCHINESE} "请先通过托盘正常退出 YueShot，再进行安装或卸载。"
+LangString SetupInvalidVersion ${LANG_ENGLISH} "The installed version registration is invalid or missing. Repair it before installing."
+LangString SetupInvalidVersion ${LANG_SIMPCHINESE} "已安装版本的登记信息缺失或无效，请修复后再安装。"
+LangString SetupDowngrade ${LANG_ENGLISH} "A newer YueShot version is installed. Downgrading is not allowed."
+LangString SetupDowngrade ${LANG_SIMPCHINESE} "已安装更新的 YueShot 版本，不能降级安装。"
+LangString SetupStartupCleanupFailed ${LANG_ENGLISH} "Could not remove this installation's login startup. Uninstall stopped."
+LangString SetupStartupCleanupFailed ${LANG_SIMPCHINESE} "无法清理此安装位置拥有的开机启动项，卸载已停止。"
+
+; Windows user UI language, rather than locale, code page or old installer state.
+; All Chinese UI variants use Simplified Chinese; other languages fall back to English.
+; /LANG=en and /LANG=zh-CN are optional explicit overrides and support repeatable QA.
+!macro SelectSetupLanguage
+  System::Call 'kernel32::GetUserDefaultUILanguage()i.r0'
+  IntOp $0 $0 & 0x3ff
+  StrCpy $LANGUAGE ${LANG_ENGLISH}
+  ${If} $0 == 4
+    StrCpy $LANGUAGE ${LANG_SIMPCHINESE}
+  ${EndIf}
+  ${GetOptions} $CMDLINE "/LANG=" $0
+  ${If} $0 == "en"
+    StrCpy $LANGUAGE ${LANG_ENGLISH}
+  ${ElseIf} $0 == "zh-CN"
+    StrCpy $LANGUAGE ${LANG_SIMPCHINESE}
+  ${EndIf}
+!macroend
 
 !macro SetContext
   !if "${INSTALLMODE}" == "currentUser"
@@ -379,8 +420,6 @@ FunctionEnd
   ${EndIf}
 !macroend
 
-Var PassiveMode
-
 !macro CheckIfAppIsRunning
   ; Check before maintenance pages as well as immediately before file changes.
   ; A running capture/save owns resources and data. Never force-kill it.
@@ -388,12 +427,12 @@ Var PassiveMode
   Pop $R0
   ${If} $R0 = 0
     SetErrorLevel 10
-    Abort "Exit YueShot normally before installing or uninstalling."
+    Abort "$(SetupAppRunning)"
   ${EndIf}
 !macroend
 
 Function CheckInstalledVersion
-  ; Never depend on PageReinstall registers: silent mode does not run that page.
+  ; Enforce the same policy in interactive, passive and silent mode.
   ReadRegStr $R8 SHCTX "${UNINSTKEY}" "DisplayName"
   ReadRegStr $R9 SHCTX "${UNINSTKEY}" "DisplayVersion"
   StrCmp "$R8$R9" "" version_check_done
@@ -405,7 +444,7 @@ Function CheckInstalledVersion
   Pop $R8
   ${If} $R8 == -1
     SetErrorLevel 13
-    Abort "The installed version is invalid or missing. Repair its registration before installing."
+    Abort "$(SetupInvalidVersion)"
   ${EndIf}
 
   !if "${ALLOWDOWNGRADES}" == "false"
@@ -413,7 +452,7 @@ Function CheckInstalledVersion
     Pop $R8
     ${If} $R8 == -1
       SetErrorLevel 12
-      Abort "A newer YueShot version is installed. Downgrading is not allowed."
+      Abort "$(SetupDowngrade)"
     ${EndIf}
   !endif
   version_check_done:
@@ -423,6 +462,16 @@ Function .onInit
   ${GetOptions} $CMDLINE "/P" $PassiveMode
   IfErrors +2 0
     StrCpy $PassiveMode 1
+
+  !insertmacro SelectSetupLanguage
+  StrCpy $AppStartMenuFolder "${PRODUCTNAME}"
+  StrCpy $DesktopSelected ${BST_CHECKED}
+  StrCpy $StartMenuSelected ${BST_CHECKED}
+  ${GetOptions} $CMDLINE "/NS" $0
+  ${IfNot} ${Errors}
+    StrCpy $DesktopSelected ${BST_UNCHECKED}
+    StrCpy $StartMenuSelected ${BST_UNCHECKED}
+  ${EndIf}
 
   !insertmacro SetContext
   !insertmacro CheckIfAppIsRunning
@@ -525,23 +574,13 @@ Section Install
   WriteRegDWORD SHCTX "${UNINSTKEY}" "NoRepair" "1"
   WriteRegDWORD SHCTX "${UNINSTKEY}" "EstimatedSize" "${ESTIMATEDSIZE}"
 
-  ; Create start menu shortcut (GUI)
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+  ; The options page and /NS populate the same values for all install modes.
+  ${If} $DesktopSelected == ${BST_CHECKED}
+    Call CreateDesktopShortcut
+  ${EndIf}
+  ${If} $StartMenuSelected == ${BST_CHECKED}
     Call CreateStartMenuShortcut
-  !insertmacro MUI_STARTMENU_WRITE_END
-
-  ; Create shortcuts for silent and passive installers, which
-  ; can be disabled by passing `/NS` flag
-  ; GUI installer has buttons for users to control creating them
-  IfSilent check_ns_flag 0
-  ${IfThen} $PassiveMode == 1 ${|} Goto check_ns_flag ${|}
-  Goto shortcuts_done
-  check_ns_flag:
-    ${GetOptions} $CMDLINE "/NS" $R0
-    IfErrors 0 shortcuts_done
-      Call CreateDesktopShortcut
-      Call CreateStartMenuShortcut
-  shortcuts_done:
+  ${EndIf}
 
   ; Auto close this page for passive mode
   ${IfThen} $PassiveMode == 1 ${|} SetAutoClose true ${|}
@@ -561,6 +600,7 @@ Function .onInstSuccess
 FunctionEnd
 
 Function un.onInit
+  !insertmacro SelectSetupLanguage
   !insertmacro SetContext
   !insertmacro CheckIfAppIsRunning
 
@@ -568,7 +608,6 @@ Function un.onInit
     !insertmacro MULTIUSER_UNINIT
   !endif
 
-  !insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
 Section Uninstall
@@ -581,7 +620,7 @@ Section Uninstall
   ${EndIf}
   ${If} $R0 != 0
     SetErrorLevel 11
-    Abort "Could not remove this installation's login startup."
+    Abort "$(SetupStartupCleanupFailed)"
   ${EndIf}
 
   ; Delete the app directory and its content from disk
@@ -622,7 +661,7 @@ Section Uninstall
   RMDir "$INSTDIR"
 
   ; Remove start menu shortcut
-  !insertmacro MUI_STARTMENU_GETFOLDER Application $AppStartMenuFolder
+  StrCpy $AppStartMenuFolder "${PRODUCTNAME}"
   Delete "$SMPROGRAMS\$AppStartMenuFolder\${PRODUCTNAME}.lnk"
   RMDir "$SMPROGRAMS\$AppStartMenuFolder"
 

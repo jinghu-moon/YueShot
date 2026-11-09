@@ -37,3 +37,47 @@ main 推送/PR 触发 Windows CI，只生成未签名 beta 候选和实际安装
 windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 zenrav1e 汇编构建失败。CI 固定官网 nasm-3.01-win64.zip，使用实际下载计算并记录的 SHA-256 校验归档，再确认版本并加入后续步骤 PATH；不关闭汇编或跳过 AVIF 门禁。此工具仅用于构建，不进入产品安装负载。
 
 正式 release --check 必须在未满足更新、权利、签名/恢复、干净用户等门槛时拒绝；未签名 stable 打包直接拒绝。不通过忽略公告、放宽断言或强杀进程制造验收通过，不将实验 HDR 自动放入默认发行配置。
+
+
+## NSIS 安装界面与语言（2026-11-09）
+
+本轮仅修改交付界面及其打包配置，没有新增截图功能。安装器使用原生 NSIS 控件，不加载 GPUI、WebView 或附带字体。界面、语言和参数合同见 [打包资源说明](../apps/yue-shot/packaging/README.md#安装界面与语言)。
+
+| 行为 | 修改前 | 修改后与实际验证 |
+| --- | --- | --- |
+| 安装流程 | 默认多页向导 | 单页安装路径和快捷方式选项 → 真实安装进度 → 自动进入完成页；完成页可取消启动 |
+| 语言 | 仅英文 | 当前用户 Windows 界面语言为中文时显示简体中文，其余回退英文；本机默认中文与 `/LANG=en` 英文实窗均验证 |
+| 路径 | 原生目录向导 | 自定义页规范化完整路径；中文且含空格的新目录安装成功；相对路径、盘符相对路径、磁盘根和现有文件明确拒绝 |
+| 快捷方式 | 统一创建或 `/NS` | 桌面和开始菜单独立选择；仅开始菜单、均不创建两种交互结果检查通过 |
+| 卸载 | 旧 NSIS 界面 | 同样自动检测语言，英文覆盖实窗验证；默认不勾选删除数据 |
+
+交互测试曾发现 NSIS `GetFullPathName` 对尚不存在的安装目录返回空字符串，已换为 `GetFullPathNameW` 并校验错误/长度，未通过预建目录绕过。另拒绝 `D:folder` 这类盘符相对路径。相对路径、根目录、文件拒绝均在真实安装页验证，中文新目录安装后逐项核对负载哈希、执行已安装 EXE smoke 并正常卸载。
+
+工具测试修改前后均为 45 项通过。实窗检查采用本机当前 150% 缩放；未验证所有系统语言和 DPI，也不代替干净普通用户验收。现有用户 Beta 安装未覆盖或卸载，实际安装回归使用隔离 dev 渠道。
+
+本轮另外运行的 npm 工具链审计发现 3 项记录（1 low、2 high，含传递影响），当前锁定版本没有自动可用修复；结果保存在本机 `target/installer-npm-audit.json`。这是构建工具链待处理项，不等同于 Rust 产品图审计结论；未修改锁文件或放宽正式发行门槛。
+
+最终 dev 候选 `target/yueshot-delivery/0.1.2-dev-bilingual-setup` 已重新打包，通过 `test-yueshot-install.ps1`、`test-yueshot-installer-policy.ps1`、`test-yueshot-channel-install.ps1` 三项门禁，日志分别位于 `target/installer-runtime-final.log`、`target/installer-policy-final.log`、`target/installer-channel-final.log`。最终安装包交互安装到中文空格目录，完成按钮成功启动该目录中的 EXE，通过产品“退出”按钮正常退出后正常卸载，默认 dev 数据保留。45 项 Python 回归日志为 `target/installer-python-tests-final.log`。以上为本机证据，本轮没有重新运行公开 CI。
+
+供人工查看的最终 Beta 安装包：`target/yueshot-delivery/0.1.2-beta-bilingual-setup/nsis/YueShot_0.1.2_x64-setup.exe`。完整 Release 打包和候选字节校验通过，源码 buildId 与上述 dev 候选一致；未安装覆盖已有 Beta，未推送仓库或创建 Release。
+
+
+## 安装器 DPI 与系统字体（2026-11-09）
+
+旧 Beta EXE 的 manifest 未声明 DPI 感知，在 150% 下由 Windows 位图缩放；现在使用 NSIS `ManifestDPIAware true`，保持 system DPI 感知，不宣称跨 DPI 显示器动态重排。新增 `tools/yueshot_installer.py` 读取实际 PE manifest（仅映射资源、不执行 EXE），打包校验安装器，安装 smoke 同时校验实际卸载器。旧候选被新检查明确拒绝，新预览通过。
+
+字体探针来自临时生成的 NSIS 预览，直接读取控件所持 HFONT 的 LOGFONT，不进入交付源码模板或产品运行流程。修改前实际正文确为 Microsoft YaHei UI 9pt，未回退宋体。修改后中文为 Microsoft YaHei UI、英文为 Segoe UI；正文、路径框与 MUI 页眉实际高度均为 -20px、字重 400，主标题 -26px、字重 400，对应当前 144 DPI 下的 10pt/13pt。实测记录在 `target/installer-system-font-probe/fonts-zh.txt` 和 `fonts-en.txt`。
+
+| 项目 | 修改前 | 修改后 |
+| --- | --- | --- |
+| DPI | 无声明，Windows 位图缩放 | system-DPI-aware，原生绘制 |
+| 正文/控件 | 9pt | 统一 10pt 常规字重 |
+| MUI 页眉 | 默认 700 粗体 | 与正文同字体、字号及 400 字重 |
+| 页面主标题 | 12pt、600 字重 | 当前语言字体 13pt、400 字重 |
+| 卸载数据选项 | 固定像素位置和高度 | 锚定在原生目录框下方，边距/高度随 dialog units 缩放 |
+
+中英文选项页及中文卸载页在本机当前 150% 缩放下实窗检查，无文字裁切或控件重叠。未变更系统字体、ClearType、缩放或语言设置；没有验证 100%/200% 的实际设备显示，也没有引入字体文件。
+
+最终 dev 候选 `target/yueshot-delivery/0.1.2-dev-system-fonts` 完整 Release 打包通过；47 项工具测试通过（`target/installer-system-font-tests.log`）。三项安装门禁全部通过，日志为 `target/installer-system-font-runtime.log`、`installer-system-font-policy.log`、`installer-system-font-channel.log`，其中安装 smoke 读取安装器和实际卸载器的 PE manifest，均确认为 system DPI 感知。另使用完整候选交互安装到 `target/字体排版 QA`，检查实际进度与完成页，核对所有负载哈希、运行已安装 EXE smoke、取消安装后启动并正常卸载。现有用户 Beta 未覆盖或卸载。
+
+供人工验收的 Beta 安装包为 `target/yueshot-delivery/0.1.2-beta-system-fonts/nsis/YueShot_0.1.2_x64-setup.exe`，完整 Release 打包和字节校验通过，源码 buildId 与 dev 回归候选一致。此次未推送仓库、未创建公开 Release。

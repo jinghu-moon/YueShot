@@ -18,6 +18,7 @@ from yueshot_security import audit as audit_security
 from yueshot_svg import audit as audit_svg
 from yueshot_vendor import verify as verify_vendor
 from yueshot_icons import verify as verify_icon
+from yueshot_installer import verify as verify_installer
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -69,7 +70,7 @@ def installer_config(output, binary, identity, root=ROOT):
             'licenseFile':str(binary/'LICENSE'),'icons':[str(root/'apps/yue-shot/packaging/YueShot.ico')],
             'windows':{'allowDowngrades':False},
             'nsis':{'installMode':'currentUser','installerIcon':str(root/'apps/yue-shot/packaging/YueShot.ico'),
-                    'template':str(generated), 'languages':['English'],'compression':'lzma',
+                    'template':str(generated), 'languages':['English','SimpChinese'],'compression':'lzma',
                     'appdataPaths':['$LOCALAPPDATA/'+identity['dataRelative']]}}
 
 def source_archive(destination, root=ROOT):
@@ -211,6 +212,9 @@ def package(args):
     cli=ROOT/'tools/delivery/node_modules/@crabnebula/packager/packager.js'
     if not cli.is_file(): raise RuntimeError('install pinned packaging tool first: npm ci --prefix tools/delivery')
     run('node',cli,'--config',output/'packager.json')
+    installer_report = [verify_installer(path) for path in sorted((output/'nsis').glob('*.exe'))]
+    if len(installer_report) != 1: raise RuntimeError('expected one DPI-aware installer')
+    (output/'installer-dpi.json').write_text(json.dumps(installer_report,indent=2)+'\n',encoding='utf8')
     icon = ROOT/'apps/yue-shot/packaging/YueShot.ico'
     icon_report = [verify_icon(binary/'YueShot.exe', icon)]
     icon_report.extend(verify_icon(path, icon) for path in sorted((output/'nsis').glob('*.exe')))

@@ -43,6 +43,7 @@ foreach ($entry in $manifest.files.PSObject.Properties) {
 }
 Invoke-Checked python @('tools/yueshot_runtime.py',$exe,'--report',(Join-Path $candidateRoot 'installed-runtime-audit.json'))
 Invoke-Checked python @('tools/yueshot_icons.py',(Join-Path $projectRoot 'apps/yue-shot/packaging/YueShot.ico'),$exe,(Join-Path $installRoot 'uninstall.exe'))
+Invoke-Checked python @('tools/yueshot_installer.py',$installers[0].FullName,(Join-Path $installRoot 'uninstall.exe'))
 $smokeProcess = Start-Process -FilePath $exe -ArgumentList @('--smoke-test','--data-dir',('"' + $dataRoot + '"')) -WindowStyle Hidden -Wait -PassThru
 if ($smokeProcess.ExitCode -ne 0) { throw "Installed smoke exited $($smokeProcess.ExitCode)" }
 if (-not (Test-Path -LiteralPath (Join-Path $dataRoot 'settings.json'))) { throw 'Installed smoke did not create settings.' }

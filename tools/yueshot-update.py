@@ -2,6 +2,7 @@
 """Prepare and sign an authenticated YueShot update; never upload or publish anything."""
 import argparse
 import base64
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -10,6 +11,9 @@ import shutil
 import subprocess
 import sys
 import time
+import zipfile
+
+from yueshot_source_bundle import verify as verify_source_bundle
 
 ROOT = Path(__file__).resolve().parents[1]
 KEYS = ROOT / 'apps/yue-shot/packaging/update-keys.json'
@@ -94,13 +98,86 @@ def sign(args):
         raise ValueError('provision and review this channel public key before signing')
     # Minisign prompts for the password directly. No password arguments, environment or logs.
     subprocess.run([str(args.minisign), '-S', '-s', str(secret), '-m', str(manifest), '-x', str(signature)], check=True)
+    verify_signature(manifest, signature, keys, args.minisign)
+    print('Signature verified against the channel public key. Nothing uploaded.')
+
+
+def verify_signature(manifest, signature, keys, minisign):
     for key in keys:
-        result = subprocess.run([str(args.minisign), '-V', '-P', key, '-m', str(manifest), '-x', str(signature)],
+        result = subprocess.run([str(minisign), '-V', '-P', key, '-m', str(manifest), '-x', str(signature)],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         if result.returncode == 0:
-            print('Signature verified against the channel public key. Nothing uploaded.')
             return
     raise ValueError('signature does not match a trusted client key; do not publish')
+
+
+def asset(path):
+    path = path.resolve(strict=True)
+    return dict(path=str(path), name=path.name, size=path.stat().st_size,
+                sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+
+
+def release_layout(record, installer, source, directory):
+    channel = record['channel']
+    if channel not in ('dev', 'beta', 'stable'):
+        raise ValueError('unsupported release channel')
+    if record['dirty']:
+        raise ValueError('release source must be clean')
+    if channel == 'stable' and not record['readyForRelease']:
+        raise ValueError('stable release qualification is incomplete')
+    if installer.name != f"YueShot_{record['version']}_x64-setup.exe" or source.name != f"YueShot_{record['version']}_source.zip":
+        raise ValueError('release assets must match the candidate version')
+    return dict(format=1, state='prepared only; no upload or publication', repository='jinghu-moon/YueShot',
+                versionRelease=dict(tag='yueshot-v'+record['version'], target=record['gitHead'],
+                                    prerelease=channel != 'stable', assets=[asset(installer), asset(source)]),
+                feedRelease=dict(tag='yueshot-updater-'+channel, prerelease=channel != 'stable',
+                                 assets=[asset(directory/'latest.json'), asset(directory/'latest.json.minisig')],
+                                 publishOrder='after version assets are public and verified without credentials'),
+                candidate={key: record[key] for key in ['version', 'channel', 'buildId', 'dirty', 'readyForRelease']})
+
+
+def plan(args):
+    candidate = args.candidate.resolve(strict=True)
+    directory = args.directory.resolve(strict=True)
+    output = args.output.resolve()
+    if output.exists():
+        raise ValueError('preserve previous publication plans; use a fresh output directory')
+    spec = importlib.util.spec_from_file_location('yueshot_delivery', ROOT/'tools/yueshot-delivery.py')
+    delivery = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(delivery)
+    delivery.verify(candidate)
+    record = json.loads((candidate/'delivery.json').read_text(encoding='utf8'))
+    verify_source_bundle(args.source, candidate)
+    manifest = json.loads((directory/'latest.json').read_text(encoding='utf8'))
+    expected, relative = manifest_for(record, 'yueshot-v'+record['version'], 180, 0)
+    expected.update(expires_unix=manifest['expires_unix'], installer_size=(candidate/relative).stat().st_size)
+    if manifest != expected or manifest['expires_unix'] <= int(time.time()):
+        raise ValueError('update manifest differs from the candidate or has expired')
+    installer = directory/Path(relative).name
+    if asset(installer)['sha256'] != expected['installer_sha256']:
+        raise ValueError('update installer differs from candidate')
+    # Use the trust roots compiled into this candidate, not a later checkout.
+    with zipfile.ZipFile(candidate/'corresponding-source.zip') as archive:
+        keys = json.loads(archive.read('apps/yue-shot/packaging/update-keys.json')).get(record['channel'], [])
+    verify_signature(directory/'latest.json', directory/'latest.json.minisig', keys, args.minisign)
+    result = release_layout(record, installer, args.source, directory)
+    version = result['versionRelease']
+    base = BASE+version['tag']+'/'
+    links = '\n'.join(f"- [{item['name']}]({base+item['name']})" for item in version['assets'])
+    hashes = '\n'.join(item['sha256']+'  '+item['name'] for item in version['assets'])
+    notes = args.notes.read_text(encoding='utf8').strip()
+    notes += f'\n\n## 下载\n\n{links}\n\n源码包包含项目及默认 Windows 发行依赖的源码、构建说明和第三方声明。\n'
+    notes += f'\n## SHA-256\n\n```text\n{hashes}\n```\n'
+    feed = result['feedRelease']
+    feed_notes = f"YueShot {record['channel']} 签名更新源。\n\n直接下载 latest.json 与 latest.json.minisig，不解析 Release 网页。\n当前指向 {version['tag']}。客户端只信任内置渠道公钥。\n"
+    output.mkdir(parents=True, exist_ok=False)
+    version['notes'] = str(output/'release-notes.md')
+    feed['notes'] = str(output/'feed-notes.md')
+    (output/'release-notes.md').write_text(notes, encoding='utf8', newline='\n')
+    (output/'feed-notes.md').write_text(feed_notes, encoding='utf8', newline='\n')
+    (output/'publication-plan.json').write_text(json.dumps(result, indent=2)+'\n', encoding='utf8', newline='\n')
+    print(output)
+    print('Prepared two version assets and two channel-feed assets. Nothing uploaded.')
 
 
 def main():
@@ -121,10 +198,18 @@ def main():
     signature.add_argument('--secret-key', required=True, type=Path)
     signature.add_argument('--minisign', type=Path, default=Path('minisign'))
     signature.set_defaults(func=sign)
+    layout = commands.add_parser('plan')
+    layout.add_argument('--candidate', required=True, type=Path)
+    layout.add_argument('--directory', required=True, type=Path)
+    layout.add_argument('--source', required=True, type=Path)
+    layout.add_argument('--notes', required=True, type=Path)
+    layout.add_argument('--output', required=True, type=Path)
+    layout.add_argument('--minisign', type=Path, default=Path('minisign'))
+    layout.set_defaults(func=plan)
     args = parser.parse_args()
     try:
         args.func(args)
-    except (OSError, ValueError, KeyError, RuntimeError, subprocess.CalledProcessError) as error:
+    except (OSError, ValueError, KeyError, RuntimeError, zipfile.BadZipFile, subprocess.CalledProcessError) as error:
         print(str(error), file=sys.stderr)
         return 1
     return 0

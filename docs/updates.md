@@ -27,6 +27,14 @@ https://github.com/jinghu-moon/YueShot/releases/download/yueshot-updater-<channe
 https://github.com/jinghu-moon/YueShot/releases/download/yueshot-updater-<channel>/latest.json.minisig
 ```
 
+`<channel>` 对 Beta 是 `beta`，对正式版本是 `stable`。客户端直接访问附件 URL，跟随 HTTPS 下载重定向，
+不解析 Release HTML、不调用 `releases/latest` 选择渠道。正式更新源只有在 stable 公钥配置并随客户端发布、正式资格完成后才启用；
+当前 stable 公钥仍为空，不能复制 Beta 清单冒充正式更新源。
+
+每个版本 Release 只上传安装器 EXE 和完整源码 ZIP。许可清单/第三方声明已包含在源码包及必要的安装内容中，不重复上传；
+两者 SHA-256 写入发布说明。签名清单及 `.minisig` 只放在独立渠道更新源，不在版本页重复提供。
+生成方案用 `tools/yueshot-update.py plan`，具体命令见 [发布手册](release-runbook.md#5-审阅并公开)。
+
 安装器来自同一仓库的版本标签，例如 `yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe`。公钥是本地信任根，签名同时绑定清单内所有字段，不能仅用同站下载的 SHA-256 代替认证。清单有有效期；发布维护者须在到期前重新签署并更新滚动清单。
 
 ## 发布者操作

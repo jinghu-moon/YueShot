@@ -95,10 +95,31 @@ python tools/yueshot-update.py sign target/yueshot-updates/<新的目录> --secr
 先形成可审阅的发布清单：commit/tag、版本与渠道、资产名称/大小/哈希、签名验证结果、验收范围和未完成项。
 本地准备不等于发布授权；新的公开发布须取得维护者明确授权。
 
-1. 先创建版本 draft，固定 commit，上传安装器、单个 `YueShot_<版本>_source.zip`、原始许可/版权材料、签名清单和校验和。不要再把内部两个源码包重复上传。
+采用两个版本附件、两个更新源附件的固定布局：
+
+| 发布位置 | 附件 | 用途 |
+| --- | --- | --- |
+| `yueshot-v<版本>` | 安装器 EXE、`YueShot_<版本>_source.zip` | 用户下载；源码包内含构建说明、许可清单与第三方原始声明 |
+| `yueshot-updater-beta` | `latest.json`、`latest.json.minisig` | Beta 客户端固定更新源 |
+| `yueshot-updater-stable` | `latest.json`、`latest.json.minisig` | 正式客户端固定更新源，完成 stable 资格并配置公钥后才启用 |
+
+SHA-256 写进版本发布说明，不再独立上传 SHA256SUMS、许可 JSON、声明文本或更新清单。
+两项源码内部输入仍保留作本地证据；不要为减少公开附件删除安装器或源码包内的许可声明。
+客户端直接下载 `/releases/download/yueshot-updater-<channel>/latest.json` 与 `.minisig`，不解析网页或依赖 GitHub API/latest。
+
+候选、合并源码及维护者签名完成后，使用新输出目录生成可审阅方案：
+
+```powershell
+python tools/yueshot-update.py plan --candidate target/yueshot-delivery/<候选> --directory target/yueshot-updates/<签署目录> --source target/yueshot-updates/<目录>/YueShot_<版本>_source.zip --notes <发布说明.md> --output target/yueshot-updates/<新的发布方案目录> --minisign <官方minisign.exe>
+```
+
+此命令核验候选、源码包、安装器、清单身份/有效期，并以候选原源码中的渠道公钥验签，生成两附件列表、带哈希的说明和更新源说明。
+它不上传或发布，也不读取私钥。dirty 候选、未取得正式资格的 stable 候选和没有匹配公钥签名的渠道均不能生成有效方案。
+
+1. 先创建版本 draft，固定 commit，仅上传方案中的安装器和完整源码包，发布说明附两者 SHA-256。
 2. 逐项核对远端资产，版本资产必须与本地已验证字节一致。Beta 使用 prerelease，不能设为 stable latest。
 3. 授权后公开版本 Release；从**不带 GitHub 登录凭据**的公开 HTTPS 地址重新下载并验签、核对哈希。
-4. 版本安装器公开且回读成功后，最后更新 `yueshot-updater-beta` 的 `latest.json` 与 `latest.json.minisig`。
+4. 版本安装器和源码包公开且回读成功后，最后更新本次渠道的 `yueshot-updater-<channel>` 配对清单/签名。只更新该渠道，不能以 Beta 材料启用 stable。
 5. 客户端会拒绝清单/签名不配对；更新两文件期间允许短暂可重试错误，不得先发布指向尚不可下载安装器的清单。
 6. 从实际已安装旧版测试检查、下载、退出安装、自动重启和设置/截图保留，记录环境、两版本 buildId 和实际结果。
 

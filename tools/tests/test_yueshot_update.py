@@ -2,6 +2,9 @@ import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 spec = importlib.util.spec_from_file_location('updater_tool', Path(__file__).parents[1] / 'yueshot-update.py')
 updater = importlib.util.module_from_spec(spec)
@@ -43,3 +46,33 @@ class UpdateManifestTests(unittest.TestCase):
             path.write_text('this is not a public key', encoding='utf8')
             with self.assertRaises(ValueError):
                 updater.public_key(path)
+
+    def test_version_downloads_are_separate_from_each_channel_feed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ['YueShot_0.1.3_x64-setup.exe', 'YueShot_0.1.3_source.zip', 'latest.json', 'latest.json.minisig']:
+                (root/name).write_bytes(name.encode())
+            record = self.candidate()
+            record.update(gitHead='a'*40, buildId='b'*64, dirty=False, readyForRelease=False)
+            for channel in ['dev', 'beta', 'stable']:
+                with self.subTest(channel=channel):
+                    record.update(channel=channel, readyForRelease=channel == 'stable')
+                    plan = updater.release_layout(record, root/'YueShot_0.1.3_x64-setup.exe', root/'YueShot_0.1.3_source.zip', root)
+                    self.assertEqual([a['name'] for a in plan['versionRelease']['assets']],
+                                     ['YueShot_0.1.3_x64-setup.exe', 'YueShot_0.1.3_source.zip'])
+                    self.assertEqual([a['name'] for a in plan['feedRelease']['assets']], ['latest.json', 'latest.json.minisig'])
+                    self.assertEqual(plan['feedRelease']['tag'], 'yueshot-updater-'+channel)
+                    self.assertEqual(plan['versionRelease']['prerelease'], channel != 'stable')
+
+    def test_dirty_source_unqualified_stable_and_wrong_asset_version_are_rejected(self):
+        record = self.candidate()
+        record.update(gitHead='a'*40, buildId='b'*64, dirty=True, readyForRelease=False)
+        for change, message in [({}, 'clean'), ({'dirty': False, 'channel': 'stable'}, 'qualification'),
+                                ({'channel': 'beta'}, 'match')]:
+            record.update(change)
+            with self.assertRaisesRegex(ValueError, message):
+                updater.release_layout(record, Path('wrong.exe'), Path('wrong.zip'), Path('.'))
+
+    def test_unconfigured_channel_cannot_validate_a_release_signature(self):
+        with self.assertRaisesRegex(ValueError, 'trusted client key'):
+            updater.verify_signature(Path('latest.json'), Path('latest.json.minisig'), [], Path('minisign'))

@@ -40,3 +40,18 @@ Rust 1.98.1 满足新依赖的最低编译器要求。数据库 schema 仍为 2�
 包括严格 AVIF/HDR Clippy、workspace 与依赖边界；ignored 不计通过。日志为 `target/sqlite-security-full-check.log`。
 修复版候选的构建与旧数据读回结果在候选验收中另记。测试使用独立目录，不打开或修改用户现有 Beta 数据。
 本更新不证明所有未知原生漏洞已排除，不自动完成微软运行库分发条款或最低系统资格。
+
+## 修复版 Release 候选与签署
+
+干净源码提交 `25ab0c56ad25ec10970f37ce6b743c528ec7a018` 已构建
+`target/yueshot-delivery/0.1.4-beta-lifecycle-sqlite-fixed`，buildId 为
+`1c8fce7c9865f18f86977c2f92dbd5cb2863f28534c85ffb536dbf06cbc80b6d`。
+Release 构建、来源/负载/运行库/许可/安全门禁及最终候选字节复核通过，`readyForRelease=false` 保留。
+新 Release EXE 对旧 SQLite 3.46.0 EXE 创建的隔离空历史数据库 smoke 成功，设置与数据库字节哈希不变；
+实际原生关闭窗口的驻留托盘和正常退出两分支通过。该证据不代替非空真实用户升级或干净普通用户资格。
+
+用户已本地签署 0.1.4 Beta 清单。官方 Minisign 与客户端同一库验签成功；提取未改动的生产认证/版本判断代码执行探针，
+接受 beta 0.1.3 → 0.1.4、拒绝篡改字节、渠道不符、过期及重复版本。签名绑定的安装器/EXE 哈希与候选实际文件一致。
+公开结构化范围见 [验收记录](acceptance/2026-11-09-sqlite-security-update.json)，
+本地日志见 `target/update-014-signature-qualification/`。目前未公开 0.1.4，现有公开 Beta 源仍为 0.1.3；
+签署不等于发布，也不等于目标电脑真实安装升级已经通过。

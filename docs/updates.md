@@ -113,4 +113,19 @@ NSIS 路径回归：官方文档要求 `/D=安装目录` 是最后一项、不�
 
 本地新 dev 候选补测实际磁盘不足，发现并修复 NSIS 提取失败绕过事务清理的问题；旧程序/数据/登记保留及释放空间后重试通过，
 文件锁/回滚、渠道安装与原生关闭回归亦通过。具体范围见 [失败验证](upgrade-failure-qualification.md)。
-这不是公开 0.1.3 包的追溯修复，也未覆盖下载卷写满、真实断网、断电或注册表写失败；新版本须按 [发布手册](release-runbook.md) 独立交付。
+这不是公开 0.1.3 包的追溯修复；此处记录的是当时安装卷资格。随后实际下载卷写满及释放空间重试也已通过，见 [失败验证](upgrade-failure-qualification.md)。
+真实断网、断电或注册表写失败仍未完成；新版本须按 [发布手册](release-runbook.md) 独立交付。
+
+## 0.1.4 Beta 已签署待发布（2026-11-09）
+
+修复版候选 `target/yueshot-delivery/0.1.4-beta-lifecycle-sqlite-fixed` 来自干净提交 `25ab0c5`，
+包括安装提取失败清理修复和 [SQLite 上游安全更新](sqlite-security-update.md)，没有新增截图功能。
+Release 打包和最终候选字节校验通过；用户本地签署后，官方 Minisign 以及客户端同一 `minisign-verify 0.3.0` 验签通过。
+进一步用未改动的生产认证与 offer 判断逻辑执行本地探针，接受 beta 0.1.3 → 0.1.4，
+拒绝篡改、错误渠道、过期和重复版本；签名清单绑定的实际安装器大小/哈希及 EXE 哈希均与候选一致。
+
+清单 SHA-256 为 `51df2f0314c5480753fa7a0c2d1660917581800c1efeacd329dd5c75c69e28c4`，
+安装器为 `b63e2943b58ed2c6d3a781835936dcd70d9bedea084450ff4e79f2b2e10f161f`。
+`target/yueshot-updates/0.1.4-beta/` 已准备 10 个版本发布资产（含签名及最终校验和）、发布备注和完整计划。
+目前没有创建 0.1.4 标签/Release、上传文件或替换公开 Beta 源；需要明确授权后才公开该版本并最后更新滚动源。
+`readyForRelease=false` 保留，真实已安装 0.1.3 → 0.1.4 升级另行验收。

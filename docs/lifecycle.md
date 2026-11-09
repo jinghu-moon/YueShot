@@ -225,3 +225,8 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 已从根因升级 bundled SQLite 至 3.54.1，重新审查 403 包闭包和原生许可材料，保留原失败报告；修改后安全审计 0 blocking / 0 maintenance，
 存储专项 19 passed；升级后的完整检查再次通过 51 项 Python、1,097 次 Rust passed、109 次 ignored 出现，严格 Clippy 与边界检查通过。
 修复版打包继续另计。详见 [SQLite 安全更新](sqlite-security-update.md)。没有忽略公告或对用户现有数据库进行操作。
+
+修复版 0.1.4 Beta Release 已从干净提交 `25ab0c5` 构建并通过最终候选字节校验；旧 Release 生成的隔离空数据库读回、
+设置/数据库哈希不变及原生关闭窗口两分支验证通过。用户已完成本地清单签署，官方/客户端验签和生产认证逻辑探针通过，
+已备齐版本源码、依赖源码、许可、安装器、签名清单与校验和。具体范围见 [验收记录](acceptance/2026-11-09-sqlite-security-update.json)。
+尚未公开该版本或更改 Beta 源；发布授权与真实 0.1.3 → 0.1.4 安装升级结果分别记录，不因签署成功提前勾选。

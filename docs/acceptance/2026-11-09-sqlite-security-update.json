@@ -1,0 +1,120 @@
+{
+  "format": 1,
+  "status": "passed-for-recorded-scope; signed and verified; publication pending",
+  "productVersion": "0.1.4",
+  "sourceCommit": "25ab0c56ad25ec10970f37ce6b743c528ec7a018",
+  "advisory": "RUSTSEC-2026-0459",
+  "before": {
+    "rusqlite": "0.32.1",
+    "libsqlite3-sys": "0.30.1",
+    "sqlite": "3.46.0",
+    "blocking": 1,
+    "ci": "https://github.com/jinghu-moon/YueShot/actions/runs/42600499131"
+  },
+  "after": {
+    "rusqlite": "0.41.1",
+    "libsqlite3-sys": "0.39.1",
+    "sqlite": "3.54.1",
+    "blocking": 0,
+    "maintenance": 0,
+    "productPackages": 403,
+    "originalLicenseTextsMissing": 0
+  },
+  "advisoryDatabase": {
+    "advisory-count": 1429,
+    "last-commit": "ba4d1245f77987d28e7a7f119ed21ad844c11f57",
+    "last-updated": "2026-11-09T11:18:32+01:00"
+  },
+  "checks": {
+    "fullCheckRustPassedAppearances": 1097,
+    "fullCheckRustIgnoredAppearances": 109,
+    "pythonTests": 51,
+    "storageTests": 19,
+    "clippy": "passed including AVIF/HDR",
+    "dependencyBoundaries": "passed"
+  },
+  "oldExecutableDataBaseline": {
+    "writerSQLiteVersionNumber": 3046000,
+    "userVersion": 2,
+    "applicationId": 1498630228,
+    "captureCount": 0,
+    "integrity": "ok",
+    "files": {
+      "settings.json": "4c5a6d11dfe76ed6fc7701ff3dfdcf5eb3347130ef8359565961dc511ad4b574",
+      "capture-history/data/yue-shot-history.db": "60a02cb3a80515175742b8919fae70e107ee2e1e2dc03086331612ad16656c97"
+    }
+  },
+  "evidence": [
+    "target/update-014-beta-package.log",
+    "target/sqlite-ci-before-fix.log",
+    "target/sqlite-storage-regression.log",
+    "target/sqlite-security-full-check.log",
+    "target/sqlite-security-audit-fixed/security-audit.json",
+    "target/update-014-beta-package-fixed.log",
+    "target/sqlite-security-upgrade/readback.json",
+    "target/update-014-window-close/report.json"
+  ],
+  "qualificationLimits": [
+    "local development environment; not clean ordinary-user qualification",
+    "old Release database is an isolated empty-history fixture; nonempty history covered by storage regressions",
+    "no proof of absence of unknown native vulnerabilities",
+    "public 0.1.4 publication and real installed 0.1.3 -> 0.1.4 upgrade still pending"
+  ],
+  "newReleaseCandidate": {
+    "version": "0.1.4",
+    "channel": "beta",
+    "buildId": "1c8fce7c9865f18f86977c2f92dbd5cb2863f28534c85ffb536dbf06cbc80b6d",
+    "gitHead": "25ab0c56ad25ec10970f37ce6b743c528ec7a018",
+    "dirty": false,
+    "readyForRelease": false
+  },
+  "releaseOldDataReadback": {
+    "format": 1,
+    "status": "passed",
+    "oldSQLiteWriterVersionNumber": 3046000,
+    "newExecutableVersion": "0.1.4",
+    "newSmokeExit": 0,
+    "checks": {
+      "userVersion": 2,
+      "applicationId": 1498630228,
+      "captureCount": 0,
+      "integrity": "ok"
+    },
+    "settingsBytesUnchanged": true,
+    "databaseBytesUnchanged": true,
+    "scope": "actual old Release-created SQLite 3.46.0 empty-history database read by the new Release; nonempty rows separately covered by storage regressions"
+  },
+  "newReleaseWindowClose": {
+    "status": "passed",
+    "checks": [
+      "closeToTray=true: native close removes last GPUI window, process/tray survive and same-instance Show reopens",
+      "closeToTray=false: native close exits normally and removes tray"
+    ],
+    "scope": "native WM_CLOSE, process survival, tray window and same-instance reopening; test-owned process termination is cleanup only"
+  },
+  "signedUpdate": {
+    "status": "passed-local-signature-and-byte-verification; public publication not authorized",
+    "sourceCommit": "25ab0c56ad25ec10970f37ce6b743c528ec7a018",
+    "buildId": "1c8fce7c9865f18f86977c2f92dbd5cb2863f28534c85ffb536dbf06cbc80b6d",
+    "version": "0.1.4",
+    "channel": "beta",
+    "manifestSha256": "51df2f0314c5480753fa7a0c2d1660917581800c1efeacd329dd5c75c69e28c4",
+    "installerSha256": "b63e2943b58ed2c6d3a781835936dcd70d9bedea084450ff4e79f2b2e10f161f",
+    "executableSha256": "be1f8e92864b5e0e7508218a60881be1e7d29841b5f0a546e8bd978c278baa24",
+    "checks": {
+      "officialMinisign": "signature and comment verified",
+      "clientAuthentication": "exact extracted production code accepts beta 0.1.3 -> 0.1.4; rejects changed bytes, channel mismatch, expiry and duplicates",
+      "installerAndExecutable": "signed size/hash match candidate and publication copies",
+      "deliveryVerification": "passed; release readiness remains false",
+      "ci": "verify and security steps passed; job cache/finalization pending",
+      "ciUrl": "https://github.com/jinghu-moon/YueShot/actions/runs/42602126904"
+    },
+    "scope": "local files and unchanged extracted production authentication/check_with; no network download, installation, or live 0.1.3 -> 0.1.4 upgrade",
+    "readyForRelease": false,
+    "signature": {
+      "name": "latest.json.minisig",
+      "size": 310,
+      "sha256": "3d794fcb707a37b0d6f0886aa51846457498f592bdd1405c0f5aa211a308aa18"
+    }
+  }
+}

@@ -42,6 +42,8 @@ jobs:
       - name: Verify the official VC143 redistributable before building
         run: python -c "import sys; sys.path.insert(0, 'tools'); from yueshot_runtime import find_vc_redist; print(find_vc_redist())"
       - run: npm ci --prefix tools/delivery
+      - name: Audit Windows packaging dependencies
+        run: npm audit --prefix tools/delivery --audit-level=low
       - uses: actions/cache/restore@v4
         id: audit-tools
         with:

@@ -66,3 +66,5 @@ NSIS 必须显式设置 `installerIcon`，模板同时设置 `MUI_ICON` / `MUI_U
 安装与卸载 EXE 显式声明 system-DPI-aware，由 NSIS 在系统 DPI 下创建原生字体和控件，避免高缩放下 Windows 位图拉伸。未声明 per-monitor 支持；跨不同 DPI 显示器移动仍可能被系统缩放。打包及安装 smoke 校验实际 EXE 的 manifest，防止声明丢失。
 
 字体统一使用系统自带的 Microsoft YaHei UI（中文）与 Segoe UI（英文），正文、页眉、按钮和路径框为 10pt 常规字重，页面主标题为 13pt 常规字重。不附带字体文件；标题直接使用 NSIS 当前语言的字体名称，避免重复定义漂移。卸载数据复选框按原生目录控件的位置和 dialog units 布局，随字号/DPI 缩放。
+
+Windows 构建工具仅安装锁定的 `@crabnebula/packager-win32-x64-msvc@0.11.2`，`tools/delivery/package.cjs` 直接调用原生 API，不自动扫描 Electron 或合并外部配置。CI 执行 npm audit，产品运行时不依赖 Node。

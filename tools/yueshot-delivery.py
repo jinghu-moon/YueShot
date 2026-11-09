@@ -209,8 +209,9 @@ def package(args):
          'features':p['selected_features']} for p in packages],indent=2)+'\n',encoding='utf8')
     config=installer_config(output,binary,identity)
     (output/'packager.json').write_text(json.dumps(config,indent=2),encoding='utf8')
-    cli=ROOT/'tools/delivery/node_modules/@crabnebula/packager/packager.js'
-    if not cli.is_file(): raise RuntimeError('install pinned packaging tool first: npm ci --prefix tools/delivery')
+    cli=ROOT/'tools/delivery/package.cjs'
+    if not (ROOT/'tools/delivery/node_modules/@crabnebula/packager-win32-x64-msvc/package.json').is_file():
+        raise RuntimeError('install pinned packaging tool first: npm ci --prefix tools/delivery')
     run('node',cli,'--config',output/'packager.json')
     installer_report = [verify_installer(path) for path in sorted((output/'nsis').glob('*.exe'))]
     if len(installer_report) != 1: raise RuntimeError('expected one DPI-aware installer')

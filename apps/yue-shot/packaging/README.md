@@ -18,7 +18,7 @@
 cargo xtask package --channel beta --profile release --output target/yueshot-delivery/<candidate>
 ```
 
-dev/beta 候选允许明确未签名；stable 目前直接拒绝，等待正式签名及恢复流水线，不能降级为 unsigned stable。
+用户于 2026-11-09 选择不做 Windows Authenticode 代码签名，dev/beta/stable 均允许明确未签名的候选；交付清单记录该策略。源码、许可、安全、运行库、安装检查继续执行，生成 stable 候选不等于已通过发行验收。自动更新包的真实性签名与密钥恢复仍需完成。
 本地安装验收仍使用 `/D` 指定候选目录，并在已有同渠道安装或同名进程存在时停止。
 `test-yueshot-channel-install.ps1` 另验证真实快捷方式/AUMID 和安装登记，运行前必须确保没有同名用户快捷方式。
 

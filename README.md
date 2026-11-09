@@ -36,8 +36,8 @@ cargo xtask package --profile release --channel beta
 实际安装与升级脚本位于 `tools/test-yueshot-*.ps1`，开始前正常退出 YueShot；不会强杀产品进程。
 
 候选包含程序、安装器、VC runtime、许可、对应源码、PDB 与精确构建标识。默认保留卸载后的用户数据。
-目前在线认证更新、签名与恢复、完整分发权利、干净普通用户 Windows 和设备验收仍未完成。
-`release --check` 应拒绝尚未具备资格的候选，未签名 stable 打包直接拒绝。
+目前在线认证更新及更新密钥恢复、完整分发权利、干净普通用户 Windows 和设备验收仍未完成。
+用户选择不做 Windows Authenticode 代码签名，所有渠道均允许生成未签名候选；`release --check` 仍拒绝尚未满足其他发行验收的候选。更新包真实性签名独立于代码签名。
 公开仓库的 Windows CI 会生成可下载的未签名候选 artifact，不创建 GitHub Release，也不代表正式发行资格。
 生命周期验证状态及未完成项见 [交付状态](docs/lifecycle.md)。
 

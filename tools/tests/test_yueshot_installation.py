@@ -1,5 +1,7 @@
 """Exercise channel isolation and generated installer paths, without touching Windows keys."""
 import copy
+from types import SimpleNamespace
+from unittest.mock import patch
 import importlib.util
 import json
 from pathlib import Path
@@ -59,14 +61,23 @@ class InstallationIdentityTests(unittest.TestCase):
                 self.assertIn('--uninstall-cleanup',template)
                 self.assertNotIn('__YUESHOT_',template)
 
-    def test_unsigned_stable_is_refused_before_build_or_filesystem_output(self):
+    def test_every_unsigned_channel_reaches_the_same_build_checks(self):
         with tempfile.TemporaryDirectory() as temporary:
-            output = Path(temporary)/'never-created'
-            result = subprocess.run([sys.executable,str(delivery.ROOT/'tools/yueshot-delivery.py'),
-                                     'package','--channel','stable','--output',str(output)],capture_output=True,text=True)
-            self.assertNotEqual(result.returncode,0)
-            self.assertIn('unsigned stable is forbidden',result.stderr)
-            self.assertFalse(output.exists())
+            for channel in ['dev','beta','stable']:
+                output = Path(temporary)/channel
+                with self.subTest(channel=channel), patch.object(delivery, 'run', side_effect=RuntimeError('build boundary')) as build:
+                    with self.assertRaisesRegex(RuntimeError, 'build boundary'):
+                        delivery.package(SimpleNamespace(channel=channel, output=output, profile='release'))
+                    build.assert_called_once_with(sys.executable, 'tools/vendor-yue.py')
+                self.assertFalse(output.exists())
+
+    def test_unknown_channels_and_existing_output_are_refused_before_build(self):
+        with tempfile.TemporaryDirectory() as temporary, patch.object(delivery, 'run') as build:
+            for channel, output, error in [('unknown', Path(temporary)/'new', 'unsupported product channel'),
+                                           ('stable', Path(temporary), 'output directory exists')]:
+                with self.subTest(channel=channel), self.assertRaisesRegex(RuntimeError, error):
+                    delivery.package(SimpleNamespace(channel=channel, output=output, profile='release'))
+            build.assert_not_called()
 
 
 if __name__ == '__main__':

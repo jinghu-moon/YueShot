@@ -16,7 +16,7 @@
 
 干净 runner 还暴露出 GDI 内存字体不属于 DirectWrite 系统字体集合的问题。原生文字改为使用显式的两份嵌入字体集合，factory/loader 与静态字体具有进程生命周期，加载错误传播；GDI 控件保留私有注册。完整生产字符串通过 cmap 和 DirectWrite face 双重缺字检查，排除系统已安装完整字体掩盖错误。字体文件、字重、字号和排版规格未改；最低系统对所需 DirectWrite 接口的资格仍须独立确认。
 
-认证在线更新及优雅退出/重启；签名和密钥备份/轮换/丢失恢复；完整分发权利与最低系统/动态加载资格；干净普通用户 Windows；真实登录自启、Explorer 重启、多屏/DPI/睡眠恢复、原生崩溃与资源稳定性；中途断电/磁盘不足等升级故障。当前本机验证来自管理员会话，不能替代普通用户验收。
+认证在线更新及优雅退出/重启；更新包签名密钥备份/轮换/丢失恢复；完整分发权利与最低系统/动态加载资格；干净普通用户 Windows；真实登录自启、Explorer 重启、多屏/DPI/睡眠恢复、原生崩溃与资源稳定性；中途断电/磁盘不足等升级故障。当前本机验证来自管理员会话，不能替代普通用户验收。
 
 本机 Windows Sandbox 未启用，未更改系统功能或重启系统。ARM64 缺少设备，单独排期，不阻塞 x64 流程。
 
@@ -36,7 +36,7 @@ main 推送/PR 触发 Windows CI，只生成未签名 beta 候选和实际安装
 
 windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 zenrav1e 汇编构建失败。CI 固定官网 nasm-3.01-win64.zip，使用实际下载计算并记录的 SHA-256 校验归档，再确认版本并加入后续步骤 PATH；不关闭汇编或跳过 AVIF 门禁。此工具仅用于构建，不进入产品安装负载。
 
-正式 release --check 必须在未满足更新、权利、签名/恢复、干净用户等门槛时拒绝；未签名 stable 打包直接拒绝。不通过忽略公告、放宽断言或强杀进程制造验收通过，不将实验 HDR 自动放入默认发行配置。
+正式 release --check 必须在未满足更新、权利、更新密钥恢复、干净用户等门槛时拒绝。用户于 2026-11-09 选择不做 Authenticode 代码签名；所有渠道允许未签名候选，代码签名不再阻塞发行。不通过忽略公告、放宽断言或强杀进程制造验收通过，不将实验 HDR 自动放入默认发行配置。
 
 
 ## NSIS 安装界面与语言（2026-11-09）
@@ -81,3 +81,12 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 最终 dev 候选 `target/yueshot-delivery/0.1.2-dev-system-fonts` 完整 Release 打包通过；47 项工具测试通过（`target/installer-system-font-tests.log`）。三项安装门禁全部通过，日志为 `target/installer-system-font-runtime.log`、`installer-system-font-policy.log`、`installer-system-font-channel.log`，其中安装 smoke 读取安装器和实际卸载器的 PE manifest，均确认为 system DPI 感知。另使用完整候选交互安装到 `target/字体排版 QA`，检查实际进度与完成页，核对所有负载哈希、运行已安装 EXE smoke、取消安装后启动并正常卸载。现有用户 Beta 未覆盖或卸载。
 
 供人工验收的 Beta 安装包为 `target/yueshot-delivery/0.1.2-beta-system-fonts/nsis/YueShot_0.1.2_x64-setup.exe`，完整 Release 打包和字节校验通过，源码 buildId 与 dev 回归候选一致。此次未推送仓库、未创建公开 Release。
+
+
+## 发行收尾任务（2026-11-09）
+
+按用户“逐项做”执行，继续禁止新增截图功能。1 未签名策略 → 2 提交/远程 CI → 3 干净普通用户 → 4 生命周期/故障 → 5 更新闭环 → 6 发行审查与测试版。
+
+用户明确选择不做 Authenticode，已移除 unsigned stable 的特殊拒绝；所有渠道执行相同构建与检查，候选记录 `codeSigning.authenticode=unsigned`、`required=false`。不以取消代码签名为由取消更新包真实性、源码/许可、干净普通用户等独立验收。旧版拒绝测试按新政策替换为三渠道都进入同一构建检查、未知渠道和已存在输出仍拒绝；48 项工具测试通过，基线 47 项通过。安装提示改为渠道无关的未签名说明。
+
+本机再次查询 `Containers-DisposableClientVM` 为 Disabled，尚未变更系统功能或重启。已询问可用的干净环境；没有把管理员会话冒充普通用户证据。

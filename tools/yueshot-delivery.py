@@ -159,8 +159,8 @@ def verify(directory, require_ready=False):
 
 def package(args):
     channel=args.channel
-    if channel == 'stable':
-        raise RuntimeError('stable packaging requires the approved signing/recovery pipeline; unsigned stable is forbidden')
+    if channel not in ('dev','beta','stable'):
+        raise RuntimeError('unsupported product channel')
     version=tomllib.loads((ROOT/'apps/yue-shot/Cargo.toml').read_text(encoding='utf8'))['package']['version']
     output=Path(args.output).resolve() if args.output else (ROOT/'target/yueshot-delivery'/f'{version}-{channel}-{args.profile}').resolve()
     if output.exists(): raise RuntimeError('output directory exists; preserve it and choose a new --output')
@@ -224,7 +224,8 @@ def package(args):
     manifest={'format':1,'product':'YueShot','version':version,'channel':channel,'architecture':'x64','profile':args.profile,
               'installation':identity,'scope':'unsigned channel candidate','buildId':build_id,'gitHead':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
               'dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT)),
-              'readyForRelease':False,'outstanding':['authenticated online update source and graceful updater integration','clean ordinary-user Windows validation','complete license/native/asset rights review','stable code signing and update authenticity recovery','public release authorization',
+              'codeSigning':{'authenticode':'unsigned','required':False},
+              'readyForRelease':False,'outstanding':['authenticated online update source and graceful updater integration','clean ordinary-user Windows validation','complete license/native/asset rights review','update signing key backup and recovery','public release authorization',
                   *license_report['missingOriginalTexts'], *[f"maintenance review: {item['name']} {item['advisory']}" for item in security_report['reviewRequired']]],
               'files':files}
     (output/'delivery.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf8')

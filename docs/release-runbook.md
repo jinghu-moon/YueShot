@@ -27,6 +27,20 @@ python tools/yueshot-delivery.py verify target/yueshot-delivery/<新的候选名
 同名输出目录禁止复用。候选构建后若源码或安装器改变，应重新构建新候选，不改旧清单里的哈希。
 首次准备打包工具及 CI 触发方式见 [README](../README.md#检查与交付) 和 [CI](ci.md)。
 
+公开下载只提供一个完整源码附件，内部两个原始源码包仍作为不可变构建证据保留：
+
+```powershell
+python tools/yueshot_source_bundle.py target/yueshot-delivery/<候选> --output target/yueshot-updates/<目录>/YueShot_<版本>_source.zip
+python tools/yueshot_source_bundle.py target/yueshot-delivery/<候选> --verify target/yueshot-updates/<目录>/YueShot_<版本>_source.zip
+```
+
+合并器只读取候选中已绑定哈希的源码、依赖和声明，不将当前工作区代码混入历史候选。
+项目源码直接位于 ZIP 根目录，`third-party/crates/` 保存默认 Windows 产品 normal/build 图的原始 `.crate`，
+`BUILDING-SOURCE.md` 提供工具链和构建说明；`SOURCE-BUNDLE.json` 关联原候选 commit/buildId 及逐文件校验。
+可选 features、其他平台和 workspace 测试的额外依赖不宣称已全部包含。工具链与 Cargo 索引不包含在包中，
+不宣称全离线开发环境或逐字节复现 EXE。验收工具也改为携带这一个合并源码附件。
+仅合并源码发布材料不会修改安装器或已签署清单；更新最终 SHA256SUMS 和发布附件清单即可，无须重新签署未变的 JSON。
+
 普通 push/PR 只执行 verify/security，不代表本次候选已经完成安装测试。
 需在同一提交手动触发 `delivery` 或通过版本 tag 运行完整交付流程；Actions 不自动创建 GitHub Release。
 
@@ -81,7 +95,7 @@ python tools/yueshot-update.py sign target/yueshot-updates/<新的目录> --secr
 先形成可审阅的发布清单：commit/tag、版本与渠道、资产名称/大小/哈希、签名验证结果、验收范围和未完成项。
 本地准备不等于发布授权；新的公开发布须取得维护者明确授权。
 
-1. 先创建版本 draft，固定 commit，上传安装器、对应源码、依赖源码、原始许可/版权材料、签名清单和校验和。
+1. 先创建版本 draft，固定 commit，上传安装器、单个 `YueShot_<版本>_source.zip`、原始许可/版权材料、签名清单和校验和。不要再把内部两个源码包重复上传。
 2. 逐项核对远端资产，版本资产必须与本地已验证字节一致。Beta 使用 prerelease，不能设为 stable latest。
 3. 授权后公开版本 Release；从**不带 GitHub 登录凭据**的公开 HTTPS 地址重新下载并验签、核对哈希。
 4. 版本安装器公开且回读成功后，最后更新 `yueshot-updater-beta` 的 `latest.json` 与 `latest.json.minisig`。

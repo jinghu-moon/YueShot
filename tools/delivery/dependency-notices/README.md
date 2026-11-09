@@ -25,7 +25,7 @@ python tools/yueshot_security.py --output target/yueshot-security
 python tools/yueshot_licenses.py --update
 ```
 
-源码校验依据 Cargo.lock 中完整 registry 身份和 checksum。许可文本从校验后的 `.crate` 压缩包读取，包含嵌套 native NOTICE/LICENSE；不信任可被修改的 registry 解包目录。原始 `.crate` 随候选的 `dependency-sources.zip` 保存，本地源码在 `corresponding-source.zip`，补充许可原文也随本地源码归档。`THIRD-PARTY-DEPENDENCY-NOTICES.txt` 装入程序目录，候选内的 JSON 记录原文来源、哈希、缺项和审查范围。
+源码校验依据 Cargo.lock 中完整 registry 身份和 checksum。许可文本从校验后的 `.crate` 压缩包读取，包含嵌套 native NOTICE/LICENSE；不信任可被修改的 registry 解包目录。原始 `.crate` 随内部候选的 `dependency-sources.zip` 保存，本地源码在 `corresponding-source.zip`，补充许可原文也随本地源码归档。公开版本和验收包使用 `tools/yueshot_source_bundle.py` 合并为单个 `YueShot_<版本>_source.zip`：项目源码在 ZIP 根，原始依赖在 `third-party/crates/`，构建说明和逐文件校验随包；内部两个包不重复上传。`THIRD-PARTY-DEPENDENCY-NOTICES.txt` 装入程序目录，候选内的 JSON 记录原文来源、哈希、缺项和审查范围。
 
 安全审查没有忽略公告。当前产品内 vulnerability/unsound/yanked 会阻止候选；停止维护公告保留为正式发布待审项；其他 workspace 包的结果单独列出并保留原始报告，不能借此声称整个 workspace 安全。审查依赖在线刷新 RustSec 和 crates.io 索引；网络或数据库元数据异常不能作为“通过”。
 

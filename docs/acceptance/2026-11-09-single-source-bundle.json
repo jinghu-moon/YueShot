@@ -1,0 +1,51 @@
+{
+  "format": 1,
+  "status": "passed-recorded-scope; publication not authorized",
+  "version": "0.1.4",
+  "channel": "beta",
+  "sourceCommit": "25ab0c56ad25ec10970f37ce6b743c528ec7a018",
+  "buildId": "1c8fce7c9865f18f86977c2f92dbd5cb2863f28534c85ffb536dbf06cbc80b6d",
+  "sourceAsset": {
+    "name": "YueShot_0.1.4_source.zip",
+    "size": 99584892,
+    "sha256": "777d2ac860773b25a7ed859eef326fa397d69a086b89df3065a773ff27fd69f8"
+  },
+  "before": {
+    "publicSourceAttachments": 2,
+    "versionAssets": 10
+  },
+  "after": {
+    "publicSourceAttachments": 1,
+    "versionAssets": 9
+  },
+  "checks": {
+    "pythonTestsPassed": 57,
+    "pythonTestsFailed": 0,
+    "originalSourceFiles": 7572,
+    "registrySourceArchives": 383,
+    "totalDefaultProductPackages": 403,
+    "sourceAndDependencyHashes": "passed against immutable candidate, source manifest and Cargo.lock",
+    "repeatability": "same fixture inputs produce byte-identical ZIP",
+    "acceptanceKit": "CRC passed; single source attachment byte-identical to publication source ZIP",
+    "extractedSourceBuild": "cargo build -p yue-shot --release --locked --offline --target-dir <existing target> passed in 3m39s",
+    "rebuiltExecutableVersion": "YueShot 0.1.4 (beta, windows-x64)",
+    "rebuiltExecutableSmokeExit": 0,
+    "sourceInputsAfterBuild": "all original source hashes unchanged",
+    "installerAndSignedManifest": "original installer, manifest and signature hashes unchanged; no new signing required"
+  },
+  "scopeLimits": [
+    "build used the local Rust registry and compiled-dependency caches; not fresh-machine or complete offline-toolchain qualification",
+    "default Windows product normal/build source graph; optional features/other targets/workspace test dependencies not all included",
+    "source rebuild checks compilation and smoke, not byte-identical reproduction of the published EXE",
+    "no installation or modification of the existing Beta installation; no screenshot feature changes",
+    "0.1.4 public release and Beta feed replacement still pending explicit approval"
+  ],
+  "evidence": [
+    "target/source-bundle-python-tests.log",
+    "target/source-bundle-014-build.log",
+    "target/source-bundle-014-extracted-build.log",
+    "target/source-bundle-014-runtime/smoke.log",
+    "target/source-bundle-014-acceptance.log",
+    "target/yueshot-updates/0.1.4-beta/publication-plan.json"
+  ]
+}

@@ -6,6 +6,8 @@ from pathlib import Path
 import shutil
 import zipfile
 
+from yueshot_source_bundle import assemble as assemble_source
+
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -28,8 +30,8 @@ def prepare(candidate, output):
     expected = {key: manifest[key] for key in ['version', 'channel', 'buildId', 'installation']}
     expected.update(installer='YueShot-setup.exe', installerSha256=manifest['files'][installer],
                     payload={name[4:]: digest for name, digest in manifest['files'].items() if name.startswith('bin/')})
-    for name in [installer, 'corresponding-source.zip', 'dependency-sources.zip']:
-        shutil.copyfile(candidate/name, output/('YueShot-setup.exe' if name == installer else Path(name).name))
+    shutil.copyfile(candidate/installer, output/'YueShot-setup.exe')
+    assemble_source(candidate, output/f"YueShot_{manifest['version']}_source.zip")
     shutil.copyfile(ROOT/'tools/test-yueshot-clean-user.ps1', output/'accept.ps1')
     shutil.copyfile(ROOT/'docs/clean-user-acceptance.md', output/'READ-ME.md')
     (output/'expected.json').write_text(json.dumps(expected, indent=2)+'\n', encoding='utf8')

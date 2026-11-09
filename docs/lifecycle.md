@@ -90,3 +90,16 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 用户明确选择不做 Authenticode，已移除 unsigned stable 的特殊拒绝；所有渠道执行相同构建与检查，候选记录 `codeSigning.authenticode=unsigned`、`required=false`。不以取消代码签名为由取消更新包真实性、源码/许可、干净普通用户等独立验收。旧版拒绝测试按新政策替换为三渠道都进入同一构建检查、未知渠道和已存在输出仍拒绝；48 项工具测试通过，基线 47 项通过。安装提示改为渠道无关的未签名说明。
 
 本机再次查询 `Containers-DisposableClientVM` 为 Disabled，尚未变更系统功能或重启。已询问可用的干净环境；没有把管理员会话冒充普通用户证据。
+
+
+### 收尾执行证据
+
+未签名 stable 完整 Release 候选 `target/yueshot-delivery/0.1.2-stable-unsigned-policy` 已打包并通过字节校验；隔离安装后逐项验证 payload、执行已安装 EXE smoke、检查安装器/卸载器实际 DPI manifest，再正常卸载并确认设置保留。日志 `target/unsigned-stable-package.log` 与 `unsigned-stable-smoke.log`。`release --check` 仍正确拒绝未完成的其他发行资格；没有创建正式 Release。
+
+提交 `2baabc8` 为安装界面/字体/DPI，`9ca1a2d` 为未签名策略；已推送并触发 [Windows CI 42560905403](https://github.com/jinghu-moon/YueShot/actions/runs/42560905403)。此处仅记录启动，最终结论另记，不能提前视为通过。
+
+用户选择另一台 Windows 电脑做干净普通用户验收。新增可离线运行的 PowerShell 验收脚本和打包工具，目标机无需开发工具；脚本拒绝提升的管理员会话、已有同渠道安装及运行中的产品，不强杀进程。宿主只验证管理员拒绝路径和 PowerShell AST 语法；另一台电脑的正向运行与人工截图/设备验收仍等待实际结果。验收说明见 [干净用户验收](clean-user-acceptance.md)。
+
+补充运行 `cargo test -p yue-shell --locked -- --include-ignored --test-threads=1`：6 项全部通过、0 ignored，包含真实测试图标创建/销毁和隔离组合键占用/恢复；这不是重启真实 Explorer 或真实登录/睡眠证明。
+
+先前 npm 审计的 3 条工具链记录已从依赖根因处理：直接依赖相同版本 `@crabnebula/packager-win32-x64-msvc@0.11.2`，由本仓库极薄 Node 入口传入完整 JSON，移除 Electron 探测、extract-zip 和 deepmerge。打包版本、NSIS 模板及产品图不变。npm ci 和 npm audit 现为 0 条漏洞记录；新入口真实编译 NSIS 后实际 DPI 和图标校验通过，日志 `target/native-packager-validation.log` 与 `delivery-native-audit.json`。CI 新增 npm audit 门禁。此结论不代表 native 打包器所有漏洞均已穷尽。

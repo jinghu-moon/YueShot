@@ -9,7 +9,7 @@ if (-not $candidateRoot.StartsWith($allowedRoot,[StringComparison]::OrdinalIgnor
 if ($LASTEXITCODE -ne 0) { throw 'Candidate verification failed' }
 $manifest = Get-Content -LiteralPath (Join-Path $candidateRoot 'delivery.json') -Raw | ConvertFrom-Json
 $identity = $manifest.installation
-if ($identity.channel -notin @('dev','beta') -or $identity.installationId -ne "com.seeyuer.yueshot.$($identity.channel).x64") { throw 'Expected reviewed channel identity' }
+if ($identity.channel -notin @('dev','beta','stable') -or $identity.installationId -ne "com.seeyuer.yueshot.$($identity.channel).x64") { throw 'Expected reviewed channel identity' }
 $registration = 'HKCU:/' + $identity.uninstallKey
 $productRegistry = 'HKCU:/' + $identity.registryKey
 $installRoot = Join-Path $candidateRoot 'installed-channel-check'

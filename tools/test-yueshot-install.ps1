@@ -12,7 +12,7 @@ if (Get-Process YueShot -ErrorAction SilentlyContinue) {
 }
 $manifest = Get-Content -LiteralPath (Join-Path $candidateRoot 'delivery.json') -Raw | ConvertFrom-Json
 $identity = $manifest.installation
-if ($identity.channel -notin @('dev','beta') -or $identity.installationId -ne "com.seeyuer.yueshot.$($identity.channel).x64") { throw 'Expected a reviewed dev/beta channel identity' }
+if ($identity.channel -notin @('dev','beta','stable') -or $identity.installationId -ne "com.seeyuer.yueshot.$($identity.channel).x64") { throw 'Expected a reviewed channel identity' }
 $registration = 'HKCU:/' + $identity.uninstallKey
 if (Test-Path -LiteralPath $registration) {
     throw 'An existing installation of this channel must be uninstalled normally first.'

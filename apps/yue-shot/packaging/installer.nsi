@@ -384,6 +384,11 @@ LangString SetupDowngrade ${LANG_SIMPCHINESE} "已安装更新的 YueShot 版本
 LangString SetupStartupCleanupFailed ${LANG_ENGLISH} "Could not remove this installation's login startup. Uninstall stopped."
 LangString SetupStartupCleanupFailed ${LANG_SIMPCHINESE} "无法清理此安装位置拥有的开机启动项，卸载已停止。"
 
+LangString SetupDeploymentFailed ${LANG_ENGLISH} "Installation could not replace its files. Close applications using the destination and check write access and free space. An existing .yueshot-install directory may contain an interrupted installation; preserve it for recovery."
+LangString SetupDeploymentFailed ${LANG_SIMPCHINESE} "无法部署安装文件。请关闭占用目标文件的程序，并检查写入权限及可用空间。如存在 .yueshot-install 目录，请保留，其中可能包含中断安装的恢复文件。"
+LangString SetupRollbackFailed ${LANG_ENGLISH} "Installation failed and some original files could not be restored. Preserve .yueshot-install in the install directory for recovery. Do not start YueShot or delete the backup."
+LangString SetupRollbackFailed ${LANG_SIMPCHINESE} "安装失败，部分原文件未能恢复。请保留安装目录中的 .yueshot-install 恢复文件，不要启动 YueShot 或删除备份。"
+
 ; Windows user UI language, rather than locale, code page or old installer state.
 ; All Chinese UI variants use Simplified Chinese; other languages fall back to English.
 ; /LANG=en and /LANG=zh-CN are optional explicit overrides and support repeatable QA.
@@ -513,28 +518,129 @@ FunctionEnd
 {{unescape_newlines preinstall_section}}
 {{/if}}
 
+; Every managed file participates in the same transaction, including the uninstaller.
+Var DeployMain
+Var DeployUninstaller
+Var DeployRollbackFailed
+!define DeployIndex 0
+{{#each resources}}
+Var DeployResource${DeployIndex}
+!define /redef /math DeployIndex ${DeployIndex} + 1
+{{/each}}
+{{#each binaries}}
+Var DeployBinary${DeployIndex}
+!define /redef /math DeployIndex ${DeployIndex} + 1
+{{/each}}
+
+!undef DeployIndex
+
+!macro ManagedFiles Operation
+  !define DeployIndex 0
+  !insertmacro ${Operation} "${MAINBINARYNAME}.exe" $DeployMain
+  {{#each resources}}
+  !insertmacro ${Operation} "{{this}}" $DeployResource${DeployIndex}
+  !define /redef /math DeployIndex ${DeployIndex} + 1
+  {{/each}}
+  {{#each binaries}}
+  !insertmacro ${Operation} "{{this}}" $DeployBinary${DeployIndex}
+  !define /redef /math DeployIndex ${DeployIndex} + 1
+  {{/each}}
+  !insertmacro ${Operation} "uninstall.exe" $DeployUninstaller
+  !undef DeployIndex
+!macroend
+
+!macro BackupManagedFile Name State
+  ; Refuse a directory at a managed file path; never back up then delete user directories.
+  System::Call 'kernel32::GetFileAttributesW(w "$INSTDIR\${Name}")i.r0'
+  ${If} $0 != -1
+    IntOp $0 $0 & 0x10
+    ${If} $0 != 0
+      Goto deployment_failed
+    ${EndIf}
+  ${EndIf}
+  StrCpy ${State} 1 ; Original did not exist.
+  ${If} ${FileExists} "$INSTDIR\${Name}"
+    StrCpy ${State} 0 ; A failed rename must leave this file untouched.
+    ClearErrors
+    Rename "$INSTDIR\${Name}" "$INSTDIR\.yueshot-install\old\${Name}"
+    IfErrors deployment_failed
+    StrCpy ${State} 2 ; Original is in the transaction directory.
+  ${EndIf}
+!macroend
+
+!macro PublishManagedFile Name State
+  ClearErrors
+  Rename "$INSTDIR\.yueshot-install\new\${Name}" "$INSTDIR\${Name}"
+  IfErrors deployment_failed
+  IntOp ${State} ${State} + 2 ; 3 = new file; 4 = replaced file.
+!macroend
+
+!macro RestoreManagedFile Name State
+  ${If} ${State} >= 3
+    ClearErrors
+    Delete "$INSTDIR\${Name}"
+    ${If} ${Errors}
+      StrCpy $DeployRollbackFailed 1
+    ${EndIf}
+  ${EndIf}
+  ${If} ${State} == 2
+  ${OrIf} ${State} == 4
+    ClearErrors
+    Rename "$INSTDIR\.yueshot-install\old\${Name}" "$INSTDIR\${Name}"
+    ${If} ${Errors}
+      StrCpy $DeployRollbackFailed 1
+    ${EndIf}
+  ${EndIf}
+!macroend
+
 Section Install
   !insertmacro CheckIfAppIsRunning
   Call CheckInstalledVersion
-  SetOutPath $INSTDIR
+  ; Stage on the destination volume, before touching installed files. Never
+  ; reuse an interrupted transaction: it may contain the only original bytes.
+  ClearErrors
+  CreateDirectory "$INSTDIR"
+  IfErrors deployment_not_started
+  System::Call 'kernel32::CreateDirectoryW(w "$INSTDIR\.yueshot-install", p 0)i.r0'
+  ${If} $0 == 0
+    Goto deployment_not_started
+  ${EndIf}
+  ClearErrors
+  CreateDirectory "$INSTDIR\.yueshot-install\old"
+  SetOutPath "$INSTDIR\.yueshot-install\new"
+  IfErrors deployment_failed
+  SetOverwrite on
 
-  ; Copy main executable
+  ; All extraction failures are fatal in interactive, passive and silent mode.
+  ClearErrors
   File "${MAINBINARYSRCPATH}"
-
-  ; Create resources directory structure
+  IfErrors deployment_failed
   {{#each resources_dirs}}
+    ClearErrors
     CreateDirectory "$INSTDIR\\{{this}}"
+    CreateDirectory "$INSTDIR\.yueshot-install\new\\{{this}}"
+    CreateDirectory "$INSTDIR\.yueshot-install\old\\{{this}}"
+    IfErrors deployment_failed
   {{/each}}
-
-  ; Copy resources
   {{#each resources}}
+    ClearErrors
     File /a "/oname={{this}}" "{{@key}}"
+    IfErrors deployment_failed
   {{/each}}
-
-  ; Copy external binaries
   {{#each binaries}}
+    ClearErrors
     File /a "/oname={{this}}" "{{@key}}"
+    IfErrors deployment_failed
   {{/each}}
+  ClearErrors
+  WriteUninstaller "$INSTDIR\.yueshot-install\new\uninstall.exe"
+  IfErrors deployment_failed
+
+  ; First back up every old file, then publish. A late locked resource must
+  ; leave the previous executable, resources and registration unchanged.
+  !insertmacro ManagedFiles BackupManagedFile
+  !insertmacro ManagedFiles PublishManagedFile
+  SetOutPath $INSTDIR
 
    ; Create file associations
   {{#each file_associations as |association| ~}}
@@ -550,9 +656,6 @@ Section Install
     WriteRegStr SHCTX "Software\Classes\\{{protocol}}\DefaultIcon" "" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\",0"
     WriteRegStr SHCTX "Software\Classes\\{{protocol}}\shell\open\command" "" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\" $\"%1$\""
   {{/each}}
-
-  ; Create uninstaller
-  WriteUninstaller "$INSTDIR\uninstall.exe"
 
   ; Save $INSTDIR in registry for future installations
   WriteRegStr SHCTX "${MANUPRODUCTKEY}" "" $INSTDIR
@@ -582,11 +685,31 @@ Section Install
     Call CreateStartMenuShortcut
   ${EndIf}
 
+  ; File deployment has committed. Only this installer-created directory is removed.
+  RMDir /r "$INSTDIR\.yueshot-install"
+  Goto deployment_done
+
+  deployment_failed:
+    StrCpy $DeployRollbackFailed 0
+    !insertmacro ManagedFiles RestoreManagedFile
+    SetOutPath $INSTDIR
+    ${If} $DeployRollbackFailed == 1
+      ; Preserve backup bytes for recovery instead of deleting them on failure.
+      SetErrorLevel 15
+      Abort "$(SetupRollbackFailed)"
+    ${EndIf}
+    RMDir /r "$INSTDIR\.yueshot-install"
+  deployment_not_started:
+    SetErrorLevel 14
+    Abort "$(SetupDeploymentFailed)"
+  deployment_done:
+
   ; Auto close this page for passive mode
   ${IfThen} $PassiveMode == 1 ${|} SetAutoClose true ${|}
 SectionEnd
 
 Function .onInstSuccess
+  SetErrorLevel 0
   ; Check for `/R` flag only in silent and passive installers because
   ; GUI installer has a toggle for the user to (re)start the app
   IfSilent check_r_flag 0
@@ -623,19 +746,17 @@ Section Uninstall
     Abort "$(SetupStartupCleanupFailed)"
   ${EndIf}
 
-  ; Delete the app directory and its content from disk
-  ; Copy main executable
-  Delete "$INSTDIR\${MAINBINARYNAME}.exe"
-
-  ; Delete resources
-  {{#each resources}}
-    Delete "$INSTDIR\\{{this}}"
+  System::Call 'kernel32::CreateDirectoryW(w "$INSTDIR\.yueshot-install", p 0)i.r0'
+  ${If} $0 == 0
+    Goto deployment_not_started
+  ${EndIf}
+  ClearErrors
+  CreateDirectory "$INSTDIR\.yueshot-install\old"
+  {{#each resources_dirs}}
+    CreateDirectory "$INSTDIR\.yueshot-install\old\\{{this}}"
   {{/each}}
-
-  ; Delete external binaries
-  {{#each binaries}}
-    Delete "$INSTDIR\\{{this}}"
-  {{/each}}
+  IfErrors deployment_failed
+  !insertmacro ManagedFiles BackupManagedFile
 
   ; Delete app associations
   {{#each file_associations as |association| ~}}
@@ -652,8 +773,8 @@ Section Uninstall
     !endif
   {{/each}}
 
-  ; Delete uninstaller
-  Delete "$INSTDIR\uninstall.exe"
+  ; All owned files have moved successfully. Unknown files never enter this directory.
+  RMDir /r "$INSTDIR\.yueshot-install"
 
   {{#each resources_dirs}}
   RMDir /REBOOTOK "$INSTDIR\\{{this}}"
@@ -695,6 +816,20 @@ Section Uninstall
   ${EndIf}
   {{/if}}
 
+  SetErrorLevel 0
+  Goto deployment_done
+  deployment_failed:
+    StrCpy $DeployRollbackFailed 0
+    !insertmacro ManagedFiles RestoreManagedFile
+    ${If} $DeployRollbackFailed == 1
+      SetErrorLevel 15
+      Abort "$(SetupRollbackFailed)"
+    ${EndIf}
+    RMDir /r "$INSTDIR\.yueshot-install"
+  deployment_not_started:
+    SetErrorLevel 14
+    Abort "$(SetupDeploymentFailed)"
+  deployment_done:
   ${GetOptions} $CMDLINE "/P" $R0
   IfErrors +2 0
     SetAutoClose true

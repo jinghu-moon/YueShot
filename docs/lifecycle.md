@@ -103,3 +103,23 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 补充运行 `cargo test -p yue-shell --locked -- --include-ignored --test-threads=1`：6 项全部通过、0 ignored，包含真实测试图标创建/销毁和隔离组合键占用/恢复；这不是重启真实 Explorer 或真实登录/睡眠证明。
 
 先前 npm 审计的 3 条工具链记录已从依赖根因处理：直接依赖相同版本 `@crabnebula/packager-win32-x64-msvc@0.11.2`，由本仓库极薄 Node 入口传入完整 JSON，移除 Electron 探测、extract-zip 和 deepmerge。打包版本、NSIS 模板及产品图不变。npm ci 和 npm audit 现为 0 条漏洞记录；新入口真实编译 NSIS 后实际 DPI 和图标校验通过，日志 `target/native-packager-validation.log` 与 `delivery-native-audit.json`。CI 新增 npm audit 门禁。此结论不代表 native 打包器所有漏洞均已穷尽。
+
+
+### 文件部署故障回归（2026-11-09）
+
+故障基线：以纯文本 EXE fixture 持有 `FileShare.None` 句柄，旧安装器静默返回 0、保留该文件，却仍创建卸载登记。证据 `target/installer-file-lock-evidence.json`。根因是 NSIS 文件写入失败后未检查错误，继续执行成功登记；不是截图或快捷键问题。隔离故障现场已在核对注册路径和 fixture 字节后修复并正常卸载，用户 Beta 安装未动。
+
+现在安装先在目标卷暂存全部负载、备份全部原文件，再发布新文件；文件失败时回滚并返回 14，回滚失败返回 15 且保留恢复文件。卸载同样先备份全部受管文件，避免后面的资源锁导致前面已删除。所有渠道的本机安装脚本使用相同策略，仍拒绝覆盖已有用户安装。
+
+| 行为 | 修改前实测 | 修改后实测 |
+| --- | --- | --- |
+| 新安装 EXE 被锁 | 返回 0，文件未替换但创建成功登记 | 返回 14，字节不变，不创建登记 |
+| 重装 EXE / 后面的 DLL / 卸载器被锁 | 原实现没有完整文件事务 | 均返回 14，所有原文件及登记逐项一致 |
+| 卸载后面的通知文件被锁 | 原实现直接逐个删除，没有回滚边界 | 返回 14，已移走文件恢复，登记保留 |
+| 文件路径上已有用户目录 | 未建立明确保护 | 拒绝替换，目录及其文件保留 |
+| 存在中断事务目录 | 没有恢复材料保护策略 | 返回 14，恢复证据字节不变 |
+| 正常安装 / 重装 / 卸载 | 正常 | 三项实际安装门禁全部通过，数据保留 |
+
+完整未签名候选 `target/yueshot-delivery/0.1.2-stable-file-transaction` 已通过 Release 构建、负载字节及审计校验。48 项 Python 工具回归通过，PowerShell 验收脚本 AST 解析通过；原生产品热键冲突测试 `tests::a_conflicting_product_hotkey_does_not_disable_the_capture_runtime` 实际执行 1 项通过、0 ignored。日志分别为 `target/installer-transaction-package.log`、`installer-transaction-python-final.log`、`installer-transaction-policy.log`、`installer-transaction-runtime.log`、`installer-transaction-channel.log`、`lifecycle-product-hotkey.log`。
+
+事务是针对当前受管文件集合的失败处理；断电后的自动恢复、磁盘不足、注册表写入故障与真实设备生命周期尚未全部验证，不据此声称完整故障资格。在线更新库 Windows 默认安装路径会直接退出进程，后续整合须走产品保存/退出策略及安装结果检查，不能直接套用 `download_and_install`。尚未接入自动更新，也未创建公开 Release。

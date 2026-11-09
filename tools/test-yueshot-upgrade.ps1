@@ -14,7 +14,7 @@ foreach ($path in @($From,$To)) {
 $a=$candidates[0];$b=$candidates[1]
 if ([Version]$b.manifest.version -le [Version]$a.manifest.version) { throw 'Use two genuine increasing product versions' }
 $identity=$a.manifest.installation
-if ($identity.channel -notin @('dev','beta') -or $identity.installationId -ne $b.manifest.installation.installationId) { throw 'Upgrade requires the same dev/beta installation identity' }
+if ($identity.channel -notin @('dev','beta','stable') -or $identity.installationId -ne $b.manifest.installation.installationId) { throw 'Upgrade requires the same channel installation identity' }
 $registry='HKCU:/'+$identity.uninstallKey
 if ((Test-Path -LiteralPath $registry) -or (Get-Process YueShot -ErrorAction SilentlyContinue)) { throw 'Normally exit YueShot and uninstall this channel before testing' }
 $work=Join-Path $b.root 'installed-upgrade-check'

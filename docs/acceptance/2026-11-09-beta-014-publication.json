@@ -1,0 +1,113 @@
+{
+  "format": 1,
+  "recordedAt": "2026-11-09T11:56:52.739895+00:00",
+  "status": "passed-publication-and-network-scope; installed-upgrade-pending",
+  "authorization": {
+    "userInstruction": "开始吧",
+    "scope": "execute discussed two-version-assets scheme and publish 0.1.4 Beta with paired Beta feed"
+  },
+  "version": "0.1.4",
+  "channel": "beta",
+  "sourceCommit": "25ab0c56ad25ec10970f37ce6b743c528ec7a018",
+  "buildId": "1c8fce7c9865f18f86977c2f92dbd5cb2863f28534c85ffb536dbf06cbc80b6d",
+  "versionRelease": {
+    "url": "https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.4",
+    "tag": "yueshot-v0.1.4",
+    "prerelease": true,
+    "draft": false,
+    "publishedAt": "2026-11-09T11:47:02Z",
+    "manualAssetCount": 2,
+    "assets": [
+      {
+        "name": "YueShot_0.1.4_source.zip",
+        "size": 99584892,
+        "digest": "sha256:777d2ac860773b25a7ed859eef326fa397d69a086b89df3065a773ff27fd69f8",
+        "browser_download_url": "https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.4/YueShot_0.1.4_source.zip"
+      },
+      {
+        "name": "YueShot_0.1.4_x64-setup.exe",
+        "size": 7202836,
+        "digest": "sha256:b63e2943b58ed2c6d3a781835936dcd70d9bedea084450ff4e79f2b2e10f161f",
+        "browser_download_url": "https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.4/YueShot_0.1.4_x64-setup.exe"
+      }
+    ]
+  },
+  "feedRelease": {
+    "url": "https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-updater-beta",
+    "tag": "yueshot-updater-beta",
+    "manualAssetCount": 2,
+    "assets": [
+      {
+        "name": "latest.json",
+        "size": 472,
+        "digest": "sha256:51df2f0314c5480753fa7a0c2d1660917581800c1efeacd329dd5c75c69e28c4",
+        "browser_download_url": "https://github.com/jinghu-moon/YueShot/releases/download/yueshot-updater-beta/latest.json"
+      },
+      {
+        "name": "latest.json.minisig",
+        "size": 310,
+        "digest": "sha256:3d794fcb707a37b0d6f0886aa51846457498f592bdd1405c0f5aa211a308aa18",
+        "browser_download_url": "https://github.com/jinghu-moon/YueShot/releases/download/yueshot-updater-beta/latest.json.minisig"
+      }
+    ]
+  },
+  "checks": {
+    "pythonTestsPassed": 60,
+    "toolingCI": "https://github.com/jinghu-moon/YueShot/actions/runs/42610740776 (success)",
+    "candidateSourceCI": "https://github.com/jinghu-moon/YueShot/actions/runs/42602126904 (success)",
+    "remoteIdentitySizesAndHashes": "passed; version tag resolves to source commit",
+    "unauthenticatedPublicVersionReadback": [
+      {
+        "name": "YueShot_0.1.4_x64-setup.exe",
+        "size": 7202836,
+        "sha256": "b63e2943b58ed2c6d3a781835936dcd70d9bedea084450ff4e79f2b2e10f161f",
+        "unauthenticatedPublicReadback": true
+      },
+      {
+        "name": "YueShot_0.1.4_source.zip",
+        "size": 99584892,
+        "sha256": "777d2ac860773b25a7ed859eef326fa397d69a086b89df3065a773ff27fd69f8",
+        "unauthenticatedPublicReadback": true
+      }
+    ],
+    "publicSourceCRCAndCandidateSourceValidation": "passed",
+    "publicFeedBytesAndOfficialMinisign": "passed",
+    "nativeClientCodeNetworkProbe": {
+      "currentVersionFloor": "0.1.3",
+      "offeredVersion": "0.1.4",
+      "actualWinHTTPInstallerDownload": "passed exact size/hash",
+      "duplicateVersion": "no repeated offer",
+      "stableWithoutKey": "refused before network",
+      "installerExecuted": false
+    },
+    "old013AssetsIdsSizesDigestsTimestampsUnchanged": true,
+    "stableFeedCreated": false,
+    "stableKeysModified": false,
+    "installerAndOwnerSignatureModified": false
+  },
+  "tagDeliveryCI": {
+    "url": "https://github.com/jinghu-moon/YueShot/actions/runs/42611747169",
+    "status": "in_progress",
+    "conclusion": "",
+    "jobs": [
+      {
+        "name": "verify",
+        "status": "in_progress",
+        "conclusion": ""
+      }
+    ]
+  },
+  "readyForRelease": false,
+  "qualificationLimits": [
+    "no actual installed 0.1.3 -> 0.1.4 installer/restart/data-preservation qualification in this run",
+    "native probe extracts the exact candidate code but is not the GPUI user interface",
+    "tag-triggered delivery CI recorded separately; running/skipped is not passed",
+    "remaining Microsoft runtime redistribution review, minimum OS/runtime/devices, failure modes and stable-key qualification remain open"
+  ],
+  "evidence": [
+    "target/two-asset-release-python-tests.log",
+    "target/yueshot-updates/0.1.4-beta/two-assets/publication-evidence/",
+    "target/update-014-live-network-probe/source-evidence.json",
+    "target/update-014-live-network-probe/result.log"
+  ]
+}

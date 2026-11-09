@@ -141,5 +141,26 @@ Release 打包和最终候选字节校验通过；用户本地签署后，官方
 合并工具的 57 项 Python 回归通过，实际验收 ZIP 的 CRC 和单源码附件一致性通过；从该源码包解压后的 Release
 重编译与配置/存储 smoke 通过，构建后原始源码哈希不变。该次使用本机依赖缓存，不代表干净机或完整离线资格。
 范围与哈希见 [单源码包验收](acceptance/2026-11-09-single-source-bundle.json)。
-目前没有创建 0.1.4 标签/Release、上传文件或替换公开 Beta 源；需要明确授权后才公开该版本并最后更新滚动源。
+以上为签署与准备阶段记录，随后公开发行的实际结果见下节。
 `readyForRelease=false` 保留，真实已安装 0.1.3 → 0.1.4 升级另行验收。
+
+## 0.1.4 Beta 两附件公开发行（2026-11-09）
+
+维护者在讨论“版本页仅 EXE/完整源码、清单仅放渠道源、直接下载固定附件 URL”后回复“开始吧”，据此执行该方案。
+[0.1.4 Beta](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.4) 固定源码提交 `25ab0c5`，
+手动上传附件仅 `YueShot_0.1.4_x64-setup.exe` 与 `YueShot_0.1.4_source.zip`；两者 SHA-256 写进发布说明。
+GitHub 自动生成的 Source code ZIP/tar.gz 条目不计作手动附件，也不能替代包含锁定依赖的完整源码包。
+
+两个远端附件的大小/哈希及固定 tag 提交已核对；随后无 GitHub 凭据从公开 URL 完整回读两文件，
+检查源码 ZIP CRC 和原候选逐文件/依赖哈希，通过后才替换 [Beta 更新源](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-updater-beta) 的清单/签名。
+更新源仍恰有两个附件。公开回读字节与本地已签署 0.1.4 清单一致，官方 Minisign 再次验签通过。
+
+从候选中提取且未改动的 WinHTTP、认证、暂存代码以版本下限 0.1.3 执行网络探针，
+实际发现 0.1.4 并下载公开安装器，验证精确大小/哈希、重复版本不提示，stable 无公钥时拒绝检查。
+探针不执行安装器，不代替实际 0.1.3 → 0.1.4 安装、重启、设置和截图保留验收。
+旧 0.1.3 资产 ID/大小/哈希/更新时间保持一致，没有创建 stable 源或修改其公钥。
+
+发布工具的全部 60 项 Python 回归通过，[工具 CI](https://github.com/jinghu-moon/YueShot/actions/runs/42610740776) 成功；
+该二进制源码的完整 [Windows CI](https://github.com/jinghu-moon/YueShot/actions/runs/42602126904) 及此前本地 Release 构建证据继续有效。
+本次 tag 另触发交付 CI，其状态单独记录，不把已启动当作通过。
+结构化证据见 [发布验收](acceptance/2026-11-09-beta-014-publication.json)。`readyForRelease=false` 与剩余稳定资格保留。

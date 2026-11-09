@@ -53,8 +53,8 @@ Release 构建、来源/负载/运行库/许可/安全门禁及最终候选字�
 用户已本地签署 0.1.4 Beta 清单。官方 Minisign 与客户端同一库验签成功；提取未改动的生产认证/版本判断代码执行探针，
 接受 beta 0.1.3 → 0.1.4、拒绝篡改字节、渠道不符、过期及重复版本。签名绑定的安装器/EXE 哈希与候选实际文件一致。
 公开结构化范围见 [验收记录](acceptance/2026-11-09-sqlite-security-update.json)，
-本地日志见 `target/update-014-signature-qualification/`。目前未公开 0.1.4，现有公开 Beta 源仍为 0.1.3；
-签署不等于发布，也不等于目标电脑真实安装升级已经通过。
+本地日志见 `target/update-014-signature-qualification/`。签署后又完成了 0.1.4 Beta 独立公开发行和更新源切换，
+见 [发布验收](acceptance/2026-11-09-beta-014-publication.json)。签署、公开及网络检查不等于目标电脑真实安装升级已经通过。
 
 该候选源码的 [Windows CI 42602126904](https://github.com/jinghu-moon/YueShot/actions/runs/42602126904)
 已全部成功，含完整检查、安全审计和缓存收尾；普通 push 的 delivery 按设计跳过，本地实际 Release 打包证据另计。

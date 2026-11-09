@@ -91,3 +91,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/test-yueshot-low-space
 本轮没有改动生产下载/暂存代码，没有关闭 TLS 验证，也没有读取私钥或修改更新源。新的资格补充了实际下载卷写满与释放空间重试，
 仍不替代真实断网、断电、注册表写失败或普通用户资格。上一轮提交 `e0be985` 的
 [Windows CI 42596214399](https://github.com/jinghu-moon/YueShot/actions/runs/42596214399) 已完整通过普通 push 的 verify/security；未运行 delivery。
+
+## 0.1.4 Beta 交付
+
+上述安装提取失败清理修复已随 0.1.4 Beta 独立签署并公开发行，Beta 更新源已切换，
+安装器和完整源码的公开回读、客户端同源检查/下载/验签通过，见 [发布证据](acceptance/2026-11-09-beta-014-publication.json)。
+旧 0.1.3 版本资产不修改；上述历史资格使用的版本与日志不重写为 0.1.4 实测。
+真实已安装 0.1.3 → 0.1.4 的安装重启/数据保留、断网/断电/注册表失败等剩余资格仍分别记录。

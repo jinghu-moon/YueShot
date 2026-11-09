@@ -11,6 +11,10 @@
 3. 核对 [已知限制](known-limitations.md)、[回归基线](regression-baseline.md) 和 [分发权利](distribution-rights.md)。
 4. 更新渠道公钥必须先单独审查。旧客户端只信任其构建时内置的公钥，不会自动读取仓库里的新配置。
 
+产品版本也进入许可清单。版本提升触发 inventory 门禁时，先比较 `target/yueshot-license-review/dependency-licenses.json`
+与已审清单，确认是产品自身版本变化，核对第三方版本、features、来源和许可原文哈希；审查后才运行
+`python tools/yueshot_licenses.py --update` 并提交差异。不得用整体刷新清单掩盖无关依赖变化。
+
 ## 2. 检查与构建候选
 
 ```powershell
@@ -43,7 +47,12 @@ python tools/test-yueshot-window-close.py --binary target/yueshot-delivery/<dev�
 
 ```powershell
 ./tools/test-yueshot-low-space.ps1 -Candidate target/yueshot-delivery/<dev候选> -Output target/low-space/<新名称>
+./tools/test-yueshot-low-space.ps1 -Candidate target/yueshot-delivery/<dev候选> -Output target/low-space/<另一个新名称> -UpdateDownload
 ```
+
+`-UpdateDownload` 另用当前产品测试代码读取公开 Beta 签名源，实际 WinHTTP 下载到同一个受控 VHD。
+它验证写满返回 112 后暂存清理，以及释放空间后相同清单/安装器的重新下载和哈希验证；不运行下载的安装器。
+此资格依赖网络和生产公钥，必须显式运行，不能将默认 ignored 项计为通过。
 
 普通用户验收按 [干净用户步骤](clean-user-acceptance.md) 使用全新解压目录执行，保存原始输出。
 自动脚本返回 `manualQualification=pending` 时，人工结论另记；不能编辑成自动通过。

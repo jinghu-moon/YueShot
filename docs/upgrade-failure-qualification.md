@@ -67,3 +67,27 @@ dev-only 保护另行实测：传入公开 Beta 候选被拒绝，未创建输�
 本轮磁盘不足针对同版本重装的真实文件部署路径；不是新一轮真实在线跨版本升级或数据库迁移。
 没有模拟断电、注册表写失败或下载目录所在卷写满；没有测量性能，不作性能提升结论。
 公开 0.1.3 及更新源未改动，修复需后续新版本独立签署/发布后才能到达用户机器。
+
+## 下载卷磁盘不足补测
+
+上一节“未测下载目录所在卷写满”描述的是安装器修复轮次，原证据保持不变。
+随后增加显式 `-UpdateDownload` 资格路径并实际执行：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools/test-yueshot-low-space.ps1 -Candidate target/yueshot-delivery/0.1.3-dev-low-space-fixed-final -Output target/low-space/20261109-update-download -UpdateDownload
+```
+
+实际产品 `check_with → authenticate → download → http::download → stage_with` 代码读取公开 Beta 源，
+在 VHD 空闲 307,200 字节时下载真实 7,174,510 字节安装器，得到 `写入更新文件失败：磁盘空间不足。 (os error 112)`。
+断言该次专用暂存目录已清理，未留下 `.partial` 或可安装 EXE；旧安装文件/数据/登记快照一致。
+释放空间后，同一清单和安装器重新下载、大小/哈希验证通过，最后删除测试下载物。
+两阶段各为 1 passed / 0 ignored。只为取得签名 offer 使用较低的显式比较版本，不安装此下载物，不放宽产品版本比较。
+
+两阶段清单 SHA-256 都为 `30eb5671f41190758d2a584eb4b953e94e20c23c6dbe3426f2d18e95fb888527`，
+安装器 SHA-256 都为 `75e8afb1a118628f6eb33562472956696f348fad0876dc57c69223524bf72fbc`。
+普通更新回归为 10 passed / 4 ignored，新 VHD 入口默认 ignored、只在此受控脚本内显式执行，未将其默认忽略计为通过。
+公开摘要见 [下载磁盘不足证据](acceptance/2026-11-09-update-download-disk-full.json)，原日志在 `target/low-space/20261109-update-download/`。
+
+本轮没有改动生产下载/暂存代码，没有关闭 TLS 验证，也没有读取私钥或修改更新源。新的资格补充了实际下载卷写满与释放空间重试，
+仍不替代真实断网、断电、注册表写失败或普通用户资格。上一轮提交 `e0be985` 的
+[Windows CI 42596214399](https://github.com/jinghu-moon/YueShot/actions/runs/42596214399) 已完整通过普通 push 的 verify/security；未运行 delivery。

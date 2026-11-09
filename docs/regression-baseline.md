@@ -7,7 +7,7 @@
 | 产品/共享 Rust 代码 | `cargo xtask check` | 记录 commit 与日志；ignored 不算通过，静态 HDR/AVIF 不算实屏资格 |
 | 工具与许可清单 | `python -m unittest discover -s tools/tests -p 'test_yueshot_*.py'` 及对应实际工具 | 不只测试 mock；候选需 `verify` 与来源校验 |
 | 安装器/资源 | Release 打包，三个 `test-yueshot-{install,installer-policy,channel-install}.ps1` | 新隔离候选；安装负载/登记/快捷方式、锁/回滚、卸载数据保留 |
-| 事务/提取路径 | 上述策略回归 + `test-yueshot-low-space.ps1` | 实际 NSIS、独立 VHD、真实磁盘满错误、失败不改旧文件/数据/登记、释放空间可重试 |
+| 事务/提取路径 | 上述策略回归 + `test-yueshot-low-space.ps1`；下载暂存路径另加 `-UpdateDownload` | 实际 NSIS/WinHTTP、独立 VHD、真实磁盘满错误、失败不改旧文件/数据/登记、释放空间可重试 |
 | 主窗口/退出 | `test-yueshot-window-close.py` 及 X/托盘人工回归 | 关闭到托盘保留进程可唤醒；明确退出返回 0；不得只测 Rust 状态 |
 | 在线更新 | `cargo test -p yue-shot --features test-support --locked --lib update:: -- --test-threads=1` | 验签负面/中断/哈希/锁，独立父子进程退出/重启；fixture 与真实 NSIS 分开记 |
 | 网络实现或发布源 | 显式 HTTPS 资格、真实客户端检查/下载/验签 | 不用单元测试冒充真实断网；区分“检查”与“下载”的故障 |

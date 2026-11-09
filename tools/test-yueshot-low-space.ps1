@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$Candidate,
-    [Parameter(Mandatory=$true)][string]$Output
+    [Parameter(Mandatory=$true)][string]$Output,
+    [switch]$UpdateDownload
 )
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -65,6 +66,27 @@ function Invoke-Smoke {
     $process = Start-Process -FilePath (Join-Path $installRoot 'YueShot.exe') -ArgumentList @('--smoke-test','--data-dir',('"'+$dataRoot+'"')) -WindowStyle Hidden -Wait -PassThru
     if ($process.ExitCode -ne 0) { throw 'Installed executable smoke failed.' }
 }
+function Invoke-UpdateDownload([string]$Phase) {
+    $previousRoot = $env:YUESHOT_UPDATE_SPACE_ROOT
+    $previousPhase = $env:YUESHOT_UPDATE_SPACE_PHASE
+    try {
+        $env:YUESHOT_UPDATE_SPACE_ROOT = Join-Path $volumeRoot 'update-space-probe'
+        $env:YUESHOT_UPDATE_SPACE_PHASE = $Phase
+        $stdout = Join-Path $testRoot ("update-$Phase.log")
+        $stderr = Join-Path $testRoot ("update-$Phase.stderr.log")
+        $test = 'update::tests::authenticated_download_on_full_volume_is_cleaned_and_reclaimed_space_is_usable'
+        $process = Start-Process -FilePath (Get-Command cargo.exe).Source -ArgumentList @('test','-p','yue-shot','--features','test-support','--locked','--lib',$test,'--','--ignored','--exact','--nocapture') -WindowStyle Hidden -RedirectStandardOutput $stdout -RedirectStandardError $stderr -Wait -PassThru
+        if ($process.ExitCode -ne 0) { throw "Native update download $Phase failed; see $stdout and $stderr." }
+        $lines = @(Get-Content -LiteralPath $stdout | Where-Object { $_.StartsWith('SPACE_QUALIFICATION=') })
+        if ($lines.Count -ne 1) { throw 'Missing authenticated download qualification result.' }
+        $qualification = $lines[0].Substring('SPACE_QUALIFICATION='.Length) | ConvertFrom-Json
+        if ($qualification.phase -ne $Phase -or $qualification.status -ne 'passed') { throw 'Unexpected download qualification result.' }
+        $result["updateDownload$Phase"] = $qualification
+    } finally {
+        $env:YUESHOT_UPDATE_SPACE_ROOT = $previousRoot
+        $env:YUESHOT_UPDATE_SPACE_PHASE = $previousPhase
+    }
+}
 try {
     & diskpart.exe /s $diskpartScript | Out-File -LiteralPath (Join-Path $testRoot 'diskpart.log')
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $vhd)) { throw 'Creating the new VHD failed.' }
@@ -82,6 +104,10 @@ try {
     $mapped = Get-Partition -DriveLetter $volume.DriveLetter | Get-Disk
     if ($mapped.Number -ne $disk.Number -or $mapped.IsBoot -or $mapped.IsSystem) { throw 'Volume ownership guard failed.' }
     $volumeRoot = "$($volume.DriveLetter):\"
+    if ($UpdateDownload) {
+        Set-Content -LiteralPath (Join-Path $volumeRoot '.yueshot-low-space-owned') -Value 'YueShot guarded 128 MiB VHD qualification' -Encoding ascii -NoNewline
+        New-Item -ItemType Directory -Path (Join-Path $volumeRoot 'update-space-probe') | Out-Null
+    }
     $installRoot = Join-Path $volumeRoot 'YueShot dev test'
     $dataRoot = Join-Path $volumeRoot 'isolated data'
     Invoke-Installer 0
@@ -115,7 +141,17 @@ try {
     if ((Snapshot) -cne $before) { throw 'Disk-full failure changed existing files, user data or registration.' }
     if (Test-Path -LiteralPath (Join-Path $installRoot '.yueshot-install')) { throw 'Disk-full failure left a transaction.' }
     $result.checks += 'NSIS returned 14; old payload, data and registry byte/value snapshot unchanged'
+    if ($UpdateDownload) {
+        Invoke-UpdateDownload 'full'
+        if ((Snapshot) -cne $before) { throw 'Failed download changed installed files or settings.' }
+        $result.checks += 'authenticated live WinHTTP download failed with disk-full 112 and removed all temporary payloads'
+    }
     Remove-Item -LiteralPath $filler
+    if ($UpdateDownload) {
+        Invoke-UpdateDownload 'reclaimed'
+        if ($result.updateDownloadfull.manifestSha256 -ne $result.updateDownloadreclaimed.manifestSha256 -or $result.updateDownloadfull.installerSha256 -ne $result.updateDownloadreclaimed.installerSha256) { throw 'Public signed offer changed between download phases; preserve evidence and qualify again.' }
+        $result.checks += 'same authenticated offer downloaded and verified after reclaim; test payload removed'
+    }
     Invoke-Smoke
     $result.checks += 'old installed executable still runs after failed reinstall'
     Invoke-Installer 0

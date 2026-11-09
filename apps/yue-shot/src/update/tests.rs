@@ -164,3 +164,69 @@ fn https_transport_uses_windows_networking_and_reads_the_public_repository() {
     let bytes = http::get("https://github.com/jinghu-moon/YueShot", 1024 * 1024).unwrap();
     assert!(String::from_utf8_lossy(&bytes).contains("YueShot"));
 }
+
+#[test]
+#[ignore = "explicit live download on the guarded low-space VHD; tools/test-yueshot-low-space.ps1 -UpdateDownload"]
+fn authenticated_download_on_full_volume_is_cleaned_and_reclaimed_space_is_usable() {
+    let root = PathBuf::from(
+        std::env::var_os("YUESHOT_UPDATE_SPACE_ROOT").expect("use the guarded VHD test script"),
+    );
+    let phase = std::env::var("YUESHOT_UPDATE_SPACE_PHASE").expect("missing qualification phase");
+    assert!(root.is_absolute());
+    assert_eq!(root.file_name().unwrap(), "update-space-probe");
+    assert_eq!(
+        fs::read(root.parent().unwrap().join(".yueshot-low-space-owned")).unwrap(),
+        b"YueShot guarded 128 MiB VHD qualification"
+    );
+    assert!(root.is_dir());
+    assert_eq!(fs::read_dir(&root).unwrap().count(), 0);
+    assert!(matches!(phase.as_str(), "full" | "reclaimed"));
+    // Authenticate the actual public feed with the same embedded trust root.
+    // A lower explicit comparison version only obtains the offer; no install runs.
+    let offer = check_with(
+        "beta",
+        &trusted_keys("beta").unwrap(),
+        "0.0.0",
+        now().unwrap(),
+        http::get,
+    )
+    .unwrap()
+    .expect("no authenticated public beta offer");
+    let manifest_sha256 = hex(&Sha256::digest(&offer.bytes));
+    let version = offer.version().to_owned();
+    let installer_sha256 = offer.manifest.installer_sha256.clone();
+    let staged = download(offer, &root);
+    if phase == "full" {
+        let error = staged.expect_err("download unexpectedly fit on the full test volume");
+        assert!(
+            error.contains("os error 112"),
+            "not disk exhaustion: {error}"
+        );
+        assert_eq!(fs::read_dir(root.join("updates")).unwrap().count(), 0);
+        println!("EXPECTED_DISK_FULL={error}");
+    } else {
+        let staged = staged.expect("download did not recover after space was reclaimed");
+        assert!(staged.directory.join("installer.exe").is_file());
+        assert!(!staged.directory.join("installer.partial").exists());
+        verify_file(
+            &staged.directory.join("installer.exe"),
+            &staged.offer.manifest.installer_sha256,
+            Some(staged.offer.manifest.installer_size),
+        )
+        .unwrap();
+        fs::remove_dir_all(staged.directory).unwrap();
+        assert_eq!(fs::read_dir(root.join("updates")).unwrap().count(), 0);
+    }
+    // Leave the next phase an empty test-owned data root.
+    fs::remove_dir(root.join("updates")).unwrap();
+    println!(
+        "SPACE_QUALIFICATION={}",
+        serde_json::json!({
+            "phase": phase,
+            "version": version,
+            "manifestSha256": manifest_sha256,
+            "installerSha256": installer_sha256,
+            "status": "passed"
+        })
+    );
+}

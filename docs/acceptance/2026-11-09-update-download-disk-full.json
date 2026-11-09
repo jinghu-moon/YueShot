@@ -1,0 +1,76 @@
+{
+  "format": 1,
+  "date": "2026-11-09",
+  "status": "passed-for-recorded-scope",
+  "operator": "agent-executed local qualification",
+  "environment": {
+    "osBuild": "10.0.26100.0",
+    "elevated": true,
+    "architecture": "x64",
+    "vhdMiB": 128,
+    "powershell": "5.1"
+  },
+  "installedDevCandidate": {
+    "version": "0.1.3",
+    "buildId": "7c2ed93f7016babfb0ac74b26be5c9806bbc39100dcd7a88c32a815539693369",
+    "installerSha256": "bc1118a2389bc3225e636e8332630b77e5e407bd7563bc053e1180a72ca2de23"
+  },
+  "testCode": "current source tests; product download/staging implementation unchanged from installed candidate",
+  "publicOffer": {
+    "phase": "full",
+    "version": "0.1.3",
+    "manifestSha256": "30eb5671f41190758d2a584eb4b953e94e20c23c6dbe3426f2d18e95fb888527",
+    "installerSha256": "75e8afb1a118628f6eb33562472956696f348fad0876dc57c69223524bf72fbc",
+    "status": "passed"
+  },
+  "fullPhase": {
+    "freeBytes": 307200,
+    "error": "write failed with native os error 112",
+    "test": "1 passed, 0 ignored",
+    "allStagingRemoved": true
+  },
+  "reclaimedPhase": {
+    "offer": {
+      "phase": "reclaimed",
+      "version": "0.1.3",
+      "manifestSha256": "30eb5671f41190758d2a584eb4b953e94e20c23c6dbe3426f2d18e95fb888527",
+      "installerSha256": "75e8afb1a118628f6eb33562472956696f348fad0876dc57c69223524bf72fbc",
+      "status": "passed"
+    },
+    "test": "1 passed, 0 ignored",
+    "sizeAndHashVerified": true,
+    "downloadedPayloadRemoved": true
+  },
+  "checks": [
+    "actual NSIS install and installed EXE smoke on owned VHD",
+    "real VHD write returned Win32 ERROR_DISK_FULL (112)",
+    "NSIS returned 14; old payload, data and registry byte/value snapshot unchanged",
+    "authenticated live WinHTTP download failed with disk-full 112 and removed all temporary payloads",
+    "same authenticated offer downloaded and verified after reclaim; test payload removed",
+    "old installed executable still runs after failed reinstall",
+    "space reclaimed; same installer retry and installed EXE smoke succeeded; settings retained",
+    "normal uninstall removed dev payload/registration and preserved isolated user file/data"
+  ],
+  "vhdDismounted": true,
+  "sourceHashes": {
+    "apps/yue-shot/src/update/tests.rs": "acd6708f586bd1c0e1d96740ccc3a718dc1b0beed7f1089e7491b1d2fd7ba2ef",
+    "apps/yue-shot/src/update/mod.rs": "156db15cfc913a74a7a59ed0cf036b46608229979666ada20406a7eefe1123b5",
+    "apps/yue-shot/src/update/http.rs": "a2417a0a7f6652a5b247f2e8e06877adb351a8c7729eb7ec06a13087fa93b9db",
+    "tools/test-yueshot-low-space.ps1": "519eec3031ab0fada135f701efa01405823c35beffa6650dc6e219e66d48abf9"
+  },
+  "evidence": [
+    "target/low-space/20261109-update-download/result.json",
+    "target/low-space/20261109-update-download/update-full.log",
+    "target/low-space/20261109-update-download/update-full.stderr.log",
+    "target/low-space/20261109-update-download/update-reclaimed.log",
+    "target/low-space/20261109-update-download/update-reclaimed.stderr.log"
+  ],
+  "notQualified": [
+    "actual network disconnection",
+    "power interruption",
+    "registry write failures",
+    "ordinary-user clean runtime",
+    "publication of a new version"
+  ],
+  "productionChanges": "none; no private key read, no TLS bypass, no feed or existing beta installation changes, no downloaded installer executed"
+}

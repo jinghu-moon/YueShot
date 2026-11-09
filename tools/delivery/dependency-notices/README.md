@@ -34,3 +34,5 @@ python tools/yueshot_licenses.py --update
 GPUI Base 的 `instant` 引用已在受控 Yue UI snapshot adaptation 中迁到其既有 `web-time` 依赖，paste 消费者迁到 pastey。当前产品的 resvg/usvg 0.49 仅启用图形与 raster-images 支持，关闭 SVG text/system-fonts/memmap-fonts；不再加载字体数据库，fontdb 和对应内嵌 ttf-parser 子集已退出默认产品图。具体适配哈希和上游哈希见 `vendor/yue-ui/snapshot.json`。`tools/yueshot_svg.py` 检查产品 normal/build 图与 SVG 资产，含动态文字的 SVG 须在制作时转为路径；普通 UI 的 DirectWrite 字体路径不受影响。安全工具仍保留内嵌 parser 检测规则：若未来重新引入该依赖，审查项会恢复；本次不是忽略或豁免公告。
 
 产品受控 Yue 快照已移除 6 个未使用的组件字体文件及其加载 feature/API；原始路径、哈希与排除原因保留在 snapshot.json，不推定这些排除字体的修改或分发权利。覆盖层的 Noto/Fira 合法来源与子集继续单独核对。对应源码归档从实际 workspace members 与受控 snapshot 清单收集文件，不能仅以 Git 未忽略文件为依据；候选核验应同时检查解压后的 snapshot、Cargo workspace 与逐文件哈希。独立组件仓库不受此源码裁剪影响。
+
+2026-11-09 更新认证接入增加 `minisign-verify 0.3.0`（MIT，无传递依赖、无 build.rs），锁定发行归档 SHA-256 为 `871285dc19d8d0ebe0eef3d0e99a205f2a71363b122632cbbfa4a6c370a960ce`，Frank Denis 版权和 LICENSE 原文随包。SHA-256、URL、版本比较复用已锁定的 sha2 0.11 / url / semver；WinHTTP 属于系统 DLL，不随包复制。产品 normal/build 清单从 404 增至 405 包，既有包版本及来源保持不变，windows-sys 0.59 仅增加 WinHTTP feature。测试专用 blake2 / ring / base64 用来签署原生回归 fixture，不进入产品 normal/build 图。新清单经逐项对照后更新，原文仍为 0 缺项；这不代表生产更新密钥或完整线上升级资格已完成。

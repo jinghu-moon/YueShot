@@ -713,6 +713,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "blake2"
+version = "0.10.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46502ad458c9a52b69d4d4d32775c788b7a1b85e8bc9d482d92250fc0e3f8efe"
+dependencies = [
+ "digest 0.10.7",
+]
+
+[[package]]
 name = "blake3"
 version = "1.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4386,6 +4395,12 @@ dependencies = [
  "mime",
  "unicase",
 ]
+
+[[package]]
+name = "minisign-verify"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "871285dc19d8d0ebe0eef3d0e99a205f2a71363b122632cbbfa4a6c370a960ce"
 
 [[package]]
 name = "miniz_oxide"
@@ -9476,16 +9491,23 @@ name = "yue-shot"
 version = "0.1.2"
 dependencies = [
  "async-channel",
+ "base64 0.22.1",
+ "blake2",
  "blake3",
  "enough",
  "gpui-kit",
  "half",
  "image",
  "log",
+ "minisign-verify",
  "png 0.18.1",
+ "ring",
  "rusqlite",
+ "semver",
  "serde",
  "serde_json",
+ "sha2 0.11.0",
+ "url",
  "windows 0.61.3",
  "windows-sys 0.59.0",
  "yue-avif",

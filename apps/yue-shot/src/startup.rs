@@ -45,6 +45,7 @@ pub(crate) enum Launch {
     ExportDiagnostics,
     ProductInfo,
     UninstallCleanup,
+    ApplyUpdate,
 }
 #[derive(Debug, Default)]
 pub(crate) struct StartupOptions {
@@ -77,7 +78,9 @@ impl StartupOptions {
                 Some("--product-info") => Launch::ProductInfo,
                 Some("--uninstall-cleanup") => Launch::UninstallCleanup,
                 Some("--remove-startup") => Launch::RemoveStartup,
-                Some("--backup-to" | "--restore-from" | "--export-diagnostics-to") => {
+                Some(
+                    "--backup-to" | "--restore-from" | "--export-diagnostics-to" | "--apply-update",
+                ) => {
                     let path = PathBuf::from(
                         args.next()
                             .ok_or("maintenance command requires an absolute destination")?,
@@ -89,6 +92,7 @@ impl StartupOptions {
                     match arg.to_str() {
                         Some("--backup-to") => Launch::Backup,
                         Some("--restore-from") => Launch::Restore,
+                        Some("--apply-update") => Launch::ApplyUpdate,
                         _ => Launch::ExportDiagnostics,
                     }
                 }

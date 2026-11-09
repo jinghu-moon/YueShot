@@ -1,0 +1,113 @@
+{
+  "public_key": "RWR0ZXN0LWtlea7dB1j2hsyfnN5f+G5p3hEY/RnmF/arw/8EEDI8LuuR",
+  "cases": [
+    {
+      "name": "valid",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleUScddQSxSpL93czNAvAaMVvKTApSYup07XqLYle6SUK/IF/pde4EseVicQFMI+WZ/GNDPp2LOCkzfQgQvquuQ0=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nU8NQV8swEqnIl6xngC8SZwo857NSr1/VAU9teXujLTqtPi4MR52I9Ry7UzzOf2MlqmUcHn+ao+LUiwpSE4zzAg==\n",
+      "valid": true
+    },
+    {
+      "name": "wrong-product",
+      "manifest": "{\"format\":1,\"product\":\"Other\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleaVYWbRdoGj3hH1hAi28bL7fsTagQSS/luUxz61aPgSkgVzE4IWdPGgSJe7GR5BW72HuIvkbAWip3bV01LzzPwc=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nW8k3vj6rPsOlam5Yki0wj2P2gRl7K+SSBo0OFNZm4ihoazTVz3+ASw0bEEOnEtR9uy6+qMr2aJ8Q0XgIi8l2Bw==\n",
+      "valid": false
+    },
+    {
+      "name": "wrong-channel",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"beta\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleY3IKDpPCP/EOZL8ylS6Sf7VMK+Jq85+3e8o2zbS735AOJ6yFBMw4uBW1ftNH6agPHF+ciXqFGLZi20Z7w+Zlw0=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nc7JENQPFxqy/lLTUlowP/RB6GctRUTHJWqwsxiXs7mEXHQcAyv5RzNGq9JdHY7IIL/9xKWndplhHD91MHOhICA==\n",
+      "valid": false
+    },
+    {
+      "name": "wrong-architecture",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"arm64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtlef+GLT67x7I2LGaK6NLJM1fnfDwuQ48U4O5lkam7CwnisfHjQzjJCEFilrf5SptYJGWj1XSlUoBTFskCA8Cw+gw=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nX/bIqrdgEho8N08aqp9hRlc/6a0yQo6QyMhEx/pL2ctbBDMdXHzC4P5YlbCiNIyk+tuZIn2QK4olHQfX41pECA==\n",
+      "valid": false
+    },
+    {
+      "name": "same-version",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.2\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtlec5smRcE5azWMcUu9WDZu+5Fi88NzFZvYsQ2IQa3iPnUfY0LUiVgpdVm52rwVkCatOYzw6qvZUILdeEnvybcrgY=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\n3MHQMBah9qc3ESXYAm0btI/g8ewmqkGlaasTFpvaSMUd2behZohXoNjjyL35guuwkaFP65ry2CBTDRGv/hoYBg==\n",
+      "valid": false
+    },
+    {
+      "name": "downgrade",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.1\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleZ1SFhIV6MDqtq/tNjz8kqgd/fSL3F6AFX7nFj5gXhKDI/XXD4bs2jZI0AT3jjcar21WpleZuZuuYn7rqejwOAc=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\n1k4cXRKyym+cw1DE1cIdnQAqFJjnOGs5CV6Tj1+2orvClWaTG8TcuRlK7ZZ+T6eADzA0Bsu9bwykMMnu695cCw==\n",
+      "valid": false
+    },
+    {
+      "name": "invalid-version",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"v0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleeMUU+hA3ffeC+MMoo0/FmpA+OAK0fq2ZwbiyKq/e6v0ua+7wkK5GsTplqvgmM+4p8fpkDZPSR+l5amJnVPaKww=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nCQe/LndUbAA/0ysS36xObq81eOUpkLTSjUb0iVzbJpcL2DGc/E2LPe0qS0vVWnKjpnKsK8Kyq2AjTnXkFStCBQ==\n",
+      "valid": false
+    },
+    {
+      "name": "stable-prerelease",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3-beta.1\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtlefmsDUoRiHhrbtKycYBvvbzW8EbbIrmm8n26PazvAEzQbJ862W2D6wjZV5KmTYfYSS/NuJevRgPDuIht4vQDTg4=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nMifRxTZ/pwgPG4VcaViWIsE6zxe/UxFoZq7MyivAI4Y2u4z79vIdYDcRmGUsPuYjZdLy3JcQYVoiJaBNSh4rBg==\n",
+      "valid": false
+    },
+    {
+      "name": "build-metadata",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3+1\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleQTdnLeHxJtZ4exCnVaB2vf1KcIy72H6/O3yt+cbuEabFvO2BF2u2v5XmbDnQC20hTQewruSQRkTfp5IkpOcUAA=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nQRbV3WVhJcqqY9GNkAnvR9i/CArtwu1ByTy5eMFTyImGV79mCHGnZGhoZe+nGTMX4S7nNqkdMDKJEvlw03ZZCQ==\n",
+      "valid": false
+    },
+    {
+      "name": "expired",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2000000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleZC9VkIR0rVnila7mvlqk8SLv7fgpZIe4FFZJYIJNL7sjhGYT853L/IHRhz71CyPvqaUS5OMogcEri2rpG8IWwk=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nnwCfOGBs01eLAcjPegr2glFY9c+DP3HxZ8kRW85ojKlCr4012J0AXPLzNVwIV3nrE31mWXf2YtGffkIIdXLXAA==\n",
+      "valid": false
+    },
+    {
+      "name": "zero-size",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":0,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleV9tUgib+jGIG6j2EdLHhQkzdFZ0kSuB+D5rqIZvDw6ifmi04DuSGwFpOcLJLaHnUVovjsIYDtG4lh4jbtDUOAk=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nFLCuTfNVQPrxbyRBAoz07fZh6e/06S3PoQad0aHP2Wi7NzdmlgiiiMQNw9pHUaXTnPsQWZvQt0DTEVxIJUl7AQ==\n",
+      "valid": false
+    },
+    {
+      "name": "oversize",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":536870913,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleVEtlmL3hZtSxoaGTT8D46UVBiVBFIs+S6uW/65v5GH6JmdWWbec/ljmFBZJjyEhCKud+RZ1bFXEaiOh5uKFCQ0=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nLjqfT4XJ2YyIlsuufop367QQxilnuwVJbmpa00nUOvcXil7NbPQGNl4Ca0SRCS3TKjZA2+oJdmDDqwYnaFfhBQ==\n",
+      "valid": false
+    },
+    {
+      "name": "bad-hash",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"a\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleaYmtZcEMx7Sbp2L/DD7R0m9kr6Ua9vTCKaEUCdcOjxF7falxu1ovNRJW3EO85Y3uadyqXrJxCnra1d+hil3GwE=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nPb/iLGxv8TEY6kDM5sd3clXf5BPx/BdyEQ4Oa7ic6CDPcBoO8MBY8ZODrPKMibuYl/Vhv2czdKl3udc/62qsCg==\n",
+      "valid": false
+    },
+    {
+      "name": "wrong-host",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://example.com/a.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtlebyrXKgAxV35gxqVFiD9R/NCUZTDQvb0Pdojq0APfVFuKgnM7EpFkwHNzz7Y+QzumF2bfP+5EFQyQuZ6ptVMmAA=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nvDfxnA2aqc6oJ0lgoim5MuEF10NrxdGqIioua8Jr9bdNkMgcjbab5/vsjMsDRR1G8aYm6zSv6/gS07NwPmCBBg==\n",
+      "valid": false
+    },
+    {
+      "name": "host-confusion",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com.evil.test/a.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleQ0omS03OpeY5DCYdd5nF7wKEotC3iJqI499V3HxyFHnToNN9lxDeMCg8Ylk6toBpWFZSyxko65HP0Knh/jQYwg=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nVqaO4E3QnQwKzEHg/l7qxV2dWauHRO6WUjmlbazek6ak2zgYGNERQbwR7UbUKwphp70JUoejk1rxn3bjEdGCBQ==\n",
+      "valid": false
+    },
+    {
+      "name": "query",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe?x=1\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtlecq/fEAyMb0CpdMjXHYfm+bptqwCCbIZ9JZVIa1KlUYge/Pbgjf/1IIVPrBaHLu/xGCc7xVEz3phEl8121exAQQ=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\n2rNhMFGOi8acOQZkhWIVw/TdmxXW/cjRuRVnnfG+jTmp4ot5K7GvCk4tGEtCs52I2v9BSjPcVX2RkG7WUN9ZCg==\n",
+      "valid": false
+    },
+    {
+      "name": "path-traversal",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/../x.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\"}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleSmfWkBo/nhqzG0mZ7jeFc0xlf5ZbhcMGuhTB+8r8CdSWGsunQWvPf+hKKllUvU7ceJhNZIJpCtAomuRcVYKvAA=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nqm5hnFK29G8C1VMSdklragvW8PUDgTU5e9ZWesumpPXRbbw/QkLPbHpkGZyDhP3CpnXqH5PIBJ4Ajv8enW+jBw==\n",
+      "valid": false
+    },
+    {
+      "name": "unknown-schema",
+      "manifest": "{\"format\":1,\"product\":\"YueShot\",\"channel\":\"stable\",\"architecture\":\"x64\",\"version\":\"0.1.3\",\"expires_unix\":2100000000,\"installer_url\":\"https://github.com/jinghu-moon/YueShot/releases/download/yueshot-v0.1.3/YueShot_0.1.3_x64-setup.exe\",\"installer_size\":20,\"installer_sha256\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"executable_sha256\":\"2222222222222222222222222222222222222222222222222222222222222222\",\"unexpected\":true}\n",
+      "signature": "untrusted comment: test-only fixture\nRUR0ZXN0LWtleXBsEYHcbbI5xncmtw0XgPqsdCY1cQeGLU3aq3pUH+RguaZna49pZTfrFnQrTTKqrPxLEZFgCVdn0Rkxnp3iqgk=\ntrusted comment: timestamp:1900000000\tfile:latest.json\tprehashed\nmjO7WxJZpF6ICKn1CNCtbOC9Pj4GMxikTW2Si1+PvUxbEjB4oVSyFWKZiKeSlE3z6zqDoZeAa3HK0IxXesmxCw==\n",
+      "valid": false
+    }
+  ]
+}

@@ -26,6 +26,7 @@ pub mod save;
 mod save_panel;
 pub mod settings;
 mod startup;
+mod update;
 const WINDOW_WIDTH: f32 = 560.0;
 const WINDOW_HEIGHT: f32 = 560.0;
 #[derive(Clone, Copy)]
@@ -42,6 +43,8 @@ struct YueShotApp {
     pins: Option<Entity<yue_pin::PinManager>>,
     pin_source: Arc<pin_source::PinSource>,
     settings: Entity<settings::SettingsView>,
+    updates: Entity<update::UpdateView>,
+    update_handoff: bool,
     save_panels: save_panel::PanelWindows,
     history: Option<CaptureHistoryStore>,
     views: Vec<WeakEntity<history_view::CaptureHistoryView>>,
@@ -57,6 +60,7 @@ struct YueShotApp {
     status: Vec<String>,
     tasks: Vec<Task<()>>,
     _settings_sync: Subscription,
+    _update_install: Subscription,
 }
 impl YueShotApp {
     fn new(paths: startup::ProductPaths, cx: &mut Context<Self>) -> Self {
@@ -75,6 +79,11 @@ impl YueShotApp {
             settings::SettingsView::new(settings::SettingsStore::new(&data))
                 .with_login_startup(login_startup)
         });
+        let updates = cx.new(|_| update::UpdateView::new(paths.channel.name(), &data));
+        let _update_install =
+            cx.subscribe(&updates, |app, _, event: &update::InstallUpdate, cx| {
+                app.install_update(event.0.clone(), cx);
+            });
         let initial = settings.read(cx).settings().clone();
         let (refresh_sender, refresh_receiver) = async_channel::unbounded();
         let (save_sender, save_receiver) = async_channel::unbounded();
@@ -262,6 +271,8 @@ impl YueShotApp {
             pins,
             pin_source: source,
             settings,
+            updates,
+            update_handoff: false,
             save_panels: save_panel::PanelWindows::default(),
             history,
             views: Vec::new(),
@@ -277,6 +288,7 @@ impl YueShotApp {
             status: Vec::new(),
             tasks,
             _settings_sync,
+            _update_install,
         };
         app.receive_capture_failures(failed_receiver, cx);
         app
@@ -323,6 +335,9 @@ impl YueShotApp {
         }));
     }
     fn dispatch(&mut self, command: Command, position: (i32, i32), cx: &mut Context<Self>) {
+        if self.update_handoff && matches!(command, Command::Capture | Command::Scroll) {
+            return;
+        }
         let started = std::time::Instant::now();
         match command {
             Command::Show => self.open_main(Page::History, cx),
@@ -390,6 +405,9 @@ impl YueShotApp {
         }
     }
     fn start_capture(&mut self, cx: &mut Context<Self>) {
+        if self.update_handoff {
+            return;
+        }
         if let Err(error) = self.capture.start_capture() {
             self.report(format!("截图启动失败：{error}"), cx);
         }
@@ -626,6 +644,7 @@ impl YueShotApp {
                 page,
                 status,
                 retry_services,
+                updates: self.updates.clone(),
             });
             created = Some(view.downgrade());
             window.on_window_should_close(cx, move |_, cx| {
@@ -647,12 +666,11 @@ impl YueShotApp {
         }
     }
     fn request_quit(&mut self, cx: &mut Context<Self>) {
-        let saving = self.settings.read(cx).shortcuts_busy()
-            || self.save_panels.has_pending_operation(cx)
-            || self.views.iter().any(|view| {
-                view.upgrade()
-                    .is_some_and(|view| view.read(cx).has_pending_operation())
-            });
+        if self.update_handoff {
+            self.report("正在准备更新，请稍候".into(), cx);
+            return;
+        }
+        let saving = self.has_pending_save(cx);
         if saving {
             self.report(
                 "正在保存图片或设置，请等待操作完成后再退出 YueShot".into(),
@@ -661,6 +679,45 @@ impl YueShotApp {
         } else {
             cx.quit();
         }
+    }
+    fn has_pending_save(&self, cx: &App) -> bool {
+        self.settings.read(cx).shortcuts_busy()
+            || self.save_panels.has_pending_operation(cx)
+            || self.views.iter().any(|view| {
+                view.upgrade()
+                    .is_some_and(|view| view.read(cx).has_pending_operation())
+            })
+    }
+    fn install_update(&mut self, staged: update::Staged, cx: &mut Context<Self>) {
+        if self.update_handoff || self.has_pending_save(cx) || self.capture.state().is_active() {
+            self.updates.update(cx, |view, cx| {
+                view.finish_handoff(Err("截图或保存尚未完成，请完成后再安装更新".into()), cx)
+            });
+            return;
+        }
+        self.update_handoff = true;
+        let data = self.data.clone();
+        let channel = startup::Channel::build().map(|channel| channel.name().to_owned());
+        self.tasks.push(cx.spawn(async move |app, cx| {
+            let prepared = cx
+                .background_spawn(async move { update::prepare(&staged, &channel?, &data) })
+                .await;
+            let _ = app.update(cx, |app, cx| {
+                app.update_handoff = false;
+                let result = prepared.and_then(|prepared| {
+                    if app.has_pending_save(cx) || app.capture.state().is_active() {
+                        return Err("仍有保存任务，已取消安装，请完成后重试".into());
+                    }
+                    prepared.commit()
+                });
+                let quit = result.is_ok();
+                app.updates
+                    .update(cx, |view, cx| view.finish_handoff(result, cx));
+                if quit {
+                    cx.quit();
+                }
+            });
+        }));
     }
     fn shutdown(&mut self, cx: &mut Context<Self>) {
         log::info!(target:"yueshot.event","shutdown.begin");
@@ -677,6 +734,7 @@ impl YueShotApp {
 struct MainWindow {
     app: WeakEntity<YueShotApp>,
     settings: Entity<settings::SettingsView>,
+    updates: Entity<update::UpdateView>,
     history: Entity<history_view::CaptureHistoryView>,
     page: Page,
     status: String,
@@ -771,6 +829,9 @@ impl Render for MainWindow {
                 Page::History => self.history.clone().into_any_element(),
                 Page::Settings => self.settings.clone().into_any_element(),
             }))
+            .when(matches!(self.page, Page::Settings), |view| {
+                view.child(self.updates.clone())
+            })
     }
 }
 pub fn run() -> std::process::ExitCode {
@@ -786,6 +847,14 @@ fn launch() -> Result<(), String> {
     let options = startup::StartupOptions::parse(std::env::args_os().skip(1))?;
     let channel = startup::Channel::build()?;
     match options.launch {
+        startup::Launch::ApplyUpdate => {
+            return update::apply(
+                options
+                    .maintenance_path
+                    .as_deref()
+                    .ok_or("缺少更新任务路径")?,
+            );
+        }
         startup::Launch::ProductInfo => {
             println!("{}", product::info(channel));
             return Ok(());
@@ -941,7 +1010,12 @@ mod tests {
         let settings = cx.new(|_| {
             super::settings::SettingsView::new(super::settings::SettingsStore::new(&data))
         });
+        let updates = cx.new(|_| super::update::UpdateView::new("dev", &data));
         cx.new(|cx| {
+            let update_install = cx.subscribe(
+                &updates,
+                |_: &mut super::YueShotApp, _, _: &super::update::InstallUpdate, _| {},
+            );
             let sync = cx.subscribe(
                 &settings,
                 |_: &mut super::YueShotApp, _, _: &super::settings::SettingsChanged, _| {},
@@ -954,6 +1028,8 @@ mod tests {
                 pins: None,
                 pin_source: std::sync::Arc::new(super::pin_source::PinSource::new()),
                 settings,
+                updates,
+                update_handoff: false,
                 save_panels: Default::default(),
                 history: None,
                 views: Vec::new(),
@@ -974,6 +1050,7 @@ mod tests {
                 status: vec!["test failure remains visible".into()],
                 tasks: Vec::new(),
                 _settings_sync: sync,
+                _update_install: update_install,
             }
         })
     }

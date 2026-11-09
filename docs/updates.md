@@ -76,3 +76,5 @@ cargo xtask check
 NSIS 路径回归：官方文档要求 `/D=安装目录` 是最后一项、不能加引号，即使目录含空格。独立真实 NSIS 探针 `target/update-nsis-path-probe/result.log` 确认 `Command::arg` 会让 NSIS 忽略含空格的自定义目录，而 Windows `raw_arg` 按原目录安装。原生辅助进程 fixture 现使用含空格的目录，并检查实际原始命令行末尾；旧实现失败证据为 `target/update-nsis-spaces-before.log`。修复不放宽安装位置登记或负载哈希校验。
 
 修复后的定向回归 `target/update-nsis-spaces-after.log` 为 10 passed / 3 ignored。原生 fixture 验证成功后重启与失败后旧 EXE/数据保留；失败后重启真实旧产品仍包含在后续真实安装器验收中，不以测试 harness EXE 的启动代替。
+
+修复版引导包为 `target/yueshot-delivery/0.1.2-beta-update-bootstrap-fixed`，从干净提交 `1f8b2b8` 构建，buildId `d2c3fd12d0a68d85c8ca5a98e6b46e48892ae245743f6439cb3b0dca9b191960`；Release 打包和候选字节/来源/运行库/许可/安全审计通过。修复后的完整 `cargo xtask check` 亦通过，日志 `target/update-path-fixed-full-check.log`，含 51 项 Python、1,097 次 Rust passed 和 108 次 ignored 出现。没有覆盖现有 beta 安装。0.1.3 仅提升产品版本以准备真实升级目标，禁止新增截图功能的限制继续有效。

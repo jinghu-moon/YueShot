@@ -1,6 +1,6 @@
 [package]
 name = "yue-shot"
-version = "0.1.2"
+version = "0.1.3"
 description = "YueShot screenshot application"
 edition = "2024"
 license = "AGPL-3.0-only"

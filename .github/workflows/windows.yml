@@ -4,72 +4,67 @@ on:
   pull_request:
   push:
     branches: [main]
+    tags: ['yueshot-v*']
   workflow_dispatch:
+    inputs:
+      delivery:
+        description: Build and validate an unsigned installer after all checks pass
+        type: boolean
+        default: false
+      cold_build:
+        description: Bypass Rust build caches in both jobs (clean build qualification)
+        type: boolean
+        default: false
 
 permissions:
   contents: read
+
+# New commits supersede unfinished runs on the same branch/PR, not other refs.
+concurrency:
+  group: yueshot-windows-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_INCREMENTAL: '0'
 
 jobs:
   verify:
     # The reviewed app-local runtime contract is VS 2022 / VC143.
     runs-on: windows-2022
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - name: Install pinned NASM for the AVIF assembly checks
-        shell: pwsh
-        run: |
-          $archive = Join-Path $env:RUNNER_TEMP 'nasm-3.01-win64.zip'
-          $destination = Join-Path $env:RUNNER_TEMP 'yueshot-nasm'
-          Invoke-WebRequest 'https://www.nasm.us/pub/nasm/releasebuilds/3.01/win64/nasm-3.01-win64.zip' -OutFile $archive
-          if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne 'E0BA5157007ABC7B1A65118A96657A961DDF55F7E3F632EE035366DFCE039CA4') {
-            throw 'Unexpected NASM archive hash'
-          }
-          Expand-Archive -LiteralPath $archive -DestinationPath $destination
-          $nasmDirectory = Join-Path $destination 'nasm-3.01'
-          $version = & (Join-Path $nasmDirectory 'nasm.exe') --version
-          if ($LASTEXITCODE -ne 0 -or $version -notmatch '^NASM version 3\.01 compiled on ') { throw 'Unexpected NASM version' }
-          Write-Output $version
-          $nasmDirectory | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      - uses: dtolnay/rust-toolchain@master
+      - name: Prepare Windows verification environment
+        id: setup
+        uses: ./.github/actions/windows-setup
         with:
-          toolchain: 1.98.1
-          components: clippy, rustfmt
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: tools/delivery/package-lock.json
-      - name: Verify the official VC143 redistributable before building
-        run: python -c "import sys; sys.path.insert(0, 'tools'); from yueshot_runtime import find_vc_redist; print(find_vc_redist())"
-      - run: npm ci --prefix tools/delivery
-      - name: Audit Windows packaging dependencies
-        run: npm audit --prefix tools/delivery --audit-level=low
-      - uses: actions/cache/restore@v4
-        id: audit-tools
-        with:
-          path: |
-            ~/.cargo/bin/cargo-deny.exe
-            ~/.cargo/bin/cargo-audit.exe
-          key: windows-x64-rust-1.98.1-deny-0.20.2-audit-0.22.1
-      - run: cargo install cargo-deny --version 0.20.2 --locked
-        if: steps.audit-tools.outputs.cache-hit != 'true'
-      - run: cargo install cargo-audit --version 0.22.1 --locked
-        if: steps.audit-tools.outputs.cache-hit != 'true'
-      - name: Verify audit tool versions
-        run: |
-          if ((cargo deny --version) -ne 'cargo-deny 0.20.2') { throw 'Unexpected cargo-deny version' }
-          if ((cargo audit --version) -ne 'cargo-audit-audit 0.22.1') { throw 'Unexpected cargo-audit version' }
-      - uses: actions/cache/save@v4
-        if: steps.audit-tools.outputs.cache-hit != 'true'
-        with:
-          path: |
-            ~/.cargo/bin/cargo-deny.exe
-            ~/.cargo/bin/cargo-audit.exe
-          key: windows-x64-rust-1.98.1-deny-0.20.2-audit-0.22.1
-      - name: Fetch locked Windows dependencies for offline audits
-        run: cargo fetch --locked --target x86_64-pc-windows-msvc
+          profile: debug
+          cold-cache: ${{ inputs.cold_build || false }}
       - run: cargo xtask check
       - run: python tools/yueshot_security.py --output target/yueshot-security
+      - name: Save successful verification compilation cache
+        if: github.ref == 'refs/heads/main' && !inputs.cold_build && steps.setup.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/debug
+          key: ${{ steps.setup.outputs.cache-key }}
+
+  delivery:
+    needs: verify
+    if: startsWith(github.ref, 'refs/tags/yueshot-v') || (github.event_name == 'workflow_dispatch' && inputs.delivery)
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare Windows delivery environment
+        id: setup
+        uses: ./.github/actions/windows-setup
+        with:
+          profile: release
+          cold-cache: ${{ inputs.cold_build || false }}
       - run: cargo xtask package --profile release
       - name: Smoke test the installed payload
         run: |
@@ -98,3 +93,12 @@ jobs:
           if ($candidates.Count -ne 1) { throw 'Expected one downloaded release candidate.' }
           python tools/yueshot-delivery.py verify $candidates[0].FullName
           if ($LASTEXITCODE -ne 0) { throw 'Downloaded candidate verification failed.' }
+      - name: Save successful delivery compilation cache
+        if: github.ref == 'refs/heads/main' && !inputs.cold_build && steps.setup.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/release
+          key: ${{ steps.setup.outputs.cache-key }}

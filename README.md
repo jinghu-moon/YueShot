@@ -38,7 +38,8 @@ cargo xtask package --profile release --channel beta
 候选包含程序、安装器、VC runtime、许可、对应源码、PDB 与精确构建标识。默认保留卸载后的用户数据。
 目前在线认证更新及更新密钥恢复、完整分发权利、干净普通用户 Windows 和设备验收仍未完成。
 用户选择不做 Windows Authenticode 代码签名，所有渠道均允许生成未签名候选；`release --check` 仍拒绝尚未满足其他发行验收的候选。更新包真实性签名独立于代码签名。
-公开仓库的 Windows CI 会生成可下载的未签名候选 artifact，不创建 GitHub Release，也不代表正式发行资格。
+普通 push / PR 的 Windows CI 执行完整检查与安全审计，不再每次构建安装包。手动运行时勾选 `delivery`，或推送 `yueshot-v*` 标签，才在同一提交检查通过后执行完整 Release 构建、安装回归及 artifact 上传/下载校验；不创建 GitHub Release，也不代表正式发行资格。
+Rust 编译缓存按 runner 镜像、编译器、debug/release、锁文件及配置区分，不缓存交付物或检查结论；手动勾选 `cold_build` 可绕过编译缓存，保留干净构建验证入口。详见 [CI 说明](docs/ci.md)。
 生命周期验证状态及未完成项见 [交付状态](docs/lifecycle.md)。
 
 ## 工程边界

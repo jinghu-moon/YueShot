@@ -1,0 +1,108 @@
+name: YueShot Windows toolchain
+description: Prepare the reviewed Windows x64 build environment and restore compilation caches.
+inputs:
+  profile:
+    description: Cargo output profile to restore (debug or release).
+    required: true
+  cold-cache:
+    description: Bypass compilation cache restore for a clean build.
+    default: 'false'
+outputs:
+  cache-key:
+    description: Primary compilation cache key for the final successful job save.
+    value: ${{ steps.cache-key.outputs.key }}
+  cache-hit:
+    description: Whether the exact compilation cache was restored.
+    value: ${{ steps.rust-cache.outputs.cache-hit }}
+runs:
+  using: composite
+  steps:
+    - name: Install pinned NASM for the AVIF assembly checks
+      shell: pwsh
+      run: |
+        $archive = Join-Path $env:RUNNER_TEMP 'nasm-3.01-win64.zip'
+        $destination = Join-Path $env:RUNNER_TEMP 'yueshot-nasm'
+        Invoke-WebRequest 'https://www.nasm.us/pub/nasm/releasebuilds/3.01/win64/nasm-3.01-win64.zip' -OutFile $archive
+        if ((Get-FileHash $archive -Algorithm SHA256).Hash -ne 'E0BA5157007ABC7B1A65118A96657A961DDF55F7E3F632EE035366DFCE039CA4') {
+          throw 'Unexpected NASM archive hash'
+        }
+        Expand-Archive -LiteralPath $archive -DestinationPath $destination
+        $nasmDirectory = Join-Path $destination 'nasm-3.01'
+        $version = & (Join-Path $nasmDirectory 'nasm.exe') --version
+        if ($LASTEXITCODE -ne 0 -or $version -notmatch '^NASM version 3\.01 compiled on ') { throw 'Unexpected NASM version' }
+        Write-Output $version
+        $nasmDirectory | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    - uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: 1.98.1
+        components: clippy, rustfmt
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: npm
+        cache-dependency-path: tools/delivery/package-lock.json
+    - name: Verify the official VC143 redistributable before building
+      shell: pwsh
+      run: python -c "import sys; sys.path.insert(0, 'tools'); from yueshot_runtime import find_vc_redist; print(find_vc_redist())"
+    - shell: pwsh
+      run: npm ci --prefix tools/delivery
+    - name: Audit Windows packaging dependencies
+      shell: pwsh
+      run: npm audit --prefix tools/delivery --audit-level=low
+    - uses: actions/cache/restore@v4
+      id: audit-tools
+      with:
+        path: |
+          ~/.cargo/bin/cargo-deny.exe
+          ~/.cargo/bin/cargo-audit.exe
+        key: windows-x64-rust-1.98.1-deny-0.20.2-audit-0.22.1
+    - shell: pwsh
+      run: cargo install cargo-deny --version 0.20.2 --locked
+      if: steps.audit-tools.outputs.cache-hit != 'true'
+    - shell: pwsh
+      run: cargo install cargo-audit --version 0.22.1 --locked
+      if: steps.audit-tools.outputs.cache-hit != 'true'
+    - name: Verify audit tool versions
+      shell: pwsh
+      run: |
+        if ((cargo deny --version) -ne 'cargo-deny 0.20.2') { throw 'Unexpected cargo-deny version' }
+        if ((cargo audit --version) -ne 'cargo-audit-audit 0.22.1') { throw 'Unexpected cargo-audit version' }
+    - uses: actions/cache/save@v4
+      if: steps.audit-tools.outputs.cache-hit != 'true'
+      with:
+        path: |
+          ~/.cargo/bin/cargo-deny.exe
+          ~/.cargo/bin/cargo-audit.exe
+        key: windows-x64-rust-1.98.1-deny-0.20.2-audit-0.22.1
+    - name: Identify compiler and runner image for compilation cache
+      id: cache-key
+      shell: pwsh
+      env:
+        CACHE_PROFILE: ${{ inputs.profile }}
+        CACHE_INPUT_HASH: ${{ hashFiles('Cargo.lock', 'Cargo.toml', 'rust-toolchain.toml', '.cargo/config.toml', 'apps/**/Cargo.toml', 'crates/**/Cargo.toml', 'vendor/**/Cargo.toml', 'vendor/**/snapshot.json') }}
+      run: |
+        if ($env:CACHE_PROFILE -notin @('debug','release')) { throw 'Unexpected Cargo cache profile' }
+        $rustVersion = (& rustc -Vv) -join "`n"
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot identify rustc' }
+        if (-not $env:ImageOS -or -not $env:ImageVersion -or -not $env:CACHE_INPUT_HASH) { throw 'Missing build cache identity' }
+        $identity = "$env:ImageOS|$env:ImageVersion|$rustVersion|incremental=0"
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try { $digest = [BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($identity))).Replace('-','').ToLowerInvariant() }
+        finally { $sha.Dispose() }
+        $prefix = "yueshot-rust-v1-$env:CACHE_PROFILE-$digest-"
+        "key=$prefix$env:CACHE_INPUT_HASH" >> $env:GITHUB_OUTPUT
+        "prefix=$prefix" >> $env:GITHUB_OUTPUT
+    - name: Restore Rust registry and compilation outputs
+      id: rust-cache
+      if: inputs.cold-cache != 'true'
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target/${{ inputs.profile }}
+        key: ${{ steps.cache-key.outputs.key }}
+        restore-keys: ${{ steps.cache-key.outputs.prefix }}
+    - name: Fetch locked Windows dependencies for offline audits
+      shell: pwsh
+      run: cargo fetch --locked --target x86_64-pc-windows-msvc

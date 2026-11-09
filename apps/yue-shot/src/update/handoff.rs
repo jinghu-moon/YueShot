@@ -318,7 +318,8 @@ fn install(job: &Job, installer: &Path, manifest: &Manifest) -> Result<()> {
     destination.push(install_directory);
     let result = Command::new(installer)
         .args(["/S", "/NS"])
-        .arg(destination)
+        // NSIS consumes /D= as the final raw tail; quoting a space-containing path ignores it.
+        .raw_arg(destination)
         .creation_flags(NO_WINDOW)
         .status();
     match result {

@@ -71,4 +71,8 @@ cargo xtask check
 
 实际 GUI 使用隔离数据目录验证设置页更新区域、按钮焦点、鼠标及 Enter 操作、缺少公钥时的可重试提示，并通过“退出”正常结束。签名测试数据还使用官方 Minisign 0.12 验证通过，不只依赖 Rust 验证器自身。
 
-带用户 beta 公钥的引导候选 `target/yueshot-delivery/0.1.2-beta-update-bootstrap` 已完成 Release 打包及候选校验，buildId `188b2b4f6464be6d5e52759bac04bfd060cf72cc5074545f03d5ce6df43d8711`；没有安装它或覆盖现有 Beta。dev 渠道 Release 的原生关闭窗口回归两个分支均通过，结果在 `target/update-window-close-native/report.json`。引导版与新版之间的真实升级尚待签署和发行验收。
+带用户 beta 公钥的初版引导候选 `target/yueshot-delivery/0.1.2-beta-update-bootstrap` 曾完成 Release 打包及候选校验，buildId `188b2b4f6464be6d5e52759bac04bfd060cf72cc5074545f03d5ce6df43d8711`；没有安装它或覆盖现有 Beta。随后发现下述 NSIS 路径交接缺陷，此包不再作为验收入口，须使用修复后重建的引导包。dev 渠道 Release 的原生关闭窗口回归两个分支均通过，结果在 `target/update-window-close-native/report.json`。引导版与新版之间的真实升级尚待签署和发行验收。
+
+NSIS 路径回归：官方文档要求 `/D=安装目录` 是最后一项、不能加引号，即使目录含空格。独立真实 NSIS 探针 `target/update-nsis-path-probe/result.log` 确认 `Command::arg` 会让 NSIS 忽略含空格的自定义目录，而 Windows `raw_arg` 按原目录安装。原生辅助进程 fixture 现使用含空格的目录，并检查实际原始命令行末尾；旧实现失败证据为 `target/update-nsis-spaces-before.log`。修复不放宽安装位置登记或负载哈希校验。
+
+修复后的定向回归 `target/update-nsis-spaces-after.log` 为 10 passed / 3 ignored。原生 fixture 验证成功后重启与失败后旧 EXE/数据保留；失败后重启真实旧产品仍包含在后续真实安装器验收中，不以测试 harness EXE 的启动代替。

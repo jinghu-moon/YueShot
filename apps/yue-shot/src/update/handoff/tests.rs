@@ -101,7 +101,7 @@ fn native_helper_waits_for_exit_checks_payload_and_records_success_or_failure() 
     next.pre = semver::Prerelease::EMPTY;
     next.build = semver::BuildMetadata::EMPTY;
     let next = next.to_string();
-    let base = unique_directory(&std::env::temp_dir().join("yueshot-native-update")).unwrap();
+    let base = unique_directory(&std::env::temp_dir().join("yueshot native update")).unwrap();
     for fail in [false, true] {
         let root = base.join(if fail { "failure" } else { "success" });
         for part in ["installed", "stage", "data"] {

@@ -30,7 +30,7 @@
 
 ## CI 与发行边界
 
-main 推送/PR 触发 Windows CI，只生成未签名 beta 候选和实际安装验证，公开仓库中的 Actions artifact 可被下载。它不是 GitHub Release，也不代表产品已经正式发布。
+main 推送/PR 触发 Windows CI 的完整检查与安全审计；手动勾选 delivery 或推送 yueshot-v* 标签，才在同一提交检查通过后生成未签名 beta 候选并执行实际安装验证。公开仓库中的 Actions artifact 可被下载。它不是 GitHub Release，也不代表产品已经正式发布。缓存、无缓存入口与实测耗时见 [CI 说明](ci.md)。
 
 构建镜像固定 windows-2022，与当前审查的 VS 2022 / VC143 Redist 合同一致；编译前验证官方 x64 Redist 目录。windows-latest 曾漂移到 VS 2026，其 Release 编译虽通过，却不符合该打包合同。更新编译器/运行库须一起核对工具、打包来源和权利材料，不从开发机 System32 猜测补 DLL。
 
@@ -96,7 +96,7 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 
 未签名 stable 完整 Release 候选 `target/yueshot-delivery/0.1.2-stable-unsigned-policy` 已打包并通过字节校验；隔离安装后逐项验证 payload、执行已安装 EXE smoke、检查安装器/卸载器实际 DPI manifest，再正常卸载并确认设置保留。日志 `target/unsigned-stable-package.log` 与 `unsigned-stable-smoke.log`。`release --check` 仍正确拒绝未完成的其他发行资格；没有创建正式 Release。
 
-提交 `2baabc8` 为安装界面/字体/DPI，`9ca1a2d` 为未签名策略；已推送并触发 [Windows CI 42560905403](https://github.com/jinghu-moon/YueShot/actions/runs/42560905403)。此处仅记录启动，最终结论另记，不能提前视为通过。
+提交 `2baabc8` 为安装界面/字体/DPI，`9ca1a2d` 为未签名策略；对应的 [Windows CI 42560905403](https://github.com/jinghu-moon/YueShot/actions/runs/42560905403) 已成功完成（2026-11-09 补查）。
 
 用户选择另一台 Windows 电脑做干净普通用户验收。新增可离线运行的 PowerShell 验收脚本和打包工具，目标机无需开发工具；脚本拒绝提升的管理员会话、已有同渠道安装及运行中的产品，不强杀进程。宿主只验证管理员拒绝路径和 PowerShell AST 语法；另一台电脑的正向运行与人工截图/设备验收仍等待实际结果。验收说明见 [干净用户验收](clean-user-acceptance.md)。
 
@@ -160,4 +160,8 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 
 用户在另一台 Windows Build `10.0.19044.0`、`elevated=false` 环境，提供修复包 buildId `7078e44cdc9ab4893b413e472d0f0271a76658f3d037887eb5c5ced0abc9e2b3` 的 StartManual / FinishManual 控制台结果，并明确反馈“测试没有问题”。依据紧接其前的定向复测步骤，将 X 关闭保留托盘、F5 仍可截图、托盘重新打开窗口、正常退出及卸载保留人工数据记为通过。见 [复测证据](acceptance/2026-11-09-windows-19044-close-to-tray-retest.json)。旧构建的失败记录保留。
 
-脚本原始 `manualQualification=pending` 不改写；它不自动判断人工操作，人工结论单独记录在 manualConfirmation 中。此次结论限于上述定向复测，没有据此补签睡眠恢复、真实登录自启、Explorer 重启、所有 DPI/多屏、磁盘不足、在线更新或干净运行库资格。生命周期修复提交 661b878 的 [Windows CI 42565942191](https://github.com/jinghu-moon/YueShot/actions/runs/42565942191) 本次查询仍在 cargo xtask check，尚未记录为通过；在线更新和首次公开测试发行仍未完成。
+脚本原始 `manualQualification=pending` 不改写；它不自动判断人工操作，人工结论单独记录在 manualConfirmation 中。此次结论限于上述定向复测，没有据此补签睡眠恢复、真实登录自启、Explorer 重启、所有 DPI/多屏、磁盘不足、在线更新或干净运行库资格。生命周期修复提交 661b878 的 [Windows CI 42565942191](https://github.com/jinghu-moon/YueShot/actions/runs/42565942191) 已全部通过，包含检查、安全审计、Release 打包、安装/回滚/渠道/原生关闭到托盘回归及 artifact 回读；耗时 26 分 18 秒。在线更新和首次公开测试发行仍未完成。
+
+### CI 缓存与交付分离验收通过（2026-11-09）
+
+提交 b93e511 将普通 push/PR 的完整检查、安全审计与手动/标签触发的完整交付拆成两个任务，保留所有原有门禁；增加分离的 debug/release 编译缓存、同 ref 旧运行取消及无编译缓存入口。普通 push [42570052468](https://github.com/jinghu-moon/YueShot/actions/runs/42570052468) 在首次无编译缓存下通过，delivery 按设计跳过。随后同一提交的手动完整运行 [42571676485](https://github.com/jinghu-moon/YueShot/actions/runs/42571676485) 全部成功，debug 精确命中缓存后 verify 为 7 分 27 秒，首次无 release 缓存的 delivery 为 14 分 01 秒；安装/回滚/渠道/关闭到托盘与 artifact 回读全部通过。实际范围、耗时和缓存限制见 [CI 说明](ci.md)。本轮没有发布 Release，也没有据此补签任何尚未完成的产品发行资格。

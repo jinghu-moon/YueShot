@@ -44,4 +44,18 @@ cold_build=true 跳过 Rust registry / target 缓存的恢复及写入，仍可�
 
 优化前，生命周期修复提交 661b878 的 Windows CI 42565942191 总耗时 26 分 18 秒（2026-11-09 05:12:29–05:38:47 UTC）。cargo xtask check 为 12 分 02 秒，Release 打包为 12 分 14 秒，安装回归 18 秒。该运行全部通过。
 
-本次不更改产品代码或降低检查标准。验证分为 workflow/action 语法和 PowerShell 解析、本地工具回归、远程普通提交确认 delivery 跳过、再次运行确认缓存恢复，以及手动完整交付验证。优化后的实际耗时和缓存命中需以运行结果补记，不能把去掉普通提交的打包时间直接当成编译缓存收益。
+本次不更改产品代码或降低检查标准。workflow 通过 actionlint 1.7.11，workflow/action YAML 和全部 PowerShell 脚本解析通过，48 项 Python 工具回归通过。原有 `cargo xtask check` 脚本和交付验证步骤保持不变。
+
+2026-11-09 对照实测（优化后两轮均为提交 b93e511）：
+
+| 运行 | 范围 / 缓存 | 总耗时 | cargo xtask check | 结果 |
+| --- | --- | --- | --- | --- |
+| [42565942191](https://github.com/jinghu-moon/YueShot/actions/runs/42565942191) | 优化前，检查与交付串行 | 26 分 18 秒 | 12 分 02 秒 | 全部通过 |
+| [42570052468](https://github.com/jinghu-moon/YueShot/actions/runs/42570052468) | 普通 push，首次无 Rust 编译缓存 | verify 15 分 01 秒 | 12 分 14 秒 | 检查/审计通过；delivery 按设计跳过；缓存保存成功 |
+| [42571676485](https://github.com/jinghu-moon/YueShot/actions/runs/42571676485) | 同一提交，手动完整交付，debug 精确命中，release 首次无缓存 | verify 7 分 27 秒；delivery 14 分 01 秒；全程 21 分 30 秒 | 5 分 13 秒 | 检查、审计、完整交付全部通过 |
+
+第二轮相较第一轮无编译缓存的 verify 缩短约 50%，计入环境准备和缓存下载/解压时间。debug 缓存压缩后约 1.63 GB，恢复约 80 秒；工作区及受控快照中的本地 crate 仍按 Cargo 指纹重新编译。每轮均实际执行 48 项 Python 测试、1,087 次 Rust 通过（含显式筛选重测）、105 次 ignored 出现及完整审计；ignored 不计作通过。此次为相同源码的单轮对照，不承诺后续源码变动、依赖变动或镜像更新后的固定耗时，也不将省略日常打包的收益归为缓存收益。
+
+手动完整交付的 Release 打包为 11 分 42 秒，实际安装/回滚/渠道与原生关闭到托盘回归为 17 秒；artifact 上传、下载及候选逐项字节校验全部通过。上传与下载整包 SHA-256 均为 `3d12f25b019d0d860b995dc6993d9edb0357630e92312b8a717115007941971c`。安全审计为 0 blocking、0 maintenance notices，15 条产品图外记录保留。候选的 release readiness 仍为 false，没有创建 GitHub Release。
+
+本轮还成功保存了独立的 release 编译缓存，压缩后约 0.83 GB；尚未实测 release 缓存恢复后的交付耗时，不据此承诺交付速度。现有证据只证明 debug 缓存恢复有效，以及首次建立 release 缓存时完整交付流程通过。

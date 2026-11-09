@@ -46,7 +46,7 @@ Rust 编译缓存按 runner 镜像、编译器、debug/release、锁文件及配
 生命周期验证状态及未完成项见 [交付状态](docs/lifecycle.md)。
 日常交付按 [发布操作手册](docs/release-runbook.md) 执行；修改后的验证范围见 [回归基线](docs/regression-baseline.md)，当前发行边界见 [已知限制](docs/known-limitations.md)。
 用户已确认登录自启、Explorer 重启后托盘恢复和睡眠唤醒后的截图/保存正常，范围见 [人工验收](docs/acceptance/2026-11-09-beta-lifecycle-manual.json)；重复循环与资源稳定性另计。
-设置页已接入按需检查、认证下载与退出安装更新；当前 [0.1.4 Beta](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.4) 及 Beta 签名更新源已公开，公开回读与客户端同源代码的检查/下载/验签通过。用户已确认的是此前 0.1.2 → 0.1.3 升级，0.1.3 → 0.1.4 的实际安装重启/数据保留仍待验收；dev/stable 尚未配置公钥，会明确拒绝更新。协议、发布者命令及验收边界见 [在线更新](docs/updates.md)。
+设置页已接入按需检查、认证下载与退出安装更新；当前 [0.1.4 Beta](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.4) 及 Beta 签名更新源已公开，公开回读与客户端同源代码的检查/下载/验签通过。用户已确认 0.1.2 → 0.1.3 及 0.1.3 → 0.1.4 的实际在线升级、自动重启、设置和截图保留正常；dev/stable 尚未配置公钥，会明确拒绝更新。协议、发布者命令及验收边界见 [在线更新](docs/updates.md)。
 
 ## 工程边界
 

@@ -1,0 +1,28 @@
+{
+  "format": 1,
+  "reportedOn": "2026-11-09",
+  "source": "User confirmation in this conversation; not independently executed on the target PC by the agent",
+  "product": "YueShot",
+  "channel": "beta",
+  "fromVersion": "0.1.3",
+  "toVersion": "0.1.4",
+  "versionRelease": "https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.4",
+  "feedRelease": "https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-updater-beta",
+  "manualConfirmation": {
+    "statement": "测试没有问题。流程跑通了吗？",
+    "precedingInstruction": "在 0.1.3 测试机检查更新，确认升级到 0.1.4 后自动重启、设置和截图保留正常",
+    "status": "passed-for-reported-scope",
+    "checks": [
+      "actual online upgrade to 0.1.4",
+      "automatic restart after installation",
+      "existing settings and screenshots retained"
+    ]
+  },
+  "conclusion": "normal Beta release/update lifecycle is closed for the reported scope",
+  "notEstablishedByThisReport": [
+    "OS build, account elevation, clean-runtime or minimum-system qualification for this specific run",
+    "independently inspected updater receipt or byte-level before/after data hashes",
+    "failure recovery under power loss, network disconnection or registry failure",
+    "stable feed/key qualification and remaining redistribution-terms review"
+  ]
+}

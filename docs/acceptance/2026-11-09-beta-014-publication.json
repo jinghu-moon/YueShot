@@ -1,7 +1,7 @@
 {
   "format": 1,
   "recordedAt": "2026-11-09T11:56:52.739895+00:00",
-  "status": "passed-publication-and-network-scope; installed-upgrade-pending",
+  "status": "passed-publication-network-and-user-reported-normal-upgrade-scope; stable qualification remains open",
   "authorization": {
     "userInstruction": "开始吧",
     "scope": "execute discussed two-version-assets scheme and publish 0.1.4 Beta with paired Beta feed"
@@ -92,6 +92,11 @@
     "jobs": [
       {
         "name": "verify",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "delivery",
         "status": "in_progress",
         "conclusion": ""
       }
@@ -99,7 +104,7 @@
   },
   "readyForRelease": false,
   "qualificationLimits": [
-    "no actual installed 0.1.3 -> 0.1.4 installer/restart/data-preservation qualification in this run",
+    "installed 0.1.3 -> 0.1.4 normal upgrade/restart/data retention now confirmed by user separately; not independently executed on target PC by agent",
     "native probe extracts the exact candidate code but is not the GPUI user interface",
     "tag-triggered delivery CI recorded separately; running/skipped is not passed",
     "remaining Microsoft runtime redistribution review, minimum OS/runtime/devices, failure modes and stable-key qualification remain open"
@@ -109,5 +114,7 @@
     "target/yueshot-updates/0.1.4-beta/two-assets/publication-evidence/",
     "target/update-014-live-network-probe/source-evidence.json",
     "target/update-014-live-network-probe/result.log"
-  ]
+  ],
+  "lastUpdatedAt": "2026-11-09T12:04:34.549465+00:00",
+  "userReportedInstalledUpgrade": "docs/acceptance/2026-11-09-beta-013-to-014-online-upgrade.json"
 }

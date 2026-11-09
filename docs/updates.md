@@ -164,3 +164,15 @@ GitHub 自动生成的 Source code ZIP/tar.gz 条目不计作手动附件，也�
 该二进制源码的完整 [Windows CI](https://github.com/jinghu-moon/YueShot/actions/runs/42602126904) 及此前本地 Release 构建证据继续有效。
 本次 tag 另触发交付 CI，其状态单独记录，不把已启动当作通过。
 结构化证据见 [发布验收](acceptance/2026-11-09-beta-014-publication.json)。`readyForRelease=false` 与剩余稳定资格保留。
+
+## 0.1.3 → 0.1.4 用户确认与闭环
+
+在要求从 0.1.3 测试机检查更新并确认“升级到 0.1.4 后自动重启、设置和截图保留”后，
+用户回复“测试没有问题。流程跑通了吗？”。据此记为该范围的正常在线升级通过，
+见 [人工验收记录](acceptance/2026-11-09-beta-013-to-014-online-upgrade.json)。
+由此形成开发/检查 → 构建与安装 → 签署 → 两附件公开发布 → 渠道清单 → 客户端认证下载 → 安装重启与数据保留的正常 Beta 闭环。
+此前独立安装、重装、卸载留数据及常驻运行的资格继续按各自版本/环境证据保留。
+
+该用户报告未提供 OS build、干净运行库状态、独立字节对照或升级回执，不扩展为所有系统/设备或故障场景均通过。
+tag CI 的 verify 已成功，delivery 仍在构建检查中；这不抵消已通过的本地 Release 与实际升级证据，也不把该轮 CI 提前记为成功。
+stable 公钥/更新源、分发条款、最低系统/运行库和剩余故障资格仍按 [已知限制](known-limitations.md) 收口。

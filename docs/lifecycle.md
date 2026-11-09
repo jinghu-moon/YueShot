@@ -1,6 +1,6 @@
 # 生命周期与交付状态
 
-2026-11-09。开发版本 0.1.3，Windows x64，默认 SDR。产品源码已从 SnapClip 工作区独立，当前阶段允许完善生命周期机制，禁止新增截图功能。
+2026-11-09。开发版本 0.1.4（Beta 准备中），公开测试版仍为 0.1.3 Beta，Windows x64，默认 SDR。产品源码已从 SnapClip 工作区独立，当前阶段允许完善生命周期机制，禁止新增截图功能。
 
 ## 已有验证
 
@@ -210,3 +210,13 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 已补齐 [发布操作手册](release-runbook.md)、[回归基线](regression-baseline.md) 与 [已知限制](known-limitations.md)。
 [分发权利](distribution-rights.md) 已明确微软运行库的剩余下游条款问题，并移除已完成的图标来源/更新真实性/密钥恢复待办。
 本轮没有批准或自行添加新的微软下游协议，也没有勾选稳定发行资格；实际断网、断电、注册表写失败及其余环境/稳定性资格仍单列。
+
+后续 [下载卷磁盘不足补测](upgrade-failure-qualification.md#下载卷磁盘不足补测) 已通过：公开 Beta 签名源、实际 WinHTTP 下载在受控 VHD 写满时返回 112，
+专用暂存目录完全清理；释放空间后，同一签名清单/安装器下载、大小和哈希验证通过。两阶段均显式执行 1 passed / 0 ignored，
+未触碰现有 Beta 安装或执行下载包。安装卷与下载卷的磁盘不足现在均有实际本地证据；真实断网、断电和注册表写失败仍另计。
+上一轮提交 `e0be985` 的公开 CI verify/security 已通过，见 [运行 42596214399](https://github.com/jinghu-moon/YueShot/actions/runs/42596214399)，不冒充本轮改动或完整交付 CI 的结果。
+
+0.1.4 仅为交付已有安装器修复提升产品版本，没有新增截图功能。许可清单经审查仅变更产品自身版本，第三方闭包/原文哈希不变。
+本地 `cargo xtask check` 完整通过：51 项 Python、1,097 次 Rust passed、109 次 ignored 出现（ignored 不计通过），
+包含严格 AVIF/HDR Clippy、workspace 和依赖边界；日志 `target/update-space-014-full-check-final.log`。
+新增磁盘不足网络资格的两阶段通过单独记录，未并入上述默认检查计数。下一步从干净提交构建 Beta，准备待签署材料；不覆盖公开 0.1.3 资产。

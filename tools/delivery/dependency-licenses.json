@@ -9079,7 +9079,7 @@
     },
     {
       "name": "yue-shot",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "licenseDeclared": "AGPL-3.0-only",
       "selectedFeatures": [
         "default"

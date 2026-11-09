@@ -41,7 +41,7 @@ cargo xtask package --profile release --channel beta
 普通 push / PR 的 Windows CI 执行完整检查与安全审计，不再每次构建安装包。手动运行时勾选 `delivery`，或推送 `yueshot-v*` 标签，才在同一提交检查通过后执行完整 Release 构建、安装回归及 artifact 上传/下载校验；不创建 GitHub Release，也不代表正式发行资格。
 Rust 编译缓存按 runner 镜像、编译器、debug/release、锁文件及配置区分，不缓存交付物或检查结论；手动勾选 `cold_build` 可绕过编译缓存，保留干净构建验证入口。详见 [CI 说明](docs/ci.md)。
 生命周期验证状态及未完成项见 [交付状态](docs/lifecycle.md)。
-设置页已接入按需检查、认证下载与退出安装更新；beta 已配置用户提供的公钥，0.1.3 清单已在本机签署并验证，线上发布及完整在线升级验收尚未完成；dev/stable 尚未配置公钥，会明确拒绝更新。协议、发布者命令及验收边界见 [在线更新](docs/updates.md)。
+设置页已接入按需检查、认证下载与退出安装更新；[0.1.3 beta](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.3) 及签名更新源已公开，实际客户端检查/下载/验签通过，已安装客户端的升级重启验收仍待完成；dev/stable 尚未配置公钥，会明确拒绝更新。协议、发布者命令及验收边界见 [在线更新](docs/updates.md)。
 
 ## 工程边界
 

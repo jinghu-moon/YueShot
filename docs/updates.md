@@ -1,6 +1,6 @@
 # YueShot 在线更新
 
-Windows x64，按 dev / beta / stable 分离。当前已经接入客户端与本地进程回归；用户在 2026-11-09 本机生成带密码的 beta 私钥，并提供公钥，beta 信任根已经配置。0.1.3 beta 清单已由用户在本机签署并通过官方工具与客户端验签库验证；尚未上传签名清单或完成真实版本之间的在线 NSIS 升级验收。安装包仍可不做 Authenticode 签名；这里的 Minisign 签名用于更新来源认证，二者独立。
+Windows x64，按 dev / beta / stable 分离。当前已经接入客户端与本地进程回归；用户在 2026-11-09 本机生成带密码的 beta 私钥，并提供公钥，beta 信任根已经配置。0.1.3 beta 与签名更新源已获用户确认并公开发布；真实客户端检查、下载与验签通过，已安装客户端的 NSIS 升级、重启与数据保留仍待验收。安装包仍可不做 Authenticode 签名；这里的 Minisign 签名用于更新来源认证，二者独立。
 
 ## 用户流程与所有权
 
@@ -92,3 +92,13 @@ NSIS 路径回归：官方文档要求 `/D=安装目录` 是最后一项、不�
 | 新 EXE | `755569a140928e026c8bb8794fe16c0f457435d5a49f7ea4409613413b6690dd` |
 
 本机 `target/yueshot-updates/0.1.3-beta/release-plan.md` 与 `publication-plan.json` 列出待审的两个公开预发布：版本 `yueshot-v0.1.3` 固定上述提交，附安装器、对应源码、依赖源码、许可材料、签名清单与校验和；滚动源 `yueshot-updater-beta` 仅附同一份清单与签名。发布备注已准备，未创建标签、Release 或上传资产。公开预发布会让 beta 客户端发现更新，需要用户确认该发布范围。`readyForRelease=false`、生产密钥恢复、分发条款和剩余设备资格继续保留；签署成功不代表真实在线升级已通过。
+
+## 公开 beta 与真实下载验收（2026-11-09）
+
+用户明确回复“可以”授权上述公开 beta 方案。已先上传并核对版本预发布全部 9 个资产的远端大小、SHA-256、固定提交和预发布状态，再公开 [YueShot 0.1.3 Beta](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-v0.1.3)。通过不带 GitHub 认证的公开 HTTPS 地址回读安装器及签名材料，字节和签名均一致后，才公开 [Beta Update Feed](https://github.com/jinghu-moon/YueShot/releases/tag/yueshot-updater-beta)。两者均为 prerelease，不设为稳定 latest；没有将候选 readyForRelease 改为 true。
+
+产品 WinHTTP/清单/暂存代码的独立网络探针使用内置 beta 公钥和 0.1.2 版本下限，实际访问滚动源，认证清单并下载真实 NSIS 安装包，检查精确大小、哈希，以及 0.1.3 客户端不接受重复升级；结果 `target/update-live-network-probe/result.log`，来源哈希及探针范围在同目录 source-evidence.json。它不执行安装器，不代替安装重启验收。
+
+实际引导版 EXE 使用隔离数据目录 `target/update-published-ui-visible`，通过 computer-use 实际点击“设置 → 检查更新”，显示“发现新版本 0.1.3”；点击“下载更新”，最终显示“版本 0.1.3 已下载并通过验证”和“退出并安装更新”。随后通过产品“退出”结束，窗口和进程已消失，没有点击安装、修改 HKCU 安装登记或覆盖用户现有 Beta。
+
+另一台普通用户电脑的验收包为 `target/yueshot-acceptance/0.1.2-to-0.1.3-beta-online.zip`，ZIP CRC 通过；含修复后的 0.1.2 引导安装器、对应/依赖源码、公开签名材料、公钥、expected.json 和 READ-ME.md，不含私钥。使用该电脑尚未安装 Beta 的普通用户安装引导版，建立测试设置与截图，再执行检查/下载/退出安装，核对自动重启到 0.1.3、自定义目录、设置和原图保留。尚未收到该真实升级结果，不能据发布成功勾选完整更新资格。

@@ -36,7 +36,7 @@ cargo xtask package --profile release --channel beta
 实际安装与升级脚本位于 `tools/test-yueshot-*.ps1`，开始前正常退出 YueShot；不会强杀产品进程。
 
 候选包含程序、安装器、VC runtime、许可、对应源码、PDB 与精确构建标识。默认保留卸载后的用户数据。
-0.1.2 → 0.1.3 beta 在线升级、自动重启、设置和截图保留已获用户实测确认；beta 密钥独立 USB 备份、恢复及实际签署/验签通过，物理拔插复读、轮换、完整分发权利及剩余环境/设备验收仍待完成。
+0.1.2 → 0.1.3 beta 在线升级、自动重启、设置和截图保留已获用户实测确认；beta 密钥独立 USB 备份、恢复、实际签署/验签及拔插后复读通过，轮换、完整分发权利及剩余环境/设备验收仍待完成。
 用户选择不做 Windows Authenticode 代码签名，所有渠道均允许生成未签名候选；`release --check` 仍拒绝尚未满足其他发行验收的候选。更新包真实性签名独立于代码签名。
 普通 push / PR 的 Windows CI 执行完整检查与安全审计，不再每次构建安装包。手动运行时勾选 `delivery`，或推送 `yueshot-v*` 标签，才在同一提交检查通过后执行完整 Release 构建、安装回归及 artifact 上传/下载校验；不创建 GitHub Release，也不代表正式发行资格。
 Rust 编译缓存按 runner 镜像、编译器、debug/release、锁文件及配置区分，不缓存交付物或检查结论；手动勾选 `cold_build` 可绕过编译缓存，保留干净构建验证入口。详见 [CI 说明](docs/ci.md)。

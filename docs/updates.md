@@ -40,7 +40,7 @@ minisign -G -p D:\YueShot-Release\beta.pub -s D:\YueShot-Release\beta.key
 python tools/yueshot-update.py trust --channel beta --public-key D:\YueShot-Release\beta.pub
 ```
 
-目录需预先创建。不要加 `-W` 取消密码保护。公钥改动审查后重新构建客户端，已经安装的旧客户端不会动态读取仓库文件。正式发行前另行完成离线备份、恢复及轮换演练；本次没有自动创建生产私钥或声称其已备份。
+目录需预先创建。不要加 `-W` 取消密码保护。公钥改动审查后重新构建客户端，已经安装的旧客户端不会动态读取仓库文件。生产私钥由用户创建并保管；独立 USB 备份、恢复和拔插后复读的实际结果见 [恢复演练](update-key-recovery.md)，密钥轮换仍待验证。
 
 验证候选后，生成待签署材料：
 
@@ -63,7 +63,7 @@ cargo xtask check
 
 原生回归从独立临时目录启动真实父/辅助进程，动态签署测试清单，验证提交前及父进程退出前都不运行安装器、安装后校验与重启、失败保留旧 EXE 和用户数据。它使用专门编译的安装器/负载 fixture，不触碰 HKCU 的真实安装登记，也不冒充真实 NSIS 在线升级验收。两个 ignored 子进程入口由该回归显式执行；网络资格用例需显式运行，ignored 不计作通过。
 
-真实签名清单 → HTTPS 下载 → 已安装旧版 → 新版 NSIS → 重启及设置/截图保留已获用户实测确认，范围见文末；生产 beta 密钥已通过独立 USB 备份、恢复及实际签署/验签，物理拔插与轮换资格另计。已完成的自动安装/回滚/渠道回归继续保留。
+真实签名清单 → HTTPS 下载 → 已安装旧版 → 新版 NSIS → 重启及设置/截图保留已获用户实测确认，范围见文末；生产 beta 密钥已通过独立 USB 备份、恢复、实际签署/验签及拔插后复读，轮换资格另计。已完成的自动安装/回滚/渠道回归继续保留。
 
 2026-11-09 本地证据：更新定向回归 10 passed / 3 ignored；两个子进程入口在原生回归中显式调用，HTTPS 用例另行实际执行 1 passed / 0 ignored。`cargo xtask check` 已通过，含 51 项 Python、1,096 次 Rust 通过与 107 次 ignored 出现（当时未包含随后新增的注册表读取用例和 HTTPS ignored 入口，新增用例另行定向通过）。安全审计 0 blocking / 0 maintenance notices，15 条产品图外记录保留。
 

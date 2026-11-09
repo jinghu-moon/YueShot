@@ -3,12 +3,13 @@
   "reportedOn": "2026-11-09",
   "product": "YueShot",
   "channel": "beta",
-  "status": "passed-backup-restore-signing",
+  "status": "passed-backup-restore-signing-and-reconnect-readback",
   "scope": [
     "owner-authorized encrypted-key backup to independently identified removable USB storage",
     "original/USB backup/restored file hashes compared equal without recording private-key hashes",
     "owner supplied password locally while signing with the restored private-key path",
-    "Minisign 0.12 verified challenge and comment signature using the original embedded beta public key"
+    "Minisign 0.12 verified challenge and comment signature using the original embedded beta public key",
+    "owner reported safe eject and reinsertion; agent reidentified USB removable storage, reread backup key/public/challenge, compared exact bytes via hashes and reverified the public message signature"
   ],
   "publicKey": "RWRPrtKhF/f6lRgLLGrdWRDJ7nekzqDkFWKoD8QPOJrsqWoRcMNhR7ZJ",
   "publicEvidence": {
@@ -18,9 +19,19 @@
   "verifierOutput": "Signature and comment signature verified",
   "privateKeyOrPasswordIncluded": false,
   "remaining": [
-    "physical USB disconnect/reconnect readback not performed",
     "key rotation not exercised",
     "loss/compromise recovery not qualified"
   ],
-  "targetSignatureCommandSource": "User-provided terminal command explicitly used the restored private-key path; agent did not enter password."
+  "targetSignatureCommandSource": "User-provided terminal command explicitly used the restored private-key path; agent did not enter password.",
+  "physicalDisconnectReconnect": {
+    "ownerStatement": "\u5df2\u7ecf\u5b89\u5168\u5f39\u51fa\uff0c\u7136\u540e\u91cd\u65b0\u63d2\u5165",
+    "agentChecks": [
+      "USB removable device reidentified after owner confirmation",
+      "backup key and public key SHA-256 match original and previously verified restored files",
+      "USB public challenge matches original expected hash",
+      "Minisign verifies USB challenge against existing restored-key signature and original embedded public key"
+    ],
+    "status": "passed",
+    "privateKeyContentsOrHashRecorded": false
+  }
 }

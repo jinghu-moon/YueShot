@@ -154,3 +154,10 @@ windows-2022 还需显式安装 NASM：缺失时现有 AVIF 严格 Clippy 在 ze
 `cargo test -p yue-shot --features test-support --locked --lib -- --test-threads=1` 为 254 passed / 4 ignored / 0 failed；另显式运行既有窗口关闭/托盘健康测试 1 passed / 0 ignored。48 项 Python 测试通过；`cargo clippy -p yue-shot --all-targets --features test-support,avif,hdr-capture --locked -- -D warnings` 通过；产品既有范围 fmt 与修改的 Windows platform 文件 rustfmt 通过。一次扩大到 `cargo fmt --all` 的检查发现历史未格式化的 `yue-image-codec` 和快照 `image_preview` 文件，未将这些无关格式修改混入修复，也不宣称全仓 fmt 通过。
 
 新验收 ZIP 为 `target/yueshot-acceptance/0.1.2-x64-close-to-tray-fixed.zip`，候选字节校验和 ZIP CRC/无 results 的初始清单检查通过。需用户在另一台电脑解压到新目录，用 `StartManual` 重点复测 X 后托盘/热键和重新打开，再正常退出并执行 `FinishManual`；不能复用上轮 buildId 的人工资格。上一轮安装器提交 d674951 的 [Windows CI 42563037473](https://github.com/jinghu-moon/YueShot/actions/runs/42563037473) 已全部通过，本次生命周期修复的 CI 结果另计。
+
+
+### 主窗口关闭修复的普通用户复测通过（2026-11-09）
+
+用户在另一台 Windows Build `10.0.19044.0`、`elevated=false` 环境，提供修复包 buildId `7078e44cdc9ab4893b413e472d0f0271a76658f3d037887eb5c5ced0abc9e2b3` 的 StartManual / FinishManual 控制台结果，并明确反馈“测试没有问题”。依据紧接其前的定向复测步骤，将 X 关闭保留托盘、F5 仍可截图、托盘重新打开窗口、正常退出及卸载保留人工数据记为通过。见 [复测证据](acceptance/2026-11-09-windows-19044-close-to-tray-retest.json)。旧构建的失败记录保留。
+
+脚本原始 `manualQualification=pending` 不改写；它不自动判断人工操作，人工结论单独记录在 manualConfirmation 中。此次结论限于上述定向复测，没有据此补签睡眠恢复、真实登录自启、Explorer 重启、所有 DPI/多屏、磁盘不足、在线更新或干净运行库资格。生命周期修复提交 661b878 的 [Windows CI 42565942191](https://github.com/jinghu-moon/YueShot/actions/runs/42565942191) 本次查询仍在 cargo xtask check，尚未记录为通过；在线更新和首次公开测试发行仍未完成。

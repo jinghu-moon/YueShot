@@ -1,0 +1,53 @@
+{
+  "source": "User-supplied console JSON and explicit manual test confirmation; not independently executed by the agent",
+  "reportedOn": "2026-11-09",
+  "reports": [
+    {
+      "format": 1,
+      "version": "0.1.2",
+      "channel": "stable",
+      "buildId": "7078e44cdc9ab4893b413e472d0f0271a76658f3d037887eb5c5ced0abc9e2b3",
+      "manualQualification": "pending",
+      "osBuild": "10.0.19044.0",
+      "elevated": false,
+      "mode": "StartManual",
+      "status": "awaiting-manual-tests",
+      "checks": [
+        "non-elevated Windows x64 session",
+        "installer bytes verified (integrity check, not update authentication)",
+        "installed payload hashes and channel registration",
+        "installed exe loaded its runtime and read/wrote isolated settings/storage",
+        "opened installed GUI with isolated manual-test data"
+      ]
+    },
+    {
+      "format": 1,
+      "version": "0.1.2",
+      "channel": "stable",
+      "buildId": "7078e44cdc9ab4893b413e472d0f0271a76658f3d037887eb5c5ced0abc9e2b3",
+      "manualQualification": "pending",
+      "osBuild": "10.0.19044.0",
+      "elevated": false,
+      "mode": "FinishManual",
+      "status": "passed-automated-checks",
+      "checks": [
+        "non-elevated Windows x64 session",
+        "installer bytes verified (integrity check, not update authentication)",
+        "installed payload hashes and channel registration",
+        "uninstall removed owned program/registration and retained test data",
+        "all manual-session data bytes retained"
+      ]
+    }
+  ],
+  "manualConfirmation": {
+    "statement": "测试没有问题",
+    "status": "passed",
+    "scope": [
+      "main window X retains tray",
+      "F5 capture remains available after main window closes",
+      "tray can reopen main window",
+      "normal Exit followed by successful FinishManual"
+    ],
+    "scopeBasis": "The targeted retest steps immediately preceding the user response; does not certify other unreported device or lifecycle checks."
+  }
+}

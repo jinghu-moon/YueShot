@@ -53,6 +53,10 @@ pub mod units;
 pub mod window_detection;
 pub mod windows;
 
+// P2 reference and competing proposals stay out of the product until selection.
+#[cfg(test)]
+mod visual_detection;
+
 pub use artifact::{CaptureService, PixelSliceSource, SelectionPixels};
 pub use error::{CaptureError, CaptureResult};
 pub use ports::{ArtifactWriter, CaptureEventSink, ClipboardWriter, OverlayPlatform};

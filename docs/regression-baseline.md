@@ -75,3 +75,11 @@
 | mark-shot 区域模块临时独立 harness（另计） | 5 | 0 | 0 |
 
 命令、参考版本哈希及证据边界见[设计文档附录 A](visual-candidate-pipeline.md#附录-a初稿研究执行记录)。原始日志仍位于临时目录，摘要持久化不等于原始日志已归档；ignored、完整 `cargo xtask check`、新 golden、新算法和正式性能对照未在该轮执行。实施时须将新批次的原始日志、环境、退出码及未覆盖项持久保存到 `docs/acceptance/`，不能借用本摘要作为新候选资格。
+
+## 视觉候选实施 P2（2026-11-16，开发阶段通过）
+
+从`3990eae`开始，算法与图形探针仅`cfg(test)`，产品仍为Window／Accessibility两来源。HTML4.1的119张PNG与v4字节相同，另固定8K小目标图。A/B同集191查询（136适用硬查询）：A全部正确且Complete；B几何全部正确但2项预算溢出，选择A＋CPU，不保留B产品路线。22项视觉测试含4项显式ignored探针均实际执行通过；137条按需读取与完整源一致，追加最大541888字节。
+
+最后回归：capture591／95 ignored，media8、geometry10、native-baseline11、selection-target3、真实窗口3以及既有9项原生／GPU资格全部实跑通过；ignored未执行者不算通过。P0 golden字节不变。`cargo xtask check`退出0。源位不变、数值／定位／采样／容量／等变合同均有独立结果；[记录与覆盖表](acceptance/visual-candidate-p2/README.md)、[阶段门](acceptance/visual-candidate-p2/stage-gate.json)。
+
+真实按需GPU小Map约153～302ms，性能失败；CPU计算P95最高约2.478ms，8K ROI同步读回P95约1.737ms。因此进入P3有界批量异步传输，不引入计算shader；P3/P4/P5尚未完成，不能称局部25ms／UI1ms或真实宿主统计资格已通过。原生K01～K03仍按基线复现，未在算法阶段夹带修复。

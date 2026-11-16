@@ -4,6 +4,9 @@
 //! device is removed) and reuses it across capture sessions. Only the swap chain is
 //! recreated when the overlay moves to a monitor with different dimensions.
 
+#[cfg(test)]
+mod visual_readback;
+
 use ::windows::Win32::Foundation::HWND;
 use ::windows::Win32::Graphics::Direct2D::Common::{
     D2D1_ALPHA_MODE, D2D1_ALPHA_MODE_PREMULTIPLIED, D2D1_PIXEL_FORMAT,

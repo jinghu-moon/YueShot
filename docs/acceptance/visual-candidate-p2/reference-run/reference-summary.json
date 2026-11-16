@@ -1,0 +1,66 @@
+{
+  "scope": "P2 reference experiments only; not complete pipeline or stage qualification",
+  "revision": "3990eae1375dfd5bb3b94ef56796424c5d580231",
+  "workingTree": [
+    " M Cargo.lock",
+    " M apps/yue-shot/crates/yue-shot-capture/Cargo.toml",
+    " M apps/yue-shot/crates/yue-shot-capture/src/lib.rs",
+    " M apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11.rs",
+    "?? .playwright-mcp/",
+    "?? apps/yue-shot/crates/yue-shot-capture/src/visual_detection/",
+    "?? apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11/",
+    "?? apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-8k-v4/",
+    "?? docs/acceptance/visual-candidate-p2/",
+    "?? tools/test-visual-candidate-p2.ps1"
+  ],
+  "command": "cargo test -p yue-shot-capture --release --locked --lib visual -- --nocapture --test-threads=1 --include-ignored",
+  "started": "2026-11-16T22:07:53.7892268+08:00",
+  "finished": "2026-11-16T22:09:54.1565349+08:00",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "exitCode": 0,
+  "passed": 11,
+  "ignored": 0,
+  "referenceChecksPassed": true,
+  "stageStatus": "in_progress",
+  "sourceSha256": {
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/mod.rs": "b3be04cb9161d3fa9f52d9b44a5d2660a3e06e83348d973dfddfacc864e7a8b8",
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/proposals.rs": "8d6ed310077bb22c9071f254fbcf733353d0fffdb6889a420134e2248c4e99fe",
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/tests.rs": "a6e01da0f361db47fb4cb028e5625810584c31579d7a74a833b303b06d511567",
+    "apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11/visual_readback.rs": "d3c8c60ec353e6d2516f9b8d67a722afcba4d7c597390191e48875c1284e9124",
+    "apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-v4/dataset-lock.json": "832e0387c268bcc1300b61072702db58192cb8ab8eab8ed6b351291d46f8aa4d",
+    "apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-8k-v4/dataset-lock.json": "c93be111cf7f8a1e28aae2b3dc28b34242a927f5d89717775b48bc090a0ce975",
+    "Cargo.lock": "79fe19f0724df4b0c18ccad3d39eaca7f586f9a508a08a553e5802dbcc8d3c30",
+    "apps/yue-shot/crates/yue-shot-capture/Cargo.toml": "3ed041f01a0d77048f6a2fd57de64b9f91faff0f32d461f603ba3cfa2977089e",
+    "tools/test-visual-candidate-p2.ps1": "28858f6e57c5673f1598bf1ef43c4f07c0a429e055b068dc7967051dc7129cdd"
+  },
+  "logSha256": "086e6c6fa5361889beab78823be572248876dcdd63ac786a1ea1e2976261f736",
+  "routes": [
+    {
+      "route": "A",
+      "hardQueries": 136,
+      "geometryPassed": 136,
+      "complete": 136,
+      "failedQueries": []
+    },
+    {
+      "route": "B",
+      "hardQueries": 136,
+      "geometryPassed": 132,
+      "complete": 136,
+      "failedQueries": [
+        "Q07-cross-q1",
+        "Q07-cross-q2",
+        "Q07-cross-g1-exclusive",
+        "Q07-cross-g2-exclusive"
+      ]
+    }
+  ],
+  "measured": true,
+  "remaining": [
+    "full B global/ROI ablation",
+    "bounded owned-region worker/readback end-to-end prototype",
+    "remaining applicable numeric/capacity/stage contracts",
+    "profile freeze and final algorithm/backend decision",
+    "independent real qualification remains P4/P5"
+  ]
+}

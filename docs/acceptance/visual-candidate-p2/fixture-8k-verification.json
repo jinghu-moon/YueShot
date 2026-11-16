@@ -1,0 +1,48 @@
+{
+  "scope": "frozen_synthetic_inputs_only",
+  "status": "passed",
+  "decoder": "Pillow 11.1.0",
+  "counts": {
+    "top_level_contracts": 1,
+    "comparison_variants": 0,
+    "png_assets": 1
+  },
+  "decoded_rgba_bytes": 132710400,
+  "manifest_sha256": "8acde5dfcbd25b189d10f257bc10b5930ea4ecb66a8336aee2436a117606de5d",
+  "dataset_lock_sha256": "c93be111cf7f8a1e28aae2b3dc28b34242a927f5d89717775b48bc090a0ce975",
+  "generator_contract_checks": {
+    "scope": "fixture_contract_and_geometry_oracle_only",
+    "total": 23,
+    "passed": 23,
+    "errors": [],
+    "names": [
+      "negative tolerance rejected",
+      "unknown op rejected",
+      "unknown stage rejected",
+      "missing query annotation rejected",
+      "invalid stage geometry rejected",
+      "unknown event rejected",
+      "missing checkpoint rejected",
+      "integer inner edge rejected",
+      "one output cannot satisfy two targets",
+      "matching uses augmenting path and is order stable",
+      "Q08 constant outputs rejected",
+      "Q08 precise stage outputs accepted",
+      "T16 transitive fixture resolves",
+      "T22 transitive fixture resolves",
+      "E16 referenced fixture resolves",
+      "missing dependency rejected",
+      "dependency cycle rejected",
+      "missing image rejected",
+      "T21 explicit text seed retained",
+      "Selecting+Shift independently covered",
+      "source failures have distinct expectations",
+      "each budget has 3 isolated boundary vectors",
+      "crossing targets have exclusive queries"
+    ],
+    "algorithm_tests": "not_run"
+  },
+  "algorithm_tests": "not_run",
+  "real_host_samples": 0,
+  "statistical_qualification": "not_claimed"
+}

@@ -35,3 +35,15 @@ python tools/yueshot_visual_fixtures.py --import-zip <导出的ZIP> --directory 
 工具拒绝覆盖既有目录或证据；全部资产验证通过后才发布新目录。冻结工具解决浏览器字体／阴影环境变化导致回放输入漂移的问题；锁文件解决输入身份与开发／验收用途不清的问题。旧版本是否保留由其实际回归引用决定，不增加产品兼容路径。
 
 **边界**：HTML 能生成算法开发所需的可控像素，且不要求真实控件参与；它不能证明真实宿主截图分布、UIA/MSAA 暴露或实际系统交互已通过。本版真实宿主样本为 0，独立验收为 0，算法运行状态为 `not_run`。图集可立即用于开发与阶段测试；设计 §8.4 的真实分层统计资格仍需另行采集。
+
+## P2开发输入4.1与8K
+
+**事实**：`visual-candidate-v4.1/`是P2执行器当前输入。4.1只改实验profile与E10的A峰数上限（4→48），119张PNG与v4逐文件字节相同；原v4及其锁保留P0历史证据引用，不是产品兼容路径。`visual-candidate-8k-v4/`另有1张7680×4320的T10-8k.png、28查询（24硬断言、4观察），保留小目标物理尺寸，不能把查询数当独立场景数。两者全部为开发输入，独立验收仍为0。
+
+```powershell
+python tools/yueshot_visual_fixtures.py --directory apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-v4.1
+python tools/yueshot_visual_fixtures.py --directory apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-8k-v4
+cargo test -p yue-shot-capture --locked --lib visual -- --test-threads=1
+```
+
+工具不带`--directory`仍检查P0冻结v4。Rust检测结果与输入锁中的`algorithm:not_run`分开保存：后者指浏览器生成器不运行检测，不应回写成算法通过。最新算法回放及字节读取证据见`docs/acceptance/visual-candidate-p2/`，已记录的历史实验不自动覆盖后续修改。

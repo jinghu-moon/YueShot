@@ -1,0 +1,22 @@
+{
+  "schema": "yueshot.visual-candidate-dataset-lock",
+  "schema_version": "4.0.0",
+  "purpose": "synthetic_development_and_deterministic_regression",
+  "generator_source": "docs/design/visual-candidate-test-cases.html",
+  "generator_source_sha256": "8a2668e47315625484365a8f03944eba95ba66a90395c1d60f26d3026c4fb8a2",
+  "export_zip_sha256": "9152d5181cef4267c5480189ce2fcf4a2ae4fba643934f3aff3f583b74462061",
+  "manifest_sha256": "8acde5dfcbd25b189d10f257bc10b5930ea4ecb66a8336aee2436a117606de5d",
+  "counts": {
+    "top_level_contracts": 1,
+    "comparison_variants": 0,
+    "png_assets": 1
+  },
+  "split": {
+    "development": "all exported contracts and assets",
+    "independent_acceptance": [],
+    "rule": "same-scene variants remain one cluster; no statistical independence claim"
+  },
+  "ground_truth": "HTML geometry/contracts defined before detector execution; no DOM is input to detector",
+  "real_host_samples": 0,
+  "algorithm_tests": "not_run"
+}

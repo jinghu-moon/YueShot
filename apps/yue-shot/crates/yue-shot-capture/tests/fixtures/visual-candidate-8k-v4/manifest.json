@@ -1,0 +1,1360 @@
+{
+  "schema": "yueshot.visual-candidate-fixtures",
+  "schema_version": "4.0.0",
+  "profile": {
+    "id": "synthetic-development-v4",
+    "status": "experimental_not_product_qualification",
+    "sampling": {
+      "corner_fraction": 0.1,
+      "corner_rounding": "ceil",
+      "minimum_distinct": 8
+    },
+    "integer_edge_tolerance_px": 0,
+    "aa_end_to_end_tolerance_px": 1,
+    "aa_localization_stage_tolerance_px": 0,
+    "calibration_freeze": "P2开发集选型结束；P5真实验收集独立冻结，不将Q变体算独立统计样本"
+  },
+  "design_reference": "docs/visual-candidate-pipeline.md §§4,6–8",
+  "coordinates": {
+    "rect": "xywh",
+    "bounds": "half-open",
+    "unit": "physical source pixels",
+    "origin": "image-local"
+  },
+  "generator": {
+    "version": "4.0.0",
+    "seed": 7,
+    "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+    "device_pixel_ratio": 1.5,
+    "canvas_color_space": "sRGB",
+    "note": "所有底图Canvas用固有尺寸，与CSS显示宽度和DPR无关；文字/阴影受浏览器字体和渲染环境影响。导出的资产哈希才是固定输入身份。"
+  },
+  "execution": {
+    "algorithm": "not_run",
+    "required": "application replay/numeric/backend runner",
+    "input_validation": {
+      "scope": "generator_inputs_and_contracts_only",
+      "status": "passed",
+      "errors": [],
+      "contract_checks": {
+        "scope": "fixture_contract_and_geometry_oracle_only",
+        "total": 23,
+        "passed": 23,
+        "errors": [],
+        "names": [
+          "negative tolerance rejected",
+          "unknown op rejected",
+          "unknown stage rejected",
+          "missing query annotation rejected",
+          "invalid stage geometry rejected",
+          "unknown event rejected",
+          "missing checkpoint rejected",
+          "integer inner edge rejected",
+          "one output cannot satisfy two targets",
+          "matching uses augmenting path and is order stable",
+          "Q08 constant outputs rejected",
+          "Q08 precise stage outputs accepted",
+          "T16 transitive fixture resolves",
+          "T22 transitive fixture resolves",
+          "E16 referenced fixture resolves",
+          "missing dependency rejected",
+          "dependency cycle rejected",
+          "missing image rejected",
+          "T21 explicit text seed retained",
+          "Selecting+Shift independently covered",
+          "source failures have distinct expectations",
+          "each budget has 3 isolated boundary vectors",
+          "crossing targets have exclusive queries"
+        ],
+        "algorithm_tests": "not_run"
+      },
+      "case_count": 60,
+      "comparison_groups": 16,
+      "comparison_variants": 99,
+      "comparison_hard_members": 49,
+      "comparison_calibration_members": 39,
+      "comparison_stage_members": 11,
+      "pixel_scenes": 114,
+      "generated_pairs": 4,
+      "E09_stage_components": 76800,
+      "T04_sampled_max_residual_rgb_codes": 1,
+      "T06_aa_bounds_ltrb": [
+        169,
+        149,
+        271,
+        221
+      ],
+      "algorithm_tests": "not_run"
+    }
+  },
+  "operation_semantics": {
+    "query_expectations": "对每个mode=assert的query在指定point运行；required_candidates按edge_tolerance_px作一对一匹配，同一输出不能同时满足两个标注；expected_default必须满足；observe_only只记录，不计精度通过。expected_chain仅用于真包含层，外→内，真实不同层须不同矩形且严格包含。",
+    "one_of_annotations": "默认Visual矩形须匹配ids之一；不是任意包含该点的矩形。非穷举标注图不对未声明候选作全局否定。",
+    "no_visual_target_in_region": "该query不得产生默认Visual框覆盖该point且与region相交；原生Window/Accessibility与手动不在此禁止范围。",
+    "forbidden_exact_candidates": "不允许发布与列出的标注矩形在容差内相等的已验证候选；不等于禁止该区域的一切几何。",
+    "stage_vectors": "直接向entry指定阶段注入；不得将connected_components掩码经颜色边缘／形态学后宣称同一标签真值。",
+    "expected_chain": "按标注ID定义外→内可到达层级；交叉矩形不得以父子关系通过。",
+    "replay": "input.initial和events是执行器的抽象输入；variants是须展开的独立情境。checkpoint断言在相应事件处检查；同一源前提被破坏时另用E08/E13断言，不与T13静态刷新混合。",
+    "numeric": "JSON保留十进制字符串／half_bits，执行器按位构造异常输入；浏览器不把NaN/Inf序列化成null冒充向量。",
+    "metamorphic": "只变换满足conditions的场景；固定d、线宽资格、预算或裁切不成立时记录资格变化，不自动算等变通过。",
+    "comparison": "Q组的members是独立完整案例，各自以input.image为唯一底图；禁止将页面拼图作为输入。comparison_member.evaluation=calibration的query仅观察，不计准确率／召回通过；stage_assertion按stage_vectors执行，不能以像素检测结果替代阶段注入。硬性成员仍按其queries和assertions执行。图像相同且上下文不同，须分别回放上下文。",
+    "calibration": "冻结前报告全部变体的逐边证据、有效采样／断裂、默认结果、拒绝原因和原始耗时；阈值变化导致的行为分界需记录，不得先看验收集再调阈值。候选的变化不假定随Δ／尺寸单调；同组变体不是独立统计样本。",
+    "scenarios": "input.scenarios中的每一项自带initial/events/assertions，独立重置后执行；带checkpoint的断言在该检查点检查，其余在事件结束后检查。不从variants描述猜测或拼装事件。未展开的旧研究变体不冒充已执行。",
+    "matching": "矩形误差按[l,t,r,b]逐边计算，r=x+w、b=y+h。匹配须owner/源/资格一致且包含查询点；几何要求max(abs(actual−truth))≤标注容差。required_candidates作最大基数一对一匹配，相同输出几何先去重；同证据按稳定几何键破平局，不用面积/IoU替代边误差。",
+    "localization": "T01及T06整数清晰边容差0；Q08端到端AA容差1，另须执行boundary_location阶段的精确覆盖向量（容差0）及组内四边有符号均值检查。端到端通过不能替代定位阶段通过。",
+    "unsupported_operation": "assertions中的未知op、未知stage entry或未实现的所需操作必须报UnsupportedContract并使该项未通过；禁止跳过或按成功计数。PROFILE是合成开发规范，不代表已冻结产品阈值。"
+  },
+  "contract_vocabulary": {
+    "assertions": [
+      "A_new_query_count",
+      "A_query_point",
+      "B_new_detection_count",
+      "affine_png_residual",
+      "all_injected_proposals_rejected",
+      "all_true_nested_layers_reachable",
+      "arrival_order_invariant",
+      "boundary_location_matches_vector",
+      "boundary_peak_not_blindly_accepted",
+      "bounded_allocation",
+      "budget_vectors_match_expected",
+      "chain_strict_containment",
+      "checked_integer_arithmetic",
+      "confirmed_rect",
+      "crossing_rects_not_parent_child",
+      "d2d_state_restored",
+      "default_at_checkpoint",
+      "default_matches_policy",
+      "default_origin",
+      "default_origin_matches_variant",
+      "dimensions_contract",
+      "distinct_sampling_positions_match_vector",
+      "duplicate_proposal_merge",
+      "each_render_matches_own_ground_truth",
+      "evidence_equivalent",
+      "evidence_within_locked_tolerance",
+      "export_rgba_equal",
+      "geometry_equal",
+      "geometry_equivalent",
+      "geometry_scale_if_qualified",
+      "geometry_translation",
+      "gray_equal",
+      "honor_declared_read_coverage",
+      "identical_rect_stop_count",
+      "idle_new_analysis_jobs",
+      "idle_new_dispatch_or_poll",
+      "idle_poll_count",
+      "injected_proposal_qualification_matches_vector",
+      "latency_and_render_budgets",
+      "level_kind_enum_coverage",
+      "lifetime_counts_balanced",
+      "localization_signed_bias",
+      "manual_and_native_operable",
+      "manual_geometry_stable",
+      "manual_lock_after_exit",
+      "manual_selection",
+      "max_edge_error_px",
+      "max_inflight_cpu",
+      "max_inflight_graphics",
+      "max_pending_latest",
+      "memory_no_growth_plateau",
+      "no_artificial_roi_edge",
+      "no_change_to_adopt_text_runs_policy",
+      "no_fake_hwnd",
+      "no_forced_short_side_upsampling",
+      "no_inverted_rect",
+      "no_late_selection_overwrite",
+      "no_leak_or_partial_publish",
+      "no_orphan_worker",
+      "no_overlay_in_export",
+      "no_panic",
+      "no_partial_candidates",
+      "no_repeated_sample_inflation",
+      "no_reuse_before_safe_completion",
+      "no_source_mutation",
+      "no_stale_publish",
+      "no_stale_quality",
+      "no_synchronous_wait",
+      "no_unselected_backend_fallback",
+      "no_visual_default",
+      "numeric_result_matches_vector",
+      "overflow_counter_visible",
+      "pixel_descriptor_equal",
+      "preview_visible",
+      "query_expectations",
+      "reachable_rect",
+      "record_actual_memory_peaks",
+      "record_host_version_native_exposure_and_sample_count",
+      "record_multiscale_side_evidence",
+      "record_proposal_evidence",
+      "record_wheel_steps",
+      "reject_before_allocation",
+      "reject_if_insufficient_distinct_samples",
+      "reject_invalid_descriptor_or_storage",
+      "reject_occlusion_conflict",
+      "repeat_geometry_stable",
+      "report_driver_and_device",
+      "report_global_local_small_target_recall",
+      "report_hard_and_calibration_separately",
+      "roi_readback_increment",
+      "run_each_member_independently",
+      "run_each_scenario_independently",
+      "screen_rect_equals_expected",
+      "second_session_operable",
+      "selected_at_checkpoint",
+      "selection_unchanged",
+      "session_generation",
+      "shutdown_nonblocking",
+      "source_bits_unchanged",
+      "source_edge_not_boundary_evidence",
+      "source_gate_valid",
+      "source_hash_unchanged",
+      "stage_fusion_matches_expected_chain",
+      "stage_mask_label_budget",
+      "stale_results_published",
+      "stale_roi_published",
+      "texture_image_not_assumed_to_overflow_labels",
+      "transform_pointer_and_owner",
+      "ui_responsive",
+      "visual_unavailable"
+    ],
+    "events": [
+      "cancel",
+      "capture_start",
+      "capture_start_then_cancel",
+      "checkpoint",
+      "confirm_result",
+      "delay_backend_completion",
+      "device_removed",
+      "dwell",
+      "idle",
+      "manual_drag",
+      "native_confirm",
+      "native_result",
+      "pointer_down",
+      "pointer_move",
+      "preview",
+      "publish_chain",
+      "publish_visual",
+      "release_backend",
+      "repeat",
+      "request_confirm",
+      "roi_complete",
+      "set_phase",
+      "set_shift",
+      "shutdown",
+      "start_visual",
+      "submit_graphics",
+      "visual_complete",
+      "visual_failure",
+      "wheel_select",
+      "wheel_walk_all"
+    ],
+    "stages": [
+      "boundary_location",
+      "budget_guard",
+      "candidate_fusion",
+      "connected_components_before_morphology",
+      "edge_sampling_qualification",
+      "rectangle_validation"
+    ],
+    "capability_rule": "runner must preflight all required operations; missing implementation = UnsupportedContract, never passed"
+  },
+  "assets": [
+    {
+      "file": "T10-8k.png",
+      "size": [
+        7680,
+        4320
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ac8da4d32c303376727402814bccbb588f6c04cdfef2e26986714d7c3b182b9e",
+      "png_sha256": "d5b74d0de8a0c5a372614ffd2ec6186e039a198a6be8b5132f60bc117081715a",
+      "png_bytes": 634740
+    }
+  ],
+  "cases": [
+    {
+      "id": "T10-8k",
+      "title": "8K小目标（保持原图物理大小）",
+      "type": "像素场景",
+      "expect": "每个框有独立查询；8px 为探索样本，不宣称必命中；另导出 8K 成对样本",
+      "readiness": "generated_input",
+      "algorithm_status": "runner_required",
+      "seed": 7,
+      "input": {
+        "image": "T10-8k.png",
+        "size": [
+          7680,
+          4320
+        ],
+        "pixel_source": {
+          "format": "RGBA8Unorm",
+          "encoding": "sRGB",
+          "alpha": "straight",
+          "row_order": "top_down",
+          "row_stride": 30720,
+          "conversion_to_yueshot": "exact RGBA→BGRA channel permutation; no color conversion"
+        },
+        "origin_screen": [
+          0,
+          0
+        ],
+        "source_key": {
+          "capture_generation": 1,
+          "pixel_generation": 1,
+          "window_epoch": 1
+        },
+        "native_path": [],
+        "windows": [
+          {
+            "hwnd": "fixture-window-1",
+            "pid": 101,
+            "creation_token": "fixture-owner-1",
+            "bounds": [
+              0,
+              0,
+              7680,
+              4320
+            ],
+            "z": 0,
+            "synthetic": true
+          }
+        ],
+        "scene_query_point": [
+          1920,
+          1080
+        ],
+        "annotation_scope": "partial; unlisted rectangles are not implicitly forbidden"
+      },
+      "annotations": [
+        {
+          "rect": [
+            1740,
+            1060,
+            8,
+            8
+          ],
+          "name": "8px",
+          "role": "target",
+          "acceptance": "exploratory",
+          "id": "T10-8k-0-0-T10-g1",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1810,
+            1060,
+            12,
+            12
+          ],
+          "name": "12px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-0-T10-g2",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1880,
+            1060,
+            16,
+            16
+          ],
+          "name": "16px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-0-T10-g3",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1950,
+            1060,
+            24,
+            24
+          ],
+          "name": "24px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-0-T10-g4",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            2020,
+            1060,
+            32,
+            32
+          ],
+          "name": "32px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-0-T10-g5",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            2168,
+            1090,
+            16,
+            16
+          ],
+          "name": "跨 ROI 右缘",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-0-T10-g6",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            200,
+            200,
+            16,
+            16
+          ],
+          "name": "ROI 之外",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-0-T10-g7",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5580,
+            1060,
+            8,
+            8
+          ],
+          "name": "8px",
+          "role": "target",
+          "acceptance": "exploratory",
+          "id": "T10-8k-3840-0-T10-g1",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5650,
+            1060,
+            12,
+            12
+          ],
+          "name": "12px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-0-T10-g2",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5720,
+            1060,
+            16,
+            16
+          ],
+          "name": "16px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-0-T10-g3",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5790,
+            1060,
+            24,
+            24
+          ],
+          "name": "24px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-0-T10-g4",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5860,
+            1060,
+            32,
+            32
+          ],
+          "name": "32px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-0-T10-g5",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            6008,
+            1090,
+            16,
+            16
+          ],
+          "name": "跨 ROI 右缘",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-0-T10-g6",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            4040,
+            200,
+            16,
+            16
+          ],
+          "name": "ROI 之外",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-0-T10-g7",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1740,
+            3220,
+            8,
+            8
+          ],
+          "name": "8px",
+          "role": "target",
+          "acceptance": "exploratory",
+          "id": "T10-8k-0-2160-T10-g1",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1810,
+            3220,
+            12,
+            12
+          ],
+          "name": "12px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-2160-T10-g2",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1880,
+            3220,
+            16,
+            16
+          ],
+          "name": "16px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-2160-T10-g3",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            1950,
+            3220,
+            24,
+            24
+          ],
+          "name": "24px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-2160-T10-g4",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            2020,
+            3220,
+            32,
+            32
+          ],
+          "name": "32px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-2160-T10-g5",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            2168,
+            3250,
+            16,
+            16
+          ],
+          "name": "跨 ROI 右缘",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-2160-T10-g6",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            200,
+            2360,
+            16,
+            16
+          ],
+          "name": "ROI 之外",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-0-2160-T10-g7",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5580,
+            3220,
+            8,
+            8
+          ],
+          "name": "8px",
+          "role": "target",
+          "acceptance": "exploratory",
+          "id": "T10-8k-3840-2160-T10-g1",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5650,
+            3220,
+            12,
+            12
+          ],
+          "name": "12px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-2160-T10-g2",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5720,
+            3220,
+            16,
+            16
+          ],
+          "name": "16px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-2160-T10-g3",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5790,
+            3220,
+            24,
+            24
+          ],
+          "name": "24px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-2160-T10-g4",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            5860,
+            3220,
+            32,
+            32
+          ],
+          "name": "32px",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-2160-T10-g5",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            6008,
+            3250,
+            16,
+            16
+          ],
+          "name": "跨 ROI 右缘",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-2160-T10-g6",
+          "edge_tolerance_px": 1
+        },
+        {
+          "rect": [
+            4040,
+            2360,
+            16,
+            16
+          ],
+          "name": "ROI 之外",
+          "role": "target",
+          "acceptance": "required",
+          "id": "T10-8k-3840-2160-T10-g7",
+          "edge_tolerance_px": 1
+        }
+      ],
+      "queries": [
+        {
+          "id": "T10-8k-0-0-T10-g1-q",
+          "subject": "T10-8k-0-0-T10-g1",
+          "point": [
+            1744,
+            1064
+          ],
+          "mode": "observe_only",
+          "expected_default": {
+            "kind": "record_outcome"
+          },
+          "required_candidates": [],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": null,
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-0-T10-g2-q",
+          "subject": "T10-8k-0-0-T10-g2",
+          "point": [
+            1816,
+            1066
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-0-T10-g2"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-0-T10-g2"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-0-T10-g2"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-0-T10-g3-q",
+          "subject": "T10-8k-0-0-T10-g3",
+          "point": [
+            1888,
+            1068
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-0-T10-g3"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-0-T10-g3"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-0-T10-g3"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-0-T10-g4-q",
+          "subject": "T10-8k-0-0-T10-g4",
+          "point": [
+            1962,
+            1072
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-0-T10-g4"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-0-T10-g4"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-0-T10-g4"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-0-T10-g5-q",
+          "subject": "T10-8k-0-0-T10-g5",
+          "point": [
+            2036,
+            1076
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-0-T10-g5"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-0-T10-g5"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-0-T10-g5"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-0-T10-g6-q",
+          "subject": "T10-8k-0-0-T10-g6",
+          "point": [
+            2176,
+            1098
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-0-T10-g6"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-0-T10-g6"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-0-T10-g6"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-0-T10-g7-q",
+          "subject": "T10-8k-0-0-T10-g7",
+          "point": [
+            208,
+            208
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-0-T10-g7"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-0-T10-g7"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-0-T10-g7"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g1-q",
+          "subject": "T10-8k-3840-0-T10-g1",
+          "point": [
+            5584,
+            1064
+          ],
+          "mode": "observe_only",
+          "expected_default": {
+            "kind": "record_outcome"
+          },
+          "required_candidates": [],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": null,
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g2-q",
+          "subject": "T10-8k-3840-0-T10-g2",
+          "point": [
+            5656,
+            1066
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-0-T10-g2"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-0-T10-g2"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-0-T10-g2"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g3-q",
+          "subject": "T10-8k-3840-0-T10-g3",
+          "point": [
+            5728,
+            1068
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-0-T10-g3"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-0-T10-g3"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-0-T10-g3"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g4-q",
+          "subject": "T10-8k-3840-0-T10-g4",
+          "point": [
+            5802,
+            1072
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-0-T10-g4"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-0-T10-g4"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-0-T10-g4"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g5-q",
+          "subject": "T10-8k-3840-0-T10-g5",
+          "point": [
+            5876,
+            1076
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-0-T10-g5"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-0-T10-g5"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-0-T10-g5"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g6-q",
+          "subject": "T10-8k-3840-0-T10-g6",
+          "point": [
+            6016,
+            1098
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-0-T10-g6"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-0-T10-g6"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-0-T10-g6"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-0-T10-g7-q",
+          "subject": "T10-8k-3840-0-T10-g7",
+          "point": [
+            4048,
+            208
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-0-T10-g7"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-0-T10-g7"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-0-T10-g7"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g1-q",
+          "subject": "T10-8k-0-2160-T10-g1",
+          "point": [
+            1744,
+            3224
+          ],
+          "mode": "observe_only",
+          "expected_default": {
+            "kind": "record_outcome"
+          },
+          "required_candidates": [],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": null,
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g2-q",
+          "subject": "T10-8k-0-2160-T10-g2",
+          "point": [
+            1816,
+            3226
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-2160-T10-g2"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-2160-T10-g2"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-2160-T10-g2"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g3-q",
+          "subject": "T10-8k-0-2160-T10-g3",
+          "point": [
+            1888,
+            3228
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-2160-T10-g3"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-2160-T10-g3"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-2160-T10-g3"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g4-q",
+          "subject": "T10-8k-0-2160-T10-g4",
+          "point": [
+            1962,
+            3232
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-2160-T10-g4"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-2160-T10-g4"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-2160-T10-g4"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g5-q",
+          "subject": "T10-8k-0-2160-T10-g5",
+          "point": [
+            2036,
+            3236
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-2160-T10-g5"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-2160-T10-g5"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-2160-T10-g5"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g6-q",
+          "subject": "T10-8k-0-2160-T10-g6",
+          "point": [
+            2176,
+            3258
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-2160-T10-g6"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-2160-T10-g6"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-2160-T10-g6"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-0-2160-T10-g7-q",
+          "subject": "T10-8k-0-2160-T10-g7",
+          "point": [
+            208,
+            2368
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-0-2160-T10-g7"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-0-2160-T10-g7"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-0-2160-T10-g7"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g1-q",
+          "subject": "T10-8k-3840-2160-T10-g1",
+          "point": [
+            5584,
+            3224
+          ],
+          "mode": "observe_only",
+          "expected_default": {
+            "kind": "record_outcome"
+          },
+          "required_candidates": [],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": null,
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g2-q",
+          "subject": "T10-8k-3840-2160-T10-g2",
+          "point": [
+            5656,
+            3226
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-2160-T10-g2"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-2160-T10-g2"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-2160-T10-g2"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g3-q",
+          "subject": "T10-8k-3840-2160-T10-g3",
+          "point": [
+            5728,
+            3228
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-2160-T10-g3"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-2160-T10-g3"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-2160-T10-g3"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g4-q",
+          "subject": "T10-8k-3840-2160-T10-g4",
+          "point": [
+            5802,
+            3232
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-2160-T10-g4"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-2160-T10-g4"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-2160-T10-g4"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g5-q",
+          "subject": "T10-8k-3840-2160-T10-g5",
+          "point": [
+            5876,
+            3236
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-2160-T10-g5"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-2160-T10-g5"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-2160-T10-g5"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g6-q",
+          "subject": "T10-8k-3840-2160-T10-g6",
+          "point": [
+            6016,
+            3258
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-2160-T10-g6"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-2160-T10-g6"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-2160-T10-g6"
+          ],
+          "edge_tolerance_px": 1
+        },
+        {
+          "id": "T10-8k-3840-2160-T10-g7-q",
+          "subject": "T10-8k-3840-2160-T10-g7",
+          "point": [
+            4048,
+            2368
+          ],
+          "mode": "assert",
+          "expected_default": {
+            "kind": "one_of_annotations",
+            "ids": [
+              "T10-8k-3840-2160-T10-g7"
+            ]
+          },
+          "required_candidates": [
+            "T10-8k-3840-2160-T10-g7"
+          ],
+          "forbidden_default_regions": [],
+          "forbidden_exact_candidates": [],
+          "expected_chain": [
+            "T10-8k-3840-2160-T10-g7"
+          ],
+          "edge_tolerance_px": 1
+        }
+      ],
+      "assertions": [
+        {
+          "op": "query_expectations"
+        },
+        {
+          "op": "no_source_mutation"
+        },
+        {
+          "op": "report_global_local_small_target_recall"
+        },
+        {
+          "op": "no_artificial_roi_edge"
+        }
+      ],
+      "variants": []
+    }
+  ],
+  "dependencies": []
+}

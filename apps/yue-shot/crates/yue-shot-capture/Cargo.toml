@@ -94,6 +94,8 @@ windows-sys = { version = "0.59", features = [
 windows-numerics = "0.2"
 
 [dev-dependencies]
+# P2 fixture runner decodes the frozen browser PNGs independently of the generator.
+png = "0.18.1"
 # Test-only: two test modules parse/serialise JSON (annotation round-trips, the UIA
 # probe's fixture payloads). The crate itself does not depend on a JSON library.
 serde_json = "1"

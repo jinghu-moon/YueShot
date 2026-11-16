@@ -24,8 +24,8 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.5 Consolas,monospace
 <footer><p>导出包包含纯底图、阶段掩码、像素描述、SHA-256、逐点查询和测试合同。所有算法结果均为 runner_required，不把卡片数当执行通过数。浏览器文字／阴影可能因环境变化；固定导出的 PNG＋JSON 后再作 golden。</p><p>边界对应：A01→T03，A02→T04，A03→T05，A04→T06，A05→T07/T19，A06→T10，A07→E05，A08→T08，A09→E07，A10→T12，A11→T13，A12→T20，A13→T09，A14→T14，A15→E04，A16→E09/E10，A17→T19，A18→T21。</p></footer>
 <script>
 'use strict';
-const VERSION='4.0.0';
-const PROFILE={id:'synthetic-development-v4',status:'experimental_not_product_qualification',sampling:{corner_fraction:.10,corner_rounding:'ceil',minimum_distinct:8},integer_edge_tolerance_px:0,aa_end_to_end_tolerance_px:1,aa_localization_stage_tolerance_px:0,calibration_freeze:'P2开发集选型结束；P5真实验收集独立冻结，不将Q变体算独立统计样本'};
+const VERSION='4.1.0';
+const PROFILE={id:'synthetic-development-v4.1',status:'experimental_not_product_qualification',sampling:{corner_fraction:.10,corner_rounding:'ceil',minimum_distinct:8},integer_edge_tolerance_px:0,aa_end_to_end_tolerance_px:1,aa_localization_stage_tolerance_px:0,calibration_freeze:'P2开发集选型结束；P5真实验收集独立冻结，不将Q变体算独立统计样本'};
 const $=s=>document.querySelector(s);
 let seed=7;const rnd=()=>(seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296;
 const F=(x,c,a,b,w,h)=>{x.fillStyle=c;x.fillRect(a,b,w,h)};
@@ -142,7 +142,9 @@ numeric('E06','交叉精修与搜索边缘','倒置／无证据矩形不可发�
 replay('E08','源／请求／HWND 复用','旧结果不得进入第二会话',[
  event('capture_start',{generation:1}),event('start_visual',{request:1}),event('cancel'),event('capture_start',{generation:2}),event('visual_complete',{capture_generation:1,request:1}),event('native_confirm',{owner_token:'old-token'})
 ],[assert('stale_results_published',{equals:0}),assert('session_generation',{equals:2}),assert('second_session_operable')],{variants:{mutate:['capture_generation','pixel_generation','request','owner_creation_token']}});
-const budgetLimits={A:{peaks_per_side:4,validation_requests:64,levels:24,extra_readback_bytes:1048576},B:{lines_per_direction:192,proposals:2048,global_validations:256,roi_validations:64,retained_candidates:320,labels:65536}};
+// P2参考：24层×每层两条描边响应=48峰。原4峰+笛卡尔积在开发集触发预算，
+// 当前沿边追踪到角点，仍保留64次原图验证及1MiB追加读取守卫。旧v4输入身份保留在P0锁文件。
+const budgetLimits={A:{peaks_per_side:48,validation_requests:64,levels:24,extra_readback_bytes:1048576},B:{lines_per_direction:192,proposals:2048,global_validations:256,roi_validations:64,retained_candidates:320,labels:65536}};
 numeric('E10','逐项容量临界与组合超限','每个守卫独立测 limit−1/limit/limit＋1，其他计数均低于上限；不生成无界对象',
  Object.entries(budgetLimits).flatMap(([algorithm,limits])=>[
   ...Object.entries(limits).flatMap(([resource,limit])=>[-1,0,1].map(delta=>({id:`${algorithm}-${resource}-${delta}`,entry:'budget_guard',algorithm,resource,limit,value:limit+delta,other_counters:Object.fromEntries(Object.entries(limits).filter(([key])=>key!==resource).map(([key,n])=>[key,n-1])),expected:delta>0?'BudgetExceeded':'Complete',expected_violations:delta>0?[resource]:[]}))),
@@ -426,7 +428,7 @@ for(const name of ['边界与相似对照','全部','像素场景','事件回放
  const b=action(name,()=>{filter=name;$('#bar').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.textContent===name));document.querySelectorAll('article').forEach(a=>a.hidden=name!=='全部'&&a.dataset.type!==name);});if(name===filter)b.className='on';$('#bar').append(b);
 }
 document.querySelectorAll('article').forEach(a=>a.hidden=a.dataset.type!==filter);document.body.classList.add('nogt');
-$('#actions').append(action('显示／隐藏标注（初始关闭）',()=>document.body.classList.toggle('nogt')),action('导出边界对照 ZIP',async()=>download(await bundle(comparisons),'visual-candidate-boundaries-v4.zip')),action('导出全部素材 ZIP',async()=>download(await bundle(manifest),'visual-candidate-fixtures-v4.zip')),action('导出清单 JSON',async()=>download(jsonBlob(await manifestExport(manifest)),'visual-candidate-cases-v4.json')),action('重新自检输入',runValidation),action('运行合同回归检查',()=>{const r=contractRegression();$('#health').textContent=`合同回归：${r.passed}/${r.total} 通过；检测算法未运行。`;if(r.errors.length)throw Error(r.errors.join('；'));}));
+$('#actions').append(action('显示／隐藏标注（初始关闭）',()=>document.body.classList.toggle('nogt')),action('导出边界对照 ZIP',async()=>download(await bundle(comparisons),'visual-candidate-boundaries-v4.1.zip')),action('导出全部素材 ZIP',async()=>download(await bundle(manifest),'visual-candidate-fixtures-v4.1.zip')),action('导出清单 JSON',async()=>download(jsonBlob(await manifestExport(manifest)),'visual-candidate-cases-v4.1.json')),action('重新自检输入',runValidation),action('运行合同回归检查',()=>{const r=contractRegression();$('#health').textContent=`合同回归：${r.passed}/${r.total} 通过；检测算法未运行。`;if(r.errors.length)throw Error(r.errors.join('；'));}));
 
 const pngCache=new WeakMap(),assetInfoCache=new Map();
 function png(c){if(!pngCache.has(c))pngCache.set(c,new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败')),'image/png')));return pngCache.get(c);}

@@ -1,0 +1,8 @@
+{
+  "command": "repeat reviewer with an existing output",
+  "expectedExitCode": 1,
+  "actualExitCode": 1,
+  "beforeSha256": "378a81cb5557639b5c6cdfd84a07cf0d32853934f6008c94530d91a5d142f139",
+  "afterSha256": "378a81cb5557639b5c6cdfd84a07cf0d32853934f6008c94530d91a5d142f139",
+  "gatePassed": true
+}

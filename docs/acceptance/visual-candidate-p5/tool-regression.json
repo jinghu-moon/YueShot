@@ -1,0 +1,6 @@
+{
+  "command": "python -m unittest discover -s tools/tests -p test_yueshot_*.py -v",
+  "exitCode": 0,
+  "finished": "2026-11-17T05:34:56.6682927+08:00",
+  "logSha256": "157cbf125c0cf6357f2cb6a41ae55caa511c72bb7c18b6840800b19445d23f61"
+}

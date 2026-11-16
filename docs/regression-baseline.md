@@ -104,3 +104,10 @@
 用户明确真机测试留待后续自行检测，因此自动化通过可提交推进；前述“未提交、不推进”是该指示前事实，不再是当前执行策略。E08新增provider私有窗口属性生命周期标签；零token不发视觉，旧token拒绝，未改名借用epoch。5项隐藏Win32 API测试、9维迟到键、T13的24种到达排列及8种不安全刷新均有覆盖。
 
 最终批次`lifetime-qualified`为33视觉常规／31 ignored、29产品、5生命周期、1传输故障通过；`lifetime-regression`为capture611／122 ignored、media8／geometry10／native-baseline11；另3项selection-target回放通过。两项各60秒idle、cargo xtask check和新exe构建通过；当前源码／日志／哈希见[P4阶段记录](acceptance/visual-candidate-p4/stage-gate.json)。四份P2行为报告精确等价。真实全操作、当前源码完整实屏性能、扩展硬件和P5独立真实统计仍待用户，不称最终升级成功。
+
+
+## 视觉候选实施 P5（2026-11-17，软件审核完成／用户验收待执行）
+
+P4产品提交`531bc91`已推送。P5不改Rust／算法／阈值，新增离线证据审核器，实际核对100个当前源码／锁文件／可执行输入、suite退出码／原始计数／SHA256、3项统一目标回放、两项各60秒idle、工程／exe、三套图集独立解码及四份P2行为等价。66项工具回归含6项审核器反例；另6项图集反例通过。当前软件结果可复用的依据是源码身份一致，而不是借用历史性能批次。
+
+完整[交付记录](acceptance/visual-candidate-p5/README.md)与[阶段门](acceptance/visual-candidate-p5/stage-gate.json)区分开发完成和用户待验收。真实F5/F7／保存／贴图、当前源码实屏性能与全交互时延、物理恢复／硬件资格、独立真实宿主统计仍未通过；用户已明确后续自行检测。不把HTML图集当独立真实样本，不声称最终升级成功。

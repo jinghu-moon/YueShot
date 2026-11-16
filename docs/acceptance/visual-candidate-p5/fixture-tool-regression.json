@@ -1,0 +1,6 @@
+{
+  "command": "python -m unittest discover -s tools/tests -p test_visual_candidate_fixtures.py -v",
+  "exitCode": 0,
+  "finished": "2026-11-17T05:36:10.1381697+08:00",
+  "logSha256": "dc412991ceca44249ef9bda3ca800cfee91c9729ddb691a797154637b376ab5d"
+}

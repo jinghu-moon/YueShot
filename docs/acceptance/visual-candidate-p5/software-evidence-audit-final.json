@@ -1,0 +1,215 @@
+{
+  "stage": "P5",
+  "scope": "Software evidence audit and cleanup; user real-machine acceptance deferred",
+  "developmentChecksPassed": true,
+  "completeAcceptance": false,
+  "realHostSamples": 0,
+  "statisticalQualification": "not_claimed",
+  "softwareCounts": {
+    "visual-reference": [
+      33,
+      31
+    ],
+    "product-replays": [
+      29,
+      0
+    ],
+    "owner-lifetimes": [
+      5,
+      0
+    ],
+    "transfer-faults": [
+      1,
+      0
+    ]
+  },
+  "baselineCounts": {
+    "capture": [
+      611,
+      122
+    ],
+    "media": [
+      8,
+      0
+    ],
+    "geometry": [
+      10,
+      0
+    ],
+    "native-baseline": [
+      11,
+      18
+    ]
+  },
+  "selectionTargetReplays": 3,
+  "currentSourceInputsChecked": 100,
+  "evidenceSummarySha256": {
+    "stage-gate.json": "508c0ba3c97c4b1135dbb955e61204476742e75bc4aa6928653e6cc2f660a7a6",
+    "docs/acceptance/visual-candidate-p4/lifetime-qualified/summary.json": "0a02e66ee25c4d309f915f0603f187d7c1ae3e100871d67914be44f7c1881fa0",
+    "docs/acceptance/visual-candidate-p4/lifetime-regression/summary.json": "607dca0cf1d4b16562623317fd56dd73bd5f12ad4dab192d6e92dcfce0e19e9d",
+    "docs/acceptance/visual-candidate-p4/lifetime-engineering.json": "2e8f7543f3d502e93eccec28c0b6f89520ea2b1a7911b1684e8865e80cbed98a",
+    "docs/acceptance/visual-candidate-p4/lifetime-idle/summary.json": "34c8af575258c3482e3b7a44bbd10fc1e757c7ec82e59fdd22f6322028707cf9",
+    "docs/acceptance/visual-candidate-p4/lifetime-product-build.json": "b02f0bade12d73529746aeed0b8121bb89cc0146f4ffdec8ba1970583e9562fd"
+  },
+  "p2BehaviorEquivalence": {
+    "VISUAL_COMPARISON": "31a9719f1c7424afb9abc85b79f41cd307614080e45a55ef7f2bb9da0943d6b8",
+    "VISUAL_STAGE": "565e66ca73ff1a805c108be6f652973ce75abe0084cc882ef73d27ac852187c9",
+    "VISUAL_LOCATION": "9be3a554020d006a7f0dfc0d1c8d2698a36f7dd9fae1d46e6e5129c53af78895",
+    "VISUAL_DEMAND": "aeb17a85f1fdbcefa69d30f8733f87ab03f9e9c524ecae50c71ea1026053589e"
+  },
+  "fixtureIntegrity": [
+    {
+      "dataset": "visual-candidate-v4",
+      "scope": "frozen_synthetic_inputs_only",
+      "status": "passed",
+      "decoder": "Pillow 11.1.0",
+      "counts": {
+        "top_level_contracts": 60,
+        "comparison_variants": 99,
+        "png_assets": 119
+      },
+      "decoded_rgba_bytes": 62625792,
+      "manifest_sha256": "10926157b5d01d03f6b444c7cbd80228faac0ab614eff1f007f7b9bf7bf89bc7",
+      "dataset_lock_sha256": "832e0387c268bcc1300b61072702db58192cb8ab8eab8ed6b351291d46f8aa4d",
+      "generator_contract_checks": {
+        "scope": "fixture_contract_and_geometry_oracle_only",
+        "total": 23,
+        "passed": 23,
+        "errors": [],
+        "names": [
+          "negative tolerance rejected",
+          "unknown op rejected",
+          "unknown stage rejected",
+          "missing query annotation rejected",
+          "invalid stage geometry rejected",
+          "unknown event rejected",
+          "missing checkpoint rejected",
+          "integer inner edge rejected",
+          "one output cannot satisfy two targets",
+          "matching uses augmenting path and is order stable",
+          "Q08 constant outputs rejected",
+          "Q08 precise stage outputs accepted",
+          "T16 transitive fixture resolves",
+          "T22 transitive fixture resolves",
+          "E16 referenced fixture resolves",
+          "missing dependency rejected",
+          "dependency cycle rejected",
+          "missing image rejected",
+          "T21 explicit text seed retained",
+          "Selecting+Shift independently covered",
+          "source failures have distinct expectations",
+          "each budget has 3 isolated boundary vectors",
+          "crossing targets have exclusive queries"
+        ],
+        "algorithm_tests": "not_run"
+      },
+      "algorithm_tests": "not_run",
+      "real_host_samples": 0,
+      "statistical_qualification": "not_claimed"
+    },
+    {
+      "dataset": "visual-candidate-v4.1",
+      "scope": "frozen_synthetic_inputs_only",
+      "status": "passed",
+      "decoder": "Pillow 11.1.0",
+      "counts": {
+        "top_level_contracts": 60,
+        "comparison_variants": 99,
+        "png_assets": 119
+      },
+      "decoded_rgba_bytes": 62625792,
+      "manifest_sha256": "94d2bd9a83cb6ce507d05e4a95c28aa1337c1d75a16eefef66a23ac93ee3dfcc",
+      "dataset_lock_sha256": "5dcac4227ca88534f586f796a38c4f12752088ee0fb625f4b4800c19f41e61b0",
+      "generator_contract_checks": {
+        "scope": "fixture_contract_and_geometry_oracle_only",
+        "total": 23,
+        "passed": 23,
+        "errors": [],
+        "names": [
+          "negative tolerance rejected",
+          "unknown op rejected",
+          "unknown stage rejected",
+          "missing query annotation rejected",
+          "invalid stage geometry rejected",
+          "unknown event rejected",
+          "missing checkpoint rejected",
+          "integer inner edge rejected",
+          "one output cannot satisfy two targets",
+          "matching uses augmenting path and is order stable",
+          "Q08 constant outputs rejected",
+          "Q08 precise stage outputs accepted",
+          "T16 transitive fixture resolves",
+          "T22 transitive fixture resolves",
+          "E16 referenced fixture resolves",
+          "missing dependency rejected",
+          "dependency cycle rejected",
+          "missing image rejected",
+          "T21 explicit text seed retained",
+          "Selecting+Shift independently covered",
+          "source failures have distinct expectations",
+          "each budget has 3 isolated boundary vectors",
+          "crossing targets have exclusive queries"
+        ],
+        "algorithm_tests": "not_run"
+      },
+      "algorithm_tests": "not_run",
+      "real_host_samples": 0,
+      "statistical_qualification": "not_claimed"
+    },
+    {
+      "dataset": "visual-candidate-8k-v4",
+      "scope": "frozen_synthetic_inputs_only",
+      "status": "passed",
+      "decoder": "Pillow 11.1.0",
+      "counts": {
+        "top_level_contracts": 1,
+        "comparison_variants": 0,
+        "png_assets": 1
+      },
+      "decoded_rgba_bytes": 132710400,
+      "manifest_sha256": "8acde5dfcbd25b189d10f257bc10b5930ea4ecb66a8336aee2436a117606de5d",
+      "dataset_lock_sha256": "c93be111cf7f8a1e28aae2b3dc28b34242a927f5d89717775b48bc090a0ce975",
+      "generator_contract_checks": {
+        "scope": "fixture_contract_and_geometry_oracle_only",
+        "total": 23,
+        "passed": 23,
+        "errors": [],
+        "names": [
+          "negative tolerance rejected",
+          "unknown op rejected",
+          "unknown stage rejected",
+          "missing query annotation rejected",
+          "invalid stage geometry rejected",
+          "unknown event rejected",
+          "missing checkpoint rejected",
+          "integer inner edge rejected",
+          "one output cannot satisfy two targets",
+          "matching uses augmenting path and is order stable",
+          "Q08 constant outputs rejected",
+          "Q08 precise stage outputs accepted",
+          "T16 transitive fixture resolves",
+          "T22 transitive fixture resolves",
+          "E16 referenced fixture resolves",
+          "missing dependency rejected",
+          "dependency cycle rejected",
+          "missing image rejected",
+          "T21 explicit text seed retained",
+          "Selecting+Shift independently covered",
+          "source failures have distinct expectations",
+          "each budget has 3 isolated boundary vectors",
+          "crossing targets have exclusive queries"
+        ],
+        "algorithm_tests": "not_run"
+      },
+      "algorithm_tests": "not_run",
+      "real_host_samples": 0,
+      "statistical_qualification": "not_claimed"
+    }
+  ],
+  "userAcceptancePending": [
+    "V01-V07 visible F5/F7/save/pin, native protection and full interaction timing",
+    "Current-source paired real captures/resources and 4K present qualification",
+    "E08 actual host lifecycle/UIPI coverage; E13 physical recovery; E14 hardware/load matrix",
+    "Independent real-host annotations, frozen held-out assets and stratified confidence gates"
+  ]
+}

@@ -33,6 +33,8 @@
 
 **P4实施事实（2026-11-17，自动化收尾，真机由用户后验收）**：A／CPU与有界异步atlas已接入产品，新增Visual来源，B仅测试。K01确认冻结、K02手动几何、K03 Shift清理已修正；T13覆盖24种到达排列及8种不安全刷新。Q05产品Query显式接收实际初始region，真实atlas三变体检验读取权限。E08补独立生命周期标签，见§4.6.1与R14；当前源码的测试、哈希及阶段状态以[P4记录](acceptance/visual-candidate-p4/README.md)、[覆盖审核](acceptance/visual-candidate-p4/coverage-audit.md)、[阶段门](acceptance/visual-candidate-p4/stage-gate.json)为准。用户明确将真机实测留待后续自行检测，因此自动化通过可提交推进；可见操作、当前源码实屏性能、扩展硬件和独立真实统计仍待验收，不能称完整升级成功。以上P0～P3是各提交时点事实。
 
+**P5实施事实（2026-11-17，软件审核完成，用户验收待执行）**：P4产品已提交推送`531bc91`。P5只增离线证据审核，不再改变产品参数：核对当前源码与清单、原始测试计数／日志哈希、四份P2行为等价、三套图集独立解码、空闲／工程／构建证据；工具反例与既有工具回归通过。唯一产品路线仍为A／CPU＋异步atlas，B／全局对照仅测试。独立真实样本=0，不声称99%／95%或完整升级成功；真机和独立资格按用户要求后续验收。[P5交付与复跑入口](acceptance/visual-candidate-p5/README.md)、[阶段门](acceptance/visual-candidate-p5/stage-gate.json)。
+
 ## 1. 项目基础情况
 
 ### 1.1 调研范围与证据边界

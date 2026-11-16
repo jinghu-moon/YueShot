@@ -1,0 +1,54 @@
+{
+  "stage": "P5",
+  "status": "development_passed_user_acceptance_pending",
+  "productRevision": "531bc9170318dbf1d28f4d39477bf4a0d9fd952a",
+  "developmentComplete": true,
+  "completeAcceptance": false,
+  "canCommitDevelopment": true,
+  "scope": "Final software evidence audit and cleanup. No Rust or algorithm changes after P4. User explicitly deferred real-machine work.",
+  "checks": {
+    "currentSoftwareEvidence": true,
+    "rawCountsAndLogHashes": true,
+    "sourceInventoryAndHashes": true,
+    "nativeSelectionTargetReplays": true,
+    "exactP2BehaviorEquivalence": true,
+    "threeFixtureCorporaDecoded": true,
+    "currentIdleEngineeringAndBuildEvidence": true,
+    "toolRegression66": true,
+    "fixtureCorruptionTests6": true,
+    "immutableOutputRejection": true,
+    "singleProductRouteReviewed": true
+  },
+  "softwareAudit": "software-evidence-audit-final.json",
+  "sourceSha256": {
+    "tools/review-visual-candidate-acceptance.py": "dcb5c13b1ca7ef15e193b6384c04d9364b91b4b9f558ac730c9fa47781940ccd",
+    "tools/tests/test_yueshot_visual_acceptance.py": "176272201375d30085d43bfb99c08f4671014475f9c854bd4ab96346523ceef5",
+    "tools/yueshot_visual_fixtures.py": "2617d4fc9942c1bf0cbd2c27eea97ff482866ab355b5049995a933702854d4e1",
+    "docs/design/visual-candidate-test-cases.html": "4c2307854def42b692bd9480d494fb9744ded8d8bae79f6b49edc900640d55b6",
+    "docs/visual-candidate-pipeline.md": "c9562f87fa327e8ac3e14f12b7a46f2b6130d617f27be80ffd07de8507ca5386",
+    "docs/regression-baseline.md": "81c3b38b7e5f28a12d60f7207b5122eefd0254058c927b5126dad2b940631cee"
+  },
+  "evidenceSha256": {
+    "cleanup-audit.txt": "5d14bf7d0c69b98a2f8ce3122a5e863447f4a984f0feeb152114e206f92e3780",
+    "fixture-tool-regression.json": "572e433867ffa841e6a449532281858942941353d187bc8b59a30d5d7289d912",
+    "fixture-tool-regression.txt": "dc412991ceca44249ef9bda3ca800cfee91c9729ddb691a797154637b376ab5d",
+    "README.md": "7982c84cefef40abb1eb724b9f5f7112e79222e6941d33dab71d50dce592d6c5",
+    "refuse-overwrite.json": "e1ed59bcde291475a815cf75925be5cb80c84fa143ffdc62eb48d759f3b96431",
+    "refuse-overwrite.txt": "663cc108a3a97b3046419ee1b0e5c39f28af9cd55a5fffea164367727acdf42a",
+    "software-evidence-audit-final.json": "378a81cb5557639b5c6cdfd84a07cf0d32853934f6008c94530d91a5d142f139",
+    "software-evidence-audit.json": "82c2d4aee9fd49dbcbb2c40a4a64f2cf5b866fea6e8d52839e1843db9409f0d4",
+    "tool-regression.json": "3f31dd1dff795992fd7c6f30fcb1470621dcd46b1e7a5bd62eaa819bf6b93542",
+    "tool-regression.txt": "157cbf125c0cf6357f2cb6a41ae55caa511c72bb7c18b6840800b19445d23f61"
+  },
+  "independentRealHostSamples": 0,
+  "statisticalQualification": "not_claimed",
+  "userAcceptancePending": [
+    "V01-V07 visible F5/F7/save/pin, native protection and full interaction timing",
+    "Current-source paired real captures/resources and 4K present qualification",
+    "E08 actual host lifecycle/UIPI coverage; E13 physical recovery; E14 hardware/load matrix",
+    "Independent real-host annotations, frozen held-out assets and stratified confidence gates"
+  ],
+  "policy": "Development work may be committed and handed off; pending real-machine/statistical requirements retain their original thresholds and are not passed.",
+  "rollback": "Git revision rollback only; no compatibility implementation",
+  "recordedAt": "2026-11-17T05:37:43.192306+08:00"
+}

@@ -1,0 +1,49 @@
+12-#[cfg(test)]
+13:pub(super) const B_LIMITS: [(&str, usize); 6] = [
+--
+31-        "A" => &A_LIMITS,
+32:        "B" => &B_LIMITS,
+--
+451-#[cfg(test)]
+452:pub fn components(image: Image<'_>, point: Point) -> Detection {
+--
+508-            foreground,
+509:            B_LIMITS[5].1,
+--
+532-                            for bottom in [bounds.bottom - 1, bounds.bottom, bounds.bottom + 1] {
+533:                                if proposals.len() == B_LIMITS[1].1 {
+--
+551-    for rect in lines {
+552:        if proposals.len() == B_LIMITS[1].1 {
+--
+642-#[cfg(test)]
+643:fn directional_rectangles(image: Image<'_>, point: Point) -> (Vec<Rect>, bool) {
+--
+715-#[cfg(test)]
+716:pub fn coarse(image: Image<'_>) -> Option<([usize; 2], Vec<u8>)> {
+--
+758-#[cfg(test)]
+759:pub fn components_with_global(
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_worker.rs:84:        let (sender, receive) = mpsc::sync_channel(1);
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_worker.rs:100:        let thread = std::thread::Builder::new()
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_worker.rs:313:        let worker = VisualWorker::new(0).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:5:    win::d3d11::visual_transfer::BatchReadback,
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:26:    transfer: Option<BatchReadback>,
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:72:            worker: VisualWorker::new(thread)?,
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:362:                    self.transfer = frame.device().and_then(|d| BatchReadback::new(d).ok());
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:454:            VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:504:        let mut pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:569:        let mut pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:644:            VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:685:        let mut pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:692:        let mut unverified_pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:696:            let mut pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:762:        let mut pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:795:            VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new())
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:807:                VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:826:            VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/visual_pipeline.rs:881:                VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new()).unwrap();
+apps/yue-shot/crates/yue-shot-capture/src/windows/overlay.rs:283:        let (ready_tx, ready_rx) = mpsc::sync_channel(1);
+apps/yue-shot/crates/yue-shot-capture/src/windows/overlay.rs:286:        let (annotation_tx, annotation_rx) = mpsc::sync_channel(64);
+apps/yue-shot/crates/yue-shot-capture/src/windows/overlay.rs:288:        let thread = thread::Builder::new()
+apps/yue-shot/crates/yue-shot-capture/src/windows/overlay.rs:835:            visual: super::visual_pipeline::VisualPipeline::new(thread_id, metrics.clone()).ok(),

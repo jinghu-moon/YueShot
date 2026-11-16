@@ -1,0 +1,54 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.76s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 46 tests
+test diagnostics::tests::visual_diagnostics_share_handle_and_reset_without_native_cross_reporting ... ok
+test visual_detection::tests::visual_comparison_fixed_inputs_report ... ok
+test visual_detection::tests::visual_detection_bordered_fills_take_outer_rim ... ok
+test visual_detection::tests::visual_detection_boundary_location_exact_coverage_vectors ... ok
+test visual_detection::tests::visual_detection_channel_permutations_need_no_bgra_conversion_copy ... ok
+test visual_detection::tests::visual_detection_cpu_development_timings ... ignored, P2 release-profile development timing; opt-in 100 repetitions per representative scene
+test visual_detection::tests::visual_detection_demand_reads_fail_closed_before_overallocation ... ok
+test visual_detection::tests::visual_detection_demand_transfer_matches_owned_input_and_enforces_bytes ... ok
+test visual_detection::tests::visual_detection_distinct_sampling_and_input_limits ... ok
+test visual_detection::tests::visual_detection_existing_pixel_contracts_reject_invalid_layout_and_unmapped_hdr ... ok
+test visual_detection::tests::visual_detection_injected_geometry_chains_and_arrival_permutations ... ok
+test visual_detection::tests::visual_detection_isolated_capacity_stage_vectors ... ok
+test visual_detection::tests::visual_detection_isolated_mask_uses_the_real_component_guard ... ok
+test visual_detection::tests::visual_detection_metamorphic_frozen_pairs ... ok
+test visual_detection::tests::visual_detection_odd_large_dimensions_do_not_mean_empty_or_upscale ... ok
+test visual_detection::tests::visual_detection_read_coverage_and_extreme_dimensions ... ok
+test visual_detection::tests::visual_detection_rectangle_validation_fixed_stage_vectors ... ok
+test visual_detection::tests::visual_detection_refinement_rejects_inversion_boundary_peaks_and_stale_evidence ... ok
+test visual_detection::tests::visual_detection_sampling_stage_contracts_and_single_output_matching ... ok
+test visual_detection::tests::visual_detection_signed_rgb_residual_cancels_affine_ramps ... ok
+test visual_detection::tests::visual_progressive_batches_preserve_full_reference_and_report_all_costs ... ok
+test visual_detection::tests::visual_progressive_incomplete_wrong_batches_and_large_indices_fail_closed ... ok
+test visual_detection::tests::visual_replay_each_algorithm_allocation_site_fails_without_partial_publication ... ok
+test window_detection::visual::tests::contracts::visual_replay_demo_q07_nested_duplicate_crossing_stage_vectors ... ok
+test window_detection::visual::tests::contracts::visual_replay_demo_t11_t20_q09_native_policy_vectors ... ok
+test window_detection::visual::tests::visual_replay_fusion_allocation_failure_keeps_native_fallback_available ... ok
+test window_detection::visual::tests::visual_replay_nested_single_pixel_layers_reachable_crossings_not_in_chain ... ok
+test window_detection::visual::tests::visual_replay_semantic_defaults_and_equal_geometry_keep_native_kind ... ok
+test window_detection::visual::tests::visual_replay_source_owner_occlusion_and_frozen_bounds_fail_closed ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_cached_native_path_requeries_visual_on_new_dwell ... ignored, L3 actual hidden controller and GPU; cached native path must not suppress new visual seeds
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_confirms_visual_pixels_and_protects_native_text ... ignored, L3 actual controller, hidden renderer, real GPU/worker; no clipboard/files/desktop capture
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_manual_choice_and_window_epoch_cannot_drift ... ignored, L3 actual hidden controller with fixed pixels; geometry/manual/epoch/Shift replay
+test windows::overlay::native_baseline::visual_replay::visual_replay_product_controller_latency_diagnostic ... ignored, L3 product controller timing on real GPU/worker and message wakeups; hidden fixed-pixel replay, no render-load qualification
+test windows::visual_pipeline::tests::visual_replay_latest_query_stays_bounded_across_thousand_moves_and_cancel ... ok
+test windows::visual_pipeline::tests::visual_replay_owner_allocation_failures_never_publish_partial_results ... ignored, L3 real GPU; named owner allocation faults, fixed fixture only
+test windows::visual_pipeline::tests::visual_replay_product_pipeline_queries_reuses_pixels_and_rejects_retired_source ... ignored, L3 real GPU and product worker; fixed fixture only, no visible window or external writes
+test windows::visual_pipeline::tests::visual_replay_request_exhaustion_and_late_reply_keys_fail_closed ... ok
+test windows::visual_pipeline::tests::visual_replay_timeout_cancel_drain_blocks_reuse_until_safe_completion ... ignored, L3 real GPU; StillDrawing injection into actual Map branch, no physical device removal
+test windows::visual_worker::tests::visual_replay_cancel_during_poll_releases_cpu_pixels_before_idle ... ok
+test windows::win::d3d11::visual_readback::visual_readback_bounded_demand_keeps_whole_frame_hierarchy ... ignored, P2 real demand transfers; intentionally measures unbatched small-Map cost
+test windows::win::d3d11::visual_readback::visual_readback_cpu_worker_region_pipeline_reference ... ignored, P2 isolated real GPU to owned CPU worker prototype; no overlay, hotkey or clipboard
+test windows::win::d3d11::visual_readback::visual_readback_full_roi_and_strips_have_exact_pixels ... ignored, P2 opt-in real GPU transfer cost; allocates test-only 4K/8K full frames
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_atlas_keeps_exact_pixels_while_drawing_and_sampling ... ignored, P3 real D2D and sampler interleaving, atlas bytes and cancellation; no visible UI
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_cold_sessions_and_idle_resource_reference ... ignored, P3 opt-in 100 cold transfer sessions and 60s idle resource reference
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_formats_capacity_and_map_failures_preserve_lifecycle ... ignored, P3 real textures and injected Map faults; does not remove the physical device
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_progressive_worker_development_costs ... ignored, P3 real GPU/worker development timing; no production/UI qualification
+
+test result: ok. 31 passed; 0 failed; 15 ignored; 0 measured; 664 filtered out; finished in 92.28s
+

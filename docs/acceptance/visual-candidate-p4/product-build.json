@@ -1,0 +1,7 @@
+{
+  "command": "cargo build -p yue-shot --locked",
+  "exitCode": 0,
+  "finished": "2026-11-17T04:41:23.5051999+08:00",
+  "logSha256": "56a62900d9e1cd51cbb440fa4053b38b65ad67a9eac880ab936d7efb5f243221",
+  "gateScope": "Fresh executable build only; not visible UI acceptance"
+}

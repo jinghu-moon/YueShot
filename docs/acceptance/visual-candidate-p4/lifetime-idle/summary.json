@@ -1,0 +1,11 @@
+{
+  "started": "2026-11-17T05:28:15.0099899+08:00",
+  "finished": "2026-11-17T05:30:17.3600426+08:00",
+  "command": "cargo test -p yue-shot-capture --release --locked --lib _idle_resource_probe -- --ignored --nocapture --test-threads=1",
+  "exitCode": 0,
+  "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 731 filtered out; finished in 121.19s",
+  "sourceManifest": "../lifetime-qualified/summary.json",
+  "sourceUnchanged": true,
+  "logSha256": "a28479712515c9a4c2eccabb7c6db5895c2df341e994be52b8144474c1c5a2e7",
+  "gatePassed": true
+}

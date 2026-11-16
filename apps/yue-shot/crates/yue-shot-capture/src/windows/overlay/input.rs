@@ -289,6 +289,9 @@ impl OverlayController {
         // selection (docs/14 §4.2).
         let hit = self.session.press(point);
         let outcome = self.gesture.press(point, hit, self.session.selection());
+        if let Some(visual) = &mut self.visual {
+            visual.invalidate();
+        }
         if let PressOutcome::BeginEdit(mode) = outcome {
             // Grabbing a handle or the interior of a selection is deliberate: the drag
             // starts immediately, with no threshold.

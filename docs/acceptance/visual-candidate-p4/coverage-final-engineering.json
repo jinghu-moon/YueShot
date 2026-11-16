@@ -1,0 +1,10 @@
+{
+  "started": "2026-11-17T04:50:12.1987285+08:00",
+  "finished": "2026-11-17T04:54:09.4937521+08:00",
+  "command": "cargo xtask check",
+  "exitCode": 0,
+  "sourceManifest": "coverage-qualified-run8/summary.json",
+  "sourceUnchanged": true,
+  "logSha256": "f6a06c94834fb9a3b8fc6b62aba113823444e2b74d2c2ced2178bd29f1cc2f79",
+  "gatePassed": true
+}

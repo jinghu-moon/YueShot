@@ -1,0 +1,193 @@
+{
+  "stage": "P4",
+  "status": "development_passed_user_acceptance_pending",
+  "baseRevision": "310359026a7186074de099816fa3aa47ba41031d",
+  "canAdvance": true,
+  "selectedProductPath": "A CPU worker + bounded asynchronous GPU atlas transfers",
+  "scope": "P4 implementation and current-source automatic checks passed. User explicitly deferred real-machine work; stage development may be committed and P5 software work may proceed. Full qualification remains pending, not passed.",
+  "currentSourceEvidence": {
+    "software": {
+      "summary": "lifetime-qualified/summary.json",
+      "checksPassed": true,
+      "sourceUnchanged": true,
+      "regularVisual": 33,
+      "regularIgnoredNotCountedAsPassed": 31,
+      "productReplays": 29,
+      "ownerLifetimeTests": 5,
+      "transferFaults": 1,
+      "p2BehaviorReports": "lifetime-qualified/p2-behavior-equivalence.json"
+    },
+    "baseline": {
+      "summary": "lifetime-regression/summary.json",
+      "gatePassed": true,
+      "capturePassed": 611,
+      "captureIgnoredNotCountedAsPassed": 122,
+      "media": 8,
+      "geometry": 10,
+      "nativeBaseline": 11,
+      "sourceIntegrity": "lifetime-source-integrity.json"
+    },
+    "engineering": {
+      "summary": "lifetime-engineering.json",
+      "gatePassed": true,
+      "exitCode": 0,
+      "sourceUnchanged": true
+    },
+    "idleResourceSubcontracts": {
+      "summary": "lifetime-idle/summary.json",
+      "gatePassed": true,
+      "tests": 2,
+      "durationSecondsPerTest": 60,
+      "sourceUnchanged": true
+    },
+    "productExecutable": {
+      "summary": "lifetime-product-build.json",
+      "exitCode": 0,
+      "sourceUnchanged": true,
+      "scope": "Fresh current-source build; user visible-operation acceptance pending"
+    },
+    "selectionTargetReplays": {
+      "log": "lifetime-selection-target.txt",
+      "passed": 3,
+      "sha256": "9a984bed307a8ba45ad102ef33066812db5c65dbcf607ae03c063cbae3c3ec7d"
+    }
+  },
+  "openGates": [
+    "User deferred V01-V07 visible product F5/F7/save/pin, native policy, full movement/dwell/result and first-display timing",
+    "User deferred current-source paired 100-session capture/resource and 4K render requalification; historical successful performance does not certify this source",
+    "User deferred physical graphics/power/display recovery, E14 extended devices/load and E08 actual host/UIPI/lifecycle coverage",
+    "P5 independent real-host annotated and reviewed held-out accuracy/confidence data not acquired; no statistical qualification claimed"
+  ],
+  "coverageAudit": "coverage-audit.md",
+  "environmentObservations": [
+    "final-desktop-observation.json",
+    "desktop-control-observation.json",
+    "desktop-control-after-final-unlock.json"
+  ],
+  "independentRealHostAccuracyQualification": "Not acquired; remains a P5 gate",
+  "nextStage": "P5 software evidence audit and cleanup; real-machine/statistical acceptance remains with user",
+  "supersededSourceEvidenceBeforeExplicitInitialRegion": {
+    "software": {
+      "summary": "software-regression-run6/summary.json",
+      "checksPassed": true,
+      "sourceUnchanged": true,
+      "regularVisual": 33,
+      "regularIgnoredNotCountedAsPassed": 30,
+      "productReplays": 28,
+      "transferFaults": 1
+    },
+    "idleResourceSubcontracts": {
+      "summary": "final-idle-probes-run2/summary.json",
+      "gatePassed": true,
+      "sourceUnchanged": true,
+      "tests": 2,
+      "durationSecondsPerTest": 60
+    },
+    "engineering": {
+      "summary": "final-engineering-check.json",
+      "gatePassed": true,
+      "exitCode": 0,
+      "sourceUnchanged": true
+    },
+    "baseline": {
+      "summary": "consolidated-baseline.json",
+      "gatePassed": true,
+      "capturePassed": 606,
+      "captureIgnoredNotCountedAsPassed": 121,
+      "initialFailedBatch": "final-regression-run/summary.json",
+      "threeActualCaptureRetests": "final-desktop-requalification/summary.json"
+    },
+    "sourceIntegrity": "source-integrity-audit.json",
+    "desktopMeasurement": {
+      "summary": "final-desktop-requalification/summary.json",
+      "checksPassed": true,
+      "sourceUnchanged": true,
+      "derivedMeasurements": "qualified-measurements-reviewed.json",
+      "coldSourceSessionsPerControl": 100,
+      "idleSecondsPerControl": 60,
+      "warmFixtures": 4,
+      "warmSessionsPerFixture": 3,
+      "minimumWarmQueriesPerSession": 1000,
+      "coldQueryP95Us": 10958,
+      "coldControllerP95Us": 11508,
+      "warmMaxSessionQueryP95Ns": 4385300,
+      "explicitVisualGpuAtlasBytes": 4194304,
+      "cpuBufferBoundBytes": 10002576,
+      "zeroRangeIdleLast20sBothControls": true
+    }
+  },
+  "lastUpdated": "2026-11-17T05:33:11.888191+08:00",
+  "supersededSourceEvidenceBeforeLifecycleTags": {
+    "software": {
+      "summary": "coverage-qualified-run8/summary.json",
+      "checksPassed": true,
+      "sourceUnchanged": true,
+      "regularVisual": 33,
+      "regularIgnoredNotCountedAsPassed": 31,
+      "productReplays": 29,
+      "transferFaults": 1,
+      "p2BehaviorReports": "coverage-qualified-run8/p2-behavior-equivalence.json"
+    },
+    "baseline": {
+      "summary": "coverage-final-regression/summary.json",
+      "gatePassed": true,
+      "capturePassed": 606,
+      "captureIgnoredNotCountedAsPassed": 122,
+      "media": 8,
+      "geometry": 10,
+      "nativeBaseline": 11,
+      "selectionTargetReplays": 3,
+      "realWindowReplays": 3,
+      "nativeGpuDirectedReplays": 9,
+      "sourceIntegrity": "coverage-source-integrity.json"
+    },
+    "engineering": {
+      "summary": "coverage-final-engineering.json",
+      "gatePassed": true,
+      "exitCode": 0,
+      "sourceUnchanged": true
+    },
+    "productExecutable": {
+      "summary": "coverage-product-build.json",
+      "exitCode": 0,
+      "scope": "Fresh executable build only, visible operation acceptance unexecuted"
+    },
+    "q05": {
+      "test": "visual_replay_demo_q05_actual_read_coverage_and_bounded_requery",
+      "variants": 3,
+      "fullSourceReadBytes": 196608,
+      "roiOnlyReadBytes": 102400,
+      "roiOnlyExtraReadBytes": 0,
+      "roiOnlyPublishedResults": 0,
+      "recoveryReadBytes": 147456,
+      "recoveryExtraReadBytes": 45056,
+      "sourceBytesUnchanged": true,
+      "scope": "Production Query with explicit actual initial coverage and real selected atlas backend; permissions enforced before GPU copies"
+    },
+    "idleResourceSubcontracts": {
+      "summary": "coverage-final-idle/summary.json",
+      "gatePassed": true,
+      "sourceUnchanged": true,
+      "tests": 2,
+      "durationSecondsPerTest": 60,
+      "scope": "Cached selection/no CPU job/no GPU poll, and actual pending atlas/200ms delay/1000 moves/60s idle; complete stage gate remains false"
+    },
+    "latestDesktopMeasurement": {
+      "summary": "coverage-final-desktop/final-desktop-requalification/summary.json",
+      "checksPassed": false,
+      "reason": "First real capture probe failed GetCursorPos Win32 error 5; runner stopped, old successful performance batch not borrowed"
+    }
+  },
+  "developmentComplete": true,
+  "completeAcceptance": false,
+  "canCommitDevelopment": true,
+  "ownerLifecycleQualification": {
+    "implementation": "WindowIdentity.creation_token; provider-private Win32 property, zero cannot qualify visual",
+    "software": "5 hidden API tests; 9 late-key dimensions; T13 8 unsafe-refresh cases",
+    "remaining": "OS-assigned same-value HWND reuse and actual host/UIPI/visible coverage left to user; not OS creation timestamp"
+  },
+  "executionPolicy": {
+    "authority": "User explicitly said real-machine tests may be set aside and will be checked later",
+    "effect": "Commit and advance development after automatic gates; preserve pending final qualifications and original thresholds"
+  }
+}

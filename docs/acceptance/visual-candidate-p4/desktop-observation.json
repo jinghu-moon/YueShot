@@ -1,0 +1,7 @@
+{
+  "observedAt": "2026-11-17T03:13:00.5447617+08:00",
+  "method": "Read-only GetUserObjectInformation; OpenInputDesktop handle closed",
+  "station": "WinSta0",
+  "threadDesktop": "Default",
+  "inputDesktop": "Screen-saver"
+}

@@ -1,0 +1,10 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.30s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 2 tests
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_confirms_visual_pixels_and_protects_native_text ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_manual_choice_and_window_epoch_cannot_drift ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 701 filtered out; finished in 0.40s
+

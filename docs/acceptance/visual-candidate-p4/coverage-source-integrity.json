@@ -1,0 +1,16 @@
+{
+  "auditedAt": "2026-11-17T04:56:42.801919+08:00",
+  "scope": "Code/test/lock and baseline document input hashes before final acceptance-index updates; index updates do not alter tested Rust source",
+  "results": [
+    {
+      "manifest": "coverage-qualified-run8/summary.json",
+      "allInputsUnchangedAtAudit": true,
+      "differences": []
+    },
+    {
+      "manifest": "coverage-final-regression/summary.json",
+      "allInputsUnchangedAtAudit": true,
+      "differences": []
+    }
+  ]
+}

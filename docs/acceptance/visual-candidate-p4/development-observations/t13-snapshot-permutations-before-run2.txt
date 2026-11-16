@@ -1,0 +1,24 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.49s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_t13_t14_t23_controller_event_contracts ... DEMO_EVENTS case=T13 wheel_steps=0 boundary=qualified_result
+DEMO_EVENTS case=T14 wheel_steps=0 boundary=qualified_result
+DEMO_EVENTS case=T23 wheel_steps=3 boundary=qualified_result
+
+thread 'windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_t13_t14_t23_controller_event_contracts' (63712) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline\visual_replay\contracts.rs:198:21:
+assertion `left == right` failed: T13 order=[0, 1, 2, 3]
+  left: Selecting
+ right: Selected
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_t13_t14_t23_controller_event_contracts
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 726 filtered out; finished in 0.69s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

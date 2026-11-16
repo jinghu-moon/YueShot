@@ -1,0 +1,12 @@
+{
+  "started": "2026-11-17T04:11:23.6064385+08:00",
+  "finished": "2026-11-17T04:12:36.0253337+08:00",
+  "command": "cargo test -p yue-shot-capture --release --locked --lib _idle_resource_probe -- --ignored --nocapture --test-threads=1",
+  "exitCode": 101,
+  "result": "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 725 filtered out; finished in 60.39s",
+  "sourceManifest": "../software-regression-run5/summary.json",
+  "sourceUnchanged": true,
+  "logSha256": "c2a13efc7ae8df231713730fdb1dd65f569dd9bfc5a76e5d4e1b2a13e7048ae7",
+  "gateScope": "T18 covered-seed readback reuse and E11 delayed-graphics/latest-only idle subcontracts, not full P4",
+  "gatePassed": false
+}

@@ -1,0 +1,19 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 24s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+
+thread 'windows::overlay::native_baseline::visual_replay_capture_lifecycle_resource_probe' (60704) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline.rs:705:57:
+called `Result::unwrap()` on an `Err` value: "GetCursorPos failed with Win32 error 5"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::overlay::native_baseline::visual_replay_capture_lifecycle_resource_probe ... FAILED
+
+failures:
+
+failures:
+    windows::overlay::native_baseline::visual_replay_capture_lifecycle_resource_probe
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 710 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

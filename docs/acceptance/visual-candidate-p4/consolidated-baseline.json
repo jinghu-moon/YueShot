@@ -1,0 +1,134 @@
+{
+  "scope": "Same-source existing B regression plus three actual-capture retests after unlock; not visible UI qualification",
+  "sourceManifest": "final-regression-run/summary.json",
+  "sourceUnchangedAtAudit": true,
+  "results": [
+    {
+      "name": "capture",
+      "gatePassed": true,
+      "passed": 606,
+      "evidence": "final-regression-run/capture.txt",
+      "sha256": "93c26540f725a38f1122821638477adc9f100b29077edab3da0c7c4fb535bcb7"
+    },
+    {
+      "name": "media",
+      "gatePassed": true,
+      "passed": 8,
+      "evidence": "final-regression-run/media.txt",
+      "sha256": "8142f207f70fe6de4732f74b001a88a03b1b8cdf02bfb112e57a462808b17bdb"
+    },
+    {
+      "name": "geometry",
+      "gatePassed": true,
+      "passed": 10,
+      "evidence": "final-regression-run/geometry.txt",
+      "sha256": "56a067c59d5c5c81de884a55de8a9fc9d14f5470672f4938a0982dedc8811eeb"
+    },
+    {
+      "name": "native-baseline",
+      "gatePassed": true,
+      "passed": 11,
+      "evidence": "final-regression-run/native-baseline.txt",
+      "sha256": "4ca223d7e22734d9c7fc40923b1d0d70323de0a9e1f9c168649cc9114faecebc"
+    },
+    {
+      "name": "selection-target",
+      "gatePassed": true,
+      "passed": 3,
+      "evidence": "final-regression-run/selection-target.txt",
+      "sha256": "47002a6783b9671cb3918465122341f2b094c9ed01677a108d4d39790f9a7e23"
+    },
+    {
+      "name": "refresh_builds_a_labelled_snapshot_with_ordered_candidates",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/refresh_builds_a_labelled_snapshot_with_ordered_candidates.txt",
+      "sha256": "7ae66bd67383234af3e5c5c37da05aea14ba61a53db2e73c09fe230ea62493b9"
+    },
+    {
+      "name": "each_refresh_advances_the_epoch_and_drops_the_previous_snapshot",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/each_refresh_advances_the_epoch_and_drops_the_previous_snapshot.txt",
+      "sha256": "d6afcac221edda2193fdf6c8a0d10e423f07007d8ba08b4b6941f213650ac517"
+    },
+    {
+      "name": "hover_revalidation_reports_bounds_changes_and_stale_targets",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/hover_revalidation_reports_bounds_changes_and_stale_targets.txt",
+      "sha256": "9a626ff944afc5327c8643c5c371c0cae821ddba54b9f9f5e8b7ed17438226f8"
+    },
+    {
+      "name": "native_baseline_controller_preview_replacement_and_manual_path_trace",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/native_baseline_controller_preview_replacement_and_manual_path_trace.txt",
+      "sha256": "8ee12e19d5cd8fe1b2c83b44875e5fa15d0726cca069178a6a0f73bf5206622d"
+    },
+    {
+      "name": "the_context_owner_assertion_is_the_invariant_we_actually_hold",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/the_context_owner_assertion_is_the_invariant_we_actually_hold.txt",
+      "sha256": "e11855bb80b945e2cc5d203d63780cefc24e826695f772cf6347ddf91f351f45"
+    },
+    {
+      "name": "async_sample_from_an_uploaded_texture_lands_within_a_few_ticks",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/async_sample_from_an_uploaded_texture_lands_within_a_few_ticks.txt",
+      "sha256": "daee9691158d5214bec94643745c409e306075a4de8b631fd8438094d534cc29"
+    },
+    {
+      "name": "fp16_region_readback_is_typed_and_keeps_exact_source_bits",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/fp16_region_readback_is_typed_and_keeps_exact_source_bits.txt",
+      "sha256": "4aa2a4100524b288590e5c9adb9228f53dce832894d04d7e1706135284946af1"
+    },
+    {
+      "name": "hdr_sampler_returns_explicit_sdr_tiles_without_changing_the_source",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/hdr_sampler_returns_explicit_sdr_tiles_without_changing_the_source.txt",
+      "sha256": "9ce9b8d0db9eab6fd7dff858d763e9af9460d8802da4c50daf32487bfde555fa"
+    },
+    {
+      "name": "window_snap_hints_are_painted_but_never_exported",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "final-regression-run/window_snap_hints_are_painted_but_never_exported.txt",
+      "sha256": "efe263340b7c8a8411f53d4f86d5cb8055aa05156d9312848a5c668440c294c7"
+    },
+    {
+      "name": "providers_probe_and_capture_a_real_monitor_when_available",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "docs/acceptance/visual-candidate-p4/final-desktop-requalification/providers_probe_and_capture_a_real_monitor_when_available.txt",
+      "sha256": "f4e5b99dca13f132b53cc3e39816b9be441441922d066fe6081e3e037aa202df",
+      "priorFailedEvidence": "final-regression-run/providers_probe_and_capture_a_real_monitor_when_available.txt",
+      "failure": "GetCursorPos Win32 error 5 on independently observed Screen-saver desktop; retained, not counted as passing"
+    },
+    {
+      "name": "a_300x200_selection_reads_back_only_its_own_bytes",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "docs/acceptance/visual-candidate-p4/final-desktop-requalification/a_300x200_selection_reads_back_only_its_own_bytes.txt",
+      "sha256": "7b25a06e0500d8d546cf20ceba77c9c388c497b6d76098ae183d30b16cae33e6",
+      "priorFailedEvidence": "final-regression-run/a_300x200_selection_reads_back_only_its_own_bytes.txt",
+      "failure": "GetCursorPos Win32 error 5 on independently observed Screen-saver desktop; retained, not counted as passing"
+    },
+    {
+      "name": "native_f5_worker_honors_capture_build_policy",
+      "gatePassed": true,
+      "passed": 1,
+      "evidence": "docs/acceptance/visual-candidate-p4/final-desktop-requalification/native_f5_worker_honors_capture_build_policy.txt",
+      "sha256": "d72f0596df8b07eceee09d5931b4967f5f671afdf40a6aa4617d77cafd6d72ee",
+      "priorFailedEvidence": "final-regression-run/native_f5_worker_honors_capture_build_policy.txt",
+      "failure": "GetCursorPos Win32 error 5 on independently observed Screen-saver desktop; retained, not counted as passing"
+    }
+  ],
+  "checksPassed": true,
+  "stageComplete": false
+}

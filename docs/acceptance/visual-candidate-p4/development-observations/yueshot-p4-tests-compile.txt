@@ -1,0 +1,27 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0616]: field `rect` of struct `visual_detection::Candidate` is private
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\visual_pipeline.rs:150:51
+    |
+150 | ...                   c.rect.left + origin.x,
+    |                         ^^^^ private field
+
+error[E0616]: field `rect` of struct `visual_detection::Candidate` is private
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\visual_pipeline.rs:151:51
+    |
+151 | ...                   c.rect.top + origin.y,
+    |                         ^^^^ private field
+
+error[E0616]: field `rect` of struct `visual_detection::Candidate` is private
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\visual_pipeline.rs:152:51
+    |
+152 | ...                   c.rect.right + origin.x,
+    |                         ^^^^ private field
+
+error[E0616]: field `rect` of struct `visual_detection::Candidate` is private
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\visual_pipeline.rs:153:51
+    |
+153 | ...                   c.rect.bottom + origin.y,
+    |                         ^^^^ private field
+
+For more information about this error, try `rustc --explain E0616`.
+error: could not compile `yue-shot-capture` (lib test) due to 4 previous errors

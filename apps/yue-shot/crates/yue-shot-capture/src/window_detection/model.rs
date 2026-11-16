@@ -11,7 +11,11 @@
 //! already reused the handle, and the overlay would snap to a rectangle that no
 //! longer belongs to the window the user pointed at. [`WindowIdentity`] therefore
 //! pairs the handle with the owning process id and a hash of the window class name;
-//! confirming a target re-checks all three (docs/14 §5.4).
+//! confirming a target re-checks those fields and an optional provider-issued
+//! lifecycle tag. The Windows provider attaches a session-private window property;
+//! destruction removes that property, so a same-process, same-class reincarnation
+//! cannot inherit an old nonzero tag. Zero denotes unverified lifetime and cannot
+//! qualify a visual owner. This is not an OS creation timestamp or snapshot epoch.
 //!
 //! ## Why a snapshot needs an epoch
 //!
@@ -136,23 +140,31 @@ pub struct WindowIdentity {
     pub hwnd: isize,
     /// Owning process, from `GetWindowThreadProcessId`.
     pub process_id: u32,
-    /// Hash of `GetClassNameW`; distinguishes a recycled handle from its predecessor.
+    /// Hash of `GetClassNameW`; detects class changes, not same-class handle reuse.
     pub class_name_hash: u64,
+    /// Provider-issued lifecycle tag; zero means lifetime could not be verified.
+    pub creation_token: usize,
 }
 
 impl WindowIdentity {
-    pub const fn new(hwnd: isize, process_id: u32, class_name_hash: u64) -> Self {
+    pub const fn new(
+        hwnd: isize,
+        process_id: u32,
+        class_name_hash: u64,
+        creation_token: usize,
+    ) -> Self {
         Self {
             hwnd,
             process_id,
             class_name_hash,
+            creation_token,
         }
     }
 
     /// Whether two observations describe the same window.
     ///
-    /// A handle that survived a close/open cycle fails this check because the
-    /// process id or the class hash changes; see the module docs.
+    /// Verified observations must also agree on their provider-issued lifetime tag.
+    /// Two zero-tag observations do not prove that no handle reincarnation occurred.
     pub fn matches(self, other: Self) -> bool {
         self == other
     }
@@ -164,6 +176,7 @@ impl WindowIdentity {
 pub enum TargetOrigin {
     Window,
     Accessibility,
+    Visual,
 }
 
 /// One level of a deep path: where it is, and what kind of thing it is (docs/21 §5.24, B6).
@@ -182,6 +195,13 @@ pub struct PathLevel {
 }
 
 impl PathLevel {
+    pub const fn visual(rect: Rect) -> Self {
+        Self {
+            rect,
+            origin: TargetOrigin::Visual,
+            kind: LevelKind::Unknown,
+        }
+    }
     pub const fn new(rect: Rect, kind: LevelKind) -> Self {
         Self {
             rect,
@@ -452,7 +472,11 @@ impl SelectionTarget {
     pub const fn at_level(mut self, level: PathLevel) -> Self {
         self.rect_screen = level.rect;
         self.origin = level.origin;
-        self.kind = Some(level.kind);
+        self.kind = if matches!(level.origin, TargetOrigin::Visual) {
+            None
+        } else {
+            Some(level.kind)
+        };
         self
     }
 
@@ -673,7 +697,7 @@ mod tests {
     }
 
     fn identity(hwnd: isize) -> WindowIdentity {
-        WindowIdentity::new(hwnd, 4242, 0xC0FFEE)
+        WindowIdentity::new(hwnd, 4242, 0xC0FFEE, 1)
     }
 
     fn candidate(hwnd: isize, z_order: u32, epoch: SnapshotEpoch) -> WindowCandidate {
@@ -757,13 +781,15 @@ mod tests {
 
     #[test]
     fn identity_mismatch_means_a_reused_handle_not_the_same_window() {
-        let original = WindowIdentity::new(0x1000, 7, 0xAAAA);
+        let original = WindowIdentity::new(0x1000, 7, 0xAAAA, 1);
         assert!(original.matches(original));
         // Recycled handle, different process.
-        assert!(!original.matches(WindowIdentity::new(0x1000, 9, 0xAAAA)));
+        assert!(!original.matches(WindowIdentity::new(0x1000, 9, 0xAAAA, 1)));
         // Recycled handle, same process, different window class.
-        assert!(!original.matches(WindowIdentity::new(0x1000, 7, 0xBBBB)));
-        assert!(!original.matches(WindowIdentity::new(0x2000, 7, 0xAAAA)));
+        assert!(!original.matches(WindowIdentity::new(0x1000, 7, 0xBBBB, 1)));
+        assert!(!original.matches(WindowIdentity::new(0x2000, 7, 0xAAAA, 1)));
+        assert!(!original.matches(WindowIdentity::new(0x1000, 7, 0xAAAA, 2)));
+        assert!(!original.matches(WindowIdentity::new(0x1000, 7, 0xAAAA, 0)));
     }
 
     #[test]
@@ -855,7 +881,7 @@ mod tests {
         // An old snapshot epoch must not rewrite the live snapshot.
         assert!(!changed.applies_to(epoch + 1, window));
         // A recycled HWND must not move the hover highlight.
-        assert!(!changed.applies_to(epoch, WindowIdentity::new(0x20, 1, 2)));
+        assert!(!changed.applies_to(epoch, WindowIdentity::new(0x20, 1, 2, 1)));
         // Identity/epoch-free verdicts carry no geometry to write back.
         assert_eq!(HoverValidity::Valid.changed_bounds(), None);
         assert!(HoverValidity::Valid.applies_to(epoch, window));

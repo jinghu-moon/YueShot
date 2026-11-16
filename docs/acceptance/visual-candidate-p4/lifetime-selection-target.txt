@@ -1,0 +1,10 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 3 tests
+test window_detection::model::tests::selection_target_replay_keeps_selected_geometry_separate_from_owner_and_source ... ok
+test window_detection::model::tests::selection_target_replay_origin_is_not_inferred_from_control_kind ... ok
+test windows::overlay::native_baseline::selection_target_replay_controller_binds_geometry_source_and_native_levels ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 730 filtered out; finished in 0.21s
+

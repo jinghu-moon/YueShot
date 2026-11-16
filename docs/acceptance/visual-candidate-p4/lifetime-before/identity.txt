@@ -1,0 +1,11 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.35s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 4 tests
+test window_detection::model::tests::bounds_changed_is_ignored_unless_epoch_and_identity_both_match ... ok
+test window_detection::model::tests::identity_mismatch_means_a_reused_handle_not_the_same_window ... ok
+test window_detection::model::tests::snapshot_lookup_is_by_identity_and_release_drops_everything ... ok
+test windows::color_output::tests::topology_order_is_not_a_change_but_white_identity_and_state_are ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 724 filtered out; finished in 0.00s
+

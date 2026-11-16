@@ -1,0 +1,15 @@
+{
+  "auditedAt": "2026-11-17T04:27:01.060193+08:00",
+  "results": [
+    {
+      "manifest": "software-regression-run6/summary.json",
+      "sourceUnchangedAtAudit": true,
+      "mismatchedPaths": []
+    },
+    {
+      "manifest": "final-regression-run/summary.json",
+      "sourceUnchangedAtAudit": true,
+      "mismatchedPaths": []
+    }
+  ]
+}

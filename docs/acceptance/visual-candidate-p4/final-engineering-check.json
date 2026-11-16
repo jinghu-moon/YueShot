@@ -1,0 +1,10 @@
+{
+  "started": "2026-11-17T04:21:44.3082160+08:00",
+  "finished": "2026-11-17T04:25:45.4690059+08:00",
+  "command": "cargo xtask check",
+  "exitCode": 0,
+  "sourceManifest": "software-regression-run6/summary.json",
+  "sourceUnchanged": true,
+  "logSha256": "e3ab68cae64d5cf27c78bb7158f78b2b5cfe98878189e8113c36ace66dc16b11",
+  "gatePassed": true
+}

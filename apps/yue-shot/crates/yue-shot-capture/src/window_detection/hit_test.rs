@@ -170,7 +170,7 @@ mod tests {
 
     fn candidate(hwnd: isize, z_order: u32, bounds: Rect, epoch: SnapshotEpoch) -> WindowCandidate {
         WindowCandidate::new(
-            WindowIdentity::new(hwnd, 1000 + hwnd as u32, 0xC0FFEE),
+            WindowIdentity::new(hwnd, 1000 + hwnd as u32, 0xC0FFEE, 1),
             bounds,
             z_order,
             epoch,
@@ -503,7 +503,7 @@ mod tests {
         assert!(
             !snapshot.apply_candidate_update(&HoverValidity::BoundsChanged {
                 epoch,
-                identity: WindowIdentity::new(identity.hwnd, identity.process_id + 1, 7),
+                identity: WindowIdentity::new(identity.hwnd, identity.process_id + 1, 7, 1),
                 new_bounds: rect(1, 1, 2, 2),
             })
         );
@@ -511,7 +511,7 @@ mod tests {
         assert!(
             !snapshot.apply_candidate_update(&HoverValidity::BoundsChanged {
                 epoch,
-                identity: WindowIdentity::new(0x999, 1, 2),
+                identity: WindowIdentity::new(0x999, 1, 2, 1),
                 new_bounds: rect(1, 1, 2, 2),
             })
         );

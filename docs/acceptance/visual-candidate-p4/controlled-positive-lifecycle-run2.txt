@@ -1,0 +1,283 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 17s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+test windows::overlay::native_baseline::visual_replay_controlled_capture_lifecycle_resource_probe ... RESOURCE {"controlled_host":true,"event":"begin","idle_seconds":60,"pid":68596,"sessions":100,"warmups":5,"with_visual":true}
+RESOURCE {"device":9865,"dpi":144,"event":"adapter","name":"NVIDIA GeForce RTX 4070 Ti SUPER","size":[3840,2160],"vendor":4318}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":0,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":173883392,"unavailable":0,"working_set":93622272}
+RESOURCE {"active_gpu":[184406016,21098496],"capture_us":64885,"cycle":0,"event":"cycle","private_bytes":163971072,"released_gpu":[150802432,16527360],"total_us":83967,"warmup":true,"working_set":86081536}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":1,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171175936,"unavailable":0,"working_set":93614080}
+RESOURCE {"active_gpu":[184356864,20983808],"capture_us":36922,"cycle":1,"event":"cycle","private_bytes":168599552,"released_gpu":[150802432,16527360],"total_us":54971,"warmup":true,"working_set":90804224}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":2,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171413504,"unavailable":0,"working_set":93814784}
+RESOURCE {"active_gpu":[184356864,20983808],"capture_us":42183,"cycle":2,"event":"cycle","private_bytes":167702528,"released_gpu":[150802432,16527360],"total_us":57842,"warmup":true,"working_set":90624000}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":3,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171376640,"unavailable":0,"working_set":93949952}
+RESOURCE {"active_gpu":[184356864,20983808],"capture_us":36574,"cycle":3,"event":"cycle","private_bytes":168534016,"released_gpu":[150802432,16527360],"total_us":54743,"warmup":true,"working_set":90918912}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":4,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171376640,"unavailable":0,"working_set":94011392}
+RESOURCE {"active_gpu":[184356864,20983808],"capture_us":34781,"cycle":4,"event":"cycle","private_bytes":168665088,"released_gpu":[150802432,16527360],"total_us":50163,"warmup":true,"working_set":91066368}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":5,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171479040,"unavailable":0,"working_set":94101504}
+RESOURCE {"active_gpu":[184356864,20983808],"capture_us":36645,"cycle":5,"event":"cycle","private_bytes":167350272,"released_gpu":[150802432,16527360],"total_us":51973,"warmup":false,"working_set":90296320}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":6,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171114496,"unavailable":0,"working_set":93802496}
+RESOURCE {"active_gpu":[184356864,20742144],"capture_us":34780,"cycle":6,"event":"cycle","private_bytes":168419328,"released_gpu":[150802432,16285696],"total_us":53051,"warmup":false,"working_set":90927104}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":7,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":171102208,"unavailable":0,"working_set":93786112}
+RESOURCE {"active_gpu":[150933504,20348928],"capture_us":36562,"cycle":7,"event":"cycle","private_bytes":134410240,"released_gpu":[117379072,15892480],"total_us":52482,"warmup":false,"working_set":90398720}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":8,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":141295616,"unavailable":0,"working_set":97521664}
+RESOURCE {"active_gpu":[150933504,19824640],"capture_us":32380,"cycle":8,"event":"cycle","private_bytes":134033408,"released_gpu":[117379072,15368192],"total_us":48604,"warmup":false,"working_set":90185728}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":9,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":136708096,"unavailable":0,"working_set":92905472}
+RESOURCE {"active_gpu":[150933504,19300352],"capture_us":35179,"cycle":9,"event":"cycle","private_bytes":133378048,"released_gpu":[117379072,14843904],"total_us":50461,"warmup":false,"working_set":89415680}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":10,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":136052736,"unavailable":0,"working_set":92286976}
+RESOURCE {"active_gpu":[150933504,18776064],"capture_us":37146,"cycle":10,"event":"cycle","private_bytes":132993024,"released_gpu":[117379072,14319616],"total_us":58199,"warmup":false,"working_set":89034752}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":11,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":135659520,"unavailable":0,"working_set":91906048}
+RESOURCE {"active_gpu":[150933504,18251776],"capture_us":49450,"cycle":11,"event":"cycle","private_bytes":131559424,"released_gpu":[117379072,13795328],"total_us":67148,"warmup":false,"working_set":87932928}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":12,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":135286784,"unavailable":0,"working_set":91480064}
+RESOURCE {"active_gpu":[150933504,17727488],"capture_us":39449,"cycle":12,"event":"cycle","private_bytes":131899392,"released_gpu":[117379072,13271040],"total_us":57154,"warmup":false,"working_set":87973888}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":13,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":134619136,"unavailable":0,"working_set":91009024}
+RESOURCE {"active_gpu":[150933504,17203200],"capture_us":32681,"cycle":13,"event":"cycle","private_bytes":131866624,"released_gpu":[117379072,12746752],"total_us":49803,"warmup":false,"working_set":88064000}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":14,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":134529024,"unavailable":0,"working_set":90869760}
+RESOURCE {"active_gpu":[150933504,16678912],"capture_us":38341,"cycle":14,"event":"cycle","private_bytes":131481600,"released_gpu":[117379072,12222464],"total_us":54495,"warmup":false,"working_set":87699456}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":15,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":134135808,"unavailable":0,"working_set":90472448}
+RESOURCE {"active_gpu":[150933504,16285696],"capture_us":40919,"cycle":15,"event":"cycle","private_bytes":131276800,"released_gpu":[117379072,11698176],"total_us":60372,"warmup":false,"working_set":87072768}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":16,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":133378048,"unavailable":0,"working_set":89382912}
+RESOURCE {"active_gpu":[150933504,15630336],"capture_us":51223,"cycle":16,"event":"cycle","private_bytes":130994176,"released_gpu":[117379072,11173888],"total_us":69042,"warmup":false,"working_set":86790144}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":17,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":133087232,"unavailable":0,"working_set":89083904}
+RESOURCE {"active_gpu":[150933504,15106048],"capture_us":39796,"cycle":17,"event":"cycle","private_bytes":130314240,"released_gpu":[117379072,10649600],"total_us":55853,"warmup":false,"working_set":86122496}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":18,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":132431872,"unavailable":0,"working_set":88420352}
+RESOURCE {"active_gpu":[150933504,14581760],"capture_us":41131,"cycle":18,"event":"cycle","private_bytes":129945600,"released_gpu":[117379072,10125312],"total_us":58947,"warmup":false,"working_set":85745664}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":19,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":132038656,"unavailable":0,"working_set":88027136}
+RESOURCE {"active_gpu":[150933504,14057472],"capture_us":34714,"cycle":19,"event":"cycle","private_bytes":129290240,"released_gpu":[117379072,9601024],"total_us":50067,"warmup":false,"working_set":85090304}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":20,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":131383296,"unavailable":0,"working_set":87388160}
+RESOURCE {"active_gpu":[150933504,13533184],"capture_us":45031,"cycle":20,"event":"cycle","private_bytes":128897024,"released_gpu":[117379072,9076736],"total_us":62277,"warmup":false,"working_set":84709376}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":21,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":130990080,"unavailable":0,"working_set":86999040}
+RESOURCE {"active_gpu":[150933504,13008896],"capture_us":38901,"cycle":21,"event":"cycle","private_bytes":128241664,"released_gpu":[117379072,8552448],"total_us":54089,"warmup":false,"working_set":84054016}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":22,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":130334720,"unavailable":0,"working_set":86343680}
+RESOURCE {"active_gpu":[150933504,12484608],"capture_us":34790,"cycle":22,"event":"cycle","private_bytes":126242816,"released_gpu":[117379072,8028160],"total_us":51238,"warmup":false,"working_set":82649088}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":23,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":129941504,"unavailable":0,"working_set":85934080}
+RESOURCE {"active_gpu":[150933504,11960320],"capture_us":32512,"cycle":23,"event":"cycle","private_bytes":127143936,"released_gpu":[117379072,7503872],"total_us":51729,"warmup":false,"working_set":82993152}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":24,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":129286144,"unavailable":0,"working_set":85319680}
+RESOURCE {"active_gpu":[150933504,11436032],"capture_us":37504,"cycle":24,"event":"cycle","private_bytes":126767104,"released_gpu":[117379072,6979584],"total_us":51386,"warmup":false,"working_set":82612224}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":25,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":128892928,"unavailable":0,"working_set":84926464}
+RESOURCE {"active_gpu":[150933504,10911744],"capture_us":34835,"cycle":25,"event":"cycle","private_bytes":126111744,"released_gpu":[117379072,6455296],"total_us":48758,"warmup":false,"working_set":81956864}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":26,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":128237568,"unavailable":0,"working_set":84242432}
+RESOURCE {"active_gpu":[150933504,10387456],"capture_us":34435,"cycle":26,"event":"cycle","private_bytes":125710336,"released_gpu":[117379072,5931008],"total_us":51737,"warmup":false,"working_set":81563648}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":27,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":127893504,"unavailable":0,"working_set":83849216}
+RESOURCE {"active_gpu":[150933504,9863168],"capture_us":35177,"cycle":27,"event":"cycle","private_bytes":125145088,"released_gpu":[117379072,5406720],"total_us":51230,"warmup":false,"working_set":80908288}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":28,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":127238144,"unavailable":0,"working_set":83226624}
+RESOURCE {"active_gpu":[150933504,9338880],"capture_us":32544,"cycle":28,"event":"cycle","private_bytes":124653568,"released_gpu":[117379072,4882432],"total_us":48953,"warmup":false,"working_set":80556032}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":29,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126844928,"unavailable":0,"working_set":82886656}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":32363,"cycle":29,"event":"cycle","private_bytes":123940864,"released_gpu":[117379072,4358144],"total_us":47483,"warmup":false,"working_set":79872000}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":30,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126271488,"unavailable":0,"working_set":82391040}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39955,"cycle":30,"event":"cycle","private_bytes":124063744,"released_gpu":[117379072,4358144],"total_us":60144,"warmup":false,"working_set":80048128}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":31,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126529536,"unavailable":0,"working_set":82632704}
+RESOURCE {"active_gpu":[150933504,8945664],"capture_us":29802,"cycle":31,"event":"cycle","private_bytes":122470400,"released_gpu":[117379072,4358144],"total_us":45216,"warmup":false,"working_set":78823424}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":32,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82313216}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":42119,"cycle":32,"event":"cycle","private_bytes":124076032,"released_gpu":[117379072,4358144],"total_us":56766,"warmup":false,"working_set":80019456}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":33,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82448384}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":34387,"cycle":33,"event":"cycle","private_bytes":123940864,"released_gpu":[117379072,4358144],"total_us":47617,"warmup":false,"working_set":79884288}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":34,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82366464}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37076,"cycle":34,"event":"cycle","private_bytes":124112896,"released_gpu":[117379072,4358144],"total_us":53805,"warmup":false,"working_set":80019456}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":35,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82526208}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":31934,"cycle":35,"event":"cycle","private_bytes":124026880,"released_gpu":[117379072,4358144],"total_us":47439,"warmup":false,"working_set":79863808}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":36,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82391040}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":34427,"cycle":36,"event":"cycle","private_bytes":124162048,"released_gpu":[117379072,4358144],"total_us":52014,"warmup":false,"working_set":80130048}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":37,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82505728}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39981,"cycle":37,"event":"cycle","private_bytes":123981824,"released_gpu":[117379072,4358144],"total_us":54574,"warmup":false,"working_set":79872000}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":38,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82313216}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37932,"cycle":38,"event":"cycle","private_bytes":124121088,"released_gpu":[117379072,4358144],"total_us":53987,"warmup":false,"working_set":80007168}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":39,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82436096}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36336,"cycle":39,"event":"cycle","private_bytes":124006400,"released_gpu":[117379072,4358144],"total_us":49959,"warmup":false,"working_set":79892480}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":40,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82337792}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37683,"cycle":40,"event":"cycle","private_bytes":124108800,"released_gpu":[117379072,4358144],"total_us":56071,"warmup":false,"working_set":79998976}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":41,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82464768}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36166,"cycle":41,"event":"cycle","private_bytes":123985920,"released_gpu":[117379072,4358144],"total_us":49262,"warmup":false,"working_set":79876096}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":42,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126263296,"unavailable":0,"working_set":82300928}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37387,"cycle":42,"event":"cycle","private_bytes":124121088,"released_gpu":[117379072,4358144],"total_us":51694,"warmup":false,"working_set":80007168}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":43,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126443520,"unavailable":0,"working_set":82448384}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":42490,"cycle":43,"event":"cycle","private_bytes":123936768,"released_gpu":[117379072,4358144],"total_us":60929,"warmup":false,"working_set":79794176}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":44,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126402560,"unavailable":0,"working_set":82251776}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":35190,"cycle":44,"event":"cycle","private_bytes":124182528,"released_gpu":[117379072,4358144],"total_us":49468,"warmup":false,"working_set":79900672}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":45,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126631936,"unavailable":0,"working_set":82345984}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":29717,"cycle":45,"event":"cycle","private_bytes":124059648,"released_gpu":[117379072,4358144],"total_us":44124,"warmup":false,"working_set":79781888}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":46,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126308352,"unavailable":0,"working_set":82186240}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":41432,"cycle":46,"event":"cycle","private_bytes":124170240,"released_gpu":[117379072,4358144],"total_us":57772,"warmup":false,"working_set":80027648}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":47,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126578688,"unavailable":0,"working_set":82583552}
+RESOURCE {"active_gpu":[150933504,8945664],"capture_us":47079,"cycle":47,"event":"cycle","private_bytes":124039168,"released_gpu":[117379072,4358144],"total_us":63422,"warmup":false,"working_set":79896576}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":48,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126509056,"unavailable":0,"working_set":82350080}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":35032,"cycle":48,"event":"cycle","private_bytes":124182528,"released_gpu":[117379072,4358144],"total_us":52538,"warmup":false,"working_set":79892480}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":49,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126500864,"unavailable":0,"working_set":82350080}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36892,"cycle":49,"event":"cycle","private_bytes":124030976,"released_gpu":[117379072,4358144],"total_us":52904,"warmup":false,"working_set":79765504}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":50,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126308352,"unavailable":0,"working_set":82198528}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":34968,"cycle":50,"event":"cycle","private_bytes":124162048,"released_gpu":[117379072,4358144],"total_us":53668,"warmup":false,"working_set":80031744}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":51,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126443520,"unavailable":0,"working_set":82448384}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39424,"cycle":51,"event":"cycle","private_bytes":124010496,"released_gpu":[117379072,4358144],"total_us":52424,"warmup":false,"working_set":79912960}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":52,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126259200,"unavailable":0,"working_set":82341888}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":35092,"cycle":52,"event":"cycle","private_bytes":122638336,"released_gpu":[117379072,4358144],"total_us":51220,"warmup":false,"working_set":78962688}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":53,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126390272,"unavailable":0,"working_set":82456576}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":34466,"cycle":53,"event":"cycle","private_bytes":123990016,"released_gpu":[117379072,4358144],"total_us":47733,"warmup":false,"working_set":79880192}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":54,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126259200,"unavailable":0,"working_set":82309120}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":40148,"cycle":54,"event":"cycle","private_bytes":124022784,"released_gpu":[117379072,4358144],"total_us":59172,"warmup":false,"working_set":79921152}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":55,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126291968,"unavailable":0,"working_set":82350080}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36438,"cycle":55,"event":"cycle","private_bytes":123994112,"released_gpu":[117379072,4358144],"total_us":54121,"warmup":false,"working_set":79900672}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":56,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126263296,"unavailable":0,"working_set":82354176}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":31791,"cycle":56,"event":"cycle","private_bytes":124153856,"released_gpu":[117379072,4358144],"total_us":46311,"warmup":false,"working_set":80035840}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":57,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126402560,"unavailable":0,"working_set":82460672}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36944,"cycle":57,"event":"cycle","private_bytes":123994112,"released_gpu":[117379072,4358144],"total_us":55311,"warmup":false,"working_set":79880192}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":58,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82305024}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":49932,"cycle":58,"event":"cycle","private_bytes":124129280,"released_gpu":[117379072,4358144],"total_us":68474,"warmup":false,"working_set":80019456}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":59,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82444288}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39216,"cycle":59,"event":"cycle","private_bytes":123998208,"released_gpu":[117379072,4358144],"total_us":59591,"warmup":false,"working_set":79896576}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":60,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82345984}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":61620,"cycle":60,"event":"cycle","private_bytes":124129280,"released_gpu":[117379072,4358144],"total_us":79834,"warmup":false,"working_set":80031744}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":61,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82481152}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":48521,"cycle":61,"event":"cycle","private_bytes":124047360,"released_gpu":[117379072,4358144],"total_us":66538,"warmup":false,"working_set":79904768}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":62,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126509056,"unavailable":0,"working_set":82341888}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37836,"cycle":62,"event":"cycle","private_bytes":124223488,"released_gpu":[117379072,4358144],"total_us":55809,"warmup":false,"working_set":79941632}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":63,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126504960,"unavailable":0,"working_set":82325504}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":46368,"cycle":63,"event":"cycle","private_bytes":124010496,"released_gpu":[117379072,4358144],"total_us":66877,"warmup":false,"working_set":79781888}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":64,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126320640,"unavailable":0,"working_set":82264064}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":45307,"cycle":64,"event":"cycle","private_bytes":124153856,"released_gpu":[117379072,4358144],"total_us":70169,"warmup":false,"working_set":80052224}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":65,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82530304}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":65869,"cycle":65,"event":"cycle","private_bytes":123973632,"released_gpu":[117379072,4358144],"total_us":84456,"warmup":false,"working_set":79921152}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":66,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82337792}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":61680,"cycle":66,"event":"cycle","private_bytes":124108800,"released_gpu":[117379072,4358144],"total_us":83696,"warmup":false,"working_set":80060416}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":67,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82468864}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":65263,"cycle":67,"event":"cycle","private_bytes":123977728,"released_gpu":[117379072,4358144],"total_us":88361,"warmup":false,"working_set":79929344}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":68,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82395136}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":65922,"cycle":68,"event":"cycle","private_bytes":124141568,"released_gpu":[117379072,4358144],"total_us":84314,"warmup":false,"working_set":80093184}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":69,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82530304}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":44375,"cycle":69,"event":"cycle","private_bytes":124006400,"released_gpu":[117379072,4358144],"total_us":61537,"warmup":false,"working_set":79929344}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":70,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82337792}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":42360,"cycle":70,"event":"cycle","private_bytes":124190720,"released_gpu":[117379072,4358144],"total_us":57750,"warmup":false,"working_set":80060416}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":71,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82468864}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39278,"cycle":71,"event":"cycle","private_bytes":124006400,"released_gpu":[117379072,4358144],"total_us":55998,"warmup":false,"working_set":79921152}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":72,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82370560}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37376,"cycle":72,"event":"cycle","private_bytes":124145664,"released_gpu":[117379072,4358144],"total_us":53650,"warmup":false,"working_set":80056320}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":73,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82501632}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":40298,"cycle":73,"event":"cycle","private_bytes":122384384,"released_gpu":[117379072,4358144],"total_us":56022,"warmup":false,"working_set":78856192}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":74,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126263296,"unavailable":0,"working_set":82317312}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":42612,"cycle":74,"event":"cycle","private_bytes":124162048,"released_gpu":[117379072,4358144],"total_us":61043,"warmup":false,"working_set":80048128}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":75,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82440192}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36927,"cycle":75,"event":"cycle","private_bytes":124002304,"released_gpu":[117379072,4358144],"total_us":53298,"warmup":false,"working_set":79892480}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":76,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126267392,"unavailable":0,"working_set":82333696}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":38703,"cycle":76,"event":"cycle","private_bytes":124133376,"released_gpu":[117379072,4358144],"total_us":57081,"warmup":false,"working_set":80031744}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":77,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82468864}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37810,"cycle":77,"event":"cycle","private_bytes":123998208,"released_gpu":[117379072,4358144],"total_us":56742,"warmup":false,"working_set":79900672}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":78,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126398464,"unavailable":0,"working_set":82444288}
+RESOURCE {"active_gpu":[150933504,8945664],"capture_us":37048,"cycle":78,"event":"cycle","private_bytes":124125184,"released_gpu":[117379072,4358144],"total_us":55412,"warmup":false,"working_set":80031744}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":79,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126443520,"unavailable":0,"working_set":82460672}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":44520,"cycle":79,"event":"cycle","private_bytes":124076032,"released_gpu":[117379072,4358144],"total_us":65041,"warmup":false,"working_set":79941632}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":80,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126509056,"unavailable":0,"working_set":82395136}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":53826,"cycle":80,"event":"cycle","private_bytes":124162048,"released_gpu":[117379072,4358144],"total_us":69072,"warmup":false,"working_set":79917056}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":81,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126504960,"unavailable":0,"working_set":82395136}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":42323,"cycle":81,"event":"cycle","private_bytes":124010496,"released_gpu":[117379072,4358144],"total_us":62672,"warmup":false,"working_set":79785984}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":82,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126312448,"unavailable":0,"working_set":82206720}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":40257,"cycle":82,"event":"cycle","private_bytes":124145664,"released_gpu":[117379072,4358144],"total_us":56864,"warmup":false,"working_set":79921152}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":83,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126574592,"unavailable":0,"working_set":82341888}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":36323,"cycle":83,"event":"cycle","private_bytes":122494976,"released_gpu":[117379072,4358144],"total_us":53276,"warmup":false,"working_set":78733312}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":84,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82247680}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":34903,"cycle":84,"event":"cycle","private_bytes":124018688,"released_gpu":[117379072,4358144],"total_us":52619,"warmup":false,"working_set":79921152}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":85,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82382848}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39100,"cycle":85,"event":"cycle","private_bytes":124080128,"released_gpu":[117379072,4358144],"total_us":56704,"warmup":false,"working_set":79826944}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":86,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82317312}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39458,"cycle":86,"event":"cycle","private_bytes":124219392,"released_gpu":[117379072,4358144],"total_us":60592,"warmup":false,"working_set":79937536}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":87,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82591744}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37816,"cycle":87,"event":"cycle","private_bytes":124080128,"released_gpu":[117379072,4358144],"total_us":53432,"warmup":false,"working_set":79933440}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":88,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82444288}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37035,"cycle":88,"event":"cycle","private_bytes":124211200,"released_gpu":[117379072,4358144],"total_us":52461,"warmup":false,"working_set":80068608}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":89,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82575360}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37023,"cycle":89,"event":"cycle","private_bytes":124080128,"released_gpu":[117379072,4358144],"total_us":52231,"warmup":false,"working_set":79937536}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":90,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82460672}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":43188,"cycle":90,"event":"cycle","private_bytes":124215296,"released_gpu":[117379072,4358144],"total_us":61860,"warmup":false,"working_set":80072704}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":91,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82591744}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":37141,"cycle":91,"event":"cycle","private_bytes":123985920,"released_gpu":[117379072,4358144],"total_us":54771,"warmup":false,"working_set":79880192}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":92,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126214144,"unavailable":0,"working_set":82350080}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39538,"cycle":92,"event":"cycle","private_bytes":124219392,"released_gpu":[117379072,4358144],"total_us":54403,"warmup":false,"working_set":80072704}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":93,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82583552}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39460,"cycle":93,"event":"cycle","private_bytes":124088320,"released_gpu":[117379072,4358144],"total_us":60065,"warmup":false,"working_set":79941632}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":94,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82579456}
+RESOURCE {"active_gpu":[150933504,8945664],"capture_us":43356,"cycle":94,"event":"cycle","private_bytes":124112896,"released_gpu":[117379072,4358144],"total_us":61449,"warmup":false,"working_set":80084992}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":95,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82583552}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39483,"cycle":95,"event":"cycle","private_bytes":123981824,"released_gpu":[117379072,4358144],"total_us":57353,"warmup":false,"working_set":79949824}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":96,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82452480}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":42391,"cycle":96,"event":"cycle","private_bytes":124194816,"released_gpu":[117379072,4358144],"total_us":56878,"warmup":false,"working_set":80093184}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":97,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126455808,"unavailable":0,"working_set":82583552}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":45564,"cycle":97,"event":"cycle","private_bytes":124014592,"released_gpu":[117379072,4358144],"total_us":61197,"warmup":false,"working_set":79958016}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":98,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82452480}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":49928,"cycle":98,"event":"cycle","private_bytes":124145664,"released_gpu":[117379072,4358144],"total_us":66757,"warmup":false,"working_set":80117760}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":99,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82583552}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":45281,"cycle":99,"event":"cycle","private_bytes":124014592,"released_gpu":[117379072,4358144],"total_us":65203,"warmup":false,"working_set":79958016}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":100,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82444288}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39611,"cycle":100,"event":"cycle","private_bytes":124149760,"released_gpu":[117379072,4358144],"total_us":56947,"warmup":false,"working_set":80093184}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":101,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126455808,"unavailable":0,"working_set":82575360}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":50080,"cycle":101,"event":"cycle","private_bytes":124014592,"released_gpu":[117379072,4358144],"total_us":64523,"warmup":false,"working_set":79958016}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":102,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82456576}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":46344,"cycle":102,"event":"cycle","private_bytes":124178432,"released_gpu":[117379072,4358144],"total_us":63783,"warmup":false,"working_set":80113664}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":103,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126447616,"unavailable":0,"working_set":82587648}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":41621,"cycle":103,"event":"cycle","private_bytes":124022784,"released_gpu":[117379072,4358144],"total_us":61558,"warmup":false,"working_set":79966208}
+RESOURCE {"buffer_bound":10002576,"completed":1,"cycle":104,"descriptor":"PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }","event":"visual","private_bytes":126316544,"unavailable":0,"working_set":82460672}
+RESOURCE {"active_gpu":[150933504,8814592],"capture_us":39978,"cycle":104,"event":"cycle","private_bytes":122855424,"released_gpu":[117379072,4358144],"total_us":59280,"warmup":false,"working_set":79015936}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122855424,"second":0,"working_set":79015936}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122855424,"second":1,"working_set":79015936}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122855424,"second":2,"working_set":79015936}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122855424,"second":3,"working_set":79015936}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122572800,"second":4,"working_set":78905344}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122531840,"second":5,"working_set":78893056}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":122531840,"second":6,"working_set":78893056}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":7,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":8,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":9,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":10,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":11,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":12,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":13,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":14,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":15,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":16,"working_set":74301440}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":17,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":18,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":19,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":20,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":21,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":22,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":23,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":24,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":25,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":26,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":27,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":28,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":29,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":30,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":31,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":32,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":33,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117932032,"second":34,"working_set":74059776}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":35,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":36,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":37,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":38,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":39,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":40,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":41,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":42,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":43,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":44,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":45,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":46,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":47,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":48,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":49,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":50,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":51,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":52,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":53,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":54,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":55,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":56,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":57,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":58,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":59,"working_set":73986048}
+RESOURCE {"event":"idle","gpu":[117379072,4358144],"private_bytes":117833728,"second":60,"working_set":73986048}
+RESOURCE {"event":"shutdown"}
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 713 filtered out; finished in 85.26s
+

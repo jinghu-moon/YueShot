@@ -411,7 +411,7 @@ mod tests {
             .issue();
         RefinementJob {
             request,
-            window: WindowIdentity::new(hwnd, 1, 2),
+            window: WindowIdentity::new(hwnd, 1, 2, 1),
             epoch: 1,
             point,
         }

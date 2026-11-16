@@ -1,0 +1,14 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0599]: no method named `handle_message` found for struct `overlay::native_baseline::Replay` in the current scope
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline\visual_replay.rs:190:20
+    |
+190 |             replay.handle_message(message.message, message.wParam, message.lParam);
+    |                    ^^^^^^^^^^^^^^ method not found in `overlay::native_baseline::Replay`
+    |
+   ::: apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline.rs:53:1
+    |
+ 53 | struct Replay(OverlayController);
+    | ------------- method `handle_message` not found for this struct
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `yue-shot-capture` (lib test) due to 1 previous error

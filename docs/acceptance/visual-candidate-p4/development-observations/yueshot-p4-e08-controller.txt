@@ -1,0 +1,9 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.71s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_e08_second_session_rejects_old_answers_and_remains_operable ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 721 filtered out; finished in 0.23s
+

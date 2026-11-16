@@ -3,6 +3,62 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
+#[test]
+fn visual_replay_each_algorithm_allocation_site_fails_without_partial_publication() {
+    let (size, pixels) = decode("T21.png");
+    let point = Point::new(450, 340);
+    let read = |rect: Rect| {
+        let mut bytes = Vec::new();
+        for y in rect.top..rect.bottom {
+            let at = (y as usize * size[0] + rect.left as usize) * 4;
+            bytes.extend_from_slice(&pixels[at..at + rect.width() as usize * 4]);
+        }
+        bytes
+    };
+    for site in [
+        "tile_index",
+        "requested_regions",
+        "missing_tiles",
+        "scan_peaks",
+        "peak_positions",
+        "edge_spans",
+        "corner_rectangles",
+        "horizontal_runs",
+        "merged_runs",
+        "run_index",
+        "pending_regions",
+        "tile_pixels",
+        "validation_positions",
+        "verified_candidates",
+    ] {
+        let (failed, hit) = allocation::fail_at(site, || {
+            let roi = progressive::Query::initial_region(size, point).unwrap();
+            let mut query = match progressive::Query::new(size, point, roi, read(roi)) {
+                Ok(q) => q,
+                Err(reason) => return reason == Completion::Failed,
+            };
+            loop {
+                match query.step() {
+                    progressive::Step::Read(regions) => {
+                        if let Err(reason) =
+                            query.apply(regions.into_iter().map(|r| (r, read(r))).collect())
+                        {
+                            return reason == Completion::Failed;
+                        }
+                    }
+                    progressive::Step::Unavailable(reason) => return reason == Completion::Failed,
+                    progressive::Step::Complete(_) => return false,
+                }
+            }
+        });
+        assert!(hit, "unexercised allocation site: {site}");
+        assert!(
+            failed,
+            "partial/complete result escaped failed allocation: {site}"
+        );
+    }
+}
+
 fn fixture_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/visual-candidate-v4.1")
 }
@@ -1031,7 +1087,7 @@ fn visual_progressive_batches_preserve_full_reference_and_report_all_costs() {
                 q["point"][1].as_i64().unwrap() as i32,
             );
             let roi = progressive::Query::initial_region(size, point).unwrap();
-            let mut query = progressive::Query::new(size, point, read(roi)).unwrap();
+            let mut query = progressive::Query::new(size, point, roi, read(roi)).unwrap();
             let expected = proposals::seed(Image::new(size, &rgba).unwrap(), point);
             let started = Instant::now();
             let mut copies = 1;
@@ -1073,13 +1129,43 @@ fn visual_progressive_batches_preserve_full_reference_and_report_all_costs() {
 
 #[test]
 fn visual_progressive_incomplete_wrong_batches_and_large_indices_fail_closed() {
+    for region in [
+        Rect::new(-1, 0, 10, 10),
+        Rect::new(0, 0, 1025, 1),
+        Rect::new(1, 1, 10, 10),
+        Rect::default(),
+        Rect::new(0, 0, 1024, 1024),
+    ] {
+        assert!(
+            progressive::Query::new([1024, 1024], Point::new(0, 0), region, Vec::new()).is_err(),
+            "invalid initial read region accepted: {region:?}"
+        );
+    }
     assert!(matches!(
-        progressive::Query::new([16384, 16384], Point::new(0, 0), vec![255; 512 * 512 * 4]),
+        progressive::Query::new(
+            [16384, 16384],
+            Point::new(0, 0),
+            Rect::new(0, 0, 512, 512),
+            vec![255; 512 * 512 * 4]
+        ),
         Err(Completion::BudgetExceeded)
     ));
-    assert!(progressive::Query::new([1024, 1024], Point::new(0, 0), vec![0; 1]).is_err());
-    let mut query =
-        progressive::Query::new([1024, 1024], Point::new(0, 0), vec![255; 512 * 512 * 4]).unwrap();
+    assert!(
+        progressive::Query::new(
+            [1024, 1024],
+            Point::new(0, 0),
+            Rect::new(0, 0, 512, 512),
+            vec![0; 1]
+        )
+        .is_err()
+    );
+    let mut query = progressive::Query::new(
+        [1024, 1024],
+        Point::new(0, 0),
+        Rect::new(0, 0, 512, 512),
+        vec![255; 512 * 512 * 4],
+    )
+    .unwrap();
     let progressive::Step::Read(regions) = query.step() else {
         panic!("missing source requires explicit evidence request");
     };

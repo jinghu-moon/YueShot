@@ -1,0 +1,37 @@
+    Checking yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+warning: method `pending_reads` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:86:8
+   |
+34 | impl<'a> Image<'a> {
+   | ------------------ method in this implementation
+...
+86 |     fn pending_reads(self) -> bool {
+   |        ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `0` is never read
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:14:17
+   |
+14 |     Unavailable(Completion),
+   |     ----------- ^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+14 -     Unavailable(Completion),
+14 +     Unavailable(()),
+   |
+
+warning: associated function `live_count` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:111:12
+    |
+ 41 | impl Query {
+    | ---------- associated function in this implementation
+...
+111 |     pub fn live_count() -> usize {
+    |            ^^^^^^^^^^
+
+warning: `yue-shot-capture` (lib) generated 3 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.79s

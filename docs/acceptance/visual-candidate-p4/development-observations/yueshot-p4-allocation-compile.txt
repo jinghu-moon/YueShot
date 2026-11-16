@@ -1,0 +1,22 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+warning: function `fail_at` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\allocation.rs:26:15
+   |
+26 | pub(crate) fn fail_at<T>(site: &'static str, run: impl FnOnce() -> T) -> (T, bool) {
+   |               ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `yue-shot-capture` (lib test) generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.68s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 5 tests
+test window_detection::visual::tests::visual_replay_nested_single_pixel_layers_reachable_crossings_not_in_chain ... ok
+test window_detection::visual::tests::visual_replay_semantic_defaults_and_equal_geometry_keep_native_kind ... ok
+test window_detection::visual::tests::visual_replay_source_owner_occlusion_and_frozen_bounds_fail_closed ... ok
+test windows::visual_pipeline::tests::visual_replay_latest_query_stays_bounded_across_thousand_moves_and_cancel ... ok
+test windows::visual_pipeline::tests::visual_replay_product_pipeline_queries_reuses_pixels_and_rejects_retired_source ... ignored, L3 real GPU and product worker; fixed fixture only, no visible window or external writes
+
+test result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 692 filtered out; finished in 0.01s
+

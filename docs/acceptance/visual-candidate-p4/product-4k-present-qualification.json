@@ -1,0 +1,6 @@
+{
+  "command": "YUESHOT_P4_SAMPLES=1000 YUESHOT_P4_SESSIONS=3 YUESHOT_P4_PRESENT=1 cargo test -p yue-shot-capture --release --locked --lib visual_replay_product_controller_latency_diagnostic -- --ignored --nocapture --test-threads=1",
+  "finished": "2026-11-17T03:38:55.5645220+08:00",
+  "exitCode": 0,
+  "logSha256": "1eda70f0ebea4fd4b0ab07bd8d45263f876a1809034a825702fbf6b2bf9d4563"
+}

@@ -1,0 +1,1 @@
+lifecycle: exit=0 sessions=100 idle=61 gate=True

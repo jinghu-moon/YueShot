@@ -1,0 +1,13 @@
+{
+  "recordedAt": "2026-11-17T04:00:35.125280+08:00",
+  "tool": "mcp__cua_repl.js: cua.getState()",
+  "result": {
+    "apps": [],
+    "browsers": [],
+    "errors": [
+      "Native apps: Error: Computer Use native pipe is unavailable: failed to connect native pipe: 系统找不到指定的文件。 (os error 2)",
+      "Browsers: Error: The browser access host is unavailable"
+    ]
+  },
+  "meaning": "Native UI interaction unavailable; does not imply the desktop is locked. Real capture probes run separately."
+}

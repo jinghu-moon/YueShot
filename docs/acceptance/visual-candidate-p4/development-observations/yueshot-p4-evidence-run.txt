@@ -1,0 +1,3 @@
+visual-reference: test result: ok. 26 passed; 0 failed; 13 ignored; 0 measured; 664 filtered out; finished in 3.15s gate=True
+product-replays: test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 692 filtered out; finished in 0.88s gate=True
+transfer-faults: test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 702 filtered out; finished in 0.19s gate=True

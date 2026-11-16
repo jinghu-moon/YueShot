@@ -543,6 +543,20 @@ pub(crate) fn test_frozen_frame(width: u32, height: u32) -> FrozenFrame {
     }
 }
 
+/// Upload fixed test pixels; never captures the desktop or changes the source bits.
+#[cfg(test)]
+pub(crate) fn test_gpu_frozen_frame(width: u32, height: u32, bytes: Vec<u8>) -> FrozenFrame {
+    let device = Arc::new(GraphicsDevice::create().unwrap());
+    let texture = device.create_bgra_texture(width, height, &bytes).unwrap();
+    let mut frame = test_frozen_frame(width, height);
+    frame.texture = Some(texture);
+    frame.device = Some(device);
+    frame.pixels = OnceLock::from(
+        PixelBuffer::from_tight(width, height, PixelDescriptor::bgra8(), bytes).unwrap(),
+    );
+    frame
+}
+
 /// Providers tried for one capture, in order.
 ///
 /// WGC is attempted first only when it is the preferred provider; BitBlt is always

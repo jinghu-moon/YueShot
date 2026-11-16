@@ -1,0 +1,10 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.79s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::win::d3d11::visual_transfer::tests::visual_replay_demo_t22_partitioned_raw_reads_preserve_pixels_evidence_and_d2d ... DEMO_TRANSFER T22 partitions=9 raw_bytes_exact=true evidence_exact=true source_unchanged=true d2d_output_exact=true compute_shader=false
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 724 filtered out; finished in 0.20s
+

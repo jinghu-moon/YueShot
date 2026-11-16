@@ -14,12 +14,15 @@ impl OverlayController {
     /// outstanding requests — is dropped here, and the refresh is handed to the detection
     /// worker so the overlay thread never runs `EnumWindows`/DWM itself.
     pub(super) fn begin_window_detection(&mut self, layout: &MonitorLayout) {
+        self.invalidate_visual();
         self.gesture = GestureState::new(system_drag_threshold(layout.dpi));
         self.set_preview_target(None);
         self.snap_radius = snap_radius_px();
         self.hover_target = None;
         self.dwell_armed = None;
         self.confirm_request = None;
+        self.confirming_preview = None;
+        self.manual_level = None;
         self.hover_request = None;
         // v2 state is per-session too: no cached deep path, no in-flight query.
         self.refine.reset();
@@ -67,7 +70,7 @@ impl OverlayController {
     /// shows until the wheel or an arrow key asks for another level. The level carries its own kind,
     /// which is what the size label names it by (docs/21 §5.24, B6).
     pub(super) fn selected_deep_level(&self) -> Option<PathLevel> {
-        let deep = self.deep_target.as_ref()?;
+        let deep = self.display_target()?;
         let chain = self.deep_levels?;
         (!chain.is_deepest())
             .then(|| chain.current(&deep.path))
@@ -89,6 +92,9 @@ impl OverlayController {
         if rect.is_empty() || self.session.state() != CaptureState::Selecting {
             return None;
         }
+        if self.preview_is_visual() {
+            return Some(format!("{}×{} px  区域", rect.width(), rect.height()));
+        }
         Some(preview_label(
             rect,
             self.preview_is_window(),
@@ -106,7 +112,7 @@ impl OverlayController {
     /// The walked-to level if there is one, otherwise the published box — the same pair the preview
     /// rectangle comes from, so the noun and the box cannot describe different levels.
     pub(super) fn preview_kind(&self) -> Option<LevelKind> {
-        let deep = self.deep_target.as_ref()?;
+        let deep = self.display_target()?;
         let level = self
             .selected_deep_level()
             .or_else(|| deep.path.last().copied())?;
@@ -122,8 +128,9 @@ impl OverlayController {
     /// What the level badge shows: how many stops the wheel still has each way (docs/21 §5.24, A1).
     pub(super) fn level_badge(&self) -> Option<LevelReach> {
         let path = self
-            .deep_target
+            .combined_target
             .as_ref()
+            .or(self.deep_target.as_ref())
             .map(|deep| deep.path.as_slice())
             .unwrap_or(&[]);
         level_badge_reach(self.deep_levels, path)
@@ -135,9 +142,18 @@ impl OverlayController {
     /// and a thin outline instead of the accent preview: "we could not get below the window" should
     /// not look like a confident element pick.
     pub(super) fn preview_is_window(&self) -> bool {
+        if let Some(combined) = &self.combined_target {
+            return self
+                .selected_deep_level()
+                .or_else(|| combined.path.last().copied())
+                .is_some_and(|level| {
+                    level.origin == crate::window_detection::TargetOrigin::Window
+                });
+        }
         if self
-            .deep_target
+            .combined_target
             .as_ref()
+            .or(self.deep_target.as_ref())
             .is_some_and(|deep| deep.path.len() == 1)
         {
             return true;
@@ -305,14 +321,14 @@ impl OverlayController {
         }
         // No answer, no box: nothing would show the colour, and arming the walk envelope for it
         // would keep the render tick alive for a second of empty repaints.
-        if self.deep_target.is_none() {
+        if self.combined_target.is_none() && self.deep_target.is_none() {
             return false;
         }
         // The walk is what the capture box's colour reports, so it is touched before the step is
         // resolved: a notch against either end of the chain still says "the wheel was used"
         // (docs/21 §5.24, A3).
         self.touch_walk();
-        let Some(deep) = self.deep_target.as_ref() else {
+        let Some(deep) = self.combined_target.as_ref().or(self.deep_target.as_ref()) else {
             return false;
         };
         // A level walk starts from what is on screen right now, so the chain is built on first use
@@ -331,6 +347,10 @@ impl OverlayController {
         );
         let moved = chain.jump_to(target);
         if moved {
+            self.manual_level = chain.current(&deep.path).map(|level| (deep.window, level));
+            if let Some(visual) = &mut self.visual {
+                visual.invalidate();
+            }
             // The first successful walk is where the counter appears, so that is where it gets
             // explained (docs/21 §5.21).
             self.arm_level_hint();
@@ -354,7 +374,7 @@ impl OverlayController {
         let Some(layout) = self.layout() else {
             return Vec::new();
         };
-        let Some(deep) = self.deep_target.as_ref() else {
+        let Some(deep) = self.combined_target.as_ref().or(self.deep_target.as_ref()) else {
             return Vec::new();
         };
         if self.hover_target.map(|target| target.identity()) != Some(deep.window) {
@@ -464,12 +484,18 @@ impl OverlayController {
     }
 
     pub(super) fn clear_snap_preview_for_modifier(&mut self) {
+        self.invalidate_visual();
+        self.confirm_request = None;
+        self.confirming_preview = None;
+        self.manual_level = None;
         let changed = self.gesture.clear_preview();
         self.set_preview_target(None);
         self.disarm_dwell();
         self.disarm_refinement();
         self.refinement.retire();
-        let deep_changed = self.deep_target.take().is_some() || self.deep_levels.take().is_some();
+        let target_changed = self.deep_target.take().is_some();
+        let levels_changed = self.deep_levels.take().is_some();
+        let deep_changed = target_changed || levels_changed;
         let hover_changed = self.hover_target.take().is_some();
         if hover_changed || deep_changed || changed {
             self.invalidate();
@@ -512,6 +538,19 @@ impl OverlayController {
     /// refinement target is the control under the pointer, and controls change far more
     /// often than windows do (docs/18 §2).
     pub(super) fn drive_refinement(&mut self, screen: Point, target: Option<SelectionTarget>) {
+        if let Some((owner, level)) = self.manual_level {
+            if target.is_some_and(|t| t.identity() == owner) && level.rect.contains(screen) {
+                return;
+            }
+            self.manual_level = None;
+            self.deep_levels = None;
+        }
+        if let Some(visual) = &mut self.visual {
+            visual.retire_for_cursor(self.cursor, screen, target.map(|t| t.identity()));
+            if visual.published.is_none() {
+                self.combined_target = None;
+            }
+        }
         // A staged downgrade only survives while the cursor stays where it was staged.
         if let Some((_, staged)) = self.pending_downgrade
             && !points_close(staged, screen)
@@ -534,6 +573,23 @@ impl OverlayController {
             self.arm_refinement();
         } else {
             self.disarm_refinement();
+            // A cached native container answers native semantics, not a new pixel seed.
+            // Reuse the same 80ms timer without claiming a native query is pending.
+            if target.is_some_and(|target| target.owner.screen_bounds.contains(screen))
+                && self.session.state() == CaptureState::Selecting
+                && self.gesture.gesture().allows_hover()
+                && !self.shift_down
+                && self.confirming_preview.is_none()
+            {
+                unsafe {
+                    SetTimer(
+                        self.window,
+                        REFINEMENT_TIMER_ID,
+                        crate::window_detection::REFINEMENT_DWELL_MS,
+                        None,
+                    )
+                };
+            }
         }
         // Mirror the scheduler's published path: it is the single source of truth for
         // "which deep target is live", and the paint layer reads it from here.
@@ -721,6 +777,7 @@ impl OverlayController {
 
     /// Nearest window for the current cursor position, converted to monitor-local space.
     pub(super) fn preview_for_cursor(&mut self) -> Option<(SelectionTarget, Rect, Rect)> {
+        self.rebuild_combined_target();
         if self.session.state() != CaptureState::Selecting {
             return None;
         }
@@ -738,7 +795,7 @@ impl OverlayController {
             at.elapsed() < Duration::from_millis(u64::from(REFINEMENT_PREVIEW_WAIT_MS))
         });
         let bounds = preview_bounds(
-            self.deep_target.as_ref(),
+            self.display_target(),
             self.selected_deep_level().map(|level| level.rect),
             target.identity(),
             screen,
@@ -752,8 +809,7 @@ impl OverlayController {
         // The selected rectangle and its native origin now travel together;
         // owner bounds remain available only for window validation/rebinding.
         let level = self
-            .deep_target
-            .as_ref()
+            .display_target()
             .filter(|deep| deep.window == target.identity())
             .and_then(|deep| deep.path.iter().rev().find(|level| level.rect == bounds))
             .copied()
@@ -793,6 +849,18 @@ impl OverlayController {
                             false,
                         );
                         self.snapshot = snapshot;
+                        self.invalidate_visual();
+                        self.manual_level = None;
+                        self.deep_levels = None;
+                        // The intent is bound to frozen pixels and the request,
+                        // not to an unrelated enumeration epoch. Keep it only
+                        // while the refreshed owner geometry remains valid.
+                        if self.confirming_preview.is_none_or(|preview| {
+                            !self.confirmation_owner_is_current(preview.target)
+                        }) {
+                            self.confirm_request = None;
+                            self.confirming_preview = None;
+                        }
                         // A rebuilt snapshot invalidates every deep path and query
                         // (docs/18 §2): they describe the previous generation's geometry.
                         self.refine.on_snapshot_changed();
@@ -861,6 +929,11 @@ impl OverlayController {
                 if !self.snapshot.apply_candidate_update(&validity) {
                     return;
                 }
+                self.invalidate_visual();
+                self.manual_level = None;
+                self.deep_levels = None;
+                self.deep_target = None;
+                self.refine.on_snapshot_changed();
                 let new_bounds = validity.changed_bounds().unwrap_or(target.screen_bounds());
                 self.metrics.log_line(
                     &format!(
@@ -991,6 +1064,7 @@ impl OverlayController {
         // The timer is periodic by nature; killing it here is what makes the dwell a
         // one-shot. A new hover re-arms it.
         unsafe { KillTimer(self.window, REFINEMENT_TIMER_ID) };
+        self.request_visual();
         if let Some(job) = self.refine.on_dwell_due() {
             self.submit_refinement(job);
         }
@@ -1101,6 +1175,14 @@ impl OverlayController {
                 // The current question has been answered. The staging branch below re-arms the
                 // dwell, which starts a new wait; anything else ends the wait here.
                 self.refinement_pending = None;
+                if self.manual_level.is_some_and(|(owner, level)| {
+                    owner == target.window
+                        && self.cursor_screen().is_some_and(|p| level.rect.contains(p))
+                }) || self.confirming_preview.is_some()
+                    || !self.gesture.gesture().allows_hover()
+                {
+                    return;
+                }
                 // A downgrade (a shallower target that still contains what is on screen) is by
                 // far the most likely reading of "the cursor passed through a parent
                 // container". Show it only once the next dwell reproduces it at the same
@@ -1186,6 +1268,10 @@ impl OverlayController {
         // Repeated Enter keeps only the newest confirmation.
         let request = self.detector.request_confirm(preview.target);
         self.confirm_request = Some(request);
+        self.confirming_preview = Some(preview);
+        if let Some(visual) = &mut self.visual {
+            visual.invalidate();
+        }
         // What the user is about to commit next to what deep selection last published, both in
         // monitor-local pixels: the two disagreeing is exactly the "probe resolves the element,
         // the app confirms the window" gap (docs/21 §8), and this line tells which side of that
@@ -1220,12 +1306,45 @@ impl OverlayController {
         true
     }
 
+    /// A snapshot epoch changes on enumeration even when the intended owner did
+    /// not change. Re-check actual owner geometry and conservative occlusion;
+    /// request/source checks remain independent in apply_confirmation. This is
+    /// not a same-process/same-class HWND creation-token guarantee.
+    fn confirmation_owner_is_current(&self, target: SelectionTarget) -> bool {
+        self.snapshot.epoch() == 0
+            || self.snapshot.find(target.identity()).is_some_and(|owner| {
+                owner.screen_bounds == target.owner.screen_bounds
+                    && owner.screen_bounds.contains_rect(target.screen_bounds())
+                    && !self.snapshot.candidates().iter().any(|front| {
+                        front.z_order < owner.z_order
+                            && !front
+                                .screen_bounds
+                                .intersect(target.screen_bounds())
+                                .is_empty()
+                    })
+            })
+    }
+
     /// Apply a validated confirmation (docs/14 §5.4).
     pub(super) fn apply_confirmation(&mut self, target: SelectionTarget, valid: bool) {
-        let Some(preview) = self.gesture.snap_preview() else {
+        let Some(preview) = self.confirming_preview.take() else {
             return;
         };
-        if preview.target.identity() != target.identity() {
+        if self.session.state() != CaptureState::Selecting
+            || self
+                .gesture
+                .snap_preview()
+                .is_none_or(|current| current.target.identity() != preview.target.identity())
+            || preview.target != target
+            || !self.confirmation_owner_is_current(target)
+            || target.source.is_some_and(|source| {
+                source.capture_generation != self.current_generation
+                    || self
+                        .frozen
+                        .as_ref()
+                        .is_none_or(|f| f.frame.source != source.pixels)
+            })
+        {
             self.metrics.record_worker_stale_result_dropped();
             return;
         }

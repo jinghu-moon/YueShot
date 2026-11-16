@@ -1,0 +1,3673 @@
+﻿[
+    {
+        "device":  9865,
+        "dpi":  144,
+        "event":  "adapter",
+        "name":  "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "size":  [
+                     3840,
+                     2160
+                 ],
+        "vendor":  4318
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9262,
+        "cycle":  0,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  173391872,
+        "query_us":  8612,
+        "unavailable":  0,
+        "working_set":  96055296
+    },
+    {
+        "active_gpu":  [
+                           184406016,
+                           23326720
+                       ],
+        "capture_us":  67225,
+        "cycle":  0,
+        "event":  "cycle",
+        "private_bytes":  165031936,
+        "released_gpu":  [
+                             150802432,
+                             18755584
+                         ],
+        "total_us":  95449,
+        "warmup":  true,
+        "working_set":  88788992
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8388,
+        "cycle":  1,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  172511232,
+        "query_us":  7855,
+        "unavailable":  0,
+        "working_set":  96047104
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           23212032
+                       ],
+        "capture_us":  36313,
+        "cycle":  1,
+        "event":  "cycle",
+        "private_bytes":  170237952,
+        "released_gpu":  [
+                             150802432,
+                             18755584
+                         ],
+        "total_us":  51640,
+        "warmup":  true,
+        "working_set":  92987392
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7295,
+        "cycle":  2,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  173043712,
+        "query_us":  6763,
+        "unavailable":  0,
+        "working_set":  96325632
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           23212032
+                       ],
+        "capture_us":  32069,
+        "cycle":  2,
+        "event":  "cycle",
+        "private_bytes":  170307584,
+        "released_gpu":  [
+                             150802432,
+                             18755584
+                         ],
+        "total_us":  47809,
+        "warmup":  true,
+        "working_set":  93609984
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7244,
+        "cycle":  3,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  172978176,
+        "query_us":  6721,
+        "unavailable":  0,
+        "working_set":  96399360
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           22970368
+                       ],
+        "capture_us":  36509,
+        "cycle":  3,
+        "event":  "cycle",
+        "private_bytes":  169938944,
+        "released_gpu":  [
+                             150802432,
+                             18513920
+                         ],
+        "total_us":  51367,
+        "warmup":  true,
+        "working_set":  93126656
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9460,
+        "cycle":  4,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  176939008,
+        "query_us":  8901,
+        "unavailable":  0,
+        "working_set":  100331520
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           22970368
+                       ],
+        "capture_us":  47129,
+        "cycle":  4,
+        "event":  "cycle",
+        "private_bytes":  170082304,
+        "released_gpu":  [
+                             150802432,
+                             18513920
+                         ],
+        "total_us":  66407,
+        "warmup":  true,
+        "working_set":  93261824
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7584,
+        "cycle":  5,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  172875776,
+        "query_us":  7049,
+        "unavailable":  0,
+        "working_set":  96268288
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           22970368
+                       ],
+        "capture_us":  39292,
+        "cycle":  5,
+        "event":  "cycle",
+        "private_bytes":  168783872,
+        "released_gpu":  [
+                             150802432,
+                             18513920
+                         ],
+        "total_us":  55324,
+        "warmup":  false,
+        "working_set":  92594176
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8271,
+        "cycle":  6,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  172642304,
+        "query_us":  7649,
+        "unavailable":  0,
+        "working_set":  96047104
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           22970368
+                       ],
+        "capture_us":  34750,
+        "cycle":  6,
+        "event":  "cycle",
+        "private_bytes":  170074112,
+        "released_gpu":  [
+                             150802432,
+                             18513920
+                         ],
+        "total_us":  50268,
+        "warmup":  false,
+        "working_set":  93261824
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9190,
+        "cycle":  7,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  172744704,
+        "query_us":  8649,
+        "unavailable":  0,
+        "working_set":  96141312
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           22577152
+                       ],
+        "capture_us":  32844,
+        "cycle":  7,
+        "event":  "cycle",
+        "private_bytes":  136065024,
+        "released_gpu":  [
+                             117379072,
+                             18120704
+                         ],
+        "total_us":  49809,
+        "warmup":  false,
+        "working_set":  92741632
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9745,
+        "cycle":  8,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  138731520,
+        "query_us":  9165,
+        "unavailable":  0,
+        "working_set":  95617024
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           22052864
+                       ],
+        "capture_us":  42290,
+        "cycle":  8,
+        "event":  "cycle",
+        "private_bytes":  135675904,
+        "released_gpu":  [
+                             117379072,
+                             17596416
+                         ],
+        "total_us":  61001,
+        "warmup":  false,
+        "working_set":  92381184
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7519,
+        "cycle":  9,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  138338304,
+        "query_us":  6987,
+        "unavailable":  0,
+        "working_set":  95215616
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           21528576
+                       ],
+        "capture_us":  52505,
+        "cycle":  9,
+        "event":  "cycle",
+        "private_bytes":  135024640,
+        "released_gpu":  [
+                             117379072,
+                             17072128
+                         ],
+        "total_us":  68767,
+        "warmup":  false,
+        "working_set":  91738112
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6809,
+        "cycle":  10,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  137682944,
+        "query_us":  6276,
+        "unavailable":  0,
+        "working_set":  94601216
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           21004288
+                       ],
+        "capture_us":  34825,
+        "cycle":  10,
+        "event":  "cycle",
+        "private_bytes":  134635520,
+        "released_gpu":  [
+                             117379072,
+                             16547840
+                         ],
+        "total_us":  49663,
+        "warmup":  false,
+        "working_set":  91332608
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7296,
+        "cycle":  11,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  137490432,
+        "query_us":  6760,
+        "unavailable":  0,
+        "working_set":  94220288
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           20480000
+                       ],
+        "capture_us":  32950,
+        "cycle":  11,
+        "event":  "cycle",
+        "private_bytes":  129187840,
+        "released_gpu":  [
+                             117379072,
+                             16023552
+                         ],
+        "total_us":  49800,
+        "warmup":  false,
+        "working_set":  85532672
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7578,
+        "cycle":  12,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  136327168,
+        "query_us":  7044,
+        "unavailable":  0,
+        "working_set":  93257728
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           19955712
+                       ],
+        "capture_us":  34796,
+        "cycle":  12,
+        "event":  "cycle",
+        "private_bytes":  133107712,
+        "released_gpu":  [
+                             117379072,
+                             15499264
+                         ],
+        "total_us":  49854,
+        "warmup":  false,
+        "working_set":  89899008
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7542,
+        "cycle":  13,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  136044544,
+        "query_us":  6994,
+        "unavailable":  0,
+        "working_set":  93097984
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           19431424
+                       ],
+        "capture_us":  34360,
+        "cycle":  13,
+        "event":  "cycle",
+        "private_bytes":  132415488,
+        "released_gpu":  [
+                             117379072,
+                             14974976
+                         ],
+        "total_us":  51917,
+        "warmup":  false,
+        "working_set":  89231360
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8348,
+        "cycle":  14,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  135675904,
+        "query_us":  7814,
+        "unavailable":  0,
+        "working_set":  92573696
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           18907136
+                       ],
+        "capture_us":  30298,
+        "cycle":  14,
+        "event":  "cycle",
+        "private_bytes":  132059136,
+        "released_gpu":  [
+                             117379072,
+                             14450688
+                         ],
+        "total_us":  45245,
+        "warmup":  false,
+        "working_set":  88870912
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8186,
+        "cycle":  15,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  134995968,
+        "query_us":  7652,
+        "unavailable":  0,
+        "working_set":  91955200
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           18513920
+                       ],
+        "capture_us":  44482,
+        "cycle":  15,
+        "event":  "cycle",
+        "private_bytes":  131932160,
+        "released_gpu":  [
+                             117379072,
+                             13926400
+                         ],
+        "total_us":  61775,
+        "warmup":  false,
+        "working_set":  88190976
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10180,
+        "cycle":  16,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  134619136,
+        "query_us":  9643,
+        "unavailable":  0,
+        "working_set":  91602944
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           17858560
+                       ],
+        "capture_us":  40951,
+        "cycle":  16,
+        "event":  "cycle",
+        "private_bytes":  131006464,
+        "released_gpu":  [
+                             117379072,
+                             13402112
+                         ],
+        "total_us":  61522,
+        "warmup":  false,
+        "working_set":  87977984
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6959,
+        "cycle":  17,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  133955584,
+        "query_us":  6427,
+        "unavailable":  0,
+        "working_set":  91049984
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           17334272
+                       ],
+        "capture_us":  37333,
+        "cycle":  17,
+        "event":  "cycle",
+        "private_bytes":  130879488,
+        "released_gpu":  [
+                             117379072,
+                             12877824
+                         ],
+        "total_us":  51368,
+        "warmup":  false,
+        "working_set":  87162880
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9291,
+        "cycle":  18,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  133570560,
+        "query_us":  8735,
+        "unavailable":  0,
+        "working_set":  90566656
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           16809984
+                       ],
+        "capture_us":  40640,
+        "cycle":  18,
+        "event":  "cycle",
+        "private_bytes":  129929216,
+        "released_gpu":  [
+                             117379072,
+                             12353536
+                         ],
+        "total_us":  58801,
+        "warmup":  false,
+        "working_set":  86757376
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7081,
+        "cycle":  19,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  132886528,
+        "query_us":  6540,
+        "unavailable":  0,
+        "working_set":  89878528
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           16285696
+                       ],
+        "capture_us":  37679,
+        "cycle":  19,
+        "event":  "cycle",
+        "private_bytes":  129290240,
+        "released_gpu":  [
+                             117379072,
+                             11829248
+                         ],
+        "total_us":  51486,
+        "warmup":  false,
+        "working_set":  86118400
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7567,
+        "cycle":  20,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  132509696,
+        "query_us":  7025,
+        "unavailable":  0,
+        "working_set":  89288704
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           15761408
+                       ],
+        "capture_us":  37504,
+        "cycle":  20,
+        "event":  "cycle",
+        "private_bytes":  128884736,
+        "released_gpu":  [
+                             117379072,
+                             11304960
+                         ],
+        "total_us":  53435,
+        "warmup":  false,
+        "working_set":  85741568
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8017,
+        "cycle":  21,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  131837952,
+        "query_us":  7483,
+        "unavailable":  0,
+        "working_set":  88903680
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           15237120
+                       ],
+        "capture_us":  39191,
+        "cycle":  21,
+        "event":  "cycle",
+        "private_bytes":  128802816,
+        "released_gpu":  [
+                             117379072,
+                             10780672
+                         ],
+        "total_us":  58372,
+        "warmup":  false,
+        "working_set":  85651456
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7121,
+        "cycle":  22,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  131461120,
+        "query_us":  6577,
+        "unavailable":  0,
+        "working_set":  88436736
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           14712832
+                       ],
+        "capture_us":  44611,
+        "cycle":  22,
+        "event":  "cycle",
+        "private_bytes":  127385600,
+        "released_gpu":  [
+                             117379072,
+                             10256384
+                         ],
+        "total_us":  60516,
+        "warmup":  false,
+        "working_set":  84512768
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7437,
+        "cycle":  23,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  130822144,
+        "query_us":  6905,
+        "unavailable":  0,
+        "working_set":  87805952
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           14188544
+                       ],
+        "capture_us":  32022,
+        "cycle":  23,
+        "event":  "cycle",
+        "private_bytes":  127213568,
+        "released_gpu":  [
+                             117379072,
+                             9732096
+                         ],
+        "total_us":  46797,
+        "warmup":  false,
+        "working_set":  84045824
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7634,
+        "cycle":  24,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  130445312,
+        "query_us":  7091,
+        "unavailable":  0,
+        "working_set":  87158784
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           13664256
+                       ],
+        "capture_us":  38844,
+        "cycle":  24,
+        "event":  "cycle",
+        "private_bytes":  126820352,
+        "released_gpu":  [
+                             117379072,
+                             9207808
+                         ],
+        "total_us":  53647,
+        "warmup":  false,
+        "working_set":  83681280
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7356,
+        "cycle":  25,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  129773568,
+        "query_us":  6820,
+        "unavailable":  0,
+        "working_set":  86835200
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           13139968
+                       ],
+        "capture_us":  37203,
+        "cycle":  25,
+        "event":  "cycle",
+        "private_bytes":  126164992,
+        "released_gpu":  [
+                             117379072,
+                             8683520
+                         ],
+        "total_us":  53331,
+        "warmup":  false,
+        "working_set":  82984960
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9380,
+        "cycle":  26,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  129396736,
+        "query_us":  8861,
+        "unavailable":  0,
+        "working_set":  86351872
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           12615680
+                       ],
+        "capture_us":  39967,
+        "cycle":  26,
+        "event":  "cycle",
+        "private_bytes":  125775872,
+        "released_gpu":  [
+                             117379072,
+                             8159232
+                         ],
+        "total_us":  57570,
+        "warmup":  false,
+        "working_set":  82608128
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9139,
+        "cycle":  27,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  128716800,
+        "query_us":  8527,
+        "unavailable":  0,
+        "working_set":  85708800
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           12091392
+                       ],
+        "capture_us":  37345,
+        "cycle":  27,
+        "event":  "cycle",
+        "private_bytes":  125116416,
+        "released_gpu":  [
+                             117379072,
+                             7634944
+                         ],
+        "total_us":  55502,
+        "warmup":  false,
+        "working_set":  81952768
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8246,
+        "cycle":  28,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  128335872,
+        "query_us":  7717,
+        "unavailable":  0,
+        "working_set":  85340160
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           11567104
+                       ],
+        "capture_us":  37230,
+        "cycle":  28,
+        "event":  "cycle",
+        "private_bytes":  124149760,
+        "released_gpu":  [
+                             117379072,
+                             7110656
+                         ],
+        "total_us":  53189,
+        "warmup":  false,
+        "working_set":  81285120
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10171,
+        "cycle":  29,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  127565824,
+        "query_us":  9231,
+        "unavailable":  0,
+        "working_set":  84598784
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           11042816
+                       ],
+        "capture_us":  37607,
+        "cycle":  29,
+        "event":  "cycle",
+        "private_bytes":  124014592,
+        "released_gpu":  [
+                             117379072,
+                             6586368
+                         ],
+        "total_us":  57323,
+        "warmup":  false,
+        "working_set":  80916480
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7136,
+        "cycle":  30,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  127291392,
+        "query_us":  6580,
+        "unavailable":  0,
+        "working_set":  84336640
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           10518528
+                       ],
+        "capture_us":  51440,
+        "cycle":  30,
+        "event":  "cycle",
+        "private_bytes":  123650048,
+        "released_gpu":  [
+                             117379072,
+                             6062080
+                         ],
+        "total_us":  68858,
+        "warmup":  false,
+        "working_set":  80547840
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6801,
+        "cycle":  31,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  126627840,
+        "query_us":  6266,
+        "unavailable":  0,
+        "working_set":  83619840
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           10125312
+                       ],
+        "capture_us":  32746,
+        "cycle":  31,
+        "event":  "cycle",
+        "private_bytes":  122966016,
+        "released_gpu":  [
+                             117379072,
+                             5537792
+                         ],
+        "total_us":  47367,
+        "warmup":  false,
+        "working_set":  79863808
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7367,
+        "cycle":  32,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  126242816,
+        "query_us":  6830,
+        "unavailable":  0,
+        "working_set":  82989056
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           9469952
+                       ],
+        "capture_us":  40226,
+        "cycle":  32,
+        "event":  "cycle",
+        "private_bytes":  122601472,
+        "released_gpu":  [
+                             117379072,
+                             5013504
+                         ],
+        "total_us":  55328,
+        "warmup":  false,
+        "working_set":  79499264
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7865,
+        "cycle":  33,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125566976,
+        "query_us":  7318,
+        "unavailable":  0,
+        "working_set":  82595840
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34328,
+        "cycle":  33,
+        "event":  "cycle",
+        "private_bytes":  122388480,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51893,
+        "warmup":  false,
+        "working_set":  79286272
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8853,
+        "cycle":  34,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  8294,
+        "unavailable":  0,
+        "working_set":  82169856
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  31848,
+        "cycle":  34,
+        "event":  "cycle",
+        "private_bytes":  121614336,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  48050,
+        "warmup":  false,
+        "working_set":  78725120
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8227,
+        "cycle":  35,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125181952,
+        "query_us":  7621,
+        "unavailable":  0,
+        "working_set":  82149376
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  45093,
+        "cycle":  35,
+        "event":  "cycle",
+        "private_bytes":  121966592,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  62548,
+        "warmup":  false,
+        "working_set":  78782464
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10166,
+        "cycle":  36,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125321216,
+        "query_us":  9611,
+        "unavailable":  0,
+        "working_set":  82063360
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  44554,
+        "cycle":  36,
+        "event":  "cycle",
+        "private_bytes":  122101760,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  64027,
+        "warmup":  false,
+        "working_set":  78925824
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6735,
+        "cycle":  37,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125173760,
+        "query_us":  6205,
+        "unavailable":  0,
+        "working_set":  82173952
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  31240,
+        "cycle":  37,
+        "event":  "cycle",
+        "private_bytes":  122527744,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  46405,
+        "warmup":  false,
+        "working_set":  79355904
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9602,
+        "cycle":  38,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125325312,
+        "query_us":  9058,
+        "unavailable":  0,
+        "working_set":  82276352
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34677,
+        "cycle":  38,
+        "event":  "cycle",
+        "private_bytes":  122105856,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  50860,
+        "warmup":  false,
+        "working_set":  78934016
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7154,
+        "cycle":  39,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125177856,
+        "query_us":  6608,
+        "unavailable":  0,
+        "working_set":  82178048
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39663,
+        "cycle":  39,
+        "event":  "cycle",
+        "private_bytes":  121499648,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  54942,
+        "warmup":  false,
+        "working_set":  78635008
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8173,
+        "cycle":  40,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125046784,
+        "query_us":  7609,
+        "unavailable":  0,
+        "working_set":  82096128
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  35123,
+        "cycle":  40,
+        "event":  "cycle",
+        "private_bytes":  122949632,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  50604,
+        "warmup":  false,
+        "working_set":  79773696
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6776,
+        "cycle":  41,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125177856,
+        "query_us":  6246,
+        "unavailable":  0,
+        "working_set":  82227200
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  32772,
+        "cycle":  41,
+        "event":  "cycle",
+        "private_bytes":  122818560,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  46626,
+        "warmup":  false,
+        "working_set":  79646720
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7508,
+        "cycle":  42,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125046784,
+        "query_us":  6965,
+        "unavailable":  0,
+        "working_set":  82165760
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  35446,
+        "cycle":  42,
+        "event":  "cycle",
+        "private_bytes":  122949632,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  49994,
+        "warmup":  false,
+        "working_set":  79777792
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7220,
+        "cycle":  43,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125177856,
+        "query_us":  6693,
+        "unavailable":  0,
+        "working_set":  82296832
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  42287,
+        "cycle":  43,
+        "event":  "cycle",
+        "private_bytes":  122818560,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57812,
+        "warmup":  false,
+        "working_set":  79646720
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6650,
+        "cycle":  44,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125054976,
+        "query_us":  6116,
+        "unavailable":  0,
+        "working_set":  82096128
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  41364,
+        "cycle":  44,
+        "event":  "cycle",
+        "private_bytes":  122949632,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57629,
+        "warmup":  false,
+        "working_set":  79777792
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7011,
+        "cycle":  45,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125177856,
+        "query_us":  6447,
+        "unavailable":  0,
+        "working_set":  82198528
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  43699,
+        "cycle":  45,
+        "event":  "cycle",
+        "private_bytes":  122572800,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  58848,
+        "warmup":  false,
+        "working_set":  79491072
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6699,
+        "cycle":  46,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125370368,
+        "query_us":  6166,
+        "unavailable":  0,
+        "working_set":  82014208
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34864,
+        "cycle":  46,
+        "event":  "cycle",
+        "private_bytes":  122146816,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  48699,
+        "warmup":  false,
+        "working_set":  78958592
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7620,
+        "cycle":  47,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125251584,
+        "query_us":  7078,
+        "unavailable":  0,
+        "working_set":  82300928
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           9076736
+                       ],
+        "capture_us":  37501,
+        "cycle":  47,
+        "event":  "cycle",
+        "private_bytes":  122990592,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51396,
+        "warmup":  false,
+        "working_set":  79769600
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8816,
+        "cycle":  48,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125091840,
+        "query_us":  8205,
+        "unavailable":  0,
+        "working_set":  82153472
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  32362,
+        "cycle":  48,
+        "event":  "cycle",
+        "private_bytes":  122990592,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  48154,
+        "warmup":  false,
+        "working_set":  79777792
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8387,
+        "cycle":  49,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125222912,
+        "query_us":  7815,
+        "unavailable":  0,
+        "working_set":  82210816
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  41979,
+        "cycle":  49,
+        "event":  "cycle",
+        "private_bytes":  122847232,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57249,
+        "warmup":  false,
+        "working_set":  79536128
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8589,
+        "cycle":  50,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125091840,
+        "query_us":  8047,
+        "unavailable":  0,
+        "working_set":  82161664
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34388,
+        "cycle":  50,
+        "event":  "cycle",
+        "private_bytes":  122974208,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  53008,
+        "warmup":  false,
+        "working_set":  79769600
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8164,
+        "cycle":  51,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125214720,
+        "query_us":  7620,
+        "unavailable":  0,
+        "working_set":  82284544
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34788,
+        "cycle":  51,
+        "event":  "cycle",
+        "private_bytes":  121421824,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  49953,
+        "warmup":  false,
+        "working_set":  78565376
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10851,
+        "cycle":  52,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  124985344,
+        "query_us":  10315,
+        "unavailable":  0,
+        "working_set":  82055168
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36926,
+        "cycle":  52,
+        "event":  "cycle",
+        "private_bytes":  122941440,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  56989,
+        "warmup":  false,
+        "working_set":  79945728
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6837,
+        "cycle":  53,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  6302,
+        "unavailable":  0,
+        "working_set":  82313216
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  37116,
+        "cycle":  53,
+        "event":  "cycle",
+        "private_bytes":  122810368,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51278,
+        "warmup":  false,
+        "working_set":  79540224
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8321,
+        "cycle":  54,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125095936,
+        "query_us":  7782,
+        "unavailable":  0,
+        "working_set":  82124800
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34619,
+        "cycle":  54,
+        "event":  "cycle",
+        "private_bytes":  122953728,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51055,
+        "warmup":  false,
+        "working_set":  79810560
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9047,
+        "cycle":  55,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  8484,
+        "unavailable":  0,
+        "working_set":  82259968
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  32293,
+        "cycle":  55,
+        "event":  "cycle",
+        "private_bytes":  122810368,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  49873,
+        "warmup":  false,
+        "working_set":  79679488
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8668,
+        "cycle":  56,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  8128,
+        "unavailable":  0,
+        "working_set":  82096128
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36195,
+        "cycle":  56,
+        "event":  "cycle",
+        "private_bytes":  122978304,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  52124,
+        "warmup":  false,
+        "working_set":  79679488
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6990,
+        "cycle":  57,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  6466,
+        "unavailable":  0,
+        "working_set":  82206720
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  35316,
+        "cycle":  57,
+        "event":  "cycle",
+        "private_bytes":  122847232,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  49416,
+        "warmup":  false,
+        "working_set":  79527936
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8430,
+        "cycle":  58,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  7902,
+        "unavailable":  0,
+        "working_set":  82112512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34461,
+        "cycle":  58,
+        "event":  "cycle",
+        "private_bytes":  122978304,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51801,
+        "warmup":  false,
+        "working_set":  79831040
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8564,
+        "cycle":  59,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  8019,
+        "unavailable":  0,
+        "working_set":  82280448
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  38692,
+        "cycle":  59,
+        "event":  "cycle",
+        "private_bytes":  122847232,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  53648,
+        "warmup":  false,
+        "working_set":  79634432
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8912,
+        "cycle":  60,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125095936,
+        "query_us":  8367,
+        "unavailable":  0,
+        "working_set":  82153472
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34415,
+        "cycle":  60,
+        "event":  "cycle",
+        "private_bytes":  122978304,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  52857,
+        "warmup":  false,
+        "working_set":  79675392
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7958,
+        "cycle":  61,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  7426,
+        "unavailable":  0,
+        "working_set":  82198528
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  32081,
+        "cycle":  61,
+        "event":  "cycle",
+        "private_bytes":  122847232,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  48139,
+        "warmup":  false,
+        "working_set":  79548416
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9017,
+        "cycle":  62,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  8484,
+        "unavailable":  0,
+        "working_set":  82161664
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  33777,
+        "cycle":  62,
+        "event":  "cycle",
+        "private_bytes":  121389056,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  52174,
+        "warmup":  false,
+        "working_set":  78712832
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7507,
+        "cycle":  63,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125120512,
+        "query_us":  6977,
+        "unavailable":  0,
+        "working_set":  82149376
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  44059,
+        "cycle":  63,
+        "event":  "cycle",
+        "private_bytes":  122826752,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  58797,
+        "warmup":  false,
+        "working_set":  79560704
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7891,
+        "cycle":  64,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  7346,
+        "unavailable":  0,
+        "working_set":  82194432
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  37370,
+        "cycle":  64,
+        "event":  "cycle",
+        "private_bytes":  122990592,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  55186,
+        "warmup":  false,
+        "working_set":  79712256
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8319,
+        "cycle":  65,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  7759,
+        "unavailable":  0,
+        "working_set":  82239488
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  62041,
+        "cycle":  65,
+        "event":  "cycle",
+        "private_bytes":  122859520,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  79614,
+        "warmup":  false,
+        "working_set":  79581184
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6808,
+        "cycle":  66,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  6272,
+        "unavailable":  0,
+        "working_set":  82137088
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36871,
+        "cycle":  66,
+        "event":  "cycle",
+        "private_bytes":  122990592,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  50732,
+        "warmup":  false,
+        "working_set":  79847424
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9931,
+        "cycle":  67,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125218816,
+        "query_us":  9396,
+        "unavailable":  0,
+        "working_set":  82268160
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  47407,
+        "cycle":  67,
+        "event":  "cycle",
+        "private_bytes":  122859520,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  67585,
+        "warmup":  false,
+        "working_set":  79716352
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7432,
+        "cycle":  68,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  6867,
+        "unavailable":  0,
+        "working_set":  82120704
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36229,
+        "cycle":  68,
+        "event":  "cycle",
+        "private_bytes":  121577472,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51026,
+        "warmup":  false,
+        "working_set":  78733312
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8174,
+        "cycle":  69,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  7603,
+        "unavailable":  0,
+        "working_set":  82145280
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  33817,
+        "cycle":  69,
+        "event":  "cycle",
+        "private_bytes":  122298368,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  50616,
+        "warmup":  false,
+        "working_set":  78860288
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9442,
+        "cycle":  70,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125087744,
+        "query_us":  8856,
+        "unavailable":  0,
+        "working_set":  82116608
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  32382,
+        "cycle":  70,
+        "event":  "cycle",
+        "private_bytes":  122990592,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  49773,
+        "warmup":  false,
+        "working_set":  79724544
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9097,
+        "cycle":  71,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125784064,
+        "query_us":  8555,
+        "unavailable":  0,
+        "working_set":  82489344
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36870,
+        "cycle":  71,
+        "event":  "cycle",
+        "private_bytes":  123428864,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  52812,
+        "warmup":  false,
+        "working_set":  79687680
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7109,
+        "cycle":  72,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125652992,
+        "query_us":  6571,
+        "unavailable":  0,
+        "working_set":  82358272
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  42255,
+        "cycle":  72,
+        "event":  "cycle",
+        "private_bytes":  122433536,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57624,
+        "warmup":  false,
+        "working_set":  79044608
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  6708,
+        "cycle":  73,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125231104,
+        "query_us":  6179,
+        "unavailable":  0,
+        "working_set":  82264064
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  35114,
+        "cycle":  73,
+        "event":  "cycle",
+        "private_bytes":  122875904,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  48091,
+        "warmup":  false,
+        "working_set":  79732736
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7776,
+        "cycle":  74,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125665280,
+        "query_us":  7237,
+        "unavailable":  0,
+        "working_set":  82616320
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  47965,
+        "cycle":  74,
+        "event":  "cycle",
+        "private_bytes":  121671680,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  64848,
+        "warmup":  false,
+        "working_set":  78827520
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9193,
+        "cycle":  75,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125231104,
+        "query_us":  8658,
+        "unavailable":  0,
+        "working_set":  82259968
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34770,
+        "cycle":  75,
+        "event":  "cycle",
+        "private_bytes":  122875904,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51888,
+        "warmup":  false,
+        "working_set":  79601664
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9333,
+        "cycle":  76,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125100032,
+        "query_us":  8795,
+        "unavailable":  0,
+        "working_set":  82255872
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  46413,
+        "cycle":  76,
+        "event":  "cycle",
+        "private_bytes":  123006976,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  65001,
+        "warmup":  false,
+        "working_set":  79724544
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7187,
+        "cycle":  77,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125231104,
+        "query_us":  6626,
+        "unavailable":  0,
+        "working_set":  82264064
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  41792,
+        "cycle":  77,
+        "event":  "cycle",
+        "private_bytes":  122875904,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  55198,
+        "warmup":  false,
+        "working_set":  79597568
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7743,
+        "cycle":  78,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125128704,
+        "query_us":  7202,
+        "unavailable":  0,
+        "working_set":  82227200
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           9076736
+                       ],
+        "capture_us":  43048,
+        "cycle":  78,
+        "event":  "cycle",
+        "private_bytes":  123138048,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  60419,
+        "warmup":  false,
+        "working_set":  79904768
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8043,
+        "cycle":  79,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125231104,
+        "query_us":  7475,
+        "unavailable":  0,
+        "working_set":  82386944
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  44977,
+        "cycle":  79,
+        "event":  "cycle",
+        "private_bytes":  121331712,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  61307,
+        "warmup":  false,
+        "working_set":  78491648
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8366,
+        "cycle":  80,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125534208,
+        "query_us":  7835,
+        "unavailable":  0,
+        "working_set":  81891328
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  41868,
+        "cycle":  80,
+        "event":  "cycle",
+        "private_bytes":  122359808,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  58810,
+        "warmup":  false,
+        "working_set":  78974976
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9733,
+        "cycle":  81,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125145088,
+        "query_us":  9191,
+        "unavailable":  0,
+        "working_set":  82182144
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  48084,
+        "cycle":  81,
+        "event":  "cycle",
+        "private_bytes":  122892288,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  66470,
+        "warmup":  false,
+        "working_set":  79753216
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9455,
+        "cycle":  82,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125116416,
+        "query_us":  8922,
+        "unavailable":  0,
+        "working_set":  82259968
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  42345,
+        "cycle":  82,
+        "event":  "cycle",
+        "private_bytes":  123023360,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  62187,
+        "warmup":  false,
+        "working_set":  79896576
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9099,
+        "cycle":  83,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125812736,
+        "query_us":  8551,
+        "unavailable":  0,
+        "working_set":  82698240
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39693,
+        "cycle":  83,
+        "event":  "cycle",
+        "private_bytes":  123457536,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57466,
+        "warmup":  false,
+        "working_set":  79745024
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8134,
+        "cycle":  84,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  7590,
+        "unavailable":  0,
+        "working_set":  82411520
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36805,
+        "cycle":  84,
+        "event":  "cycle",
+        "private_bytes":  122462208,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51655,
+        "warmup":  false,
+        "working_set":  79077376
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7338,
+        "cycle":  85,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125247488,
+        "query_us":  6803,
+        "unavailable":  0,
+        "working_set":  82284544
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34310,
+        "cycle":  85,
+        "event":  "cycle",
+        "private_bytes":  121556992,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  48657,
+        "warmup":  false,
+        "working_set":  78716928
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8515,
+        "cycle":  86,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  7979,
+        "unavailable":  0,
+        "working_set":  82264064
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34143,
+        "cycle":  86,
+        "event":  "cycle",
+        "private_bytes":  122339328,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  51894,
+        "warmup":  false,
+        "working_set":  79089664
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9602,
+        "cycle":  87,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125247488,
+        "query_us":  9066,
+        "unavailable":  0,
+        "working_set":  82374656
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  45125,
+        "cycle":  87,
+        "event":  "cycle",
+        "private_bytes":  122769408,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  63121,
+        "warmup":  false,
+        "working_set":  79745024
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10124,
+        "cycle":  88,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125116416,
+        "query_us":  9570,
+        "unavailable":  0,
+        "working_set":  82251776
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39309,
+        "cycle":  88,
+        "event":  "cycle",
+        "private_bytes":  122900480,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57744,
+        "warmup":  false,
+        "working_set":  79884288
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8389,
+        "cycle":  89,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125812736,
+        "query_us":  7304,
+        "unavailable":  0,
+        "working_set":  82907136
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  47646,
+        "cycle":  89,
+        "event":  "cycle",
+        "private_bytes":  122642432,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  64379,
+        "warmup":  false,
+        "working_set":  79740928
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8471,
+        "cycle":  90,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  7931,
+        "unavailable":  0,
+        "working_set":  82575360
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39182,
+        "cycle":  90,
+        "event":  "cycle",
+        "private_bytes":  122339328,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57008,
+        "warmup":  false,
+        "working_set":  79069184
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10698,
+        "cycle":  91,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125247488,
+        "query_us":  10140,
+        "unavailable":  0,
+        "working_set":  82354176
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  32407,
+        "cycle":  91,
+        "event":  "cycle",
+        "private_bytes":  121565184,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  52594,
+        "warmup":  false,
+        "working_set":  78700544
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  11646,
+        "cycle":  92,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125116416,
+        "query_us":  11102,
+        "unavailable":  0,
+        "working_set":  82161664
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  37057,
+        "cycle":  92,
+        "event":  "cycle",
+        "private_bytes":  122908672,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  59011,
+        "warmup":  false,
+        "working_set":  79872000
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8926,
+        "cycle":  93,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125812736,
+        "query_us":  8385,
+        "unavailable":  0,
+        "working_set":  82927616
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39911,
+        "cycle":  93,
+        "event":  "cycle",
+        "private_bytes":  122646528,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  58242,
+        "warmup":  false,
+        "working_set":  79736832
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9653,
+        "cycle":  94,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125710336,
+        "query_us":  9093,
+        "unavailable":  0,
+        "working_set":  82595840
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           9076736
+                       ],
+        "capture_us":  42421,
+        "cycle":  94,
+        "event":  "cycle",
+        "private_bytes":  122372096,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  60306,
+        "warmup":  false,
+        "working_set":  79060992
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  10112,
+        "cycle":  95,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125243392,
+        "query_us":  9556,
+        "unavailable":  0,
+        "working_set":  82337792
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  37442,
+        "cycle":  95,
+        "event":  "cycle",
+        "private_bytes":  122806272,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57680,
+        "warmup":  false,
+        "working_set":  79740928
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8017,
+        "cycle":  96,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125014016,
+        "query_us":  7507,
+        "unavailable":  0,
+        "working_set":  82157568
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  37433,
+        "cycle":  96,
+        "event":  "cycle",
+        "private_bytes":  123015168,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57989,
+        "warmup":  false,
+        "working_set":  79872000
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8242,
+        "cycle":  97,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125247488,
+        "query_us":  7700,
+        "unavailable":  0,
+        "working_set":  82464768
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34968,
+        "cycle":  97,
+        "event":  "cycle",
+        "private_bytes":  122597376,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  50362,
+        "warmup":  false,
+        "working_set":  79863808
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9639,
+        "cycle":  98,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125579264,
+        "query_us":  9099,
+        "unavailable":  0,
+        "working_set":  82771968
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  53057,
+        "cycle":  98,
+        "event":  "cycle",
+        "private_bytes":  123318272,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  74730,
+        "warmup":  false,
+        "working_set":  80257024
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8475,
+        "cycle":  99,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125812736,
+        "query_us":  7960,
+        "unavailable":  0,
+        "working_set":  82755584
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  52344,
+        "cycle":  99,
+        "event":  "cycle",
+        "private_bytes":  123187200,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  70014,
+        "warmup":  false,
+        "working_set":  80125952
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  9689,
+        "cycle":  100,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  9158,
+        "unavailable":  0,
+        "working_set":  82624512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  36996,
+        "cycle":  100,
+        "event":  "cycle",
+        "private_bytes":  123326464,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57837,
+        "warmup":  false,
+        "working_set":  80261120
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8840,
+        "cycle":  101,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125812736,
+        "query_us":  8304,
+        "unavailable":  0,
+        "working_set":  82755584
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  34882,
+        "cycle":  101,
+        "event":  "cycle",
+        "private_bytes":  123195392,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  52905,
+        "warmup":  false,
+        "working_set":  80130048
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8971,
+        "cycle":  102,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  7662,
+        "unavailable":  0,
+        "working_set":  82608128
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39810,
+        "cycle":  102,
+        "event":  "cycle",
+        "private_bytes":  123588608,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  57474,
+        "warmup":  false,
+        "working_set":  80310272
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  7752,
+        "cycle":  103,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125812736,
+        "query_us":  7217,
+        "unavailable":  0,
+        "working_set":  83009536
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  39431,
+        "cycle":  103,
+        "event":  "cycle",
+        "private_bytes":  123342848,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  55416,
+        "warmup":  false,
+        "working_set":  80154624
+    },
+    {
+        "buffer_bound":  10002576,
+        "completed":  1,
+        "controller_us":  8744,
+        "cycle":  104,
+        "descriptor":  "PixelDescriptor { format: Bgra8Unorm, encoding: Srgb, alpha: Straight }",
+        "event":  "visual",
+        "private_bytes":  125681664,
+        "query_us":  8210,
+        "unavailable":  0,
+        "working_set":  82673664
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8945664
+                       ],
+        "capture_us":  41868,
+        "cycle":  104,
+        "event":  "cycle",
+        "private_bytes":  123473920,
+        "released_gpu":  [
+                             117379072,
+                             4489216
+                         ],
+        "total_us":  59870,
+        "warmup":  false,
+        "working_set":  80293888
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  123473920,
+        "second":  0,
+        "working_set":  80297984
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  123473920,
+        "second":  1,
+        "working_set":  80297984
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  123473920,
+        "second":  2,
+        "working_set":  80297984
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  123191296,
+        "second":  3,
+        "working_set":  80195584
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  123191296,
+        "second":  4,
+        "working_set":  80195584
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  121638912,
+        "second":  5,
+        "working_set":  79134720
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  121638912,
+        "second":  6,
+        "working_set":  79134720
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  7,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  8,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  9,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  10,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  11,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  12,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  13,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  14,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  15,
+        "working_set":  74543104
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  16,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  17,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  18,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  19,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  20,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  21,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  22,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  23,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  24,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  25,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  26,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  27,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  28,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  29,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  30,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  31,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  32,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  33,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  117035008,
+        "second":  34,
+        "working_set":  74301440
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  35,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  36,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  37,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  38,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  39,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  40,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  41,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  42,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  43,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  44,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  45,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  46,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  47,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  48,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  49,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  50,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  51,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  52,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  53,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  54,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  55,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  56,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  57,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  58,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  59,
+        "working_set":  74223616
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4489216
+                ],
+        "private_bytes":  116932608,
+        "second":  60,
+        "working_set":  74223616
+    },
+    {
+        "event":  "shutdown",
+        "owner_shutdown_us":  12329,
+        "visual_workers_balanced":  true
+    }
+]

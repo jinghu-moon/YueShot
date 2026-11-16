@@ -1,0 +1,23 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 15s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+test windows::overlay::native_baseline::visual_replay_controlled_capture_lifecycle_resource_probe ... RESOURCE {"controlled_host":true,"event":"begin","idle_seconds":60,"pid":27480,"sessions":100,"warmups":5,"with_visual":true}
+RESOURCE {"device":9865,"dpi":144,"event":"adapter","name":"NVIDIA GeForce RTX 4070 Ti SUPER","size":[3840,2160],"vendor":4318}
+
+thread 'windows::overlay::native_baseline::visual_replay_controlled_capture_lifecycle_resource_probe' (87768) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline.rs:849:17:
+assertion `left == right` failed: controlled positive host did not select a visual target
+  left: Window
+ right: Visual
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    windows::overlay::native_baseline::visual_replay_controlled_capture_lifecycle_resource_probe
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 711 filtered out; finished in 19.26s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

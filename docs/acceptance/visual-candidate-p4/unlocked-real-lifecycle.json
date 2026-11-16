@@ -1,0 +1,6 @@
+{
+  "command": "cargo test -p yue-shot-capture --release --locked --lib visual_replay_capture_lifecycle_resource_probe -- --ignored --nocapture --test-threads=1",
+  "finished": "2026-11-17T03:17:45.9025563+08:00",
+  "exitCode": 0,
+  "logSha256": "19902f15af12d81fd3a2331bcdd9b0b7b4ae0ef1eec8d69eba4252461987f548"
+}

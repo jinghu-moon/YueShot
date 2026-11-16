@@ -1,0 +1,1473 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running `target\debug\xtask.exe check`
+verified 6900 snapshot files, 6 recorded exclusions; source f4b1d27a130045ac8b5335d568cbd997dca9f9ce, dirty=True
+Verified 2 vendored macro migrations against original crate archives.
+............................................................
+----------------------------------------------------------------------
+Ran 60 tests in 1.481s
+
+OK
+codec license/source inventory: 127 locked packages verified
+Verified embedded font hashes, original font/icon notices and absence of the removed component font bundle.
+Verified 8086 graphical SVG assets and no SVG font dependencies/features.
+Verified 403 product normal/build source checksums and license inventory; 0 original texts missing.
+licenses ok
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+   Compiling yue-shot v0.1.4 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.38s
+     Running unittests src\lib.rs (target\debug\deps\yue_shell-86ae869ef5b7969f.exe)
+
+running 6 tests
+test tests::invalid_options_are_rejected_before_starting_a_thread ... ok
+test tests::occupied_hotkey_recovers_without_unregistering_working_bindings ... ignored, temporarily reserves an unused Ctrl+Alt+Shift function-key chord on this thread
+test tests::reconfiguration_reserves_before_commit_and_preserves_old_bindings_on_failure ... ignored, reserves isolated Ctrl+Alt+Shift function keys and creates a test icon
+test tests::repeated_health_failures_publish_once_and_recovery_clears_them ... ok
+test tests::the_icon_can_be_created_and_taken_away ... ignored, creates its own icon and hidden native window; no desktop input or Explorer restart
+test tests::tooltip_and_windows_strings_are_terminated ... ok
+
+test result: ok. 3 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\yue_shot-fd5282e31b127a52.exe)
+
+running 272 tests
+test autostart::tests::invalid_types_strings_and_oversized_values_never_look_enabled ... ok
+test autostart::tests::login_command_roundtrips_unicode_spaces_quotes_and_trailing_slashes ... ok
+test autostart::tests::moved_executable_requires_an_explicit_registration_update ... ok
+test autostart::tests::registry_read_register_remove_and_identities_are_isolated ... ok
+test autostart::tests::uninstall_cleans_only_this_executable_and_channel_for_all_data_roots ... ok
+test autostart::tests::windows_block_is_reported_and_never_overwritten ... ok
+test capture::artifact_writer::tests::a_band_source_that_fails_writes_no_artifact ... ok
+test capture::artifact_writer::tests::a_banded_picture_writes_the_same_png_as_a_whole_one ... ok
+test capture::artifact_writer::tests::a_long_image_becomes_a_png_with_every_row_in_place ... ok
+test capture::artifact_writer::tests::an_archive_registration_failure_reports_the_retained_original_path ... ok
+test capture::artifact_writer::tests::an_oversized_dimension_is_rejected_before_the_first_byte ... ok
+test capture::artifact_writer::tests::changed_source_generation_cannot_publish_a_master ... ok
+test capture::artifact_writer::tests::hdr_selection_publishes_a_lossless_master_without_a_png8_conversion ... ok
+test capture::artifact_writer::tests::rounded_opaque_hdr_selection_records_the_derived_alpha_without_relabeling_the_frame ... ok
+test capture::artifact_writer::tests::the_writer_hands_the_store_decodable_png_bytes ... ok
+test capture::convert::tests::a_bmp_round_trips_through_its_own_header ... ok
+test capture::convert::tests::a_corrupt_master_is_a_structured_error ... ok
+test capture::convert::tests::a_failed_conversion_leaves_no_file_behind ... ok
+test capture::convert::tests::a_png_master_converts_to_a_readable_jpeg ... ok
+test capture::convert::tests::bmp_refuses_a_file_over_two_gigabytes ... ok
+test capture::convert::tests::measure_formats_on_a_file ... ignored, measurement: transcodes one real PNG into every format and prints the table
+test capture::convert::tests::saving_a_png_master_as_png_is_a_byte_copy ... ok
+test capture::convert::tests::the_first_written_row_is_row_zero_in_the_file ... ok
+test capture::convert::tests::the_jpeg_frame_budget_is_refused_before_the_master_is_read ... ok
+test capture::convert::tests::the_quality_setting_changes_the_jpeg ... ok
+test capture::convert::tests::webp_refuses_what_it_cannot_hold ... ok
+test capture::row_band_jpeg::tests::a_4k_frame_fits_the_budget_and_a_30k_row_capture_does_not ... ok
+test capture::row_band_jpeg::tests::a_short_write_cannot_become_a_jpeg ... ok
+test capture::row_band_jpeg::tests::a_small_image_round_trips_and_is_baseline ... ok
+test capture::row_band_jpeg::tests::an_image_past_the_formats_side_is_refused_before_allocating ... ok
+test capture::row_band_jpeg::tests::cancelling_stops_the_encode ... ok
+test capture::row_band_jpeg::tests::rows_must_arrive_in_order_and_in_whole_rows ... ok
+test capture::row_band_jpeg::tests::the_frame_budget_is_refused_before_the_rows_exist ... ok
+test capture::row_band_jpeg::tests::the_sink_encodes_with_the_optimiser_on ... ok
+test capture::row_band_png::tests::a_short_export_is_refused ... ok
+test capture::row_band_png::tests::a_skipped_row_range_is_an_error ... ok
+test capture::row_band_png::tests::an_oversized_dimension_is_refused_before_the_header ... ok
+test capture::row_band_png::tests::the_artifact_decodes_back_to_the_expected_pixels ... ok
+test capture::row_band_png::tests::the_selected_filter_is_the_one_p0_04_measured ... ok
+test capture::webp_sink::tests::a_lossless_webp_is_the_same_pixels ... ok
+test capture::webp_sink::tests::a_scroll_capture_never_reaches_this_sink ... ok
+test capture::webp_sink::tests::a_short_write_cannot_become_a_webp ... ok
+test capture::webp_sink::tests::rows_must_arrive_in_order_and_in_whole_rows ... ok
+test capture::webp_sink::tests::the_formats_side_limit_is_refused_before_allocating ... ok
+test capture::webp_sink::tests::the_memory_guard_refuses_what_would_reserve_half_a_gigabyte ... ok
+test capture_host::native_tests::the_shell_can_host_the_capture_overlay ... ignored, takes the F5 hotkey and creates a real overlay window
+test capture_host::runtime_acknowledgement_tests::only_successful_creation_consumes_and_ends_the_capture_session ... ok
+test capture_host::tests::capture_failure_handoff_is_bounded_and_never_blocks_the_overlay ... ok
+test capture_host::tests::long_save_request_transfers_owned_bands_without_reading_or_exporting ... ok
+test capture_host::tests::pin_request_is_queued_once_for_the_product_thread ... ok
+test capture_host::tests::save_request_forwards_the_original_pixel_buffer_to_the_ui_channel ... ok
+test capture_host::tests::sdr_artifact_is_a_complete_png_with_bgra_converted_to_rgba ... ok
+test capture_host::tests::writer_persists_the_artifact_and_registers_product_history ... ok
+test capture_host::tests::writer_preserves_high_precision_pixels_in_the_source_master ... ok
+test commands::tests::product_commands_have_unique_roundtripping_ids ... ok
+test diagnostics::tests::bounded_scan_recovers_after_corrupt_oversized_and_incomplete_lines ... ok
+test diagnostics::tests::export_drops_arbitrary_strings_even_in_metadata_and_debug_records ... ok
+test diagnostics::tests::maximum_metadata_fits_the_export_budget ... ok
+test diagnostics::tests::record_budget_keeps_the_newest_records ... ok
+test history_source::tests::a_failed_archive_can_retry_and_a_corrupt_master_never_becomes_a_thumbnail_replay ... ok
+test history_source::tests::corrupt_sdr_and_hdr_exports_preserve_the_target_and_clean_their_own_partial ... ok
+test history_source::tests::deleting_history_releases_a_shared_capture_only_after_its_last_reference ... ok
+test history_source::tests::history_export_checks_the_resolved_target_and_never_overwrites_its_source ... ok
+test history_source::tests::history_original_button_opens_the_real_pin_view_with_original_pixels ... ok
+test history_source::tests::oversized_source_is_rejected_before_allocating_or_opening_a_file ... ok
+test history_source::tests::repeated_panel_saves_archive_once_and_hdr_replay_keeps_bits_generation_and_live_pixels ... ok
+test history_source::tests::sdr_replay_reopens_the_original_size_and_alpha_instead_of_the_row_thumbnail ... ok
+test history_source::tests::streaming_hdr_history_export_uses_the_master_and_keeps_pq_depth_and_alpha ... ok
+test history_source::tests::unrepresentable_hdr_export_fails_without_clipping_or_replacing_the_original ... ok
+test history_view::tests::screenshot_pages_and_selection_remain_distinct_after_refresh_and_delete ... ok
+test instance::tests::a_second_process_transfers_capture_without_becoming_a_writer ... 
+running 1 test
+test instance::tests::instance_subprocess ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 271 filtered out; finished in 0.00s
+
+ok
+test instance::tests::bad_and_oversized_clients_do_not_poison_the_next_launch ... ok
+test instance::tests::clients_that_exit_before_sending_do_not_stop_the_server ... ok
+test instance::tests::commands_transfer_over_real_pipes_and_shutdown_releases_the_endpoint ... ok
+test instance::tests::data_root_lock_excludes_other_channels_and_releases_without_unlinking ... ok
+test instance::tests::full_queue_rejects_a_launch_and_recovers_after_drain ... ok
+test instance::tests::idle_peer_is_timed_out_and_pending_io_is_cancelled_on_shutdown ... ok
+test instance::tests::instance_subprocess ... ok
+test instance::tests::isolated_roots_can_run_independently_and_crash_releases_the_writer_lock ... 
+running 1 test
+test instance::tests::instance_subprocess ... ok
+test instance::tests::protocol_accepts_only_fixed_versioned_commands ... ok
+test logging::tests::normal_log_records_omit_sensitive_messages_and_the_queue_is_bounded ... ok
+test logging::tests::rotation_has_a_fixed_disk_budget ... ok
+test maintenance::tests::backup_verifies_bytes_and_restore_refuses_existing_data_then_recovers_exactly ... ok
+test maintenance::tests::corruption_and_path_traversal_fail_before_touching_destination ... ok
+test maintenance::tests::interrupted_restore_is_blocked_from_startup_and_resumes_without_overwriting ... ok
+test pin_source::tests::a_monitor_selection_keeps_its_pixels_and_screen_position ... ok
+test pin_source::tests::a_new_selection_can_be_claimed_while_an_older_creation_is_pending ... ok
+test pin_source::tests::a_newer_selection_replaces_an_older_one ... ok
+test pin_source::tests::a_rejected_pin_keeps_the_selection_available_for_retry ... ok
+test pin_source::tests::a_selection_at_the_primary_monitor_origin_is_still_pinned ... ok
+test pin_source::tests::a_stitched_image_has_no_place_on_screen_and_is_not_pinned ... ok
+test pin_source::tests::hdr_selection_transfers_shared_pixels_and_keeps_generation_and_alpha ... ok
+test pin_source::tests::taking_a_selection_leaves_the_slot_empty ... ok
+test pin_source::tests::the_slot_is_empty_until_something_is_published ... ok
+test pin_source::tests::without_a_home_there_is_nothing_to_take ... ok
+test product::tests::channel_installations_have_distinct_stable_identifiers ... ok
+test save::assemble::tests::a_band_past_the_end_is_refused ... ok
+test save::assemble::tests::a_broken_template_is_a_validation_failure ... ok
+test save::assemble::tests::a_first_run_starts_with_the_specs_template_and_the_specs_number ... ok
+test save::assemble::tests::a_percentage_size_reaches_the_file ... ok
+test save::assemble::tests::a_selection_becomes_a_png_of_the_size_it_was_given ... ok
+test save::assemble::tests::a_successful_save_advances_the_sequence_when_the_name_asks_for_it ... ok
+test save::assemble::tests::a_template_without_the_sequence_does_not_consume_a_number ... ok
+test save::assemble::tests::a_transparent_pixel_becomes_the_fill_in_a_jpeg_and_stays_transparent_in_a_png ... ok
+test save::assemble::tests::an_edited_template_is_taken_and_an_unchanged_one_is_not ... ok
+test save::assemble::tests::moving_the_number_leaves_the_template_alone ... ok
+test save::assemble::tests::neither_cancelling_nor_failing_uses_up_a_number ... ok
+test save::assemble::tests::the_after_save_switches_are_remembered_and_unchanged_ones_are_not ... ok
+test save::assemble::tests::the_chosen_format_is_the_file_that_lands ... ok
+test save::assemble::tests::the_panels_size_is_the_size_of_the_file ... ok
+test save::assemble::tests::the_quality_tiers_are_the_recorded_numbers ... ok
+test save::assemble::tests::the_request_expands_the_name_with_the_selections_size ... ok
+test save::assemble::tests::the_two_after_save_switches_do_not_share_a_slot ... ok
+test save::assemble::tests::the_width_comes_before_the_height ... ok
+test save::assemble::tests::what_the_panel_weighs_is_what_the_save_writes ... ok
+test save::bands::tests::a_banded_save_writes_the_encoded_bytes_and_leaves_no_partial ... ok
+test save::bands::tests::a_non_png_band_request_is_refused ... ok
+test save::bands::tests::a_too_wide_band_picture_is_refused_before_the_format_is_considered ... ok
+test save::bands::tests::caps_are_checked_for_banded_saves_against_the_real_width ... ok
+test save::bands::tests::splitting_into_bands_does_not_change_the_png ... ok
+test save::caps::tests::a_four_k_frame_passes_every_format ... ok
+test save::caps::tests::bmp_refuses_a_file_over_two_gibibytes ... ok
+test save::caps::tests::jpeg_refuses_one_pixel_past_its_frame_budget ... ok
+test save::caps::tests::png_accepts_a_width_only_a_u32_could_hold ... ok
+test save::caps::tests::webp_refuses_one_pixel_past_its_side_limit ... ok
+test save::dirs::tests::the_desktop_is_absolute_or_empty_and_never_ends_with_a_separator ... ok
+test save::estimate::tests::a_shrink_step_always_makes_the_picture_smaller ... ok
+test save::estimate::tests::a_shrink_step_gives_up_rather_than_repeating_itself ... ok
+test save::estimate::tests::a_size_that_equals_a_preset_names_it ... ok
+test save::estimate::tests::bytes_are_shown_in_the_units_the_mockup_shows ... ok
+test save::estimate::tests::fitting_gives_up_when_no_size_can_pass ... ok
+test save::estimate::tests::fitting_under_a_limit_stops_at_the_first_size_that_fits ... ok
+test save::estimate::tests::fitting_under_a_limit_that_already_holds_does_not_shrink ... ok
+test save::estimate::tests::the_best_tier_is_the_first_one_that_fits ... ok
+test save::estimate::tests::when_no_tier_fits_the_lowest_one_is_reported ... ok
+test save::scale::tests::a_flat_colour_survives_shrinking_and_growing ... ok
+test save::scale::tests::a_frame_of_the_same_size_is_copied_byte_for_byte ... ok
+test save::scale::tests::a_percentage_is_rounded_and_never_reaches_zero ... ok
+test save::scale::tests::a_size_field_is_read_as_pixels_when_it_holds_pixels ... ok
+test save::scale::tests::a_transparent_pixel_takes_the_fill_colour ... ok
+test save::scale::tests::alpha_is_resampled_with_the_colours ... ok
+test save::scale::tests::an_uneven_ratio_uses_the_last_column ... ok
+test save::scale::tests::an_unusable_pair_keeps_the_selections_size ... ok
+test save::scale::tests::growing_keeps_the_corners ... ok
+test save::scale::tests::halving_averages_the_pixels_it_covers ... ok
+test save::scale::tests::switching_the_mode_only_rewrites_the_numbers ... ok
+test save::scale::tests::the_mode_decides_what_the_numbers_mean ... ok
+test save::service::tests::a_failed_write_leaves_no_final_file_and_no_partial ... ok
+test save::service::tests::a_path_past_the_limit_is_refused_before_writing ... ok
+test save::service::tests::a_png_request_copies_the_master_byte_for_byte ... ok
+test save::service::tests::a_preexisting_partial_file_is_never_removed_by_a_failed_save ... ok
+test save::service::tests::a_reserved_name_is_refused_with_its_own_sentence ... ok
+test save::service::tests::a_second_png_save_renames_instead_of_overwriting ... ok
+test save::service::tests::a_stream_encoder_failure_keeps_the_old_target_and_removes_only_its_own_partial ... ok
+test save::service::tests::a_trailing_dot_is_removed_with_a_warning ... ok
+test save::service::tests::an_empty_stem_is_refused_with_the_copy_key ... ok
+test save::service::tests::cancelling_before_the_first_byte_leaves_nothing_behind ... ok
+test save::service::tests::cancelling_between_partial_and_commit_removes_the_partial_and_keeps_the_old_file ... ok
+test save::service::tests::cancelling_is_reported_as_cancelled_and_not_as_an_io_error ... ok
+test save::service::tests::illegal_characters_are_listed_once_each ... ok
+test save::service::tests::overwriting_a_name_replaces_it_and_no_partial_survives ... ok
+test save::service::tests::the_plain_target_is_the_name_the_save_starts_from ... ok
+test save::template::tests::an_empty_template_or_an_empty_result_is_refused ... ok
+test save::template::tests::an_unclosed_bracket_is_refused ... ok
+test save::template::tests::an_unknown_variable_is_refused ... ok
+test save::template::tests::each_variable_expands_to_the_shape_the_spec_shows ... ok
+test save::template::tests::the_sequence_is_used_only_when_asked_for ... ok
+test save::template::tests::the_sequence_keeps_its_own_digits ... ok
+test save::transcode::tests::a_transcode_is_the_format_it_was_asked_for ... ok
+test save::transcode::tests::no_master_is_left_in_the_folder_it_was_parked_in ... ok
+test save::transcode::tests::the_quality_is_ignored_by_lossless_webp ... ok
+test save::transcode::tests::the_quality_reaches_the_encoder ... ok
+test save_panel::directories::tests::added_paths_survive_reload_and_cannot_be_duplicated ... ok
+test save_panel::directories::tests::builtin_paths_are_not_added_as_user_presets ... ok
+test save_panel::directories::tests::invalid_paths_and_failed_writes_do_not_create_presets ... ok
+test save_panel::model::tests::invalid_or_huge_drafts_do_not_mutate_the_last_valid_output ... ok
+test save_panel::model::tests::ratio_is_based_on_original_pixels_and_unlocked_axes_are_independent ... ok
+test save_panel::model::tests::relocking_captures_the_current_aspect_ratio ... ok
+test save_panel::model::tests::units_presets_and_reset_use_the_capture_not_mockup_dimensions ... ok
+test save_panel::source::tests::a_failure_is_explained_and_a_success_and_a_cancel_are_not ... ok
+test save_panel::source::tests::a_lower_quality_tier_writes_fewer_bytes ... ok
+test save_panel::source::tests::the_ceiling_decides_what_lands_and_writes_nothing_when_it_cannot_be_met ... ok
+test save_panel::source::tests::the_chosen_fill_colours_a_jpegs_transparent_pixels ... ok
+test save_panel::source::tests::the_chosen_number_and_policy_reach_the_save ... ok
+test save_panel::source::tests::the_menu_order_is_the_panels_own ... ok
+test save_panel::source::tests::the_panel_writes_the_size_and_the_format_it_was_given ... ok
+test save_panel::source::tests::the_preview_is_the_picture_at_its_own_size ... ok
+test save_panel::source::tests::the_synthetic_picture_is_the_size_it_claims_and_is_opaque ... ok
+test save_panel::source::tests::the_weight_is_the_file_that_would_be_written ... ok
+test save_panel::tests::a_broken_long_source_leaves_no_partial_or_successful_export ... ok
+test save_panel::tests::abandoning_a_banded_panel_releases_its_source_without_writing ... ok
+test save_panel::tests::banded_panel_streams_all_eighty_thousand_rows_and_declares_a_bounded_proxy ... ok
+test save_panel::tests::configured_save_format_applies_only_to_supported_sdr_panel_formats ... ok
+test save_panel::tests::copying_an_over_budget_long_image_is_rejected_before_reading_rows ... ok
+test save_panel::tests::encoded_preview_keeps_native_detail_above_the_old_2048_cap ... ok
+test save_panel::tests::hdr_formats_are_gated_by_the_production_encoder_not_transitive_codec_dependencies ... ok
+test save_panel::tests::hdr_picture_default_preserves_source_and_explicit_sdr_is_a_derivative ... ok
+test save_panel::tests::long_original_is_not_silently_resized_or_exported_as_a_proxy ... ok
+test save_panel::tests::long_preview_declares_proxy_without_relabelling_source_pixels ... ok
+test save_panel::tests::preview_decodes_the_exact_bytes_written_by_each_encoder ... ok
+test save_panel::tests::raw_preview_keeps_4k_pixels_without_cpu_resampling ... ok
+test save_panel::tests::raw_preview_preserves_bgra_alpha_and_bounds_its_texture ... ok
+test save_panel::tests::raw_preview_rejects_inconsistent_capture_buffers ... ok
+test save_panel::tests::saving_a_long_image_archives_the_banded_original_once_and_preserves_user_export ... ok
+test save_panel::tests::ui::a_previous_panel_still_committing_blocks_exit_until_its_real_save_completes ... ok
+test save_panel::tests::ui::archive_failure_reports_the_saved_file_separately ... ok
+test save_panel::tests::ui::cancelling_export_before_it_starts_does_not_cancel_the_original_capture ... ok
+test save_panel::tests::ui::closing_the_panel_does_not_cancel_a_requested_path_preset ... ok
+test save_panel::tests::ui::composition_enter_does_not_export_an_uncommitted_filename ... ok
+test save_panel::tests::ui::failed_capture_uses_the_component_error_and_real_retry_action ... ok
+test save_panel::tests::ui::file_format_options_start_at_the_left_padding_and_remain_selectable ... ok
+test save_panel::tests::ui::format_selection_changes_quality_controls_and_escape_only_closes_the_popup ... ok
+test save_panel::tests::ui::long_capture_opens_with_a_proxy_and_saves_its_full_original ... ok
+test save_panel::tests::ui::opening_a_new_capture_closes_the_previous_idle_panel ... ok
+test save_panel::tests::ui::ordinary_save_panel_opens_with_the_configured_supported_default ... ok
+test save_panel::tests::ui::original_is_ready_before_the_export_debounce_and_survives_invalid_edits ... ok
+test save_panel::tests::ui::presets_units_and_ratio_are_driven_through_yue_controls ... ok
+test save_panel::tests::ui::rapid_edits_publish_only_the_latest_output_preview ... ok
+test save_panel::tests::ui::responsive_layout_keeps_footer_outside_the_scrolling_form ... ok
+test save_panel::tests::ui::save_panel_tags_have_pill_corners ... ok
+test save_panel::tests::ui::save_writes_the_ui_size_once_and_reports_io_failure_without_losing_edits ... ok
+test save_panel::tests::ui::saving_a_resized_export_archives_the_unchanged_original ... ok
+test save_panel::tests::ui::tab_in_this_form_moves_focus_without_indenting_the_number ... ok
+test save_panel::tests::ui::tags_and_the_after_save_caption_share_a_vertical_center ... ok
+test save_panel::tests::ui::the_add_path_button_adds_a_working_shortcut_and_rejects_invalid_drafts ... ok
+test save_panel::tests::ui::the_format_focus_ring_fits_inside_the_form_scroll_clip ... ok
+test save_panel::tests::ui::theme_colors_reach_the_painted_panel_and_preview_without_channel_shifts ... ok
+test save_panel::tests::ui::typing_dimensions_updates_output_and_invalid_drafts_cannot_save ... ok
+test save_panel::tests::ui::yue_viewer_owns_zoom_pan_comparison_background_and_keyboard_scope ... ok
+test settings::model::tests::a_damaged_file_is_preserved_and_backed_up_without_being_overwritten ... ok
+test settings::model::tests::a_file_from_another_version_still_loads ... ok
+test settings::model::tests::a_missing_file_is_first_run_and_keeps_todays_behaviour ... ok
+test settings::model::tests::adopting_the_overlay_label_keeps_the_rest_of_the_settings ... ok
+test settings::model::tests::an_older_file_without_a_save_block_keeps_png_at_ninety_two ... ok
+test settings::model::tests::future_schema_cannot_be_loaded_or_downgraded_by_save ... ok
+test settings::model::tests::invalid_key_bindings_are_rejected_and_the_original_is_preserved ... ok
+test settings::model::tests::replacement_is_durable_and_invalid_values_leave_the_last_good_file ... ok
+test settings::model::tests::settings_round_trip_through_the_file ... ok
+test settings::model::tests::the_save_block_round_trips_through_the_file ... ok
+test settings::model::tests::untouched_bindings_are_not_written_out ... ok
+test settings::settings_view::tests::a_view_starts_from_the_file ... ok
+test settings::settings_view::tests::login_switch_reads_windows_and_failed_writes_keep_the_actual_state ... ok
+test settings::settings_view::tests::save_format_choice_updates_the_view_and_persisted_defaults ... ok
+test shortcut_editor::tests::the_apply_button_reports_failure_without_changing_the_saved_binding ... ok
+test shortcuts::tests::defaults_name_real_actions_and_do_not_claim_f3_or_f9 ... ok
+test shortcuts::tests::each_conflict_message_names_its_own_key ... ok
+test shortcuts::tests::escape_and_enter_are_not_global_hotkeys ... ok
+test shortcuts::tests::global_keys_reject_duplicates_typing_system_and_overlay_conflicts ... ok
+test shortcuts::tests::the_second_hotkey_is_registered_with_the_same_discipline ... ok
+test startup::tests::channels_and_canonical_data_roots_define_independent_instances ... ok
+test startup::tests::default_product_roots_are_channel_isolated_and_never_use_a_temp_fallback ... ok
+test startup::tests::launch_parser_preserves_windows_paths_and_rejects_ambiguous_commands ... ok
+test startup::tests::persistent_path_creation_failure_is_returned_without_fallback ... ok
+test tests::a_conflicting_product_hotkey_does_not_disable_the_capture_runtime ... ignored, temporarily reserves F5; creates hidden capture window and a test tray
+test tests::binary_is_a_thin_composition_entry ... ok
+test tests::capture_errors_reach_the_existing_window_without_unbounded_duplicates ... ok
+test tests::closing_and_reopening_the_window_keeps_services_and_reads_live_tray_health ... ignored, creates an isolated native tray; headless GPUI receives no OS-thread wakeups
+test tests::opening_the_main_window_does_not_reenter_its_application_owner ... ok
+test update::handoff::tests::helper_process ... ignored, subprocess entry point invoked by the native update regression
+test update::handoff::tests::native_helper_waits_for_exit_checks_payload_and_records_success_or_failure ... ok
+test update::handoff::tests::parent_process ... ignored, subprocess entry point invoked by the native update regression
+test update::handoff::tests::registry_lookup_refuses_unknown_channels_and_does_not_guess_installation_paths ... ok
+test update::tests::apply_requires_an_isolated_helper_and_cannot_be_used_as_an_arbitrary_installer_launcher ... ok
+test update::tests::authenticated_download_on_full_volume_is_cleaned_and_reclaimed_space_is_usable ... ignored, explicit live download on the guarded low-space VHD; tools/test-yueshot-low-space.ps1 -UpdateDownload
+test update::tests::check_download_and_authentication_form_one_flow_with_latest_version_handling ... ok
+test update::tests::downloaded_bytes_are_checked_and_locked_against_replacement ... ok
+test update::tests::https_transport_uses_windows_networking_and_reads_the_public_repository ... ignored, explicit network qualification against the public YueShot repository
+test update::tests::interrupted_and_corrupt_downloads_never_leave_an_installable_payload ... ok
+test update::tests::signed_identity_channel_architecture_version_url_size_and_expiry_are_enforced ... ok
+test update::tests::unconfigured_channels_fail_closed_and_plain_http_is_rejected ... ok
+test update::tests::unsigned_bytes_changed_after_signing_and_wrong_trust_roots_are_rejected ... ok
+test update::view::tests::check_button_reports_unconfigured_keys_and_remains_retryable ... ok
+
+test result: ok. 264 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 57.48s
+
+     Running unittests src\main.rs (target\debug\deps\YueShot-91e6631b87709ac7.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\export_path_copies.rs (target\debug\deps\export_path_copies-1eab76d9c50e79ba.exe)
+
+running 3 tests
+test the_banded_export_never_owns_the_whole_image ... ignored, L4: needs the running app closed, and a release build for a real 20,000 px export
+test the_export_path_allocates_no_second_full_copy ... ignored, L4: Release, one process, a real 20,000 px export
+test the_export_path_holds_at_most_one_row_band_at_a_time ... ignored, L4: Release, one process, a real 20,000 px export
+
+test result: ok. 0 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\exr_decode.rs (target\debug\deps\exr_decode-9cedeaae9b177ea0.exe)
+
+running 1 test
+test exr_roundtrip_preserves_float_pixels_across_multiple_blocks ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\hdr_resources.rs (target\debug\deps\hdr_resources-d91393c78c6b8818.exe)
+
+running 2 tests
+test hdr_45mp_archive_and_export_are_bounded ... ignored, Release 45MP resource measurement, explicit process, no desktop capture
+test hdr_4k_archive_and_export_are_bounded ... ignored, Release resource measurement, explicit process, no desktop capture
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\instance_cli.rs (target\debug\deps\instance_cli-ff9b80fbdac55310.exe)
+
+running 6 tests
+test diagnostics_are_offline_locked_redacted_and_never_overwrite ... ok
+test help_and_version_do_not_create_or_lock_a_data_directory ... ok
+test missing_instance_endpoint_fails_without_starting_another_writer ... ok
+test offline_maintenance_refuses_a_writer_and_restores_the_verified_database ... ok
+test product_info_is_available_without_localappdata_or_data_side_effects ... ok
+test smoke_refuses_an_active_writer_before_opening_configuration_or_storage ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.57s
+
+     Running tests\png_params_probe.rs (target\debug\deps\png_params_probe-70692e58838962af.exe)
+
+running 3 tests
+test perf2_measures_one_parameter_combination ... ignored, P0.04 probe: needs --release and twelve separate processes; see tools/p0-04-png-params.ps1
+test the_artifact_decodes_back_to_the_expected_pixels ... ok
+test the_encoder_streams_rows_without_materializing_the_image ... ok
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.71s
+
+     Running tests\png_row_band_memory.rs (target\debug\deps\png_row_band_memory-d9c6308f246374d4.exe)
+
+running 1 test
+test the_sink_streams_without_materializing_the_image ... ignored, L4: Release, one process, a real 30,000 px encode
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\regression_baseline.rs (target\debug\deps\regression_baseline-e878526791a712ef.exe)
+
+running 1 test
+test the_yueshot_regression_inventory_covers_every_owned_capture_behaviour ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests\settings_ui.rs (target\debug\deps\settings_ui-3cc3c6a43a48209a.exe)
+
+running 7 tests
+test adopting_the_overlay_label_writes_it_to_disk ... ok
+test close_to_tray_is_persisted_and_announced_without_changing_capture_preferences ... ok
+test picking_the_label_unit_writes_it_to_disk ... ok
+test product_text_roles_keep_system_families_and_upstream_metrics ... ok
+test the_overlay_switches_are_saved_and_announced ... ok
+test the_unit_suffix_switch_writes_to_disk ... ok
+test toggling_the_setting_writes_it_to_disk ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests\svg_rendering.rs (target\debug\deps\svg_rendering-27608d2d80f83fb9.exe)
+
+running 4 tests
+test svg_does_not_scan_a_malformed_system_font ... ok
+test svg_graphics_preserve_gradients_clipping_filters_and_embedded_raster ... ok
+test svg_icons_preserve_pixels_and_aspect_ratio ... ok
+test svg_live_text_is_explicitly_unsupported ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-dc4a6efcce752d29.exe)
+
+running 727 tests
+test annotation::tests::apply_style_targets_selection_then_default ... ok
+test annotation::tests::bring_forward_and_backward_nudge_one_step_and_noop_at_ends ... ok
+test annotation::tests::commit_drag_records_one_undo_step ... ok
+test annotation::tests::create_item_pushes_undo_and_selects ... ok
+test annotation::tests::delete_selected_pushes_undo ... ok
+test annotation::tests::dist_to_degenerate_segment_is_point_distance ... ok
+test annotation::tests::dist_to_horizontal_segment_correct ... ok
+test annotation::tests::draft_commit_adds_item_and_pushes_undo ... ok
+test annotation::tests::duplicate_selected_creates_new_item ... ok
+test annotation::tests::execute_routes_commands_to_document_operations ... ok
+test annotation::tests::handle_at_finds_corner_and_resizes_bounds ... ok
+test annotation::tests::hit_test_returns_top_most_item ... ok
+test annotation::tests::ids_are_deterministic_and_per_document ... ok
+test annotation::tests::item_round_trips_through_serde_json ... ok
+test annotation::tests::new_document_is_empty ... ok
+test annotation::tests::reset_clears_all_state ... ok
+test annotation::tests::resize_endpoint_moves_only_that_end ... ok
+test annotation::tests::style_change_pushes_undo_once ... ok
+test annotation::tests::translate_does_not_push_undo ... ok
+test annotation::tests::undo_after_create_is_empty_and_redo_restores ... ok
+test annotation::tests::undo_restores_previous_state ... ok
+test annotation::tests::z_order_is_the_list_position ... ok
+test artifact::tests::a_radius_wider_than_half_the_short_side_is_clamped ... ok
+test artifact::tests::crops_the_selection_out_of_the_frozen_frame ... ok
+test artifact::tests::empty_or_offscreen_selections_are_rejected ... ok
+test artifact::tests::prepare_reads_only_the_selection_bytes ... ok
+test artifact::tests::readback_of_the_wrong_size_is_rejected ... ok
+test artifact::tests::rounding_a_corner_only_touches_the_corner ... ok
+test artifact::tests::selection_is_clipped_to_the_frame_before_readback ... ok
+test artifact::tests::validate_clips_rather_than_rejecting_a_partly_offscreen_selection ... ok
+test diagnostics::tests::a_snapshot_refresh_records_its_cost_and_the_candidate_gauge ... ok
+test diagnostics::tests::queue_depth_is_a_bounded_gauge ... ok
+test diagnostics::tests::reset_clears_every_counter_for_the_next_session ... ok
+test diagnostics::tests::the_handle_is_shared_between_threads ... ok
+test diagnostics::tests::the_summary_line_names_every_documented_metric ... ok
+test diagnostics::tests::timings_keep_the_latest_and_the_worst_case ... ok
+test diagnostics::tests::visual_diagnostics_share_handle_and_reset_without_native_cross_reporting ... ok
+test error::tests::error_codes_map_to_ipc_codes ... ok
+test error::tests::native_code_is_parsed_from_tagged_message ... ok
+test geometry::rounded_frame_tests::a_corner_grip_sits_on_the_arc_and_moves_out_with_the_radius ... ok
+test geometry::rounded_frame_tests::the_cap_is_a_quarter_of_the_short_side ... ok
+test geometry::rounded_frame_tests::the_session_snapshot_carries_the_panel_radius ... ok
+test geometry::rounded_frame_tests::the_whole_corner_region_grabs_the_corner_grip ... ok
+test geometry::tests::a_window_on_another_display_never_lands_on_this_overlay ... ok
+test geometry::tests::crosshair_clamps_to_the_frame_at_the_edges ... ok
+test geometry::tests::crosshair_is_local_and_centred_on_the_cursor ... ok
+test geometry::tests::crosshair_radius_scales_with_dpi ... ok
+test geometry::tests::dpi_scales_the_handle_hit_area ... ok
+test geometry::tests::drag_in_any_direction_normalises_the_rectangle ... ok
+test geometry::tests::edges_report_the_matching_handle ... ok
+test geometry::tests::empty_snapshot_creates_a_new_selection ... ok
+test geometry::tests::every_control_the_region_panel_draws_can_be_hit ... ok
+test geometry::tests::handles_hit_test_at_their_anchor_points ... ok
+test geometry::tests::interior_hit_tests_as_move_and_exterior_as_outside ... ok
+test geometry::tests::local_coordinates_follow_the_monitor_origin ... ok
+test geometry::tests::magnifier_flips_on_every_screen_edge_and_stays_visible ... ok
+test geometry::tests::magnifier_source_keeps_the_cursor_centred_away_from_edges ... ok
+test geometry::tests::minimum_size_is_enforced_while_resizing ... ok
+test geometry::tests::move_keeps_the_size_and_stays_inside_the_monitor ... ok
+test geometry::tests::rectangles_surrounding_a_hole_cover_the_mask ... ok
+test geometry::tests::resize_can_cross_over_the_opposite_edge ... ok
+test geometry::tests::resize_follows_the_pointer_and_clamps_into_the_monitor ... ok
+test geometry::tests::selection_is_clipped_to_the_monitor ... ok
+test geometry::tests::shift_corner_resize_can_shrink_back_toward_the_fixed_corner ... ok
+test geometry::tests::shift_corner_resize_changes_by_pixels_instead_of_ratio_units ... ok
+test geometry::tests::shift_corner_resize_ignores_the_press_point_and_the_hit_slop_offset ... ok
+test geometry::tests::shift_corner_resize_keeps_ratio_when_clamped_or_minimized ... ok
+test geometry::tests::shift_corner_resize_mirrors_past_the_fixed_corner ... ok
+test geometry::tests::shift_corner_resize_preserves_the_original_ratio_for_all_corners ... ok
+test geometry::tests::shift_corner_resize_scales_from_the_pointer_on_a_single_axis_move ... ok
+test geometry::tests::shift_does_not_constrain_edge_or_move_drags ... ok
+test geometry::tests::size_label_prefers_above_and_aligns_to_left_edge ... ok
+test geometry::tests::size_label_stays_inside_horizontal_work_area_bounds ... ok
+test geometry::tests::surrounds_with_no_hole_returns_the_whole_frame ... ok
+test geometry::tests::the_four_fields_share_one_column_per_card ... ok
+test geometry::tests::the_hit_test_reads_the_same_rectangles_the_drawing_does ... ok
+test geometry::tests::the_image_card_grows_the_panel_only_when_it_is_open ... ok
+test geometry::tests::the_image_card_head_toggles_and_the_slider_maps_positions_to_values ... ok
+test geometry::tests::the_level_badge_prefers_the_boxs_own_corner ... ok
+test geometry::tests::the_panel_goes_outside_a_selection_too_small_to_hold_it ... ok
+test geometry::tests::the_pill_radius_is_half_the_height_and_never_negative ... ok
+test geometry::tests::the_ratio_menu_hangs_below_its_button_and_stays_on_screen ... ok
+test geometry::tests::the_region_panel_grows_with_the_display_scale ... ok
+test geometry::tests::the_region_panel_is_420_dip_wide_and_centred ... ok
+test geometry::tests::the_segment_radius_nests_inside_its_container_and_never_goes_negative ... ok
+test geometry::tests::the_segment_slide_lands_on_both_ends_and_moves_monotonically ... ok
+test geometry::tests::the_segment_widths_give_every_option_the_same_width ... ok
+test geometry::tests::the_segmented_control_capitalises_what_the_badge_keeps_lowercase ... ok
+test geometry::tests::the_size_label_ladder_keeps_the_words_the_fallback_needs ... ok
+test geometry::tests::window_rect_conversion_clips_a_window_that_spans_monitors ... ok
+test geometry::tests::window_rect_conversion_keeps_a_full_monitor_window_exact ... ok
+test geometry::tests::window_rect_conversion_normalises_degenerate_input ... ok
+test geometry::tests::window_rect_conversion_rejects_rects_off_this_monitor ... ok
+test geometry::tests::window_rect_conversion_subtracts_the_monitor_origin ... ok
+test keymap::tests::a_rebound_action_answers_its_new_key_only ... ok
+test keymap::tests::caps_show_the_names_the_guide_uses ... ok
+test keymap::tests::chords_round_trip_through_their_settings_form ... ok
+test keymap::tests::overrides_store_only_what_differs_from_the_defaults ... ok
+test keymap::tests::overrides_that_cannot_work_are_refused ... ok
+test keymap::tests::the_defaults_answer_the_keys_the_overlay_always_had ... ok
+test keymap::tests::the_guide_lists_the_visible_rows_grouped_and_merged ... ok
+test keymap::tests::virtual_keys_name_the_physical_key ... ok
+test monitor_cache::tests::a_window_spanning_two_monitors_is_visible_on_both ... ok
+test monitor_cache::tests::an_empty_cache_classifies_every_rectangle_as_invisible ... ok
+test monitor_cache::tests::degenerate_monitor_rectangles_are_dropped ... ok
+test monitor_cache::tests::intersection_is_half_open_at_monitor_edges ... ok
+test monitor_cache::tests::layouts_convert_to_their_bounds ... ok
+test monitor_cache::tests::negative_virtual_desktop_origins_are_handled ... ok
+test monitor_cache::tests::release_drops_the_topology ... ok
+test region::char_entry_tests::an_ascii_digit_and_its_full_width_twin_are_the_same_key ... ok
+test region::char_entry_tests::anything_that_is_not_a_digit_is_refused ... ok
+test region::tests::a_field_starts_editing_as_soon_as_the_focus_lands_on_it ... ok
+test region::tests::a_ratio_follows_the_edited_side_and_free_lets_them_go ... ok
+test region::tests::a_ratio_shrinks_to_fit_the_screen_and_keeps_its_proportion ... ok
+test region::tests::a_refused_region_shows_up_in_the_footer_not_only_in_red ... ok
+test region::tests::a_region_on_a_monitor_left_of_the_primary_is_ordinary ... ok
+test region::tests::an_off_screen_region_is_refused_with_the_range_to_use ... ok
+test region::tests::center_and_origin_place_the_region ... ok
+test region::tests::clicking_a_delay_segment_selects_that_segment ... ok
+test region::tests::enter_confirms_from_a_field_and_cancel_wins_over_everything ... ok
+test region::tests::swap_does_not_move_the_region_back_into_the_screen ... ok
+test region::tests::swapping_flips_the_ratio_and_falls_back_when_there_is_no_counterpart ... ok
+test region::tests::switching_the_unit_re_reads_the_same_region ... ok
+test region::tests::tab_skips_the_slider_while_the_card_is_closed ... ok
+test region::tests::tab_walks_the_panel_in_reading_order_and_wraps ... ok
+test region::tests::the_caret_moves_and_a_digit_lands_where_it_sits ... ok
+test region::tests::the_caret_never_ends_up_outside_the_buffer ... ok
+test region::tests::the_delay_group_switches_with_the_arrows ... ok
+test region::tests::the_destination_defaults_to_copy_and_drives_the_footer_readout ... ok
+test region::tests::the_four_numbers_read_back_the_selection_in_the_chosen_unit ... ok
+test region::tests::the_image_summary_follows_the_unit_and_says_when_there_is_none ... ok
+test region::tests::the_radius_is_clamped_to_the_short_side ... ok
+test region::tests::the_ratio_button_shows_free_until_a_ratio_is_picked ... ok
+test region::tests::the_ratio_menu_opens_picks_and_lets_escape_through_first ... ok
+test region::tests::the_slider_keys_step_and_stop_at_the_ends ... ok
+test region::tests::the_three_label_toggles_are_the_panels_own_three_bits ... ok
+test region::tests::the_unit_group_switches_with_the_arrows_without_losing_the_focus ... ok
+test region::tests::typing_appends_at_the_caret_and_backspace_deletes_one_character ... ok
+test ring_contrast::tests::every_background_gets_the_smallest_underlay_that_works ... ok
+test ring_contrast::tests::ring_contrast_probe ... ignored, probe: prints the recomputed A4 tables for the docs
+test ring_contrast::tests::the_inner_rings_sit_on_the_raw_frame_not_on_the_masked_page ... ok
+test ring_contrast::tests::the_new_table_over_the_whole_luminance_range ... ok
+test ring_contrast::tests::the_pre_a2_table_is_void_because_it_picks_the_wrong_underlay ... ok
+test ring_contrast::tests::the_tone_ladder_helps_the_strong_rings_and_not_the_faint_ones ... ok
+test sampler::tests::a_pending_tile_cannot_be_replaced_by_fast_pointer_motion ... ok
+test sampler::tests::cached_sample_coverage_checks_data_and_all_four_edges ... ok
+test sampler::tests::complete_extracts_center_pixel ... ok
+test sampler::tests::format_cycles_hex_rgb_hsl ... ok
+test sampler::tests::format_hex_uppercase ... ok
+test sampler::tests::formatted_renders_each_format ... ok
+test sampler::tests::initial_state_has_no_color ... ok
+test sampler::tests::pending_origin_reports_the_submitted_tile ... ok
+test sampler::tests::reset_clears_all_state ... ok
+test sampler::tests::rgb_to_hsl_known_colors ... ok
+test sampler::tests::should_request_when_no_cache ... ok
+test sampler::tests::stale_preserves_last_color ... ok
+test sampler::tests::throttle_prevents_rapid_requests ... ok
+test sampler::tests::tile_hit_prevents_request ... ok
+test sampler::tests::tile_miss_allows_request ... ok
+test sampler::tests::update_cursor_within_tile_detects_color_change ... ok
+test save_format::preference_tests::a_hand_edited_quality_is_clamped_not_rejected ... ok
+test save_format::preference_tests::an_older_settings_file_without_the_save_block_loads_as_the_default ... ok
+test save_format::preference_tests::the_defaults_are_the_products_current_behaviour ... ok
+test save_format::preference_tests::the_formats_round_trip_through_their_stored_names ... ok
+test save_format::tests::bmp_stops_at_the_signed_height_limit ... ok
+test save_format::tests::jpeg_stops_at_its_specified_side ... ok
+test save_format::tests::png_can_hold_anything_its_header_can ... ok
+test save_format::tests::the_labels_say_what_the_formats_are ... ok
+test save_format::tests::the_limit_says_the_number_it_was_broken_by ... ok
+test save_format::tests::webp_stops_at_the_container_limit ... ok
+test scroll::backed::budget_tests::dropping_the_store_removes_its_tile_file ... ok
+test scroll::backed::budget_tests::the_budgets_separate_working_memory_from_temporary_storage ... ok
+test scroll::backed::budget_tests::the_sweep_takes_orphans_and_never_a_live_file ... ok
+test scroll::backed::tests::a_prepend_over_a_broken_tile_still_writes_its_band ... ok
+test scroll::backed::tests::a_small_row_cap_keeps_the_entire_first_frame ... ok
+test scroll::backed::tests::appends_land_in_the_same_place_as_one_buffer ... ok
+test scroll::backed::tests::fp16_tiles_preserve_raw_bits_across_sealing_reverse_growth_and_drop ... ok
+test scroll::backed::tests::the_front_ring_always_has_room_for_what_unsealing_takes ... ok
+test scroll::backed::tests::unsealing_reports_a_broken_tile_instead_of_pretending ... ok
+test scroll::estimate::tests::a_blinking_caret_and_an_animation_do_not_hide_the_shift ... ok
+test scroll::estimate::tests::a_different_page_is_unknown ... ok
+test scroll::estimate::tests::a_fixed_header_and_footer_do_not_pull_the_answer_to_zero ... ok
+test scroll::estimate::tests::a_fixed_sidebar_does_not_spoil_the_strips_beside_it ... ok
+test scroll::estimate::tests::a_jump_beyond_the_overlap_floor_is_unknown ... ok
+test scroll::estimate::tests::a_jump_under_a_fixed_header_is_unknown_not_still ... ok
+test scroll::estimate::tests::a_live_but_unscrolled_page_is_still ... ok
+test scroll::estimate::tests::a_plain_scroll_down_is_measured_exactly ... ok
+test scroll::estimate::tests::a_scroll_up_is_measured_as_a_negative_shift ... ok
+test scroll::estimate::tests::a_zoomed_frame_is_unknown_not_a_shift ... ok
+test scroll::estimate::tests::repeated_content_is_unknown_rather_than_guessed ... ok
+test scroll::estimate::tests::the_cost_of_one_estimate_at_the_field_selection_size ... ok
+test scroll::layout::tests::a_short_selection_gets_the_minimum_height ... ok
+test scroll::layout::tests::the_buttons_span_the_bottom_row_in_order ... ok
+test scroll::layout::tests::the_footprint_is_the_panel_and_its_shadow ... ok
+test scroll::layout::tests::the_panel_flips_left_when_the_right_side_has_no_room ... ok
+test scroll::layout::tests::the_panel_grows_with_the_thumbnail_up_to_the_selection_height ... ok
+test scroll::layout::tests::the_panel_is_right_of_the_selection_and_bottom_aligned ... ok
+test scroll::layout::tests::the_panel_scales_with_dpi ... ok
+test scroll::layout::tests::the_panel_stays_inside_the_work_area ... ok
+test scroll::layout::tests::the_size_badge_floats_inside_the_well ... ok
+test scroll::layout::tests::the_status_line_is_silent_until_something_needs_saying ... ok
+test scroll::scroll_format_tests::a_short_view_keeps_webp_and_a_tall_one_does_not ... ok
+test scroll::scroll_format_tests::bmp_is_lowered_to_png_because_it_is_only_a_save_target ... ok
+test scroll::scroll_format_tests::jpeg_is_lowered_when_the_frame_would_not_fit_its_budget ... ok
+test scroll::scroll_format_tests::jpeg_still_reports_the_formats_own_limit_first ... ok
+test scroll::scroll_format_tests::png_is_never_lowered ... ok
+test scroll::scroll_format_tests::the_scroll_log_prints_on_a_change_and_then_every_sixty_frames ... ok
+test scroll::scroll_format_tests::webp_is_lowered_before_a_tall_scroll_starts ... ok
+test scroll::stats::tests::a_long_quiet_stretch_is_visible_as_counts ... ok
+test scroll::stats::tests::a_negative_shift_counts_as_distance ... ok
+test scroll::stats::tests::every_placement_lands_in_its_own_count ... ok
+test scroll::stitch::tests::a_jump_the_estimator_cannot_measure_is_skipped_and_the_session_recovers ... ok
+test scroll::stitch::tests::a_long_session_moves_the_canvas_a_logarithmic_number_of_times ... ok
+test scroll::stitch::tests::a_move_inside_known_rows_writes_nothing ... ok
+test scroll::stitch::tests::a_pure_downward_sequence_matches_the_oracle ... ok
+test scroll::stitch::tests::a_pure_upward_sequence_matches_the_oracle ... ok
+test scroll::stitch::tests::a_scroll_down_reproduces_the_page_with_one_header_and_one_footer ... ok
+test scroll::stitch::tests::a_sequence_that_hits_the_row_cap_matches_the_oracle ... ok
+test scroll::stitch::tests::contained_moves_match_the_oracle_and_write_nothing ... ok
+test scroll::stitch::tests::scrolling_back_up_and_down_again_changes_nothing_already_seen ... ok
+test scroll::stitch::tests::scrolling_up_from_the_middle_grows_the_canvas_at_the_top ... ok
+test scroll::stitch::tests::several_direction_reversals_match_the_oracle ... ok
+test scroll::stitch::tests::the_backed_store_matches_the_oracle_on_every_sequence ... ok
+test scroll::stitch::tests::the_canvas_moves_a_logarithmic_number_of_times_at_the_field_size ... ignored, timing report: run with --release --ignored --nocapture
+test scroll::stitch::tests::the_canvas_stops_growing_at_its_cap ... ok
+test scroll::stitch::tests::the_cost_of_an_append_at_the_field_size ... ignored, timing report: run with --release --ignored --nocapture
+test scroll::store::tests::a_buffer_that_cannot_grow_is_left_untouched ... ok
+test scroll::store::tests::rows_travel_in_both_directions ... ok
+test scroll::tests::a_broken_tile_file_is_not_reported_as_success ... ok
+test scroll::tests::a_failed_seal_is_reported_as_storage_not_as_the_row_cap ... ok
+test scroll::tests::a_jump_is_reported_as_lost_and_scrolling_back_recovers ... ok
+test scroll::tests::a_random_live_scroll_of_a_long_page_stitches_to_the_page_byte_for_byte ... ok
+test scroll::tests::fp16_scroll_uses_sdr_geometry_and_keeps_original_row_bits ... ok
+test scroll::tests::the_band_source_reproduces_the_whole_image ... ok
+test scroll::tests::the_bands_add_up_to_the_whole_image ... ok
+test scroll::tests::the_byte_budget_can_be_the_cap_that_stops_the_image ... ok
+test scroll::tests::the_cost_of_one_frame_at_the_field_size ... ignored, timing report: run with --release --include-ignored --nocapture
+test scroll::tests::the_image_stops_at_its_cap_and_says_so ... ok
+test scroll::tests::the_preview_follows_the_viewport_back_up ... ok
+test scroll::tests::the_preview_shows_the_tail_while_scrolling_down_and_marks_the_viewport ... ok
+test scroll::thumb::tests::a_prepend_adds_rows_in_front_without_moving_the_blocks ... ok
+test scroll::thumb::tests::each_thumbnail_pixel_is_the_mean_of_its_block ... ok
+test scroll::thumb::tests::growth_at_the_bottom_adds_rows_and_recomputes_only_the_band ... ok
+test scroll::thumb::tests::scratch_measure_the_pixel_writeback ... ignored, measurement, not an assertion
+test scroll::thumb::tests::the_factor_is_the_smallest_that_fits_the_panel ... ok
+test scroll::thumb::tests::the_scaled_filter_covers_the_canvas_edge_to_edge ... ok
+test session::tests::a_press_alone_never_creates_a_zero_size_selection ... ok
+test session::tests::a_scroll_session_needs_a_committed_selection ... ok
+test session::tests::a_too_short_selection_is_refused_and_kept ... ok
+test session::tests::annotating_locks_selection_and_stays_confirmable ... ok
+test session::tests::annotating_requires_a_selected_session ... ok
+test session::tests::arming_an_active_session_is_rejected ... ok
+test session::tests::artifact_rejects_a_selection_outside_the_frozen_frame ... ok
+test session::tests::chrome_is_hidden_until_a_selection_exists ... ok
+test session::tests::confirming_without_a_selection_is_rejected ... ok
+test session::tests::dragging_inside_moves_the_existing_selection ... ok
+test session::tests::enabling_shift_mid_drag_matches_a_drag_that_held_shift_from_the_start ... ok
+test session::tests::esc_from_every_active_state_returns_to_idle ... ok
+test session::tests::every_capture_state_variant_is_reachable ... ok
+test session::tests::happy_path_walks_through_every_state ... ok
+test session::tests::preparing_accepts_the_frame_and_arms_the_session ... ok
+test session::tests::preparing_cannot_be_entered_twice ... ok
+test session::tests::pressing_outside_keeps_the_selection_until_the_drag_starts ... ok
+test session::tests::shift_corner_drag_is_aspect_locked_but_shift_edge_drag_is_not ... ok
+test session::tests::shift_corner_drag_reverses_through_the_fixed_corner ... ok
+test session::tests::snap_to_adopts_a_usable_rectangle_and_relies_on_the_clip_for_edges ... ok
+test session::tests::snap_to_rejects_degenerate_rectangles_and_leaves_the_session_untouched ... ok
+test session::tests::the_capture_session_ends_before_the_scroll_session_starts ... ok
+test session::tests::tiny_committed_selection_keeps_edit_hits_but_hides_colliding_grips ... ok
+test session::tests::window_destroy_and_device_removal_use_the_same_cleanup ... ok
+test units::tests::a_number_survives_the_round_trip_between_units ... ok
+test units::tests::a_switch_changes_only_the_item_it_names ... ok
+test units::tests::a_unit_converts_the_pixel_value_it_is_given ... ok
+test units::tests::a_whole_number_of_dp_survives_the_round_trip_at_every_scale_windows_uses ... ok
+test units::tests::px_to_dip_divides_by_the_scale_the_settings_page_names ... ok
+test units::tests::px_to_dip_rounds_both_sides_of_zero_the_same_way ... ok
+test units::tests::the_badge_can_drop_its_size_and_go_quiet ... ok
+test units::tests::the_label_writes_what_the_display_asks_for ... ok
+test visual_detection::tests::visual_comparison_fixed_inputs_report ... ok
+test visual_detection::tests::visual_detection_bordered_fills_take_outer_rim ... ok
+test visual_detection::tests::visual_detection_boundary_location_exact_coverage_vectors ... ok
+test visual_detection::tests::visual_detection_channel_permutations_need_no_bgra_conversion_copy ... ok
+test visual_detection::tests::visual_detection_cpu_development_timings ... ignored, P2 release-profile development timing; opt-in 100 repetitions per representative scene
+test visual_detection::tests::visual_detection_demand_reads_fail_closed_before_overallocation ... ok
+test visual_detection::tests::visual_detection_demand_transfer_matches_owned_input_and_enforces_bytes ... ok
+test visual_detection::tests::visual_detection_distinct_sampling_and_input_limits ... ok
+test visual_detection::tests::visual_detection_existing_pixel_contracts_reject_invalid_layout_and_unmapped_hdr ... ok
+test visual_detection::tests::visual_detection_injected_geometry_chains_and_arrival_permutations ... ok
+test visual_detection::tests::visual_detection_isolated_capacity_stage_vectors ... ok
+test visual_detection::tests::visual_detection_isolated_mask_uses_the_real_component_guard ... ok
+test visual_detection::tests::visual_detection_metamorphic_frozen_pairs ... ok
+test visual_detection::tests::visual_detection_odd_large_dimensions_do_not_mean_empty_or_upscale ... ok
+test visual_detection::tests::visual_detection_read_coverage_and_extreme_dimensions ... ok
+test visual_detection::tests::visual_detection_rectangle_validation_fixed_stage_vectors ... ok
+test visual_detection::tests::visual_detection_refinement_rejects_inversion_boundary_peaks_and_stale_evidence ... ok
+test visual_detection::tests::visual_detection_sampling_stage_contracts_and_single_output_matching ... ok
+test visual_detection::tests::visual_detection_signed_rgb_residual_cancels_affine_ramps ... ok
+test visual_detection::tests::visual_progressive_batches_preserve_full_reference_and_report_all_costs ... ok
+test visual_detection::tests::visual_progressive_incomplete_wrong_batches_and_large_indices_fail_closed ... ok
+test visual_detection::tests::visual_replay_each_algorithm_allocation_site_fails_without_partial_publication ... ok
+test window_detection::deep::tests::a_cursor_move_without_a_window_clears_everything ... ok
+test window_detection::deep::tests::a_deeper_target_replaces_immediately ... ok
+test window_detection::deep::tests::a_deferred_position_survives_a_failed_or_abandoned_query ... ok
+test window_detection::deep::tests::a_fresh_chain_selects_the_deepest_level ... ok
+test window_detection::deep::tests::a_lateral_target_replaces_immediately ... ok
+test window_detection::deep::tests::a_level_walk_skips_the_levels_that_look_identical ... ok
+test window_detection::deep::tests::a_partial_path_never_suppresses_the_next_query ... ok
+test window_detection::deep::tests::a_pending_answer_keeps_the_last_verified_rectangle_of_the_window ... ok
+test window_detection::deep::tests::a_position_whose_dwell_expired_during_a_query_is_queried_afterwards ... ok
+test window_detection::deep::tests::a_query_is_only_issued_after_the_dwell_expires ... ok
+test window_detection::deep::tests::a_result_from_another_epoch_is_not_published ... ok
+test window_detection::deep::tests::a_shallower_target_that_contains_the_current_one_needs_confirmation ... ok
+test window_detection::deep::tests::a_stale_chain_cannot_publish_a_box_outside_the_path ... ok
+test window_detection::deep::tests::a_target_that_still_covers_the_cursor_is_shown_even_when_nothing_is_pending ... ok
+test window_detection::deep::tests::a_two_level_chain_draws_two_rings_and_no_inners ... ok
+test window_detection::deep::tests::a_verified_target_for_another_window_never_leaks_into_this_one ... ok
+test window_detection::deep::tests::a_walked_level_overrides_the_published_box_in_the_preview ... ok
+test window_detection::deep::tests::a_wedged_query_is_abandoned_once_its_budget_is_spent ... ok
+test window_detection::deep::tests::a_window_only_answer_has_nowhere_to_walk ... ok
+test window_detection::deep::tests::an_abandoned_query_cannot_publish_its_answer_afterwards ... ok
+test window_detection::deep::tests::an_empty_result_frees_the_single_flight_slot ... ok
+test window_detection::deep::tests::an_epoch_change_drops_the_cache_and_the_query ... ok
+test window_detection::deep::tests::degenerate_paths_are_answered_without_rings_or_panics ... ok
+test window_detection::deep::tests::moving_inside_the_published_path_still_re_queries ... ok
+test window_detection::deep::tests::no_follow_up_without_a_deferred_dwell ... ok
+test window_detection::deep::tests::only_the_newest_cursor_position_is_queried ... ok
+test window_detection::deep::tests::reset_clears_the_pending_target_the_query_and_the_cache ... ok
+test window_detection::deep::tests::reset_goes_back_to_what_the_refinement_published ... ok
+test window_detection::deep::tests::returning_to_a_parent_that_does_not_contain_the_old_target_is_immediate ... ok
+test window_detection::deep::tests::rings_fade_with_distance_from_the_selection_and_floor_at_65_percent ... ok
+test window_detection::deep::tests::stepping_up_stops_at_the_window_frame_and_down_at_the_box ... ok
+test window_detection::deep::tests::the_answer_ring_survives_collapse_only_while_it_is_kept ... ok
+test window_detection::deep::tests::the_cap_drops_the_furthest_non_anchors ... ok
+test window_detection::deep::tests::the_chain_plan_matches_the_prototype_on_the_nine_level_page ... ok
+test window_detection::deep::tests::the_first_hover_of_a_window_withholds_the_preview_until_it_answers ... ok
+test window_detection::deep::tests::the_first_target_and_an_unchanged_target_are_immediate ... ok
+test window_detection::deep::tests::the_published_path_starts_at_the_window_frame_and_ends_at_the_target ... ok
+test window_detection::deep::tests::the_remaining_stops_count_notches_that_land_somewhere_new ... ok
+test window_detection::deep::tests::the_unsupported_provider_never_produces_a_path ... ok
+test window_detection::gesture::tests::a_click_confirms_the_preview_but_a_drag_never_does ... ok
+test window_detection::gesture::tests::a_click_without_a_preview_changes_nothing ... ok
+test window_detection::gesture::tests::a_held_button_blocks_the_dwell_preview ... ok
+test window_detection::gesture::tests::a_held_button_suppresses_hover_and_new_previews ... ok
+test window_detection::gesture::tests::a_plain_press_never_creates_or_moves_a_selection ... ok
+test window_detection::gesture::tests::a_press_on_a_handle_or_inside_starts_the_edit_immediately ... ok
+test window_detection::gesture::tests::a_stale_dwell_result_never_produces_a_preview ... ok
+test window_detection::gesture::tests::a_tiny_jitter_does_not_start_a_manual_drag ... ok
+test window_detection::gesture::tests::a_tiny_jitter_stays_pending_and_a_real_move_starts_the_drag ... ok
+test window_detection::gesture::tests::dwell_replaces_a_preview_only_when_the_rectangle_changes ... ok
+test window_detection::gesture::tests::reset_drops_the_preview_and_the_pending_press ... ok
+test window_detection::gesture::tests::the_drag_test_is_symmetric_and_overflow_safe ... ok
+test window_detection::gesture::tests::the_preview_carries_the_selection_it_must_be_able_to_restore ... ok
+test window_detection::gesture::tests::the_preview_is_display_state_not_a_pointer_gesture ... ok
+test window_detection::hit_test::tests::a_point_in_two_overlapping_windows_belongs_to_the_frontmost ... ok
+test window_detection::hit_test::tests::a_released_snapshot_answers_nothing ... ok
+test window_detection::hit_test::tests::a_shared_edge_is_zero_distance_from_both_but_belongs_to_one ... ok
+test window_detection::hit_test::tests::bounds_changed_is_written_back_into_the_snapshot ... ok
+test window_detection::hit_test::tests::candidates_from_another_generation_are_invisible ... ok
+test window_detection::hit_test::tests::degenerate_rectangles_are_never_hit_or_snapped_to ... ok
+test window_detection::hit_test::tests::distance_is_zero_inside_a_rectangle_and_positive_outside ... ok
+test window_detection::hit_test::tests::hit_test_and_nearest_target_stay_inside_the_latency_budget ... ok
+test window_detection::hit_test::tests::hit_test_picks_the_frontmost_overlapping_window ... ok
+test window_detection::hit_test::tests::hit_test_uses_half_open_edges ... ok
+test window_detection::hit_test::tests::nearest_target_breaks_ties_by_z_order ... ok
+test window_detection::hit_test::tests::nearest_target_prefers_the_window_under_the_cursor ... ok
+test window_detection::hit_test::tests::nearest_target_respects_the_snap_radius ... ok
+test window_detection::hit_test::tests::point_distance_squared_matches_the_pythagorean_value ... ok
+test window_detection::hit_test::tests::stale_or_mismatched_updates_are_ignored ... ok
+test window_detection::model::tests::a_target_knows_when_its_snapshot_generation_is_gone ... ok
+test window_detection::model::tests::an_adopted_id_becomes_the_newest_request_and_keeps_issue_monotonic ... ok
+test window_detection::model::tests::bounds_changed_is_ignored_unless_epoch_and_identity_both_match ... ok
+test window_detection::model::tests::candidate_bounds_stay_in_screen_space_and_are_half_open ... ok
+test window_detection::model::tests::degenerate_candidates_are_marked_unusable ... ok
+test window_detection::model::tests::epochs_start_at_one_and_increase_strictly ... ok
+test window_detection::model::tests::every_level_kind_has_one_debug_name_and_at_most_one_noun ... ok
+test window_detection::model::tests::identity_mismatch_means_a_reused_handle_not_the_same_window ... ok
+test window_detection::model::tests::request_gate_keeps_only_the_newest_request ... ok
+test window_detection::model::tests::selection_target_replay_keeps_selected_geometry_separate_from_owner_and_source ... ok
+test window_detection::model::tests::selection_target_replay_origin_is_not_inferred_from_control_kind ... ok
+test window_detection::model::tests::snapshot_lookup_is_by_identity_and_release_drops_everything ... ok
+test window_detection::model::tests::the_zero_epoch_never_matches_a_live_snapshot ... ok
+test window_detection::native_baseline::native_baseline_hit_mapping_and_epoch_trace ... ok
+test window_detection::native_baseline::native_baseline_pending_preview_and_visible_layer_trace ... ok
+test window_detection::native_baseline::native_baseline_press_blocks_late_publish_and_threshold_is_inclusive ... ok
+test window_detection::provider::tests::exclusions_match_by_hwnd_and_by_process ... ok
+test window_detection::provider::tests::shell_surfaces_are_matched_exactly ... ok
+test window_detection::provider::tests::the_exclusion_epoch_only_moves_when_the_set_changes ... ok
+test window_detection::provider::tests::the_provider_contract_is_usable_without_win32 ... ok
+test window_detection::provider::tests::tool_window_and_no_activate_styles_are_not_shell_surfaces ... ok
+test window_detection::snapshot::tests::a_window_spanning_off_screen_is_kept_while_its_visible_part_exists ... ok
+test window_detection::snapshot::tests::candidates_keep_z_order_and_take_the_current_epoch ... ok
+test window_detection::snapshot::tests::class_name_hash_is_stable_and_class_sensitive ... ok
+test window_detection::snapshot::tests::classify_applies_both_passes_and_pairs_identities ... ok
+test window_detection::snapshot::tests::pass_one_keeps_tool_and_no_activate_windows ... ok
+test window_detection::snapshot::tests::pass_one_rejects_our_own_windows_and_shell_surfaces ... ok
+test window_detection::snapshot::tests::pass_two_rejects_cloaked_unreadable_and_off_screen_windows ... ok
+test window_detection::transition::tests::a_settled_transition_is_never_running ... ok
+test window_detection::transition::tests::a_transition_starts_at_the_current_value_and_ends_at_the_target ... ok
+test window_detection::transition::tests::interpolation_hits_both_ends_and_blends_both_size_and_position ... ok
+test window_detection::transition::tests::out_quad_is_a_normalised_decelerating_curve ... ok
+test window_detection::transition::tests::presenting_directly_cancels_a_running_transition ... ok
+test window_detection::transition::tests::retargeting_mid_flight_continues_from_what_is_displayed ... ok
+test window_detection::transition::tests::starting_and_ending_on_the_same_rectangle_does_not_animate ... ok
+test window_detection::uia::tests::a_same_bounds_container_is_descent_worthy ... ok
+test window_detection::uia::tests::a_text_run_inside_an_element_is_not_a_target ... ok
+test window_detection::uia::tests::adopting_a_hit_keeps_the_chain_a_containment_chain ... ok
+test window_detection::uia::tests::an_answer_that_covers_the_page_is_not_an_answer ... ok
+test window_detection::uia::tests::an_over_long_path_reports_the_traversal_limit ... ok
+test window_detection::uia::tests::backtracking_gives_depth_back_but_never_beyond_the_bound ... ok
+test window_detection::uia::tests::children_outside_the_parent_frame_are_rejected ... ok
+test window_detection::uia::tests::merging_deduplicates_and_keeps_a_nested_order ... ok
+test window_detection::uia::tests::merging_extends_the_primary_path_downwards_and_never_coarsens ... ok
+test window_detection::uia::tests::merging_never_adds_a_level_that_does_not_contain_the_current_tail ... ok
+test window_detection::uia::tests::only_same_bounds_panes_and_groups_are_structural_wrappers ... ok
+test window_detection::uia::tests::the_fallback_path_collects_the_children_under_the_point_and_the_frame ... ok
+test window_detection::uia::tests::the_node_and_depth_budgets_stop_the_walk ... ok
+test window_detection::uia::tests::the_providers_finer_box_is_adopted_unless_it_is_a_text_run ... ok
+test window_detection::uia::tests::the_published_path_stays_ordered_and_bounded ... ok
+test window_detection::visual::tests::contracts::visual_replay_demo_q07_nested_duplicate_crossing_stage_vectors ... ok
+test window_detection::visual::tests::contracts::visual_replay_demo_t11_t20_q09_native_policy_vectors ... ok
+test window_detection::visual::tests::contracts::visual_replay_demo_t12_physical_dpi_origin_and_occlusion_vectors ... ok
+test window_detection::visual::tests::visual_replay_fusion_allocation_failure_keeps_native_fallback_available ... ok
+test window_detection::visual::tests::visual_replay_nested_single_pixel_layers_reachable_crossings_not_in_chain ... ok
+test window_detection::visual::tests::visual_replay_semantic_defaults_and_equal_geometry_keep_native_kind ... ok
+test window_detection::visual::tests::visual_replay_source_owner_occlusion_and_frozen_bounds_fail_closed ... ok
+test windows::capture_worker::tests::generations_increase_monotonically ... ok
+test windows::capture_worker::tests::native_baseline_cancel_restart_completion_permutations ... ok
+test windows::capture_worker::tests::native_f5_worker_honors_capture_build_policy ... ignored, live desktop: captures one frame through the real F5 worker; run default and hdr-capture builds separately; no clipboard or settings changes
+test windows::capture_worker::tests::pending_request_is_overwritten_not_stacked ... ok
+test windows::capture_worker::tests::results_with_a_stale_generation_are_dropped ... ok
+test windows::capture_worker::tests::results_with_the_current_generation_are_delivered_once ... ok
+test windows::capture_worker::tests::stale_requests_are_never_handed_to_the_worker ... ok
+test windows::color_output::tests::advanced_color_alone_does_not_prove_hdr_and_output_changes_invalidate_a_snapshot ... ok
+test windows::color_output::tests::only_confirmed_sdr_can_use_eight_bits ... ok
+test windows::color_output::tests::query_live_monitor_color_without_com_or_capture ... ignored, reads current display capabilities only; requires a live desktop, does not capture or change settings
+test windows::color_output::tests::topology_order_is_not_a_change_but_white_identity_and_state_are ... ok
+test windows::color_output::tests::white_and_display_peak_combinations_are_frozen_without_changing_source_policy ... ok
+test windows::color_output::tests::white_is_verified_and_clone_targets_must_agree ... ok
+test windows::detection_worker::tests::a_confirm_request_reports_validity_for_a_bogus_target ... ok
+test windows::detection_worker::tests::a_refresh_request_produces_a_snapshot_tagged_with_its_request_id ... ok
+test windows::detection_worker::tests::a_revalidate_request_classifies_the_hovered_window ... ok
+test windows::detection_worker::tests::shutdown_is_idempotent_and_releases_the_thread ... ok
+test windows::detection_worker::tests::the_mailbox_keeps_only_the_newest_request ... ok
+test windows::export_worker::tests::a_cancelled_export_deletes_the_file_it_already_wrote ... ok
+test windows::export_worker::tests::a_cancelled_pixel_master_is_deleted_like_a_png ... ok
+test windows::export_worker::tests::a_cancelled_queued_job_is_never_handed_to_the_worker ... ok
+test windows::export_worker::tests::a_failed_export_is_reported_with_its_stage ... ok
+test windows::export_worker::tests::a_result_for_the_current_generation_is_delivered_once ... ok
+test windows::export_worker::tests::cancelling_drops_the_result_and_the_artifact ... ok
+test windows::export_worker::tests::job_metadata_reaches_the_executor ... ok
+test windows::export_worker::tests::shutdown_is_idempotent_and_refuses_new_jobs ... ok
+test windows::export_worker::tests::submit_stamps_a_fresh_generation_and_supersedes_a_queued_job ... ok
+test windows::export_worker::tests::the_export_message_id_does_not_collide_with_the_capture_worker ... ok
+test windows::export_worker::tests::the_worker_runs_the_executor_without_the_caller_waiting ... ok
+test windows::hotkey::tests::ctrl_s_and_escape_are_scoped_and_f9_is_free ... ok
+test windows::hotkey::tests::scoped_save_registration_tracks_settings_including_all_alternative_chords ... ok
+test windows::monitor::tests::a_second_declaration_never_downgrades_an_aware_process ... ok
+test windows::monitor::tests::dpi_awareness_is_declared_and_idempotent ... ok
+test windows::monitor::tests::enumeration_reports_at_least_one_primary_monitor_with_consistent_geometry ... ok
+test windows::monitor::tests::monitor_handle_is_available_for_providers ... ignored, L3 (docs/31 D-14): needs a monitor at the cursor, so it needs an interactive desktop; run with --ignored --test-threads=1 on a live desktop
+test windows::monitor::tests::monitor_lookup_falls_back_to_the_nearest_display ... ok
+test windows::msaa_provider::tests::a_cancelled_query_never_reaches_the_provider ... ok
+test windows::msaa_provider::tests::a_child_self_variant_carries_a_child_id ... ok
+test windows::msaa_provider::tests::a_window_the_system_reports_as_hung_is_quarantined_without_being_called ... ok
+test windows::msaa_provider::tests::an_already_quarantined_window_is_answered_without_touching_the_provider ... ok
+test windows::overlay::dim_layer::tests::hdr_composition_keeps_the_click_through_window_contract_and_releases_on_hide ... ignored, L3: short-lived nonactivating test window and GPU composition; no capture or input injection
+test windows::overlay::dim_layer::tests::the_dim_pixel_is_the_single_layer_equivalent_of_the_overlay_mask ... ok
+test windows::overlay::dim_layer::tests::the_hole_is_in_client_coordinates ... ok
+test windows::overlay::dim_layer::tests::the_required_style_bits_are_the_click_through_layered_set ... ok
+test windows::overlay::input::tests::a_stale_read_back_is_not_handed_over_without_a_selection ... ok
+test windows::overlay::input::tests::arming_the_save_panel_needs_a_selection ... ok
+test windows::overlay::input::tests::arming_the_save_panel_sets_the_flag ... ok
+test windows::overlay::input::tests::ctrl_enter_opens_the_panel_in_the_pick_context ... ok
+test windows::overlay::input::tests::ctrl_s_arms_the_save_panel_in_the_pick_context ... ok
+test windows::overlay::input::tests::cursor_nudges_move_exactly_one_screen_pixel ... ok
+test windows::overlay::input::tests::enter_still_confirms_and_ctrl_enter_is_not_bound_while_scrolling ... ok
+test windows::overlay::input::tests::no_selection_means_no_save_request ... ok
+test windows::overlay::input::tests::releasing_a_drag_starts_scroll_only_for_f7_and_never_for_an_empty_click ... ok
+test windows::overlay::input::tests::the_panel_entry_ignores_the_size_label_preferences ... ok
+test windows::overlay::input::tests::the_panel_entry_needs_a_live_selection ... ok
+test windows::overlay::input::tests::the_save_panel_action_is_bound_to_ctrl_s_in_the_pick_context ... ok
+test windows::overlay::input::tests::the_save_panel_action_is_declared_once ... ok
+test windows::overlay::input::tests::the_save_request_carries_the_selected_pixels ... ok
+test windows::overlay::native_baseline::native_baseline_capture_lifecycle_resource_probe ... ignored, L3: captures the desktop for 100 sessions, then observes 60s idle; no visible overlay or external writes
+test windows::overlay::native_baseline::native_baseline_confirm_publishes_exact_frozen_region ... ok
+test windows::overlay::native_baseline::native_baseline_confirmation_gate_cancel_restart_and_closed_owner ... ok
+test windows::overlay::native_baseline::native_baseline_confirmation_keeps_requested_same_owner_rectangle ... ok
+test windows::overlay::native_baseline::native_baseline_controller_preview_replacement_and_manual_path_trace ... ignored, L3: real D3D11/D2D renderer on a hidden window; injected native answers, no desktop capture
+test windows::overlay::native_baseline::native_baseline_other_owner_and_cleared_preview_reject_late_confirmation ... ok
+test windows::overlay::native_baseline::native_baseline_pressed_gesture_rejects_late_dwell_before_confirmation ... ok
+test windows::overlay::native_baseline::native_baseline_restart_cross_worker_completion_permutations ... ok
+test windows::overlay::native_baseline::selection_target_replay_controller_binds_geometry_source_and_native_levels ... ignored, L3: real hidden renderer; native paths injected, no clipboard or files
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_e08_second_session_rejects_old_answers_and_remains_operable ... ignored, L3 real controller/GPU: cancel/re-arm with retired visual and native confirmation answers; synthetic source bytes
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_t13_t14_t23_controller_event_contracts ... ignored, L3 controller with qualified-result injection: frozen Demo T13/T14/T23 events, no detector qualification
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_display_and_power_messages_retire_inflight_sources ... ignored, L3 actual controller/GPU; injects Windows display/power notifications, never suspends the physical computer
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_cached_native_path_requeries_visual_on_new_dwell ... ignored, L3 actual hidden controller and GPU; cached native path must not suppress new visual seeds
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_confirms_visual_pixels_and_protects_native_text ... ignored, L3 actual controller, hidden renderer, real GPU/worker; no clipboard/files/desktop capture
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_manual_choice_and_changed_owner_cannot_drift ... ignored, L3 actual hidden controller with fixed pixels; geometry/manual/epoch/Shift replay
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t15_phase_and_shift_late_completion_matrix ... ignored, L3 real controller/GPU: all eight frozen Demo T15 phase/Shift combinations, not physical input
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t16_analysis_does_not_change_export_or_source ... ignored, L3 actual GPU source and export paths for both frozen T16 analysis variants; no external writes
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t17_failures_preserve_native_and_manual_and_retire_old_preview ... ignored, L3 real controller/GPU; injected result-allocation fault with and without native and previous visual results
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t19_and_q13_similar_pixels_reach_product_default ... ignored, L3 actual product pixels/controller for frozen T19 and all Q13 gap members; synthetic development input only
+test windows::overlay::native_baseline::visual_replay::visual_replay_missing_visual_worker_preserves_native_and_manual_controller ... ignored, L3 controller/GPU construction with named visual-worker allocation failure; native and manual input stay usable
+test windows::overlay::native_baseline::visual_replay::visual_replay_product_controller_latency_diagnostic ... ignored, L3 product controller timing on real GPU/worker and message wakeups; hidden fixed-pixel replay, no render-load qualification
+test windows::overlay::native_baseline::visual_replay_capture_lifecycle_resource_probe ... ignored, L3 actual desktop capture and native owner + product visual worker for 100 sessions and 60s idle
+test windows::overlay::native_baseline::visual_replay_controlled_capture_lifecycle_resource_probe ... ignored, L3 visible no-activate controlled D2D host; actual capture, real owner, 100 successful product visual sessions and 60s idle
+test windows::overlay::native_baseline::visual_replay_controlled_capture_without_analysis_resource_probe ... ignored, L3 paired controlled-host capture resource reference: no visual jobs, 100 sessions and 60s idle
+test windows::overlay::render_submit::tests::the_scroll_selection_replaces_the_idle_capture_selection_for_rendering ... ok
+test windows::overlay::scroll::tests::the_frame_band_runs_round_the_selection_edge ... ok
+test windows::overlay::scroll::tests::the_window_region_covers_only_the_frame_band_of_the_selection ... ok
+test windows::overlay::session::confirm_action_tests::pin_does_not_export_and_copy_does_not_pin ... ok
+test windows::overlay::session::countdown_tests::a_zero_second_countdown_still_shows_one_second ... ok
+test windows::overlay::session::countdown_tests::the_countdown_walks_down_to_fire_exactly_at_the_deadline ... ok
+test windows::overlay::session::countdown_tests::the_number_rounds_up_and_never_shows_zero_while_waiting ... ok
+test windows::overlay::session::delay_outcome_tests::a_delayed_session_follows_the_destination_it_was_armed_with ... ok
+test windows::overlay::session::delay_outcome_tests::a_delayed_session_whose_region_was_refused_reports_instead_of_silence ... ok
+test windows::overlay::session::delay_outcome_tests::a_normal_session_just_shows_the_overlay ... ok
+test windows::overlay::tests::a_guide_at_rest_does_not_keep_the_tick_alive ... ok
+test windows::overlay::tests::a_rounded_selection_narrows_the_countdown_region_to_a_rounded_ring ... ok
+test windows::overlay::tests::a_stalled_tick_does_not_make_the_guide_jump ... ok
+test windows::overlay::tests::command_round_trips_through_wparam ... ok
+test windows::overlay::tests::entering_the_countdown_paints_the_hud_before_it_reshapes_the_window ... ok
+test windows::overlay::tests::escape_and_enter_map_to_cancel_and_confirm ... ok
+test windows::overlay::tests::failed_pin_wakeup_preserves_pixels_and_session_for_retry ... ok
+test windows::overlay::tests::leaving_the_countdown_hides_the_window_before_it_stops_the_hud ... ok
+test windows::overlay::tests::lparam_decodes_signed_client_coordinates ... ok
+test windows::overlay::tests::only_a_ring_that_is_new_fades_in ... ok
+test windows::overlay::tests::overlay_style_is_activatable_so_escape_reaches_it ... ok
+test windows::overlay::tests::pin_acknowledgement_consumes_once_and_finishes_only_the_matching_session ... ok
+test windows::overlay::tests::resizing_during_the_countdown_moves_the_pin_region_with_the_frame ... ok
+test windows::overlay::tests::stale_pin_completion_cannot_consume_or_cancel_a_newer_selection_or_session ... ok
+test windows::overlay::tests::the_box_only_turns_green_after_a_walk_and_the_first_tick_moves_it ... ok
+test windows::overlay::tests::the_chain_eases_in_and_re_using_it_continues_from_what_is_on_screen ... ok
+test windows::overlay::tests::the_chain_fade_is_flat_then_quantised_into_a_bounded_number_of_steps ... ok
+test windows::overlay::tests::the_countdown_dim_layer_actually_darkens_outside_the_selection ... ignored, L3 (docs/31 D-14): needs a live desktop; shows a real layered window
+test windows::overlay::tests::the_countdown_gate_never_paints_a_normal_frame ... ok
+test windows::overlay::tests::the_countdown_keeps_only_the_ui_that_is_on_screen ... ok
+test windows::overlay::tests::the_countdown_only_offers_a_resize_cursor_on_the_frame ... ok
+test windows::overlay::tests::the_cursor_stays_on_the_dragged_direction_while_dragging ... ok
+test windows::overlay::tests::the_guide_fades_in_over_its_span_and_out_faster ... ok
+test windows::overlay::tests::the_hint_is_taught_once_and_follows_a_walk_only_while_it_shows ... ok
+test windows::overlay::tests::the_level_hint_counts_the_way_the_confirm_line_does ... ok
+test windows::overlay::tests::the_preview_label_calls_a_walked_to_box_a_container_without_counting_levels ... ok
+test windows::overlay::tests::the_preview_label_names_the_control_when_the_transport_knows_it ... ok
+test windows::overlay::tests::the_preview_label_names_the_element_it_snapped_to ... ok
+test windows::overlay::tests::the_preview_label_names_the_window_and_the_unsupported_fallback ... ok
+test windows::overlay::tests::the_scroll_message_id_collides_with_nothing_that_is_already_posted ... ok
+test windows::overlay::tests::the_walk_colour_rises_in_a_tenth_of_a_second_and_holds_for_one_point_two ... ok
+test windows::overlay::tests::wheel_units_become_one_level_per_notch_and_add_up_for_a_touchpad ... ok
+test windows::overlay::timer_id_tests::every_window_timer_id_is_distinct ... ok
+test windows::proc_mem::tests::the_query_returns_this_process_working_set ... ok
+test windows::providers::tests::a_300x200_selection_reads_back_only_its_own_bytes ... ignored, L3 (docs/31 D-14): reads a region back from the monitor at the cursor; run with --ignored --test-threads=1 on a live desktop
+test windows::providers::tests::a_device_lost_hresult_is_classified_as_device_removal ... ok
+test windows::providers::tests::a_first_frame_timeout_is_a_fallback_eligible_failure ... ok
+test windows::providers::tests::bitblt_is_the_only_provider_once_wgc_is_dropped ... ok
+test windows::providers::tests::crop_handles_a_padded_row_pitch ... ok
+test windows::providers::tests::crop_rejects_a_buffer_shorter_than_the_selection ... ok
+test windows::providers::tests::frozen_fp16_crop_retains_encoding_generation_and_negative_bits ... ok
+test windows::providers::tests::high_precision_never_falls_back_to_bitblt ... ok
+test windows::providers::tests::pixel_slice_clips_out_of_range_regions ... ok
+test windows::providers::tests::pixel_slice_crops_rows_without_padding ... ok
+test windows::providers::tests::provider_names_are_stable_for_events ... ok
+test windows::providers::tests::providers_probe_and_capture_a_real_monitor_when_available ... ignored, L3 (docs/31 D-14): probes and captures the monitor at the cursor; run with --ignored --test-threads=1 on a live desktop
+test windows::providers::tests::read_region_clips_a_negative_origin_to_the_frame ... ok
+test windows::providers::tests::read_region_clips_a_selection_hanging_off_the_right_and_bottom ... ok
+test windows::providers::tests::read_region_only_transfers_the_selection ... ok
+test windows::providers::tests::wgc_is_tried_before_the_bitblt_fallback ... ok
+test windows::refinement_worker::tests::a_non_default_adopt_text_runs_reaches_the_fallback ... ok
+test windows::refinement_worker::tests::a_query_produces_a_target_tagged_with_its_request_and_epoch ... ok
+test windows::refinement_worker::tests::a_second_session_still_accepts_the_worker_result ... ok
+test windows::refinement_worker::tests::a_superseded_query_is_cancelled_cooperatively ... ok
+test windows::refinement_worker::tests::a_window_neither_provider_can_resolve_never_invents_geometry ... ok
+test windows::refinement_worker::tests::native_baseline_transport_adoption_matrix ... ok
+test windows::refinement_worker::tests::shutdown_is_idempotent_and_leaves_no_thread ... ok
+test windows::scroll_worker::tests::a_delivered_notch_keeps_auto_on_and_remembers_the_target ... ok
+test windows::scroll_worker::tests::a_full_image_is_news_once_and_never_moves_the_panel ... ok
+test windows::scroll_worker::tests::a_notch_ends_the_instant_a_frame_shows_it ... ok
+test windows::scroll_worker::tests::a_notch_that_times_out_reports_what_the_page_did ... ok
+test windows::scroll_worker::tests::a_page_that_keeps_repainting_gets_to_finish_the_scroll_it_started ... ok
+test windows::scroll_worker::tests::a_refused_wheel_turns_auto_off_and_says_so ... ok
+test windows::scroll_worker::tests::a_target_names_its_class_and_process ... ok
+test windows::scroll_worker::tests::an_auto_interval_override_is_clamped_and_falls_back_on_nonsense ... ok
+test windows::scroll_worker::tests::auto_gives_up_only_after_a_run_of_idle_notches ... ok
+test windows::scroll_worker::tests::only_access_denied_is_a_refusal ... ok
+test windows::scroll_worker::tests::placed_still_and_unknown_frames_keep_their_meaning ... ok
+test windows::scroll_worker::tests::the_closed_loop_sets_the_cadence_from_the_page ... ok
+test windows::scroll_worker::tests::the_preview_buffer_survives_the_round_trip_to_the_overlay ... ok
+test windows::timed_call::tests::a_call_past_its_deadline_is_abandoned_but_keeps_its_slot ... ok
+test windows::timed_call::tests::a_call_that_finishes_in_time_is_returned ... ok
+test windows::timed_call::tests::the_runner_never_exceeds_its_capacity ... ok
+test windows::top_level_provider::tests::a_filtered_probe_never_reaches_the_snapshot ... ok
+test windows::top_level_provider::tests::each_refresh_advances_the_epoch_and_drops_the_previous_snapshot ... ignored, L3 (docs/31 D-14): reads the real desktop topology; run with --ignored --test-threads=1 on a live desktop
+test windows::top_level_provider::tests::exclusions_remove_a_window_from_the_snapshot ... ignored, L3 (docs/31 D-14): reads the real desktop topology; run with --ignored --test-threads=1 on a live desktop
+test windows::top_level_provider::tests::hover_revalidation_reports_bounds_changes_and_stale_targets ... ignored, L3 (docs/31 D-14): reads the real desktop topology; run with --ignored --test-threads=1 on a live desktop
+test windows::top_level_provider::tests::our_own_process_can_be_excluded_entirely ... ignored, L3 (docs/31 D-14): reads the real desktop topology; run with --ignored --test-threads=1 on a live desktop
+test windows::top_level_provider::tests::refresh_builds_a_labelled_snapshot_with_ordered_candidates ... ignored, L3 (docs/31 D-14): reads the real desktop topology; run with --ignored --test-threads=1 on a live desktop
+test windows::top_level_provider::tests::reset_clears_the_epoch_and_the_cached_topology ... ignored, L3 (docs/31 D-14): reads the real desktop topology; run with --ignored --test-threads=1 on a live desktop
+test windows::top_level_provider::tests::validating_an_unknown_handle_fails_closed ... ok
+test windows::uia_provider::tests::probes::browser_element_probe ... ignored, launches a browser; run explicitly with --ignored --nocapture
+test windows::uia_provider::tests::probes::dump_uia_names_under_the_cursor ... ignored, probe: needs a window under the cursor; prints the names UIA exposes there
+test windows::uia_provider::tests::probes::explorer_rule_probe ... ignored, opens a File Explorer window; run explicitly with --ignored --nocapture
+test windows::uia_provider::tests::unit::a_cancelled_query_stops_before_touching_the_tree ... ok
+test windows::uia_provider::tests::unit::a_real_window_yields_a_path_that_starts_at_the_window_frame ... ignored, L3 (docs/31 D-14): creates a real window and walks the UI Automation tree; run with --ignored --test-threads=1 on a live desktop
+test windows::uia_provider::tests::unit::an_empty_uia_level_is_never_remembered ... ignored, L3 (docs/31 D-14): creates a real window and walks the UI Automation tree; run with --ignored --test-threads=1 on a live desktop
+test windows::uia_provider::tests::unit::an_unknown_window_is_quarantined_and_never_invents_geometry ... ok
+test windows::uia_provider::tests::unit::expanded_levels_are_reused_within_a_generation_and_dropped_across_them ... ignored, L3 (docs/31 D-14): creates a real window and walks the UI Automation tree; run with --ignored --test-threads=1 on a live desktop
+test windows::uia_provider::tests::unit::the_real_pipeline_still_answers_in_the_second_capture_session ... ignored, L3 (docs/31 D-14): creates a real window and walks the UI Automation tree; run with --ignored --test-threads=1 on a live desktop
+test windows::visual_pipeline::tests::visual_replay_cached_selection_idle_resource_probe ... ignored, L3 real GPU and worker; 60s completed-query cache idle, no visible UI qualification
+test windows::visual_pipeline::tests::visual_replay_delayed_graphics_latest_query_idle_resource_probe ... ignored, L3 real GPU, injected 200ms Map delay, thousand moves and 60s idle
+test windows::visual_pipeline::tests::visual_replay_hung_map_cancel_and_shutdown_do_not_wait_for_gpu_completion ... ignored, L3 actual submitted GPU batch with injected StillDrawing/device-removed outcome; no physical hang or device removal
+test windows::visual_pipeline::tests::visual_replay_latest_query_stays_bounded_across_thousand_moves_and_cancel ... ok
+test windows::visual_pipeline::tests::visual_replay_owner_allocation_failures_never_publish_partial_results ... ignored, L3 real GPU; named owner allocation faults, fixed fixture only
+test windows::visual_pipeline::tests::visual_replay_product_pipeline_queries_reuses_pixels_and_rejects_retired_source ... ignored, L3 real GPU and product worker; fixed fixture only, no visible window or external writes
+test windows::visual_pipeline::tests::visual_replay_query_budget_failure_does_not_disable_other_points_in_same_frame ... ok
+test windows::visual_pipeline::tests::visual_replay_request_exhaustion_and_late_reply_keys_fail_closed ... ok
+test windows::visual_pipeline::tests::visual_replay_timeout_cancel_drain_blocks_reuse_until_safe_completion ... ignored, L3 real GPU; StillDrawing injection into actual Map branch, no physical device removal
+test windows::visual_worker::tests::visual_replay_cancel_during_poll_releases_cpu_pixels_before_idle ... ok
+test windows::win::bitblt::tests::bitblt_captures_a_real_monitor ... ignored, L3 (docs/31 D-14): captures the desktop at the cursor, so it needs an interactive desktop; run with --ignored --test-threads=1 on a live desktop
+test windows::win::d2d::color::tests::overlay_white_scales_only_authored_ui_and_validates_the_snapshot ... ok
+test windows::win::d2d::color::tests::sdr_thumbnail_is_explicit_ui_content_not_a_reinterpreted_hdr_source ... ok
+test windows::win::d2d::guide_pass::tests::a_short_screen_splits_columns_between_groups_never_inside_one ... ok
+test windows::win::d2d::guide_pass::tests::alternatives_get_a_slash_and_held_keys_a_plus ... ok
+test windows::win::d2d::guide_pass::tests::an_empty_guide_has_no_layout ... ok
+test windows::win::d2d::guide_pass::tests::keys_are_right_aligned_and_labels_share_one_edge ... ok
+test windows::win::d2d::guide_pass::tests::the_default_guide_is_one_column_on_a_1080p_screen ... ok
+test windows::win::d2d::guide_pass::tests::the_guide_sits_bottom_left_with_a_margin ... ok
+test windows::win::d2d::hdr_tests::hdr_countdown_composes_fp16_without_reading_or_replacing_the_source ... ignored, L4: offscreen HDR countdown composition; no desktop capture or system changes
+test windows::win::d2d::hdr_tests::hdr_loupe_center_uses_the_source_not_the_sdr_sampler_or_crosshair ... ignored, L4: real GPU/D2D FP16 rendering; no screen capture or system-setting changes
+test windows::win::d2d::hdr_tests::hdr_overlay_keeps_source_scale_masks_linearly_and_exports_fp16_annotations ... ignored, L4: real GPU/D2D FP16 rendering; no screen capture or system-setting changes
+test windows::win::d2d::hdr_tests::hdr_ui_icons_alpha_and_white_changes_keep_one_color_interpretation ... ignored, L4: real GPU/D2D FP16 rendering; no screen capture or system-setting changes
+test windows::win::d2d::magnifier_pass::tests::a_roomy_row_keeps_the_largest_font_and_runs_end_to_end ... ok
+test windows::win::d2d::magnifier_pass::tests::a_tight_row_steps_the_font_down_until_the_minimum_gap_fits ... ok
+test windows::win::d2d::magnifier_pass::tests::caps_are_never_narrower_than_they_are_tall_and_scale_with_dpi ... ok
+test windows::win::d2d::magnifier_pass::tests::hdr_numeric_formats_are_explicitly_sdr_but_copy_values_are_unchanged ... ok
+test windows::win::d2d::magnifier_pass::tests::shrink_to_fit_stops_at_the_floor_when_nothing_fits ... ok
+test windows::win::d2d::magnifier_pass::tests::shrink_to_fit_takes_the_largest_size_that_fits ... ok
+test windows::win::d2d::tests::an_element_preview_keeps_its_own_pixels_and_the_window_fallback_does_not ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::chain_rings_carry_luminance_on_light_and_dark_content ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::chrome_stays_out_of_the_exported_pixels ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::composed_frame_masks_outside_the_selection_and_keeps_it_clear ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::export_crop_matches_preview_and_bakes_annotations ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::font_cost_probe ... ignored, measurement probe; run with --ignored --nocapture
+test windows::win::d2d::tests::geometry_helpers_match_the_shared_selection_maths ... ok
+test windows::win::d2d::tests::mask_alpha_is_translucent_but_dark ... ok
+test windows::win::d2d::tests::metrics_scale_with_dpi ... ok
+test windows::win::d2d::tests::moving_the_selection_erases_the_previous_chrome ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::size_label_panel_is_painted_at_the_selection_top_left ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_blurred_mask_follows_the_rounded_hole_and_keeps_its_blur ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_capture_box_is_blue_at_rest_and_green_while_walking ... ok
+test windows::win::d2d::tests::the_caret_can_be_switched_off_and_on ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_cmap_reader_finds_glyphs_and_does_not_invent_them ... ok
+test windows::win::d2d::tests::the_cost_of_publishing_a_thumbnail ... ignored, measures the real D2D upload path
+test windows::win::d2d::tests::the_cost_of_the_countdown_dim_source ... ignored, measurement, not an assertion
+test windows::win::d2d::tests::the_cost_of_the_panel_icons ... ignored, measurement, not an assertion
+test windows::win::d2d::tests::the_countdown_dim_source_blurs_the_frame_under_the_mask ... ignored, needs a real GPU (docs/31 D-14)
+test windows::win::d2d::tests::the_countdown_hud_paints_only_the_frame_the_badge_and_the_number ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_countdown_number_paints_inside_the_selection ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_default_hint_row_fits_the_loupe ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_editing_frame_paints_inside_the_selection_edge ... ignored, composes through the real D3D11/D2D path; the L4 gate runs it with --ignored
+test windows::win::d2d::tests::the_embedded_number_subset_covers_the_numbers_the_panel_shows ... ok
+test windows::win::d2d::tests::the_embedded_subset_covers_the_strings_the_overlay_draws ... ok
+test windows::win::d2d::tests::the_focused_number_cell_shows_a_caret_at_the_end_of_the_text ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_frame_is_stroked_inside_the_selection_edge ... ok
+test windows::win::d2d::tests::the_glyph_tint_follows_the_colour_it_is_given ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_hovered_badge_keeps_its_white_text_readable ... ok
+test windows::win::d2d::tests::the_label_steps_aside_only_for_a_loupe_that_is_painted ... ok
+test windows::win::d2d::tests::the_level_badge_reads_as_two_directions_with_the_pinned_one_dimmed ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_mask_hole_follows_the_rounded_selection ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_mask_ring_cache_does_not_keep_a_stale_shape ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_overlay_thread_never_blocks_longer_than_eight_ms ... ignored, composes through the real D3D11/D2D path; the L4 gate runs it with --ignored
+test windows::win::d2d::tests::the_painted_segment_matches_the_layout_width ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_panel_backdrop_blurs_what_is_behind_it ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_panel_draws_the_thumbnail_flat ... ignored, composes through the real D3D11/D2D path; the L4 gate runs it with --ignored
+test windows::win::d2d::tests::the_panel_glyphs_land_in_the_boxes_they_were_given ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_resting_capture_box_is_a_luminance_step_on_light_and_dark_content ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::the_scroll_session_draws_only_the_frame_and_the_panel ... ignored, composes through the real D3D11/D2D path; the L4 gate runs it with --ignored
+test windows::win::d2d::tests::the_segment_block_slides_between_the_two_units ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::widest_colour_value_fits_the_info_row ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::window_snap_hints_are_painted_but_never_exported ... ignored, L4 (docs/31 D-14): renders through the real D3D11/D2D path; run with --ignored on a machine with a GPU
+test windows::win::d2d::tests::with_every_label_item_off_no_badge_is_painted_and_no_menu_can_open ... ok
+test windows::win::d2d::tests::write_drawn_text_for_the_font_subset ... ignored, codegen for subfont/build_subset.py; run through subfont/subset.ps1
+test windows::win::d3d11::tests::async_sample_from_a_wgc_frame_lands_within_a_few_ticks ... ignored, L3 (docs/31 D-14): needs a monitor at the cursor and a WGC-capturable desktop; run with --ignored --test-threads=1 on a live desktop
+test windows::win::d3d11::tests::async_sample_from_an_uploaded_texture_lands_within_a_few_ticks ... ignored, L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU
+test windows::win::d3d11::tests::composition_target_accepts_the_overlay_swap_chain_and_presents ... ignored, L3 (docs/31 D-14): creates a popup window and presents through DirectComposition; run with --ignored --test-threads=1 on a live desktop
+test windows::win::d3d11::tests::device_creation_and_texture_round_trip ... ignored, L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU
+test windows::win::d3d11::tests::device_lost_codes_are_recognised_from_tagged_messages ... ok
+test windows::win::d3d11::tests::fp16_region_readback_is_typed_and_keeps_exact_source_bits ... ignored, L4: opt-in D3D11 FP16 upload/readback, no window or display changes
+test windows::win::d3d11::tests::hdr_sampler_returns_explicit_sdr_tiles_without_changing_the_source ... ignored, L4: real GPU FP16 tile readback; no desktop capture or clipboard writes
+test windows::win::d3d11::tests::readback_always_copies_the_whole_frame ... ignored, L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU
+test windows::win::d3d11::tests::sample_mapping_peak_must_be_finite_positive_and_within_pq_range ... ok
+test windows::win::d3d11::tests::swap_chain_can_be_created_and_presented ... ignored, L4 (docs/31 D-14): needs a real D3D11 device and a swap chain; run with --ignored on a machine with a GPU
+test windows::win::d3d11::tests::the_context_owner_assertion_is_the_invariant_we_actually_hold ... ignored, L4 (docs/31 D-14): needs a real D3D11 device; run with --ignored on a machine with a GPU
+test windows::win::d3d11::tests::the_cost_of_one_region_readback_at_the_field_selection_size ... ignored, L4 (docs/31 D-14): needs a real D3D11 device; run with --include-ignored --nocapture
+test windows::win::d3d11::tests::the_latency_a_staging_pool_would_hide_at_the_field_selection_size ... ignored, L4 (docs/31 D-14): needs a real D3D11 device; run with --include-ignored --nocapture
+test windows::win::d3d11::tests::typed_copy_strips_padding_and_refuses_short_pitch_before_reading ... ok
+test windows::win::d3d11::visual_readback::visual_readback_bounded_demand_keeps_whole_frame_hierarchy ... ignored, P2 real demand transfers; intentionally measures unbatched small-Map cost
+test windows::win::d3d11::visual_readback::visual_readback_cpu_worker_region_pipeline_reference ... ignored, P2 isolated real GPU to owned CPU worker prototype; no overlay, hotkey or clipboard
+test windows::win::d3d11::visual_readback::visual_readback_full_roi_and_strips_have_exact_pixels ... ignored, P2 opt-in real GPU transfer cost; allocates test-only 4K/8K full frames
+test windows::win::d3d11::visual_transfer::tests::visual_replay_demo_t22_partitioned_raw_reads_preserve_pixels_evidence_and_d2d ... ignored, L3 real GPU atlas and offscreen D2D, Demo T22 slicing exactly on T01 edges; no compute shader selected
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_atlas_keeps_exact_pixels_while_drawing_and_sampling ... ignored, P3 real D2D and sampler interleaving, atlas bytes and cancellation; no visible UI
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_cold_sessions_and_idle_resource_reference ... ignored, P3 opt-in 100 cold transfer sessions and 60s idle resource reference
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_formats_capacity_and_map_failures_preserve_lifecycle ... ignored, P3 real textures and injected Map faults; does not remove the physical device
+test windows::win::d3d11::visual_transfer::tests::visual_transfer_progressive_worker_development_costs ... ignored, P3 real GPU/worker development timing; no production/UI qualification
+test windows::win::wgc::tests::an_unavailable_capture_option_is_recorded_and_asserted_not_swallowed ... ok
+test windows::win::wgc::tests::an_unavailable_cursor_option_does_not_fail_the_capture ... ok
+test windows::win::wgc::tests::captured_texture_contract_rejects_wrong_format_and_short_content ... ok
+test windows::win::wgc::tests::frame_pool_formats_keep_sc_rgb_distinct_from_relative_linear_sdr ... ok
+test windows::win::wgc::tests::support_probe_never_panics ... ok
+test windows::win::wgc::tests::the_pool_is_not_recreated_between_frames ... ok
+test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+running 1 test
+test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 726 filtered out; finished in 0.01s
+
+ok
+test windows::win::window::tests::a_click_through_layered_window_is_not_a_candidate ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::a_combined_region_keeps_the_frame_ring_and_drops_the_middle ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::a_minimised_window_is_not_a_candidate ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::a_rounded_hole_covers_the_corner_wedge ... ok
+test windows::win::window::tests::a_rounded_ring_follows_the_arc_on_a_real_window ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::a_visible_tool_window_is_enumerated_and_a_hidden_one_is_not ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::a_window_region_narrows_the_window_and_restores ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::capture_is_taken_and_released_on_a_real_window ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::click_through_requires_both_layered_and_transparent ... ok
+test windows::win::window::tests::dwm_batch_returns_one_read_per_handle ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::frame_bounds_include_the_title_bar_and_exclude_the_invisible_border ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::hiding_before_clearing_the_region_leaves_no_visible_frame ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::invalid_handles_are_rejected_without_calling_into_win32 ... ok
+test windows::win::window::tests::only_the_topmost_of_stacked_child_windows_is_shown_at_a_point ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::the_hit_test_pass_through_lasts_exactly_as_long_as_its_guard ... ok
+test windows::win::window::tests::visible_child_rects_reports_child_windows_inside_the_parent ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+test windows::win::window::tests::window_attributes_are_stable_for_a_live_window ... ignored, L3 (docs/31 D-14): creates a real window; run with --ignored --test-threads=1 on a live desktop
+
+test result: ok. 606 passed; 0 failed; 121 ignored; 0 measured; 0 filtered out; finished in 102.14s
+
+     Running tests\layered_differential.rs (target\debug\deps\layered_differential-ef4bd9c9e9184b11.exe)
+
+running 3 tests
+test a_pin_style_layered_window_shows_what_a_dim_style_one_does_not ... ignored, L3 (docs/31 D-14): needs a live desktop; layered windows must be composited to mean anything
+test a_rounded_pin_shows_the_desktop_through_its_corners ... ignored, L3 (docs/23 §14.55.18): needs a live desktop — it photographs the screen
+test the_probe_itself_can_see_a_plain_window ... ignored, L3 (docs/31 D-14): needs a live desktop
+
+test result: ok. 0 passed; 0 failed; 3 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests\source_contract.rs (target\debug\deps\source_contract-b495551496572032.exe)
+
+running 6 tests
+test a_source_change_during_readback_is_rejected ... ok
+test band_materialization_preserves_fp16_and_refuses_mixed_generations ... ok
+test equal_layout_with_a_different_generation_is_rejected ... ok
+test readback_must_match_the_frozen_color_definition ... ok
+test rounded_fp16_keeps_hdr_rgb_and_multiplies_associated_color ... ok
+test selection_preserves_fp16_bits_encoding_and_generation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_storage-3e91a6320335db89.exe)
+
+running 3 tests
+test artifact_store::tests::read_notices_a_file_that_no_longer_matches_its_fingerprint ... ok
+test artifact_store::tests::two_writes_in_one_session_get_two_files ... ok
+test artifact_store::tests::write_names_the_file_and_describes_it_truthfully ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests\capture_history.rs (target\debug\deps\capture_history-57e514b4e1075a7f.exe)
+
+running 11 tests
+test an_invalid_pending_record_is_retained_without_disabling_capture_history ... ok
+test capture_history_is_persistent_sorted_and_paged_without_pixel_cache ... ok
+test committed_retirement_is_recovered_without_touching_an_external_export ... ok
+test deleting_shared_rows_releases_the_owned_artifact_only_with_the_last_reference ... ok
+test duplicate_identity_is_idempotent_conflicts_are_rejected_and_shared_source_survives ... ok
+test existing_pending_capture_recovers_source_without_retaining_its_disposable_preview ... ok
+test failed_delete_commit_preserves_the_row_and_its_owned_original ... ok
+test failed_schema_change_keeps_version_rows_and_source_references ... ok
+test future_database_schema_is_rejected_before_journaling_or_recovery_changes ... ok
+test pending_registration_contains_only_metadata_and_recovers_after_failed_commit ... ok
+test removing_unused_cache_preserves_history_and_originals_and_reclaims_disk ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.97s
+
+     Running tests\pixel_master.rs (target\debug\deps\pixel_master-119af87511a97e39.exe)
+
+running 5 tests
+test compressed_master_preserves_fp16_bits_metadata_and_cross_tile_rows ... ok
+test damaged_compressed_pixels_are_rejected ... ok
+test failed_source_does_not_publish_a_partial_master ... ok
+test invalid_tiles_and_old_versions_are_rejected_without_partial_publication ... ok
+test sdr_and_relative_linear_masters_keep_their_original_definition ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.09s
+
+   Doc-tests yue_shell
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests yue_shot
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests yue_shot_capture
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests yue_shot_storage
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_overlay_ui-90b799f930bdc193.exe)
+
+running 222 tests
+test copy::tests::conflict_links_read_as_actions ... ok
+test copy::tests::a_formatted_message_keeps_its_literal_wording ... ok
+test copy::tests::the_plan_and_the_code_agree_on_the_count ... ok
+test panel::checkbox::tests::disabled_checkbox_cannot_toggle ... ok
+test panel::checkbox::tests::a_press_toggles_only_when_released_inside ... ok
+test panel::button::tests::disabled_button_never_activates ... ok
+test panel::button::tests::hit_testing_uses_the_paint_rect ... ok
+test panel::button::tests::leaving_during_capture_keeps_press_but_release_outside_cancels ... ok
+test panel::button::tests::pointer_release_activates_only_when_it_ends_inside_after_a_press_inside ... ok
+test copy::tests::the_eleven_messages_are_distinct_and_clean ... ok
+test copy::tests::warnings_carry_a_repair ... ok
+test panel::checkbox::tests::releasing_outside_does_not_toggle_and_clears_pressed ... ok
+test panel::checkbox::tests::toggling_from_indeterminate_selects_checked ... ok
+test panel::dropdown::tests::keyboard_navigation_selects_and_closes_the_menu ... ok
+test panel::dropdown::tests::menu_hit_testing_checks_items_before_padding ... ok
+test panel::elide::tests::a_path_exactly_as_wide_as_the_room_is_returned_whole ... ok
+test panel::elide::tests::the_drive_and_the_last_segment_stay ... ok
+test panel::feedback::tests::tooltip_appears_after_delay_and_hides_on_leave ... ok
+test panel::elide::tests::no_room_returns_nothing ... ok
+test panel::elide::tests::a_path_that_fits_is_returned_whole ... ok
+test panel::elide::tests::a_value_without_a_separator_still_shortens ... ok
+test panel::field::click_tests::a_caret_counts_in_units_rather_than_bytes ... ok
+test panel::elide::tests::the_last_segment_gives_up_its_end_rather_than_its_start ... ok
+test panel::feedback::tests::toast_expires_and_reports_progress ... ok
+test panel::field::click_tests::a_caret_past_the_end_is_clamped_to_the_end ... ok
+test panel::field::click_tests::a_native_control_asks_for_a_system_face_rather_than_the_embedded_one ... ok
+test panel::field::click_tests::a_closed_menu_hides_nothing ... ok
+test panel::field::click_tests::a_menu_covers_only_the_boxes_it_overlaps ... ok
+test panel::field::click_tests::a_native_control_is_inset_and_centred_at_its_text_height ... ok
+test panel::field::click_tests::a_rectangle_owns_its_left_and_top_but_not_its_right_and_bottom ... ok
+test panel::field::click_tests::a_token_lands_where_the_caret_is_and_the_caret_follows_it ... ok
+test panel::field::click_tests::each_shortcut_chip_answers_for_itself ... ok
+test panel::field::click_tests::the_after_save_switches_are_hit_where_they_are_drawn ... ok
+test panel::field::click_tests::the_minimize_button_answers_only_inside_itself ... ok
+test panel::field::click_tests::the_minimize_button_sits_one_gap_left_of_the_close ... ok
+test panel::field::click_tests::the_path_buttons_answer_where_they_are_drawn ... ok
+test panel::field::click_tests::the_token_menu_hangs_under_its_button_and_inside_the_column ... ok
+test panel::field::click_tests::the_tokens_are_the_ones_the_specification_names ... ok
+test panel::field::click_tests::the_token_rows_tile_the_menu ... ok
+test font::tests::embedded_fonts_resolve_in_directwrite_with_regular_weight_and_required_glyphs ... ok
+test panel::field::click_tests::the_variable_button_owns_the_strip_the_field_gave_up ... ok
+test copy::tests::every_message_appears_verbatim_in_the_spec ... ok
+test panel::field::face_tests::a_face_height_is_its_size_at_every_scale ... ok
+test panel::field::face_tests::the_numeric_face_is_larger_and_right_aligned ... ok
+test panel::field::tests::a_click_finds_the_swatch_under_it_or_none ... ok
+test panel::field::field_state_tests::every_state_is_listed_once_and_indexed_by_its_position ... ok
+test panel::field::tests::a_closed_format_menu_chooses_nothing_and_an_open_one_answers_per_row ... ok
+test panel::field::tests::a_footer_click_is_answered_where_the_button_is_drawn ... ok
+test panel::field::tests::a_message_survives_focus_until_the_next_attempt ... ok
+test panel::field::tests::a_footer_status_that_would_be_negative_is_empty_rather_than_backwards ... ok
+test panel::field::tests::a_menu_row_is_wide_enough_for_its_word_and_its_key ... ok
+test panel::field::tests::a_press_released_elsewhere_chooses_nothing ... ok
+test panel::field::face_tests::only_the_size_cells_are_set_in_the_numeric_face ... ok
+test panel::field::tests::a_selection_is_the_accent_mixed_into_the_field_fill ... ok
+test panel::field::tests::a_shortcut_scales_the_capture_to_its_percentage ... ok
+test panel::field::tests::a_shortcut_answers_only_inside_its_own_chip ... ok
+test panel::field::tests::clicking_the_second_option_selects_it ... ok
+test panel::field::tests::each_footer_button_answers_only_inside_itself ... ok
+test panel::field::tests::each_field_answers_from_its_own_state ... ok
+test panel::field::tests::focus_changes_the_border_and_the_ring_and_nothing_else ... ok
+test panel::field::tests::focus_still_paints_a_clean_field ... ok
+test panel::field::tests::every_validation_key_names_the_field_it_is_about ... ok
+test panel::field::tests::no_text_box_reaches_under_a_control_the_frame_draws ... ok
+test panel::field::tests::only_the_commands_that_can_act_are_enabled ... ok
+test panel::field::tests::the_context_menu_lists_the_four_commands_a_text_box_has ... ok
+test panel::field::tests::the_after_save_row_sits_between_the_name_row_and_the_size_row ... ok
+test panel::field::tests::every_option_can_be_chosen_by_clicking_it ... ok
+test panel::field::tests::the_after_save_switches_sit_on_the_label_line_after_the_label ... ok
+test panel::field::tests::the_context_menu_covers_the_name_box_and_only_it ... ok
+test panel::field::tests::the_estimate_moves_down_by_the_fill_row ... ok
+test panel::field::tests::the_context_menu_opens_upward_when_there_is_no_room_below ... ok
+test panel::field::tests::the_field_warning_is_the_designs_warning ... ok
+test panel::field::tests::the_drawing_loop_sees_every_field_with_its_own_state ... ok
+test panel::field::tests::the_after_save_row_is_a_header_with_no_content ... ok
+test panel::field::tests::the_estimate_row_is_last_and_opens_the_third_group ... ok
+test panel::field::tests::the_footer_sits_under_the_body_and_ends_the_panel ... ok
+test panel::field::tests::the_copy_glyph_leads_its_word_inside_the_button ... ok
+test panel::field::tests::the_fill_is_white_at_eight_percent_over_the_surface ... ok
+test panel::field::tests::the_form_declares_one_tab_stop_per_focusable_field ... ok
+test panel::field::tests::the_fill_row_is_shown_for_jpg_and_nothing_else ... ok
+test panel::field::tests::the_footer_buttons_run_right_to_left_in_the_designs_order ... ok
+test panel::field::tests::the_footer_keeps_its_absolute_numbers ... ok
+test panel::field::tests::the_field_sits_on_its_slot ... ok
+test panel::field::tests::the_hint_line_sits_under_the_shortcuts_at_the_designs_numbers ... ok
+test panel::field::tests::the_footer_status_takes_the_space_the_buttons_leave ... ok
+test panel::field::tests::the_form_fits_inside_the_preview_band ... ok
+test panel::field::tests::the_format_button_takes_eighty_dip_and_its_gap_from_the_name_row ... ok
+test panel::field::tests::the_menu_rows_carry_the_keys_the_box_answers_to ... ok
+test panel::field::tests::the_format_menu_flips_above_the_button_only_when_it_would_leave_the_window ... ok
+test panel::field::tests::the_hint_appears_only_when_a_side_grows ... ok
+test panel::field::tests::the_hit_rectangles_are_the_rectangles_that_are_drawn ... ok
+test panel::field::tests::the_marked_swatch_is_the_one_the_colour_belongs_to ... ok
+test panel::field::tests::the_format_menu_hangs_from_the_button_and_holds_three_items ... ok
+test panel::field::tests::the_name_box_is_set_at_the_mockups_size ... ok
+test panel::field::tests::the_name_control_gives_up_its_strip_to_the_variable_button ... ok
+test panel::field::tests::the_mode_buttons_answer_where_they_are_drawn ... ok
+test panel::field::tests::the_path_row_ends_with_its_two_buttons ... ok
+test panel::field::tests::the_quality_control_is_hidden_for_png_and_the_hint_takes_its_place ... ok
+test panel::field::tests::the_quality_hint_is_the_designs_grey_over_the_surface ... ok
+test panel::field::tests::the_path_row_is_an_input_and_a_line_of_three_chips ... ok
+test panel::field::tests::the_quality_row_stays_inside_its_group ... ok
+test panel::field::tests::the_quality_row_is_as_tall_as_the_segment_and_not_as_tall_as_a_field ... ok
+test panel::field::tests::the_quality_segment_ends_at_the_form_column ... ok
+test panel::field::tests::the_reset_answers_on_its_own_button ... ok
+test panel::field::tests::the_separator_stands_between_copy_and_cancel ... ok
+test panel::field::tests::the_size_row_is_its_cells_and_a_line_of_four_shortcuts ... ok
+test panel::field::tests::the_shortcut_percentages_and_their_words_agree ... ok
+test panel::field::tests::the_size_row_opens_a_group_and_sits_sixteen_below_the_name_row ... ok
+test panel::field::tests::the_swatches_sit_at_the_end_of_the_fill_row ... ok
+test panel::frame::preview_fit_tests::a_wide_image_touches_the_sides_and_is_centred ... ok
+test panel::field::tests::three_options_and_two_insets_make_up_the_track ... ok
+test panel::frame::preview_fit_tests::a_degenerate_input_yields_nothing_to_draw ... ok
+test panel::frame::preview_fit_tests::a_small_image_is_centred_at_its_own_size ... ok
+test panel::frame::preview_fit_tests::the_placement_is_relative_to_the_card_origin ... ok
+test panel::frame::preview_fit_tests::a_tall_image_touches_the_top_and_bottom ... ok
+test panel::frame::tests::a_size_cell_is_a_label_then_a_number_then_a_unit ... ok
+test panel::fonts::tests::the_numeric_face_is_the_subset_and_not_the_source_font ... ok
+test panel::frame::tests::a_pixel_view_names_the_channels_in_dib_order ... ok
+test panel::frame::tests::a_text_row_and_a_row_of_design_height_are_not_interchangeable ... ok
+test panel::frame::tests::every_number_scales_with_the_dpi ... ok
+test panel::frame::tests::fill_rgb_takes_the_designs_order_and_stores_the_buffers ... ok
+test panel::frame::tests::the_close_button_answers_only_inside_itself ... ok
+test panel::frame::tests::the_close_glyph_sits_centred_in_its_button ... ok
+test panel::frame::tests::the_directory_row_sits_above_the_name_row ... ok
+test panel::frame::tests::the_field_font_is_the_input_size_and_not_the_field_height ... ok
+test panel::frame::tests::the_first_form_slot_starts_where_the_design_puts_it ... ok
+test panel::frame::tests::the_close_glyph_is_drawn_in_the_buttons_colour ... ok
+test panel::frame::tests::the_directory_row_draws_its_value_and_never_a_focus_ring ... ok
+test panel::frame::tests::the_card_border_is_drawn_over_the_checkerboard ... ok
+test panel::frame::tests::the_form_column_ends_before_the_panel_padding ... ok
+test panel::frame::tests::the_divider_sits_at_the_header_height ... ok
+test panel::frame::tests::the_form_groups_are_sixteen_apart ... ok
+test panel::frame::tests::an_idle_field_has_no_visible_border ... ok
+test panel::frame::tests::a_drawn_number_carries_its_selection_and_its_caret ... ok
+test panel::frame::tests::a_panel_without_a_message_leaves_the_status_space_clean ... ok
+test panel::frame::tests::erasing_the_target_leaves_the_unpainted_body_transparent ... ok
+test panel::frame::tests::a_token_menu_without_values_leaves_its_right_side_clean ... ok
+test panel::frame::tests::a_row_with_nothing_to_warn_about_leaves_the_hint_line_clean ... ok
+test panel::frame::tests::a_drawn_number_in_warning_takes_the_warning_colour ... ok
+test panel::frame::tests::the_chosen_quality_word_is_brighter_than_the_unchosen_ones ... ok
+test panel::frame::tests::the_directory_field_is_filled_and_has_no_border_when_idle ... ok
+test panel::frame::tests::clicking_an_option_moves_the_block_the_painter_draws ... ok
+test panel::frame::tests::the_header_body_and_columns_land_where_the_design_puts_them ... ok
+test panel::frame::tests::the_limit_controls_are_the_designs_own_numbers ... ok
+test panel::frame::tests::the_panel_is_the_designs_width_and_a_derived_height ... ok
+test panel::frame::tests::the_quality_line_shows_one_thing_at_a_time ... ok
+test panel::frame::tests::the_footer_draws_its_hairline_and_its_filled_button ... ok
+test panel::frame::tests::the_chosen_size_mode_is_the_one_that_is_filled ... ok
+test panel::frame::tests::the_link_hub_icon_is_drawn_in_accent_text ... ok
+test panel::frame::tests::the_path_row_draws_a_filled_button_and_its_chips ... ok
+test panel::frame::tests::the_panel_fits_its_window_at_one_hundred_and_fifty_percent ... ok
+test panel::frame::tests::the_panel_has_a_one_dip_inner_stroke ... ok
+test panel::frame::tests::the_preview_card_is_a_sixteen_dip_checkerboard ... ok
+test panel::frame::tests::the_quality_segment_marks_the_chosen_option_with_the_accent ... ok
+test panel::frame::tests::the_preview_card_starts_after_the_padding ... ok
+test panel::frame::tests::the_fill_row_draws_three_swatches_for_jpg_and_none_for_png ... ok
+test panel::frame::tests::the_minimize_glyph_is_drawn_in_the_buttons_colour ... ok
+test panel::frame::tests::the_panel_preview_shows_the_captured_picture_and_not_a_placeholder ... ok
+test panel::frame::tests::the_over_resolution_hint_is_drawn_in_the_warning_colour ... ok
+test panel::frame::tests::each_field_draws_its_own_frame_state ... ok
+test panel::frame::tests::the_row_labels_are_drawn_above_their_rows ... ok
+test panel::frame::tests::the_footer_status_is_drawn_in_its_levels_colour ... ok
+test panel::frame::tests::the_size_row_sits_below_the_name_row_and_splits_into_two_cells ... ok
+test panel::frame::tests::the_size_row_takes_its_numbers_from_the_design ... ok
+test panel::frame::tests::the_two_size_cells_are_separated_by_the_hub ... ok
+test panel::icon_button::tests::icon_button_uses_one_rect_for_paint_and_hit_testing ... ok
+test panel::icon_button::tests::icon_button_uses_the_same_press_and_release_contract_as_button ... ok
+test panel::icons::tests::a_rounded_square_is_ink_inside_and_empty_in_its_corners ... ok
+test panel::icons::tests::the_custom_swatch_is_a_wheel_rather_than_one_colour ... ok
+test panel::icons::tests::every_glyph_has_a_stable_slot_and_baked_png ... ok
+test panel::icons::tests::every_glyph_has_distinct_asset_bytes ... ok
+test panel::icons::tests::every_glyph_has_raw_pixels_of_the_baked_size ... ok
+test panel::icons::tests::a_translucent_pixel_is_premultiplied ... ok
+test panel::icons::tests::tinting_colours_the_ink_and_keeps_the_alpha ... ok
+test panel::interaction::tests::cancel_releases_pointer_capture ... ok
+test panel::icons::tests::turning_a_glyph_twice_restores_it ... ok
+test panel::interaction::tests::disabled_controls_cannot_start_or_keep_a_press ... ok
+test panel::interaction::tests::press_survives_pointer_leave_until_release ... ok
+test panel::motion::tests::ease_out_is_monotonic_and_bounded ... ok
+test panel::motion::tests::motion_has_stable_endpoints ... ok
+test panel::motion::tests::reduced_motion_jumps_to_the_end ... ok
+test panel::radio::tests::radio_hit_testing_returns_only_the_option_rect ... ok
+test panel::motion::tests::spring_starts_at_zero_and_settles_at_one_with_a_small_overshoot ... ok
+test panel::radio::tests::disabled_radio_cannot_be_selected_or_focused ... ok
+test panel::frame::tests::a_focused_field_draws_its_border_and_ring ... ok
+test panel::radio::tests::release_inside_selects_the_pressed_option ... ok
+test panel::radio::tests::release_outside_does_not_change_radio_selection ... ok
+test panel::segmented::tests::hit_testing_uses_the_segment_rectangles ... ok
+test panel::segmented::tests::nested_radius_never_becomes_negative ... ok
+test panel::segmented::tests::pointer_release_selects_one_segment_and_respects_disabled_segments ... ok
+test panel::segmented::tests::slide_clamps_and_lands_on_both_endpoints ... ok
+test panel::slider::tests::pointer_and_keyboard_values_snap_to_step ... ok
+test panel::slider::tests::release_and_cancel_end_capture ... ok
+test panel::tag::tests::tag_uses_its_pill_rect_for_hit_testing ... ok
+test panel::text_field::tests::a_clamp_leaves_an_empty_field_empty ... ok
+test panel::tag::tests::tag_toggles_only_when_released_inside ... ok
+test panel::text_field::tests::a_new_field_keeps_the_digits_and_nothing_else ... ok
+test panel::text_field::tests::a_number_written_in_from_outside_lands_with_the_caret_after_it ... ok
+test panel::text_field::tests::a_paste_keeps_its_digits_and_respects_the_room_left ... ok
+test panel::text_field::tests::a_right_aligned_number_is_placed_from_the_box_and_its_own_width ... ok
+test panel::text_field::tests::a_step_moves_by_one_or_by_ten_and_stops_at_the_edges ... ok
+test panel::text_field::tests::a_selection_can_be_read_back_for_a_copy ... ok
+test panel::text_field::tests::backspace_and_delete_remove_the_selection_before_they_remove_a_digit ... ok
+test panel::text_field::tests::gaining_the_focus_selects_everything_so_typing_replaces ... ok
+test panel::text_field::tests::losing_the_focus_drops_the_selection ... ok
+test panel::text_field::tests::the_arrows_collapse_a_selection_to_its_edges ... ok
+test panel::text_field::tests::the_view_carries_what_the_painter_needs ... ok
+test panel::toggle::tests::animated_thumb_has_monotonic_position_and_pressed_size ... ok
+test panel::text_field::tests::typing_lands_at_the_caret_and_only_digits_get_in ... ok
+test panel::toggle::tests::release_inside_toggles_and_release_outside_cancels ... ok
+test panel::toggle::tests::thumb_moves_between_the_two_stable_endpoints ... ok
+test panel::frame::tests::the_title_is_drawn_inside_the_header ... ok
+test panel::frame::tests::the_format_button_border_is_accent_only_when_open ... ok
+test panel::frame::tests::the_size_cells_are_filled_and_have_no_border_when_idle ... ok
+test panel::frame::tests::the_size_row_draws_its_four_shortcuts ... ok
+test panel::frame::tests::the_quality_control_gives_way_to_the_hint_for_png ... ok
+test panel::frame::tests::the_sheet_is_the_designs_surface_colour ... ok
+test panel::frame::tests::the_variable_button_is_drawn_inside_the_name_field ... ok
+test panel::frame::tests::the_size_cells_draw_their_word_and_their_unit ... ok
+test panel::frame::tests::the_token_menu_prints_each_variables_current_value ... ok
+test panel::frame::tests::the_open_format_menu_marks_only_the_chosen_option ... ok
+test panel::frame::tests::the_format_button_draws_the_chosen_word_in_the_text_colour ... ok
+
+test result: ok. 222 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.69s
+
+    Checking yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Checking yue-shot v0.1.4 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.94s
+    Checking yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Checking yue-shot v0.1.4 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot)
+    Checking codec-bench v0.1.0 (D:\100_Projects\110_Daily\YueShot\tools\codec-bench)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.42s
+checked yue-shot: 383 packages in its normal graph
+checked yue-shot-capture: 38 packages in its normal graph
+checked yue-shot-storage: 41 packages in its normal graph
+checked yue-shot-overlay-ui: 20 packages in its normal graph
+checked yue-shot-model: 15 packages in its normal graph
+checked yue-geometry: 8 packages in its normal graph
+checked yue-media: 13 packages in its normal graph
+checked yue-pin: 359 packages in its normal graph
+checked yue-clipboard: 25 packages in its normal graph
+checked yue-pin-model: 14 packages in its normal graph
+checked yue-avif: 101 packages in its normal graph
+checked apps/yue-shot/crates/yue-shot-capture/src/scroll: 8 files scanned for platform references
+dependency direction is clean

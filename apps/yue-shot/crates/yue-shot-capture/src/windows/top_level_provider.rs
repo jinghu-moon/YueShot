@@ -17,8 +17,11 @@ use crate::window_detection::model::{
 use crate::window_detection::provider::{Exclusions, WindowDetectionError, WindowProvider};
 use crate::window_detection::snapshot::{candidates_from_classified, class_name_hash, classify};
 
+mod lifetime;
+
 use super::monitor;
 use super::win::window as win32;
+use lifetime::LifetimeTags;
 
 /// Enumerates the desktop's top-level windows and validates snap targets.
 #[derive(Debug, Default)]
@@ -28,6 +31,7 @@ pub struct TopLevelWindowProvider {
     epochs: EpochCounter,
     /// Display rectangles this provider's snapshots were filtered against.
     monitors: MonitorCache,
+    lifetimes: LifetimeTags,
 }
 
 impl TopLevelWindowProvider {
@@ -37,6 +41,7 @@ impl TopLevelWindowProvider {
 
     /// Forget the current epoch and display topology.
     pub fn reset(&mut self) {
+        self.lifetimes.retain(|_| false);
         self.epochs.reset();
         self.monitors.release();
     }
@@ -53,6 +58,9 @@ impl TopLevelWindowProvider {
     /// minimised, cloaked, or recycled by a different process/window class.
     fn read_target(&self, identity: WindowIdentity) -> Option<Rect> {
         let hwnd = identity.hwnd;
+        if identity.creation_token != 0 && !self.lifetimes.matches(identity) {
+            return None;
+        }
         if !win32::is_window(hwnd)
             || !win32::is_window_visible(hwnd)
             || win32::is_iconic(hwnd)
@@ -69,7 +77,11 @@ impl TopLevelWindowProvider {
         if class_name_hash(&class_name) != identity.class_name_hash {
             return None;
         }
-        win32::frame_bounds(hwnd)
+        let bounds = win32::frame_bounds(hwnd)?;
+        if identity.creation_token != 0 && !self.lifetimes.matches(identity) {
+            return None;
+        }
+        Some(bounds)
     }
 }
 
@@ -88,6 +100,24 @@ impl WindowProvider for TopLevelWindowProvider {
         // Policy passes (exclusions, shell surfaces, cloaked, off-screen) run on plain
         // data; the epoch is stamped last so no candidate can carry a future value.
         let classified = classify(&probes, &reads, exclusions, &self.monitors);
+        self.lifetimes
+            .retain(|h| classified.iter().any(|w| w.identity.hwnd == h));
+        let classified: Vec<_> = classified
+            .into_iter()
+            .filter_map(|mut window| {
+                if let Some(token) = self.lifetimes.tag(window.identity.hwnd) {
+                    window.identity.creation_token = token;
+                    // Tag first, then observe PID/class/frame again and check the tag
+                    // on both sides. Enumeration may have raced a close/re-create.
+                    window.screen_bounds = self.read_target(window.identity)?;
+                    if !self.monitors.intersects_any(window.screen_bounds) {
+                        return None;
+                    }
+                }
+                // UIPI/tag capacity/failure leaves zero: native-only, never visual-qualified.
+                Some(window)
+            })
+            .collect();
         let epoch = self.epochs.bump();
         let candidates = candidates_from_classified(&classified, epoch);
         Ok(WindowSnapshot::new(
@@ -98,6 +128,11 @@ impl WindowProvider for TopLevelWindowProvider {
     }
 
     fn validate(&self, target: &SelectionTarget) -> bool {
+        if target.origin == crate::window_detection::TargetOrigin::Visual
+            && target.identity().creation_token == 0
+        {
+            return false;
+        }
         self.read_target(target.identity())
             .is_some_and(|bounds| !bounds.is_empty())
     }
@@ -261,7 +296,7 @@ mod tests {
     fn validating_an_unknown_handle_fails_closed() {
         let provider = TopLevelWindowProvider::new();
         let target = SelectionTarget::window(crate::window_detection::model::WindowCandidate::new(
-            WindowIdentity::new(0xDEAD, 1, 2),
+            WindowIdentity::new(0xDEAD, 1, 2, 1),
             Rect::new(0, 0, 10, 10),
             0,
             1,

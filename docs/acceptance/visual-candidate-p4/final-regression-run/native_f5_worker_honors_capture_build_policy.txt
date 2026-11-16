@@ -1,0 +1,21 @@
+﻿    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::capture_worker::tests::native_f5_worker_honors_capture_build_policy ... FAILED
+
+failures:
+
+---- windows::capture_worker::tests::native_f5_worker_honors_capture_build_policy stdout ----
+
+thread 'windows::capture_worker::tests::native_f5_worker_honors_capture_build_policy' (52576) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\capture_worker.rs:476:77:
+called `Result::unwrap()` on an `Err` value: "GetCursorPos failed with Win32 error 5"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    windows::capture_worker::tests::native_f5_worker_honors_capture_build_policy
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 726 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

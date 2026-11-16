@@ -1,0 +1,15 @@
+    Checking yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error: items after a test module
+   --> apps\yue-shot\crates\yue-shot-capture\src\window_detection\visual.rs:18:1
+    |
+ 18 | mod tests {
+    | ^^^^^^^^^
+...
+183 | impl VisualSnapshot {
+    | ^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_test_module
+    = note: `-D clippy::items-after-test-module` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::items_after_test_module)]`
+
+error: could not compile `yue-shot-capture` (lib test) due to 1 previous error

@@ -1,0 +1,344 @@
+    Checking yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+warning: constant `ATLAS` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:5:7
+  |
+5 | const ATLAS: u32 = 1024;
+  |       ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `COPY_SLICE` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:6:7
+  |
+6 | const COPY_SLICE: usize = 64;
+  |       ^^^^^^^^^^
+
+warning: static `LIVE_TRANSFERS` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:7:8
+  |
+7 | static LIVE_TRANSFERS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+  |        ^^^^^^^^^^^^^^
+
+warning: type alias `OwnedRegions` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:8:17
+  |
+8 | pub(crate) type OwnedRegions = Vec<(Rect, Vec<u8>)>;
+  |                 ^^^^^^^^^^^^
+
+warning: struct `Piece` is never constructed
+  --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:10:8
+   |
+10 | struct Piece {
+   |        ^^^^^
+
+warning: struct `Batch` is never constructed
+  --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:16:8
+   |
+16 | struct Batch {
+   |        ^^^^^
+
+warning: struct `BatchReadback` is never constructed
+  --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:24:19
+   |
+24 | pub(crate) struct BatchReadback {
+   |                   ^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:31:12
+    |
+ 30 | impl BatchReadback {
+    | ------------------ associated items in this implementation
+ 31 |     pub fn new(device: &GraphicsDevice) -> Result<Self, String> {
+    |            ^^^
+...
+ 46 |     pub fn begin(&mut self, source: &ID3D11Texture2D, regions: Vec<Rect>) -> Result<(), String> {
+    |            ^^^^^
+...
+126 |     pub fn submit_slice(&mut self) -> Result<bool, String> {
+    |            ^^^^^^^^^^^^
+...
+163 |     pub fn cancel(&mut self) {
+    |            ^^^^^^
+...
+169 |     pub fn pending(&self) -> bool {
+    |            ^^^^^^^
+...
+173 |     pub fn poll(&mut self) -> Option<Result<OwnedRegions, String>> {
+    |            ^^^^
+...
+193 |     fn complete_mapping(
+    |        ^^^^^^^^^^^^^^^^
+
+warning: enum `Completion` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:15:10
+   |
+15 | pub enum Completion {
+   |          ^^^^^^^^^^
+
+warning: struct `Image` is never constructed
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:25:12
+   |
+25 | pub struct Image<'a> {
+   |            ^^^^^
+
+warning: associated items `from_reader`, `with_prefetch`, `pending_reads`, `request`, `pixel`, and `sample` are never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:59:12
+    |
+ 34 | impl<'a> Image<'a> {
+    | ------------------ associated items in this implementation
+...
+ 59 |     pub fn from_reader(
+    |            ^^^^^^^^^^^
+...
+ 76 |     pub fn with_prefetch(
+    |            ^^^^^^^^^^^^^
+...
+ 86 |     fn pending_reads(self) -> bool {
+    |        ^^^^^^^^^^^^^
+...
+ 90 |     fn request(self, region: Rect) {
+    |        ^^^^^^^
+...
+117 |     fn pixel(self, point: Point) -> Option<[f32; 3]> {
+    |        ^^^^^
+...
+136 |     fn sample(self, x: f32, y: f32) -> Option<[f32; 3]> {
+    |        ^^^^^^
+
+warning: function `norm` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:180:4
+    |
+180 | fn norm(value: [f32; 3]) -> f32 {
+    |    ^^^^
+
+warning: function `difference` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:184:4
+    |
+184 | fn difference(a: [f32; 3], b: [f32; 3]) -> [f32; 3] {
+    |    ^^^^^^^^^^
+
+warning: function `jump` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:188:4
+    |
+188 | fn jump(samples: [[f32; 3]; 4]) -> f32 {
+    |    ^^^^
+
+warning: struct `Parameters` is never constructed
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:196:12
+    |
+196 | pub struct Parameters {
+    |            ^^^^^^^^^^
+
+warning: struct `SideEvidence` is never constructed
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:213:12
+    |
+213 | pub struct SideEvidence {
+    |            ^^^^^^^^^^^^
+
+warning: method `qualifies` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:229:8
+    |
+228 | impl SideEvidence {
+    | ----------------- method in this implementation
+229 |     fn qualifies(&self, parameters: Parameters) -> bool {
+    |        ^^^^^^^^^
+
+warning: struct `Candidate` is never constructed
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:238:12
+    |
+238 | pub struct Candidate {
+    |            ^^^^^^^^^
+
+warning: function `serialize_rect` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:246:4
+    |
+246 | fn serialize_rect<S: serde::Serializer>(rect: &Rect, serializer: S) -> Result<S::Ok, S::Error> {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `sample_positions` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:257:4
+    |
+257 | fn sample_positions(start: i32, end: i32) -> Vec<i32> {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `sample_positions_limit` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:261:4
+    |
+261 | fn sample_positions_limit(start: i32, end: i32, maximum: usize) -> Vec<i32> {
+    |    ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `request_probe` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:285:4
+    |
+285 | fn request_probe(image: Image<'_>, position: [f32; 2], inward: [f32; 2]) {
+    |    ^^^^^^^^^^^^^
+
+warning: function `request_validation` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:295:4
+    |
+295 | fn request_validation(image: Image<'_>, rect: Rect) {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `probe` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:315:4
+    |
+315 | fn probe(
+    |    ^^^^^
+
+warning: function `validate` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:401:8
+    |
+401 | pub fn validate(image: Image<'_>, rect: Rect, parameters: Parameters) -> Candidate {
+    |        ^^^^^^^^
+
+warning: function `validate_limit` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:405:4
+    |
+405 | fn validate_limit(
+    |    ^^^^^^^^^^^^^^
+
+warning: function `canonicalise` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:531:4
+    |
+531 | fn canonicalise(image: Image<'_>, initial: Candidate, parameters: Parameters) -> Candidate {
+    |    ^^^^^^^^^^^^
+
+warning: function `measure_side_limit` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\mod.rs:562:4
+    |
+562 | fn measure_side_limit(
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: constant `TILE` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:7:7
+  |
+7 | const TILE: usize = 4;
+  |       ^^^^
+
+warning: constant `TILE_BYTES` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:8:7
+  |
+8 | const TILE_BYTES: usize = TILE * TILE * 4;
+  |       ^^^^^^^^^^
+
+warning: static `LIVE_QUERIES` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:9:8
+  |
+9 | static LIVE_QUERIES: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+  |        ^^^^^^^^^^^^
+
+warning: enum `Step` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:11:10
+   |
+11 | pub enum Step {
+   |          ^^^^
+
+warning: enum `Stage` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:17:6
+   |
+17 | enum Stage {
+   |      ^^^^^
+
+warning: struct `Query` is never constructed
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:23:12
+   |
+23 | pub struct Query {
+   |            ^^^^^
+
+warning: multiple associated items are never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\progressive.rs:42:12
+    |
+ 41 | impl Query {
+    | ---------- associated items in this implementation
+ 42 |     pub fn initial_region(size: [usize; 2], point: Point) -> Result<Rect, Completion> {
+    |            ^^^^^^^^^^^^^^
+...
+ 60 |     pub fn new(size: [usize; 2], point: Point, initial: Vec<u8>) -> Result<Self, Completion> {
+    |            ^^^
+...
+ 95 |     pub fn live_count() -> usize {
+    |            ^^^^^^^^^^
+...
+103 |     fn record_buffers(&mut self, external: usize) {
+    |        ^^^^^^^^^^^^^^
+...
+130 |     fn columns(&self) -> usize {
+    |        ^^^^^^^
+...
+133 |     fn tile_rect(&self, key: usize) -> Rect {
+    |        ^^^^^^^^^
+...
+144 |     fn request(&mut self, rect: Rect) {
+    |        ^^^^^^^
+...
+187 |     fn pixel(&mut self, point: Point) -> Option<[u8; 4]> {
+    |        ^^^^^
+...
+207 |     pub fn step(&mut self) -> Step {
+    |            ^^^^
+...
+345 |     pub fn apply(&mut self, regions: Vec<(Rect, Vec<u8>)>) -> Result<(), Completion> {
+    |            ^^^^^
+
+warning: constant `A_LIMITS` is never used
+ --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:6:18
+  |
+6 | pub(super) const A_LIMITS: [(&str, usize); 4] = [
+  |                  ^^^^^^^^
+
+warning: function `over_budget` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:21:4
+   |
+21 | fn over_budget(value: usize, limit: usize) -> bool {
+   |    ^^^^^^^^^^^
+
+warning: struct `Detection` is never constructed
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:53:12
+   |
+53 | pub struct Detection {
+   |            ^^^^^^^^^
+
+warning: function `finish` is never used
+  --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:61:15
+   |
+61 | pub(super) fn finish(
+   |               ^^^^^^
+
+warning: function `rank` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:112:4
+    |
+112 | fn rank(candidates: &mut Vec<Candidate>) {
+    |    ^^^^
+
+warning: function `scan_peaks` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:145:15
+    |
+145 | pub(super) fn scan_peaks(image: Image<'_>, point: Point, side: usize) -> (Vec<i32>, bool) {
+    |               ^^^^^^^^^^
+
+warning: type alias `SeedPeaks` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:308:17
+    |
+308 | pub(super) type SeedPeaks = [(Vec<i32>, bool); 4];
+    |                 ^^^^^^^^^
+
+warning: function `seed_peaks` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:310:15
+    |
+310 | pub(super) fn seed_peaks(image: Image<'_>, point: Point) -> SeedPeaks {
+    |               ^^^^^^^^^^
+
+warning: function `seed_rectangles` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:314:15
+    |
+314 | pub(super) fn seed_rectangles(image: Image<'_>, point: Point, lists: &SeedPeaks) -> Vec<Rect> {
+    |               ^^^^^^^^^^^^^^^
+
+warning: function `line_span` is never used
+   --> apps\yue-shot\crates\yue-shot-capture\src\visual_detection\proposals.rs:376:4
+    |
+376 | fn line_span(image: Image<'_>, edge: i32, tangent: i32, side: usize) -> Option<(i32, i32)> {
+    |    ^^^^^^^^^
+
+warning: `yue-shot-capture` (lib) generated 45 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.22s

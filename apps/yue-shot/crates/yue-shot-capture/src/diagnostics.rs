@@ -33,6 +33,15 @@ fn micros(elapsed: Duration) -> u64 {
 
 #[derive(Debug, Default)]
 struct Counters {
+    visual_submitted: AtomicU64,
+    visual_completed: AtomicU64,
+    visual_empty: AtomicU64,
+    visual_cancelled: AtomicU64,
+    visual_unavailable: AtomicU64,
+    visual_last_us: AtomicU64,
+    visual_max_us: AtomicU64,
+    visual_peak_buffer_bytes: AtomicU64,
+
     /// Overlay presents (full-surface repaints) and how long each took.
     ///
     /// The overlay's cost model is *frames*, not rectangles: drawing four more rings is free, and
@@ -117,6 +126,15 @@ struct Counters {
 /// A copyable reading of every counter, for assertions and one-line reports.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub struct WindowDetectionReading {
+    pub visual_submitted: u64,
+    pub visual_completed: u64,
+    pub visual_empty: u64,
+    pub visual_cancelled: u64,
+    pub visual_unavailable: u64,
+    pub visual_last_us: u64,
+    pub visual_max_us: u64,
+    pub visual_peak_buffer_bytes: u64,
+
     pub present_count: u64,
     pub present_last_us: u64,
     pub present_max_us: u64,
@@ -518,10 +536,48 @@ impl WindowDetectionMetrics {
     }
 
     /// Read every counter.
+    pub(crate) fn record_visual_submitted(&self) {
+        self.counters
+            .visual_submitted
+            .fetch_add(1, Ordering::Relaxed);
+    }
+
+    pub(crate) fn record_visual_completed(&self, elapsed: Duration, empty: bool, buffer: usize) {
+        self.counters
+            .visual_completed
+            .fetch_add(1, Ordering::Relaxed);
+        self.counters
+            .visual_empty
+            .fetch_add(u64::from(empty), Ordering::Relaxed);
+        let us = micros(elapsed);
+        self.counters.visual_last_us.store(us, Ordering::Relaxed);
+        self.counters.visual_max_us.fetch_max(us, Ordering::Relaxed);
+        self.counters
+            .visual_peak_buffer_bytes
+            .fetch_max(buffer as u64, Ordering::Relaxed);
+    }
+
+    pub(crate) fn record_visual_retired(&self, unavailable: bool) {
+        let counter = if unavailable {
+            &self.counters.visual_unavailable
+        } else {
+            &self.counters.visual_cancelled
+        };
+        counter.fetch_add(1, Ordering::Relaxed);
+    }
+
     pub fn reading(&self) -> WindowDetectionReading {
         let counters = &self.counters;
         let load = |value: &AtomicU64| value.load(Ordering::Relaxed);
         WindowDetectionReading {
+            visual_submitted: load(&counters.visual_submitted),
+            visual_completed: load(&counters.visual_completed),
+            visual_empty: load(&counters.visual_empty),
+            visual_cancelled: load(&counters.visual_cancelled),
+            visual_unavailable: load(&counters.visual_unavailable),
+            visual_last_us: load(&counters.visual_last_us),
+            visual_max_us: load(&counters.visual_max_us),
+            visual_peak_buffer_bytes: load(&counters.visual_peak_buffer_bytes),
             present_count: load(&counters.present_count),
             present_last_us: load(&counters.present_last_us),
             present_max_us: load(&counters.present_max_us),
@@ -607,7 +663,7 @@ impl WindowDetectionMetrics {
              refinement_superseded={} refinement_downgrades_staged={} \
              refinement_follow_ups={} \
              refinement_precision_adopted={} refinement_precision_not_finer={} \
-             refinement_precision_unavailable={}",
+             refinement_precision_unavailable={} visual_submitted={} visual_completed={} visual_empty={} visual_cancelled={} visual_unavailable={} visual_elapsed_us last={} max={} visual_peak_buffer_bytes={}",
             reading.present_count,
             reading.present_last_us,
             reading.present_max_us,
@@ -661,6 +717,14 @@ impl WindowDetectionMetrics {
             reading.refinement_precision_adopted,
             reading.refinement_precision_not_finer,
             reading.refinement_precision_unavailable,
+            reading.visual_submitted,
+            reading.visual_completed,
+            reading.visual_empty,
+            reading.visual_cancelled,
+            reading.visual_unavailable,
+            reading.visual_last_us,
+            reading.visual_max_us,
+            reading.visual_peak_buffer_bytes,
         )
     }
 
@@ -724,6 +788,14 @@ impl WindowDetectionMetrics {
         }
         self.last_precision_outcome.store(0, Ordering::Relaxed);
         for counter in [
+            &counters.visual_submitted,
+            &counters.visual_completed,
+            &counters.visual_empty,
+            &counters.visual_cancelled,
+            &counters.visual_unavailable,
+            &counters.visual_last_us,
+            &counters.visual_max_us,
+            &counters.visual_peak_buffer_bytes,
             &counters.present_count,
             &counters.present_last_us,
             &counters.present_max_us,
@@ -794,6 +866,35 @@ fn record_timing(count: &AtomicU64, last: &AtomicU64, max: &AtomicU64, elapsed: 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn visual_diagnostics_share_handle_and_reset_without_native_cross_reporting() {
+        let metrics = WindowDetectionMetrics::new();
+        let worker = metrics.clone();
+        worker.record_visual_submitted();
+        worker.record_visual_completed(Duration::from_micros(420), false, 1024);
+        worker.record_visual_completed(Duration::from_micros(210), true, 512);
+        worker.record_visual_retired(true);
+        worker.record_visual_retired(false);
+        let r = metrics.reading();
+        assert_eq!(
+            (r.visual_submitted, r.visual_completed, r.visual_empty),
+            (1, 2, 1)
+        );
+        assert_eq!(
+            (
+                r.visual_last_us,
+                r.visual_max_us,
+                r.visual_peak_buffer_bytes
+            ),
+            (210, 420, 1024)
+        );
+        assert_eq!((r.visual_cancelled, r.visual_unavailable), (1, 1));
+        assert_eq!((r.refinement_submitted, r.refinement_published), (0, 0));
+        assert!(metrics.summary_line().contains("visual_unavailable=1"));
+        metrics.reset();
+        assert_eq!(metrics.reading(), WindowDetectionReading::default());
+    }
 
     #[test]
     fn timings_keep_the_latest_and_the_worst_case() {

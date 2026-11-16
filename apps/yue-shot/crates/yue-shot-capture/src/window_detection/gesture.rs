@@ -317,7 +317,7 @@ mod tests {
 
     fn target(epoch: SnapshotEpoch) -> SelectionTarget {
         SelectionTarget::window(WindowCandidate::new(
-            WindowIdentity::new(0x1234, 7, 0xABC),
+            WindowIdentity::new(0x1234, 7, 0xABC, 1),
             Rect::new(100, 100, 300, 200),
             0,
             epoch,

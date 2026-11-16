@@ -61,7 +61,7 @@ fn the_real_pipeline_still_answers_in_the_second_capture_session() {
         .expect("this test needs an interactive window station (docs/31 D-14)");
     let bounds = Rect::new(200, 200, 560, 460);
     let point = Point::new(300, 300);
-    let identity = WindowIdentity::new(fixture.handle(), std::process::id(), 0x5E7);
+    let identity = WindowIdentity::new(fixture.handle(), std::process::id(), 0x5E7, 1);
     let metrics = WindowDetectionMetrics::new();
     // Wait until the fixture is registered with UIA *before* the pipeline runs: the point of
     // this test is the id plumbing between sessions, so a cold-start "no tree yet" answer

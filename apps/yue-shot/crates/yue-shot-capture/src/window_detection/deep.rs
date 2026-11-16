@@ -298,7 +298,10 @@ pub fn next_visible_stop(
             return next.clamp(0, path.len() as i32 - 1) as usize;
         }
         candidate = next as usize;
-        if edge_shift(path[candidate].rect, path[current].rect) >= threshold_px {
+        let visual_boundary = (path[candidate].origin == super::TargetOrigin::Visual
+            || path[current].origin == super::TargetOrigin::Visual)
+            && path[candidate].rect != path[current].rect;
+        if visual_boundary || edge_shift(path[candidate].rect, path[current].rect) >= threshold_px {
             return candidate;
         }
     }
@@ -949,7 +952,7 @@ mod tests {
     }
 
     fn window(hwnd: isize) -> WindowIdentity {
-        WindowIdentity::new(hwnd, 4242, 0xC0FFEE)
+        WindowIdentity::new(hwnd, 4242, 0xC0FFEE, 1)
     }
 
     #[test]

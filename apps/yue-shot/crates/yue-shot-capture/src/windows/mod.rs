@@ -41,4 +41,6 @@ pub mod tile_sweep;
 pub mod timed_call;
 pub mod top_level_provider;
 pub mod uia_provider;
+pub(crate) mod visual_pipeline;
+pub(crate) mod visual_worker;
 pub mod win;

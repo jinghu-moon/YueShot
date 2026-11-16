@@ -290,7 +290,7 @@ mod tests {
 
     fn target() -> SelectionTarget {
         SelectionTarget::window(WindowCandidate::new(
-            crate::window_detection::model::WindowIdentity::new(0xDEAD, 1, 2),
+            crate::window_detection::model::WindowIdentity::new(0xDEAD, 1, 2, 1),
             crate::geometry::Rect::new(0, 0, 10, 10),
             0,
             1,

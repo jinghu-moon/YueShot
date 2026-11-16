@@ -606,7 +606,7 @@ mod tests {
     use std::time::Duration;
 
     fn window() -> WindowIdentity {
-        WindowIdentity::new(0x100, 4242, 0xC0FFEE)
+        WindowIdentity::new(0x100, 4242, 0xC0FFEE, 1)
     }
 
     fn deep(bounds: Rect, reason: StopReason) -> DeepTarget {

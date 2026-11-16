@@ -1,0 +1,24 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0599]: no associated function or constant named `sdr_bgra` found for struct `yue_media::pixels::PixelDescriptor` in the current scope
+  --> apps\yue-shot\crates\yue-shot-capture\src\window_detection\visual.rs:30:53
+   |
+30 |                 yue_media::pixels::PixelDescriptor::sdr_bgra(),
+   |                                                     ^^^^^^^^ associated function or constant not found in `yue_media::pixels::PixelDescriptor`
+   |
+note: if you're trying to build a new `yue_media::pixels::PixelDescriptor` consider using one of the following associated functions:
+      yue_media::pixels::PixelDescriptor::bgra8
+      yue_media::pixels::PixelDescriptor::new
+  --> crates\yue-media\src\pixels.rs:68:5
+   |
+68 |       pub const fn bgra8() -> Self {
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+75 | /     pub fn new(
+76 | |         format: PixelFormat,
+77 | |         encoding: PixelEncoding,
+78 | |         alpha: AlphaMode,
+79 | |     ) -> Result<Self, &'static str> {
+   | |___________________________________^
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `yue-shot-capture` (lib test) due to 1 previous error

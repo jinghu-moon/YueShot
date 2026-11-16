@@ -1,0 +1,19 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.93s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 11 tests
+test visual_detection::tests::visual_replay_each_algorithm_allocation_site_fails_without_partial_publication ... ok
+test window_detection::visual::tests::visual_replay_fusion_allocation_failure_keeps_native_fallback_available ... ok
+test window_detection::visual::tests::visual_replay_nested_single_pixel_layers_reachable_crossings_not_in_chain ... ok
+test window_detection::visual::tests::visual_replay_semantic_defaults_and_equal_geometry_keep_native_kind ... ok
+test window_detection::visual::tests::visual_replay_source_owner_occlusion_and_frozen_bounds_fail_closed ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_confirms_visual_pixels_and_protects_native_text ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_manual_choice_and_window_epoch_cannot_drift ... ok
+test windows::visual_pipeline::tests::visual_replay_latest_query_stays_bounded_across_thousand_moves_and_cancel ... ok
+test windows::visual_pipeline::tests::visual_replay_owner_allocation_failures_never_publish_partial_results ... ok
+test windows::visual_pipeline::tests::visual_replay_product_pipeline_queries_reuses_pixels_and_rejects_retired_source ... ok
+test windows::visual_pipeline::tests::visual_replay_timeout_cancel_drain_blocks_reuse_until_safe_completion ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 692 filtered out; finished in 1.07s
+

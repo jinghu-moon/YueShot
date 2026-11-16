@@ -1,0 +1,241 @@
+{
+  "scope": "Development observations only; failures and intermediate compilations retained, not final qualification",
+  "files": [
+    {
+      "file": "yueshot-p4-algo-faults.txt",
+      "sha256": "14bbb5321fe45637792d98f868836b0c083ca0ec8b477ab17219bdb483a43129"
+    },
+    {
+      "file": "yueshot-p4-all-visual-reference.txt",
+      "sha256": "b8c5c3e0884d5b02c399f12360b08b263e030a37c5bf7b45da336612436d614b"
+    },
+    {
+      "file": "yueshot-p4-allocation-compile.txt",
+      "sha256": "3010aec89f18f95a891ebb4fa66fe6a4e3c6152646c83fb6947dd75bfb168ffe"
+    },
+    {
+      "file": "yueshot-p4-cached-native.txt",
+      "sha256": "0138f15606453ae2b10a8b76f43f89c5bef409c44dcc9abd388a47d2724ccefb"
+    },
+    {
+      "file": "yueshot-p4-cancel-branches.txt",
+      "sha256": "a6525d69f80131303a69f71cffbd5c5f6d7e19dbf25cb6632378201bed79a802"
+    },
+    {
+      "file": "yueshot-p4-clippy.txt",
+      "sha256": "f64786462c86bf494385a7e3c8c3815a6b1e9509c5c000b8d451fa3bbec0948c"
+    },
+    {
+      "file": "yueshot-p4-clippy2.txt",
+      "sha256": "14cf62b7059cdbeef1e3e6f4264cd0348733926faf2ff1981f00b83f4e85ac51"
+    },
+    {
+      "file": "yueshot-p4-clippy3.txt",
+      "sha256": "68378d19f4e7f9264c532af750b399812676e0a8effc694bfe633f71d7f4ce1a"
+    },
+    {
+      "file": "yueshot-p4-controller.txt",
+      "sha256": "af13e14c59ce6f756aaae46dec0d0935139db666d7af00fc7986cf05eb600cb8"
+    },
+    {
+      "file": "yueshot-p4-controller2.txt",
+      "sha256": "38ee008313e2d678b6a71b7c57310ab0945fc69a1a41a7730dabfb6e427cef34"
+    },
+    {
+      "file": "yueshot-p4-current-clippy.txt",
+      "sha256": "db97943636ade408478f3d5fac97c3a25ae356313abfb0bd608622a3a3742557"
+    },
+    {
+      "file": "yueshot-p4-current-final-clippy.txt",
+      "sha256": "f343d0f0cb5e645bf5662ced094a08b4fad6e09b114caec07003abfc3d8dc6dd"
+    },
+    {
+      "file": "yueshot-p4-demo-events.txt",
+      "sha256": "f4bc9c5161863973730ed156d173a1f885163b6b1461900a1a372028f934df57"
+    },
+    {
+      "file": "yueshot-p4-demo-stage.txt",
+      "sha256": "b16f4226691b0ac563354f9f13b78ebc130eaaf7d39619424a9b4c26e9e06529"
+    },
+    {
+      "file": "yueshot-p4-demo-stage2.txt",
+      "sha256": "6c17b4c68828be94ed96562fecbfbb2a2bc6079d6998317d83ee8beb0c033376"
+    },
+    {
+      "file": "yueshot-p4-demo-stage3.txt",
+      "sha256": "28e132541f1703f01ad0947619ea3dcf8e783652b20c7fb54a2277c9861dc396"
+    },
+    {
+      "file": "yueshot-p4-demo-t17-retest.txt",
+      "sha256": "fce2f8f89d600c2bdcdb6169a75e24a6cf07374b4d7b7919f4b5fe509a12f3ee"
+    },
+    {
+      "file": "yueshot-p4-diagnostics-clippy.txt",
+      "sha256": "81ee5f99ff358b3db41b4b2bee68975869464ddef3cc89c1f527226a47a72923"
+    },
+    {
+      "file": "yueshot-p4-diagnostics-clippy2.txt",
+      "sha256": "4c427fb77a45a2a6efe9dc57898c60db49916ee87d03d31fd3dcf7d2f54d8f90"
+    },
+    {
+      "file": "yueshot-p4-display-power.txt",
+      "sha256": "4bf724d02240fdfe8a05458357ab0609bd3677338001eba142fc0548261e5439"
+    },
+    {
+      "file": "yueshot-p4-e08-controller.txt",
+      "sha256": "5f1ada9837426885eeb47e3884bdf3501f21831a868398a2a9393ebde22c75ed"
+    },
+    {
+      "file": "yueshot-p4-enhanced-replays.txt",
+      "sha256": "a9db4bf32faf231818f7c2342f13dc1acc5c40c475cd6d7c2bf800d1f983b71e"
+    },
+    {
+      "file": "yueshot-p4-evidence-run.txt",
+      "sha256": "af03b4a37e7badf5bc0a39376967ce781a33b48cf65210422c4df9158052bc92"
+    },
+    {
+      "file": "yueshot-p4-extended-clippy.txt",
+      "sha256": "01742e955af85211ea18e89eae7204efef29e47fa9cd70881c99b47012901d04"
+    },
+    {
+      "file": "yueshot-p4-fusion-tests.txt",
+      "sha256": "91e645f3ba9fd8e7268bf311160c5c39032af575516156d9f4ff6ace5eecba93"
+    },
+    {
+      "file": "yueshot-p4-fusion-tests2.txt",
+      "sha256": "05cd9b9cb468f0f4f4a7c66afbaf269ae118c9529ec3d1883a9fbac3191eb522"
+    },
+    {
+      "file": "yueshot-p4-hung-shutdown.txt",
+      "sha256": "9059a68495fd06e75c92083cea812a36c464679cb4dad437d5260411a26ad544"
+    },
+    {
+      "file": "yueshot-p4-integration-check.txt",
+      "sha256": "cb201684bdeb1e26bf4306e0a7dc3056484512d7c901a34afe4ef8888530d13c"
+    },
+    {
+      "file": "yueshot-p4-integration-check2.txt",
+      "sha256": "bc683b0206b6d8f0c75378c4012c0e80fa89122f113c92dfb46cb8e93d99a19b"
+    },
+    {
+      "file": "yueshot-p4-late-matrix.txt",
+      "sha256": "939b9056c98fec269a112c75c72c302a8656b7246f382895810b76ed53281c8b"
+    },
+    {
+      "file": "yueshot-p4-lifecycle-clippy.txt",
+      "sha256": "295e8bd530a8904bfdba99f9d1f92cf08733789f15787af3cf40ce9bfef2c633"
+    },
+    {
+      "file": "yueshot-p4-manual-fixes.txt",
+      "sha256": "3f422bb92a7432ff15539d639ebeb4214ff71d45d84ed7188cf8384c064be5ba"
+    },
+    {
+      "file": "yueshot-p4-native-fixes.txt",
+      "sha256": "fdcf301d995e1536d5731d40e63ddb3a0c8cecb79b721e4c91cf81778cf205be"
+    },
+    {
+      "file": "yueshot-p4-native-fixes2.txt",
+      "sha256": "7c5f885f165529f86b228b82b229e59e400822ec6641fcf7acbdeb6defa97bea"
+    },
+    {
+      "file": "yueshot-p4-native-regression.txt",
+      "sha256": "800b807472f92abec9fb89856f31147da4808f5a9fe32f4fe7a85f586cf87fd5"
+    },
+    {
+      "file": "yueshot-p4-native-tests.txt",
+      "sha256": "4e38e2f1fd6db6b685f7c29bd6722974377b1b9be541dd10b8fa36ce33b88f9a"
+    },
+    {
+      "file": "yueshot-p4-product-gpu-correct-fixture.txt",
+      "sha256": "8976df620c5650e68bcb0766d214b3d1b8b5590f489319edc457d0e361f6dd6b"
+    },
+    {
+      "file": "yueshot-p4-product-gpu.txt",
+      "sha256": "28b678d11c3e07d8ef41179d4f726b2130a8c139ffd443f01df8de75a146f92b"
+    },
+    {
+      "file": "yueshot-p4-product-latency.txt",
+      "sha256": "c4ef0ce14ffede0d601fc5a59f4926587f540e6275906a30b1e44e1e89ec7f51"
+    },
+    {
+      "file": "yueshot-p4-promote-check.txt",
+      "sha256": "e99bed6d7eb86f5c04dc2e4ea121067f12e12b26b440262e6121ccb27d94bd4a"
+    },
+    {
+      "file": "yueshot-p4-promote-tests.txt",
+      "sha256": "86af2a116c4ea41d57c322a244d41a5f7e5ce07cce18f736337268fad213398c"
+    },
+    {
+      "file": "yueshot-p4-qualification-clippy.txt",
+      "sha256": "72a1ec9d1dd9272b06d8079aba53c8e9ad5b826a403c90a2ecc6e95354ce3a37"
+    },
+    {
+      "file": "yueshot-p4-query-budget.txt",
+      "sha256": "94ee8494d052a083faed735177b9c082be7d6b0a48dfb19cc29458801491aaf3"
+    },
+    {
+      "file": "yueshot-p4-real-lifecycle.txt",
+      "sha256": "6aea329c5b13d81ef2a226c1f6173006234fd2ebebe761722997e528330deaea"
+    },
+    {
+      "file": "yueshot-p4-real-timer.txt",
+      "sha256": "5f1a1466b007f45a37f6fec69ca71b8af6602a7371d85e1639f5e77cf838e1c5"
+    },
+    {
+      "file": "yueshot-p4-replay-tests.txt",
+      "sha256": "cba286fd989dbedb261556c734df725c6a39ebe6358027a738e130f36200a97b"
+    },
+    {
+      "file": "yueshot-p4-replays-all.txt",
+      "sha256": "45d7f56d6c0756a1092b4b197e1cf9baaa2e22d89b21f5ce8bf1c552e3a128dd"
+    },
+    {
+      "file": "yueshot-p4-resource-counters-clippy.txt",
+      "sha256": "2c63e4e0b93b998cd707336043f1586af7e3e4336a9fb174a6fc808064020eba"
+    },
+    {
+      "file": "yueshot-p4-t13-t14-t23.txt",
+      "sha256": "377bb257ca146242b64c9525476e2ca784b71131f04a6c92cb6074e2e6760feb"
+    },
+    {
+      "file": "yueshot-p4-t19-q13.txt",
+      "sha256": "a0fdcb35118c5f7bca72540f77efeec16d15dba5c4194a0a1b67ec039027fe90"
+    },
+    {
+      "file": "yueshot-p4-t19-t21-q13-release.txt",
+      "sha256": "108da0d3988912999c94f9ec12ec40eb37b902c998ba0dd0abec8dbac97af73a"
+    },
+    {
+      "file": "yueshot-p4-t19-t21-q13.txt",
+      "sha256": "76d5a85cdc58fd5f13d651a80d6c14a355f0627cb0b01c50e6fab49b7e34845d"
+    },
+    {
+      "file": "yueshot-p4-t1x.txt",
+      "sha256": "49f69efd929ba894f8555b48439a5ae3211117fdd9d99350d7bad8cb052a9130"
+    },
+    {
+      "file": "yueshot-p4-t22.txt",
+      "sha256": "7353440d16910c175a851dbdec78a6c904099fd76b7397b0ba87f3e72453c814"
+    },
+    {
+      "file": "yueshot-p4-tests-compile.txt",
+      "sha256": "745032479a749140919cf157a3f52c62b2343d54338f6f3201f87c0d73c1080c"
+    },
+    {
+      "file": "yueshot-p4-timeout-retest.txt",
+      "sha256": "166b56e7b50e2537f2aeb9c42eddbabb995f3b1e17b847862bb529db7b89ddf0"
+    },
+    {
+      "file": "yueshot-p4-visual-debug.txt",
+      "sha256": "8a1b040e06229e104f29dccdaaada34f6889e36b5f6ac2c7f3bb17403e330cd9"
+    },
+    {
+      "file": "yueshot-p4-visual-tests.txt",
+      "sha256": "6dab1584e3e4c3038f1e28c8174ef5c4960077a846bb075406150a84aa5be1b2"
+    },
+    {
+      "file": "yueshot-p4-worker-check.txt",
+      "sha256": "dcaf823f813d64da961ecf31d71086d407170b3eb36145736afad9540f116c7d"
+    }
+  ]
+}

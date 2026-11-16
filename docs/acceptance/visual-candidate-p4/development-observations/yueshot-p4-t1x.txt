@@ -1,0 +1,21 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.15s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 7 tests
+test window_detection::visual::tests::contracts::visual_replay_demo_t11_t20_q09_native_policy_vectors ... DEMO_FUSION native_policy_vectors=38 stage_only=true
+ok
+test window_detection::visual::tests::contracts::visual_replay_demo_t12_physical_dpi_origin_and_occlusion_vectors ... ok
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_t13_t14_t23_controller_event_contracts ... DEMO_EVENTS case=T13 wheel_steps=0 boundary=qualified_result
+DEMO_EVENTS case=T14 wheel_steps=0 boundary=qualified_result
+DEMO_EVENTS case=T23 wheel_steps=3 boundary=qualified_result
+ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t15_phase_and_shift_late_completion_matrix ... DEMO_EVENTS T15_scenarios=8 actual_controller=true completion_from_real_pixels=true
+ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t16_analysis_does_not_change_export_or_source ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t17_failures_preserve_native_and_manual_and_retire_old_preview ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t19_and_q13_similar_pixels_reach_product_default ... DEMO_PRODUCT T19_Q13_queries=12 detection_and_fusion=true
+ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 712 filtered out; finished in 4.51s
+

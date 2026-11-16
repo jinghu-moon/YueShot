@@ -1,0 +1,12 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.55s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::win::d3d11::visual_transfer::tests::visual_replay_demo_q05_actual_read_coverage_and_bounded_requery ... DEMO_READ_COVERAGE id="Q05-full" read_count=1 extra_bytes=0 denied=false source_unchanged=true
+DEMO_READ_COVERAGE id="Q05-crop" read_count=1 extra_bytes=12288 denied=true source_unchanged=true
+DEMO_READ_COVERAGE id="Q05-recover" read_count=53 extra_bytes=45056 denied=false source_unchanged=true
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 727 filtered out; finished in 0.24s
+

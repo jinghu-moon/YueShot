@@ -1,0 +1,8 @@
+{
+  "scope": "Current code, lock and fixed test inputs; document index changes do not certify or invalidate code execution",
+  "checks": [
+    "product",
+    "baseline"
+  ],
+  "passed": true
+}

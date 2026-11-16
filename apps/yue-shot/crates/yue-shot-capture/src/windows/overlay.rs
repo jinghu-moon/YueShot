@@ -546,6 +546,10 @@ struct OverlayController {
     snapshot_request: Option<RequestId>,
     /// Confirmation request currently outstanding.
     confirm_request: Option<RequestId>,
+    /// Immutable geometry/source at confirmation submission, never the later preview.
+    confirming_preview: Option<crate::window_detection::SnapPreview>,
+    /// Explicit wheel choice survives asynchronous path replacement by geometry.
+    manual_level: Option<(crate::window_detection::WindowIdentity, PathLevel)>,
     /// Single-flight hover re-validation request (docs/14 §5.5).
     hover_request: Option<RequestId>,
     /// Preview rectangle currently painted (eased, monitor-local pixels).
@@ -562,6 +566,9 @@ struct OverlayController {
     refinement: RefinementWorker,
     /// The published deep path, if the refinement worker produced one this session.
     deep_target: Option<DeepTarget>,
+    /// Unified paint/selection chain; the native provider cache stays independent.
+    combined_target: Option<DeepTarget>,
+    visual: Option<super::visual_pipeline::VisualPipeline>,
     /// Which level of `deep_target`'s chain the user walked to (docs/21 §5.17). `None` means the
     /// published box itself, which is what every session starts with.
     deep_levels: Option<LevelChain>,
@@ -810,6 +817,8 @@ impl OverlayController {
             snapshot: WindowSnapshot::empty(),
             snapshot_request: None,
             confirm_request: None,
+            confirming_preview: None,
+            manual_level: None,
             hover_request: None,
             preview_rect: None,
             preview_target: None,
@@ -822,6 +831,8 @@ impl OverlayController {
             refine: RefinementScheduler::new(),
             refinement,
             deep_target: None,
+            combined_target: None,
+            visual: super::visual_pipeline::VisualPipeline::new(thread_id, metrics.clone()).ok(),
             deep_levels: None,
             hint: None,
             hint_taught: false,
@@ -909,6 +920,7 @@ mod session;
 mod state;
 #[cfg(test)]
 mod tests;
+mod visual;
 
 #[cfg(test)]
 mod native_baseline;

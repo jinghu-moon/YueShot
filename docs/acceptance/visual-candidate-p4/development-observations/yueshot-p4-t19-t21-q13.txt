@@ -1,0 +1,19 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.79s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+
+thread 'windows::overlay::native_baseline::visual_replay::visual_replay_demo_t19_and_q13_similar_pixels_reach_product_default' (70008) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline\visual_replay.rs:204:9:
+controller visual publication timed out
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t19_and_q13_similar_pixels_reach_product_default ... FAILED
+
+failures:
+
+failures:
+    windows::overlay::native_baseline::visual_replay::visual_replay_demo_t19_and_q13_similar_pixels_reach_product_default
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 719 filtered out; finished in 7.10s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

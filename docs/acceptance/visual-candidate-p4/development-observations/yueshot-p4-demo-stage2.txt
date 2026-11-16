@@ -1,0 +1,11 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0449]: visibility qualifiers are not permitted here
+  --> apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\window_host.rs:11:5
+   |
+11 |     pub(super) unsafe fn handle(&mut self, message: u32, wparam: WPARAM, lparam: LPARAM) -> Option<LRESULT> {
+   |     ^^^^^^^^^^ help: remove the qualifier
+   |
+   = note: trait items always share the visibility of their trait
+
+For more information about this error, try `rustc --explain E0449`.
+error: could not compile `yue-shot-capture` (lib test) due to 1 previous error

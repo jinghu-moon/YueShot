@@ -1,5 +1,6 @@
 //! Two bounded proposal experiments sharing the same validator. No annotations.
 use super::*;
+#[cfg(test)]
 use std::collections::VecDeque;
 
 pub(super) const A_LIMITS: [(&str, usize); 4] = [
@@ -8,6 +9,7 @@ pub(super) const A_LIMITS: [(&str, usize); 4] = [
     ("levels", 24),
     ("extra_readback_bytes", 1048576),
 ];
+#[cfg(test)]
 pub(super) const B_LIMITS: [(&str, usize); 6] = [
     ("lines_per_direction", 192),
     ("proposals", 2048),
@@ -20,6 +22,7 @@ fn over_budget(value: usize, limit: usize) -> bool {
     value > limit
 }
 
+#[cfg(test)]
 pub(super) fn budget_violations(
     algorithm: &str,
     counters: &[(&str, usize)],
@@ -57,11 +60,12 @@ pub struct Detection {
 
 pub(super) fn finish(
     image: Image<'_>,
-    proposals: Vec<Rect>,
+    proposals: impl IntoIterator<Item = Rect, IntoIter: ExactSizeIterator>,
     point: Point,
     limit: usize,
     mut completion: Completion,
 ) -> Detection {
+    let proposals = proposals.into_iter();
     let total = proposals.len();
     let mut candidates = Vec::new();
     let mut validations = 0;
@@ -87,6 +91,11 @@ pub(super) fn finish(
             Parameters::default(),
         );
         if candidate.qualified && candidate.rect.contains(point) {
+            if !image.reserve(&mut candidates, 1, "verified_candidates") {
+                candidates.clear();
+                completion = Completion::Failed;
+                break;
+            }
             candidates.push(candidate);
         }
     }
@@ -107,7 +116,7 @@ pub(super) fn finish(
 }
 
 fn rank(candidates: &mut Vec<Candidate>) {
-    candidates.sort_by(|a, b| {
+    candidates.sort_unstable_by(|a, b| {
         let quality = |c: &Candidate| {
             let weakest = c
                 .sides
@@ -252,10 +261,13 @@ pub(super) fn scan_peaks(image: Image<'_>, point: Point, side: usize) -> (Vec<i3
             }
         }
         if votes > 0 && roughness / votes as f32 <= Parameters::default().threshold * 8.0 {
+            if !image.reserve(&mut peaks, 1, "scan_peaks") {
+                return (Vec::new(), true);
+            }
             peaks.push((at, votes, strength, roughness / votes as f32));
         }
     }
-    peaks.sort_by(|a, b| {
+    peaks.sort_unstable_by(|a, b| {
         b.1.cmp(&a.1)
             .then_with(|| a.3.total_cmp(&b.3))
             .then_with(|| (a.0 - coordinate).abs().cmp(&(b.0 - coordinate).abs()))
@@ -266,12 +278,18 @@ pub(super) fn scan_peaks(image: Image<'_>, point: Point, side: usize) -> (Vec<i3
     // Keep that derived bound now that unrelated Cartesian products are gone.
     let exceeded = over_budget(peaks.len(), A_LIMITS[0].1);
     peaks.truncate(A_LIMITS[0].1);
-    (peaks.into_iter().map(|p| p.0).collect(), exceeded)
+    let mut positions = Vec::new();
+    if !image.reserve(&mut positions, peaks.len(), "peak_positions") {
+        return (positions, true);
+    }
+    positions.extend(peaks.into_iter().map(|p| p.0));
+    (positions, exceeded)
 }
 
 /// A: three row/column strips find bounded peaks and trace their corners. Sampling beyond
 /// the owned coverage is impossible. Full-frame test input is owned CPU memory;
 /// physical strip/edge transfer batching is measured separately by readback probe.
+#[cfg(test)]
 pub fn seed(image: Image<'_>, point: Point) -> Detection {
     if image.coverage.is_empty() {
         return finish(image, Vec::new(), point, 64, Completion::Complete);
@@ -321,6 +339,9 @@ pub(super) fn seed_rectangles(image: Image<'_>, point: Point, lists: &SeedPeaks)
             return Some((start, end));
         }
         let result = line_span(image, edge, tangent, side)?;
+        if !image.reserve(&mut spans, 1, "edge_spans") {
+            return None;
+        }
         spans.push((edge, side, result.0, result.1));
         Some(result)
     };
@@ -358,13 +379,16 @@ pub(super) fn seed_rectangles(image: Image<'_>, point: Point, lists: &SeedPeaks)
                         Rect::new(start, other_start, end, other_end)
                     };
                     if rect.contains(point) {
+                        if !image.reserve(&mut rectangles, 1, "corner_rectangles") {
+                            return Vec::new();
+                        }
                         rectangles.push(rect);
                     }
                 }
             }
         }
     }
-    rectangles.sort_by_key(|r| (r.area(), r.left, r.top, r.right, r.bottom));
+    rectangles.sort_unstable_by_key(|r| (r.area(), r.left, r.top, r.right, r.bottom));
     rectangles.dedup();
     rectangles
 }
@@ -424,6 +448,7 @@ fn line_span(image: Image<'_>, edge: i32, tangent: i32, side: usize) -> Option<(
 /// B experiment: edge/background components plus directional lines on owned CPU
 /// pixels. Does not call A. The comparison harness prepares the coarse image
 /// once, then maps proposals back and revalidates original pixels.
+#[cfg(test)]
 pub fn components(image: Image<'_>, point: Point) -> Detection {
     let image = if image.coverage.area() > 1_048_576 {
         let left = (point.x - 256).clamp(
@@ -548,6 +573,7 @@ pub fn components(image: Image<'_>, point: Point) -> Detection {
     )
 }
 
+#[cfg(test)]
 pub(super) fn walk_components(
     mask: &[bool],
     width: usize,
@@ -613,6 +639,7 @@ pub(super) fn walk_components(
     Completion::Complete
 }
 
+#[cfg(test)]
 fn directional_rectangles(image: Image<'_>, point: Point) -> (Vec<Rect>, bool) {
     let mut all = [Vec::new(), Vec::new()];
     let mut exceeded = false;
@@ -685,6 +712,7 @@ fn directional_rectangles(image: Image<'_>, point: Point) -> (Vec<Rect>, bool) {
 /// Exact box/area integration, built once per source by the comparison harness.
 /// The temporary is a B-only experiment; its source acquisition cost is reported
 /// separately and cannot be excluded from the product memory/latency budget.
+#[cfg(test)]
 pub fn coarse(image: Image<'_>) -> Option<([usize; 2], Vec<u8>)> {
     if image.coverage != Rect::new(0, 0, image.size[0] as i32, image.size[1] as i32)
         || image.coverage.area() <= 1_048_576
@@ -727,6 +755,7 @@ pub fn coarse(image: Image<'_>) -> Option<([usize; 2], Vec<u8>)> {
     Some((size, result))
 }
 
+#[cfg(test)]
 pub fn components_with_global(
     image: Image<'_>,
     global: Option<Image<'_>>,

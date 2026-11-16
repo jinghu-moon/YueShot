@@ -1,0 +1,11 @@
+{
+  "command": "cargo build -p yue-shot --locked",
+  "exitCode": 0,
+  "finished": "2026-11-17T05:32:01.9864010+08:00",
+  "executable": "target/debug/YueShot.exe",
+  "executableSha256": "c6874fa55f81362d7ebfca18ad28929399cf6f275c25014dc8fad623fefed465",
+  "logSha256": "19a42fdcc769592aee28b48a0e28af0403b5d8af9c7b225f67022b3d7de4dfa4",
+  "sourceManifest": "lifetime-qualified/summary.json",
+  "sourceUnchanged": true,
+  "scope": "Current-source executable only; visible acceptance deferred to user"
+}

@@ -1,0 +1,3 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+   Compiling yue-shot v0.1.4 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 15.02s

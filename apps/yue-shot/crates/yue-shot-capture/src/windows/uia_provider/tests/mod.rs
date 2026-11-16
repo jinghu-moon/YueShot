@@ -20,7 +20,7 @@ use std::time::Duration;
 fn job(hwnd: isize, point: Point) -> RefinementJob {
     RefinementJob {
         request: crate::window_detection::model::RequestGate::new().issue(),
-        window: crate::window_detection::model::WindowIdentity::new(hwnd, 1, 2),
+        window: crate::window_detection::model::WindowIdentity::new(hwnd, 1, 2, 1),
         epoch: 1,
         point,
     }

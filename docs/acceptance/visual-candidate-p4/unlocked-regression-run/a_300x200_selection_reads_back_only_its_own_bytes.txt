@@ -1,0 +1,8 @@
+﻿    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::providers::tests::a_300x200_selection_reads_back_only_its_own_bytes ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 710 filtered out; finished in 0.21s
+

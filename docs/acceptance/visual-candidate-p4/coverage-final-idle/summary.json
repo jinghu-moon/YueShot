@@ -1,0 +1,12 @@
+{
+  "started": "2026-11-17T04:55:34.8441294+08:00",
+  "finished": "2026-11-17T04:57:36.0587509+08:00",
+  "command": "cargo test -p yue-shot-capture --release --locked --lib _idle_resource_probe -- --ignored --nocapture --test-threads=1",
+  "exitCode": 0,
+  "result": "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 726 filtered out; finished in 120.60s",
+  "sourceManifest": "../coverage-qualified-run8/summary.json",
+  "sourceUnchanged": true,
+  "logSha256": "61dcd8b6e7b607e03c0b1fdcec9f5e8f5c4658a482f65167c2b280f116cbadef",
+  "gatePassed": true,
+  "canAdvance": false
+}

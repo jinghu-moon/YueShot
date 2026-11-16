@@ -1,0 +1,9 @@
+{
+  "command": "cargo xtask check",
+  "exitCode": 0,
+  "gatePassed": true,
+  "finished": "2026-11-17T05:31:38.2177970+08:00",
+  "sourceManifest": "lifetime-qualified/summary.json",
+  "logSha256": "210d1ca0b964f79688c2ad684bc72a5b774f7b2c3dcdb03f055aceb447f904b0",
+  "sourceUnchanged": true
+}

@@ -1,0 +1,23 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.55s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 3 tests
+test window_detection::visual::tests::contracts::visual_replay_demo_t11_t20_q09_native_policy_vectors ... DEMO_FUSION native_policy_vectors=38 stage_only=true
+ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t15_phase_and_shift_late_completion_matrix ... DEMO_EVENTS T15_scenarios=8 actual_controller=true completion_from_real_pixels=true
+ok
+
+thread 'windows::overlay::native_baseline::visual_replay::visual_replay_demo_t17_failures_preserve_native_and_manual_and_retire_old_preview' (46308) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline\visual_replay.rs:376:53:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t17_failures_preserve_native_and_manual_and_retire_old_preview ... FAILED
+
+failures:
+
+failures:
+    windows::overlay::native_baseline::visual_replay::visual_replay_demo_t17_failures_preserve_native_and_manual_and_retire_old_preview
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 711 filtered out; finished in 1.45s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

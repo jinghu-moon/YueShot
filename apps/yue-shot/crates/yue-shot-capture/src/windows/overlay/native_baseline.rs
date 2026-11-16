@@ -6,6 +6,7 @@ use super::*;
 use crate::ports::{BandSource, NullEventSink, SelectionSpec};
 use crate::window_detection::{WindowCandidate, WindowIdentity};
 use std::ops::{Deref, DerefMut};
+mod visual_replay;
 
 struct NoExternalIo;
 
@@ -190,7 +191,7 @@ impl Drop for Replay {
 
 fn target(hwnd: isize) -> SelectionTarget {
     SelectionTarget::window(WindowCandidate::new(
-        WindowIdentity::new(hwnd, 7, 11),
+        WindowIdentity::new(hwnd, 7, 11, 1),
         Rect::new(0, 0, 64, 48),
         0,
         17,
@@ -247,10 +248,8 @@ fn native_baseline_other_owner_and_cleared_preview_reject_late_confirmation() {
 }
 
 #[test]
-fn native_baseline_known_defect_confirmation_uses_replaced_same_owner_rectangle() {
-    // R04/B08 characterization, NOT the desired contract. Keep this reproducer
-    // separate from P1's equivalence claim; the corrective change must replace
-    // this expectation with the requested rectangle and report the behavior diff.
+fn native_baseline_confirmation_keeps_requested_same_owner_rectangle() {
+    // P4 fixes the P0 K01 reproducer. Original output is retained in P0 evidence.
     let mut replay = Replay::new();
     let requested = Rect::new(10, 8, 30, 20);
     let late = Rect::new(4, 3, 50, 40);
@@ -260,12 +259,7 @@ fn native_baseline_known_defect_confirmation_uses_replaced_same_owner_rectangle(
     let request = replay.confirm_request.unwrap();
     replay.preview(target, late); // a native result/wheel step while confirmation is in flight
     replay.confirmation(request, target, true);
-    assert_ne!(
-        replay.session.selection(),
-        requested,
-        "P0: known race unexpectedly changed; review the fix"
-    );
-    assert_eq!(replay.session.selection(), late);
+    assert_eq!(replay.session.selection(), requested);
     assert_eq!(
         replay
             .shared
@@ -275,7 +269,7 @@ fn native_baseline_known_defect_confirmation_uses_replaced_same_owner_rectangle(
             .as_ref()
             .unwrap()
             .region,
-        late
+        requested
     );
 }
 
@@ -592,25 +586,21 @@ fn native_baseline_controller_preview_replacement_and_manual_path_trace() {
         "insertion below index happens to preserve geometry"
     );
     answer(&mut replay, vec![frame, inserted, a]);
-    // B09: current implementation preserves an index, not the user's chosen geometry.
     assert_eq!(
         replay.preview_target,
-        Some(inserted.rect),
-        "P0 known manual-level drift on ancestor removal"
+        Some(parent.rect),
+        "P4 preserves the explicit geometry when an ancestor disappears"
     );
-    assert_eq!(replay.preview_kind(), Some(LevelKind::Group));
+    assert_eq!(replay.preview_kind(), Some(LevelKind::Pane));
     assert!(replay.preview_label_text().unwrap().contains("容器"));
     replay.clear_snap_preview_for_modifier();
     assert!(replay.gesture.snap_preview().is_none());
     assert!(replay.deep_target.is_none());
-    // B07/B09 known defect: clear_snap_preview_for_modifier uses short-circuit
-    // `take().is_some() || take().is_some()`, leaving the second field behind.
-    // This is a characterization, not a passing assertion of the desired policy.
-    assert_eq!(
-        replay.deep_levels.unwrap().index(),
-        1,
-        "P0 known Shift cleanup defect"
+    assert!(
+        replay.deep_levels.is_none(),
+        "P4 clears both independent fields"
     );
+    assert!(replay.manual_level.is_none());
     assert!(replay.session.selection().is_empty());
 }
 
@@ -692,6 +682,28 @@ fn selection_target_replay_controller_binds_geometry_source_and_native_levels() 
 #[test]
 #[ignore = "L3: captures the desktop for 100 sessions, then observes 60s idle; no visible overlay or external writes"]
 fn native_baseline_capture_lifecycle_resource_probe() {
+    capture_lifecycle_resource_probe(false, false);
+}
+
+#[test]
+#[ignore = "L3 actual desktop capture and native owner + product visual worker for 100 sessions and 60s idle"]
+fn visual_replay_capture_lifecycle_resource_probe() {
+    capture_lifecycle_resource_probe(true, false);
+}
+
+#[test]
+#[ignore = "L3 visible no-activate controlled D2D host; actual capture, real owner, 100 successful product visual sessions and 60s idle"]
+fn visual_replay_controlled_capture_lifecycle_resource_probe() {
+    capture_lifecycle_resource_probe(true, true);
+}
+
+#[test]
+#[ignore = "L3 paired controlled-host capture resource reference: no visual jobs, 100 sessions and 60s idle"]
+fn visual_replay_controlled_capture_without_analysis_resource_probe() {
+    capture_lifecycle_resource_probe(false, true);
+}
+
+fn capture_lifecycle_resource_probe(with_visual: bool, controlled: bool) {
     use ::windows::Win32::Graphics::Dxgi::{
         DXGI_MEMORY_SEGMENT_GROUP_LOCAL, DXGI_MEMORY_SEGMENT_GROUP_NON_LOCAL,
         DXGI_QUERY_VIDEO_MEMORY_INFO, IDXGIAdapter3, IDXGIDevice,
@@ -699,10 +711,41 @@ fn native_baseline_capture_lifecycle_resource_probe() {
     use ::windows::core::Interface;
     use serde_json::json;
 
+    if with_visual {
+        struct ProbeLog;
+        impl log::Log for ProbeLog {
+            fn enabled(&self, _: &log::Metadata<'_>) -> bool {
+                true
+            }
+            fn log(&self, record: &log::Record<'_>) {
+                let text = record.args().to_string();
+                if text.contains("visual query unavailable") {
+                    println!("VISUAL_FAILURE {text}");
+                }
+            }
+            fn flush(&self) {}
+        }
+        static LOGGER: ProbeLog = ProbeLog;
+        log::set_logger(&LOGGER).expect("run the resource probe in its own test process");
+        log::set_max_level(log::LevelFilter::Debug);
+    }
+
     monitor::set_per_monitor_v2_awareness().unwrap();
+    let mut host = controlled.then(|| {
+        super::super::win::d3d11::visual_transfer::tests::PresentProbe::new(
+            &super::super::win::d3d11::GraphicsDevice::create().unwrap(),
+        )
+    });
+    let positive = host.as_mut().map(|host| host.positive_scene());
+    let workers_before =
+        super::super::visual_worker::LIVE_WORKERS.load(std::sync::atomic::Ordering::SeqCst);
     let mut replay = Replay::build(true);
     replay.cancel("resource-probe-setup");
-    let monitor = monitor::captured_monitor_at_cursor().unwrap();
+    let monitor = if controlled {
+        monitor::captured_monitor_at(Point::new(0, 0)).unwrap()
+    } else {
+        monitor::captured_monitor_at_cursor().unwrap()
+    };
     let mut adapter: Option<IDXGIAdapter3> = None;
     let gpu_usage = |adapter: &IDXGIAdapter3| {
         [
@@ -717,9 +760,12 @@ fn native_baseline_capture_lifecycle_resource_probe() {
     };
     println!(
         "RESOURCE {}",
-        json!({"event":"begin", "pid":std::process::id(), "warmups":5, "sessions":100, "idle_seconds":60})
+        json!({"event":"begin", "pid":std::process::id(), "warmups":5, "sessions":100, "idle_seconds":60, "with_visual":with_visual,"controlled_host":controlled})
     );
     for cycle in 0..105 {
+        if let Some(host) = &mut host {
+            host.pump();
+        }
         let started = Instant::now();
         let generation = replay.worker.next_generation();
         replay
@@ -768,6 +814,91 @@ fn native_baseline_capture_lifecycle_resource_probe() {
         replay.session.overlay_ready().unwrap();
         let source = prepared.frozen.frame.source;
         replay.frozen = Some(prepared.frozen);
+        if with_visual {
+            use crate::window_detection::provider::WindowProvider;
+            // Enumeration is a real provider query on a separate thread, never an
+            // overlay event. No HWND or owner answer is fabricated in this probe.
+            replay.snapshot = thread::spawn(|| {
+                super::super::top_level_provider::TopLevelWindowProvider::new()
+                    .refresh(&Exclusions::default())
+                    .unwrap()
+            })
+            .join()
+            .unwrap();
+            let bounds = replay.frozen.as_ref().unwrap().monitor.layout.bounds;
+            let owner = *replay
+                .snapshot
+                .candidates()
+                .iter()
+                .find(|w| {
+                    !w.screen_bounds.intersect(bounds).is_empty()
+                        && host
+                            .as_ref()
+                            .is_none_or(|host| w.identity.hwnd == host.window.0 as isize)
+                })
+                .expect("no real owner on captured monitor");
+            let visible = owner.screen_bounds.intersect(bounds);
+            let screen = Point::new(
+                visible.left + visible.width() / 2,
+                visible.top + visible.height() / 2,
+            );
+            replay.cursor = Point::new(screen.x - bounds.left, screen.y - bounds.top);
+            replay.hover_target = Some(SelectionTarget::window(owner));
+            let visual_started = Instant::now();
+            replay.request_visual();
+            let deadline = Instant::now() + Duration::from_secs(2);
+            while !replay.visual.as_ref().unwrap().idle() {
+                replay.on_visual_ready();
+                assert!(
+                    Instant::now() < deadline,
+                    "visual lifecycle did not complete"
+                );
+                thread::sleep(Duration::from_micros(100));
+            }
+            let metrics = replay.metrics.reading();
+            assert_eq!(metrics.visual_submitted, 1);
+            assert_eq!(
+                metrics.visual_completed + metrics.visual_unavailable,
+                1,
+                "query silently retired"
+            );
+            if controlled {
+                assert_eq!(
+                    metrics.visual_completed, 1,
+                    "controlled positive host did not complete visual analysis"
+                );
+                assert_eq!(metrics.visual_unavailable, 0);
+                let target = replay
+                    .gesture
+                    .snap_preview()
+                    .expect("positive host has no preview")
+                    .target;
+                assert_eq!(
+                    target.origin,
+                    crate::window_detection::TargetOrigin::Visual,
+                    "controlled positive host did not select a visual target"
+                );
+                let expected = positive.unwrap();
+                let origin = monitor.origin();
+                assert_eq!(
+                    target.screen_bounds(),
+                    Rect::new(
+                        expected.left + origin.x,
+                        expected.top + origin.y,
+                        expected.right + origin.x,
+                        expected.bottom + origin.y
+                    )
+                );
+            }
+            println!(
+                "RESOURCE {}",
+                json!({"event":"visual", "cycle":cycle,"completed":metrics.visual_completed,"unavailable":metrics.visual_unavailable,"controller_us":visual_started.elapsed().as_micros(),"query_us":metrics.visual_last_us,"descriptor":format!("{:?}", source.descriptor()),"buffer_bound":metrics.visual_peak_buffer_bytes,"private_bytes":super::super::proc_mem::private_bytes(),"working_set":super::super::proc_mem::working_set_bytes()})
+            );
+            // The ordinary native baseline below remains the exact confirmation
+            // contract; retire the visual result before that separate operation.
+            replay.invalidate_visual();
+            replay.snapshot.release();
+        }
         let selected = Rect::new(10, 10, 266, 138);
         replay.preview(target(101), selected);
         replay.run_action(Action::Confirm);
@@ -788,6 +919,27 @@ fn native_baseline_capture_lifecycle_resource_probe() {
             replay.run_action(Action::OpenSavePanel);
         }
         replay.cancel("resource-probe-cycle");
+        if with_visual {
+            let deadline = Instant::now() + Duration::from_secs(2);
+            while !replay.visual.as_ref().unwrap().idle() {
+                replay.on_visual_ready();
+                assert!(
+                    Instant::now() < deadline,
+                    "cancelled visual transfer did not drain"
+                );
+                thread::sleep(Duration::from_millis(1));
+            }
+            assert_eq!(
+                crate::visual_detection::progressive::LIVE_QUERIES
+                    .load(std::sync::atomic::Ordering::SeqCst),
+                0
+            );
+            assert_eq!(
+                super::super::win::d3d11::visual_transfer::LIVE_TRANSFERS
+                    .load(std::sync::atomic::Ordering::SeqCst),
+                0
+            );
+        }
         assert_eq!(replay.session.state(), CaptureState::Idle);
         assert!(replay.frozen.is_none() && replay.renderer.is_none());
         assert!(replay.deep_target.is_none() && replay.deep_levels.is_none());
@@ -795,20 +947,34 @@ fn native_baseline_capture_lifecycle_resource_probe() {
         assert!(!replay.render_armed && !replay.refine.is_in_flight());
         println!(
             "RESOURCE {}",
-            json!({"event":"cycle", "cycle":cycle, "warmup":cycle<5, "capture_us":capture_us, "total_us":started.elapsed().as_micros(), "working_set":super::super::proc_mem::working_set_bytes().unwrap(), "active_gpu":active_gpu, "released_gpu":gpu_usage(adapter.as_ref().unwrap())})
+            json!({"event":"cycle", "cycle":cycle, "warmup":cycle<5, "capture_us":capture_us, "total_us":started.elapsed().as_micros(), "working_set":super::super::proc_mem::working_set_bytes().unwrap(), "private_bytes":super::super::proc_mem::private_bytes(), "active_gpu":active_gpu, "released_gpu":gpu_usage(adapter.as_ref().unwrap())})
         );
     }
     for second in 0..=60 {
         assert!(replay.worker.take_ready().is_none());
         assert!(!replay.render_armed && !replay.refine.is_in_flight());
+        if with_visual {
+            assert!(replay.visual.as_ref().unwrap().idle());
+            let metrics = replay.metrics.reading();
+            assert_eq!(metrics.visual_submitted, 0, "idle visual analysis job");
+        }
         println!(
             "RESOURCE {}",
-            json!({"event":"idle", "second":second, "working_set":super::super::proc_mem::working_set_bytes().unwrap(), "gpu":gpu_usage(adapter.as_ref().unwrap())})
+            json!({"event":"idle", "second":second, "working_set":super::super::proc_mem::working_set_bytes().unwrap(), "private_bytes":super::super::proc_mem::private_bytes(), "gpu":gpu_usage(adapter.as_ref().unwrap())})
         );
         if second < 60 {
             thread::sleep(Duration::from_secs(1));
         }
     }
     replay.worker.shutdown();
-    println!("RESOURCE {}", json!({"event":"shutdown"}));
+    let shutdown_started = Instant::now();
+    drop(replay);
+    assert_eq!(
+        super::super::visual_worker::LIVE_WORKERS.load(std::sync::atomic::Ordering::SeqCst),
+        workers_before
+    );
+    println!(
+        "RESOURCE {}",
+        json!({"event":"shutdown", "visual_workers_balanced":true,"owner_shutdown_us":shutdown_started.elapsed().as_micros()})
+    );
 }

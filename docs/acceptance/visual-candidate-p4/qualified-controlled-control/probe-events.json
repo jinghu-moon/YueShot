@@ -1,0 +1,2413 @@
+﻿[
+    {
+        "device":  9865,
+        "dpi":  144,
+        "event":  "adapter",
+        "name":  "NVIDIA GeForce RTX 4070 Ti SUPER",
+        "size":  [
+                     3840,
+                     2160
+                 ],
+        "vendor":  4318
+    },
+    {
+        "active_gpu":  [
+                           184406016,
+                           12201984
+                       ],
+        "capture_us":  59151,
+        "cycle":  0,
+        "event":  "cycle",
+        "private_bytes":  156991488,
+        "released_gpu":  [
+                             150802432,
+                             11841536
+                         ],
+        "total_us":  69151,
+        "warmup":  true,
+        "working_set":  79269888
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           12103680
+                       ],
+        "capture_us":  36515,
+        "cycle":  1,
+        "event":  "cycle",
+        "private_bytes":  157466624,
+        "released_gpu":  [
+                             150802432,
+                             12103680
+                         ],
+        "total_us":  42493,
+        "warmup":  true,
+        "working_set":  79581184
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           11862016
+                       ],
+        "capture_us":  32380,
+        "cycle":  2,
+        "event":  "cycle",
+        "private_bytes":  157356032,
+        "released_gpu":  [
+                             150802432,
+                             11599872
+                         ],
+        "total_us":  40881,
+        "warmup":  true,
+        "working_set":  79474688
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           11862016
+                       ],
+        "capture_us":  47706,
+        "cycle":  3,
+        "event":  "cycle",
+        "private_bytes":  157294592,
+        "released_gpu":  [
+                             150802432,
+                             11730944
+                         ],
+        "total_us":  53863,
+        "warmup":  true,
+        "working_set":  79593472
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           11862016
+                       ],
+        "capture_us":  50008,
+        "cycle":  4,
+        "event":  "cycle",
+        "private_bytes":  157495296,
+        "released_gpu":  [
+                             150802432,
+                             11599872
+                         ],
+        "total_us":  56937,
+        "warmup":  true,
+        "working_set":  79749120
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           11862016
+                       ],
+        "capture_us":  39851,
+        "cycle":  5,
+        "event":  "cycle",
+        "private_bytes":  157347840,
+        "released_gpu":  [
+                             150802432,
+                             11599872
+                         ],
+        "total_us":  45849,
+        "warmup":  false,
+        "working_set":  79622144
+    },
+    {
+        "active_gpu":  [
+                           184356864,
+                           11862016
+                       ],
+        "capture_us":  42639,
+        "cycle":  6,
+        "event":  "cycle",
+        "private_bytes":  157478912,
+        "released_gpu":  [
+                             150802432,
+                             11599872
+                         ],
+        "total_us":  47723,
+        "warmup":  false,
+        "working_set":  79753216
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           11468800
+                       ],
+        "capture_us":  39876,
+        "cycle":  7,
+        "event":  "cycle",
+        "private_bytes":  123465728,
+        "released_gpu":  [
+                             117379072,
+                             11206656
+                         ],
+        "total_us":  45456,
+        "warmup":  false,
+        "working_set":  79228928
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           10944512
+                       ],
+        "capture_us":  37386,
+        "cycle":  8,
+        "event":  "cycle",
+        "private_bytes":  123072512,
+        "released_gpu":  [
+                             117379072,
+                             10682368
+                         ],
+        "total_us":  42636,
+        "warmup":  false,
+        "working_set":  78839808
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           10420224
+                       ],
+        "capture_us":  32483,
+        "cycle":  9,
+        "event":  "cycle",
+        "private_bytes":  122417152,
+        "released_gpu":  [
+                             117379072,
+                             10158080
+                         ],
+        "total_us":  38416,
+        "warmup":  false,
+        "working_set":  78200832
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           9895936
+                       ],
+        "capture_us":  35961,
+        "cycle":  10,
+        "event":  "cycle",
+        "private_bytes":  122023936,
+        "released_gpu":  [
+                             117379072,
+                             10027008
+                         ],
+        "total_us":  40248,
+        "warmup":  false,
+        "working_set":  77848576
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           9371648
+                       ],
+        "capture_us":  42385,
+        "cycle":  11,
+        "event":  "cycle",
+        "private_bytes":  121368576,
+        "released_gpu":  [
+                             117379072,
+                             9109504
+                         ],
+        "total_us":  46885,
+        "warmup":  false,
+        "working_set":  77197312
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8847360
+                       ],
+        "capture_us":  33830,
+        "cycle":  12,
+        "event":  "cycle",
+        "private_bytes":  120983552,
+        "released_gpu":  [
+                             117379072,
+                             8585216
+                         ],
+        "total_us":  37970,
+        "warmup":  false,
+        "working_set":  76812288
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           8323072
+                       ],
+        "capture_us":  31835,
+        "cycle":  13,
+        "event":  "cycle",
+        "private_bytes":  120328192,
+        "released_gpu":  [
+                             117379072,
+                             8323072
+                         ],
+        "total_us":  37614,
+        "warmup":  false,
+        "working_set":  76161024
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           7798784
+                       ],
+        "capture_us":  36595,
+        "cycle":  14,
+        "event":  "cycle",
+        "private_bytes":  119934976,
+        "released_gpu":  [
+                             117379072,
+                             7929856
+                         ],
+        "total_us":  40617,
+        "warmup":  false,
+        "working_set":  75767808
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           7405568
+                       ],
+        "capture_us":  32006,
+        "cycle":  15,
+        "event":  "cycle",
+        "private_bytes":  119349248,
+        "released_gpu":  [
+                             117379072,
+                             7274496
+                         ],
+        "total_us":  38430,
+        "warmup":  false,
+        "working_set":  75120640
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           6750208
+                       ],
+        "capture_us":  31963,
+        "cycle":  16,
+        "event":  "cycle",
+        "private_bytes":  118956032,
+        "released_gpu":  [
+                             117379072,
+                             6881280
+                         ],
+        "total_us":  38583,
+        "warmup":  false,
+        "working_set":  74731520
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           6225920
+                       ],
+        "capture_us":  36818,
+        "cycle":  17,
+        "event":  "cycle",
+        "private_bytes":  118300672,
+        "released_gpu":  [
+                             117379072,
+                             5963776
+                         ],
+        "total_us":  40902,
+        "warmup":  false,
+        "working_set":  74080256
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           5701632
+                       ],
+        "capture_us":  34566,
+        "cycle":  18,
+        "event":  "cycle",
+        "private_bytes":  117907456,
+        "released_gpu":  [
+                             117379072,
+                             5439488
+                         ],
+        "total_us":  41629,
+        "warmup":  false,
+        "working_set":  73744384
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           5177344
+                       ],
+        "capture_us":  35019,
+        "cycle":  19,
+        "event":  "cycle",
+        "private_bytes":  117252096,
+        "released_gpu":  [
+                             117379072,
+                             5177344
+                         ],
+        "total_us":  40834,
+        "warmup":  false,
+        "working_set":  73089024
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37440,
+        "cycle":  20,
+        "event":  "cycle",
+        "private_bytes":  116858880,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  42085,
+        "warmup":  false,
+        "working_set":  72699904
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32634,
+        "cycle":  21,
+        "event":  "cycle",
+        "private_bytes":  116727808,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  39449,
+        "warmup":  false,
+        "working_set":  72568832
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34911,
+        "cycle":  22,
+        "event":  "cycle",
+        "private_bytes":  116858880,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  39311,
+        "warmup":  false,
+        "working_set":  72699904
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34819,
+        "cycle":  23,
+        "event":  "cycle",
+        "private_bytes":  116727808,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  41352,
+        "warmup":  false,
+        "working_set":  72572928
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34560,
+        "cycle":  24,
+        "event":  "cycle",
+        "private_bytes":  116858880,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  39928,
+        "warmup":  false,
+        "working_set":  72704000
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32616,
+        "cycle":  25,
+        "event":  "cycle",
+        "private_bytes":  116731904,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  39055,
+        "warmup":  false,
+        "working_set":  72577024
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37199,
+        "cycle":  26,
+        "event":  "cycle",
+        "private_bytes":  116862976,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  43715,
+        "warmup":  false,
+        "working_set":  72708096
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37443,
+        "cycle":  27,
+        "event":  "cycle",
+        "private_bytes":  116731904,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  43803,
+        "warmup":  false,
+        "working_set":  72577024
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  36890,
+        "cycle":  28,
+        "event":  "cycle",
+        "private_bytes":  116862976,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  42958,
+        "warmup":  false,
+        "working_set":  72708096
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37277,
+        "cycle":  29,
+        "event":  "cycle",
+        "private_bytes":  116731904,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  42253,
+        "warmup":  false,
+        "working_set":  72577024
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  39018,
+        "cycle":  30,
+        "event":  "cycle",
+        "private_bytes":  116932608,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  45449,
+        "warmup":  false,
+        "working_set":  72777728
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4784128
+                       ],
+        "capture_us":  34309,
+        "cycle":  31,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  40321,
+        "warmup":  false,
+        "working_set":  72654848
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34882,
+        "cycle":  32,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  39685,
+        "warmup":  false,
+        "working_set":  72790016
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34576,
+        "cycle":  33,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  40633,
+        "warmup":  false,
+        "working_set":  72663040
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  39282,
+        "cycle":  34,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  46179,
+        "warmup":  false,
+        "working_set":  72843264
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  36233,
+        "cycle":  35,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  40669,
+        "warmup":  false,
+        "working_set":  72712192
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32423,
+        "cycle":  36,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  37109,
+        "warmup":  false,
+        "working_set":  72843264
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32705,
+        "cycle":  37,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  38215,
+        "warmup":  false,
+        "working_set":  72716288
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  44974,
+        "cycle":  38,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  51909,
+        "warmup":  false,
+        "working_set":  72851456
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34230,
+        "cycle":  39,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  40187,
+        "warmup":  false,
+        "working_set":  72724480
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37797,
+        "cycle":  40,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  44667,
+        "warmup":  false,
+        "working_set":  72855552
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37446,
+        "cycle":  41,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  41456,
+        "warmup":  false,
+        "working_set":  72724480
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  33595,
+        "cycle":  42,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  39489,
+        "warmup":  false,
+        "working_set":  72855552
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34924,
+        "cycle":  43,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  39279,
+        "warmup":  false,
+        "working_set":  72728576
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  33616,
+        "cycle":  44,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  37549,
+        "warmup":  false,
+        "working_set":  72859648
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  40507,
+        "cycle":  45,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  45217,
+        "warmup":  false,
+        "working_set":  72728576
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  38836,
+        "cycle":  46,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  44013,
+        "warmup":  false,
+        "working_set":  72859648
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4784128
+                       ],
+        "capture_us":  44913,
+        "cycle":  47,
+        "event":  "cycle",
+        "private_bytes":  116871168,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  51267,
+        "warmup":  false,
+        "working_set":  72732672
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  57347,
+        "cycle":  48,
+        "event":  "cycle",
+        "private_bytes":  117002240,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  66054,
+        "warmup":  false,
+        "working_set":  72863744
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  59045,
+        "cycle":  49,
+        "event":  "cycle",
+        "private_bytes":  116944896,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  65543,
+        "warmup":  false,
+        "working_set":  72749056
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  41424,
+        "cycle":  50,
+        "event":  "cycle",
+        "private_bytes":  117075968,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  48247,
+        "warmup":  false,
+        "working_set":  72880128
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  63768,
+        "cycle":  51,
+        "event":  "cycle",
+        "private_bytes":  116944896,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  69603,
+        "warmup":  false,
+        "working_set":  72749056
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34527,
+        "cycle":  52,
+        "event":  "cycle",
+        "private_bytes":  117075968,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  39595,
+        "warmup":  false,
+        "working_set":  72880128
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  44381,
+        "cycle":  53,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  48162,
+        "warmup":  false,
+        "working_set":  72761344
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32583,
+        "cycle":  54,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  37303,
+        "warmup":  false,
+        "working_set":  72892416
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  31864,
+        "cycle":  55,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  36699,
+        "warmup":  false,
+        "working_set":  72761344
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34006,
+        "cycle":  56,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  39046,
+        "warmup":  false,
+        "working_set":  72892416
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32167,
+        "cycle":  57,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  37619,
+        "warmup":  false,
+        "working_set":  72761344
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  45490,
+        "cycle":  58,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  50795,
+        "warmup":  false,
+        "working_set":  72892416
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37036,
+        "cycle":  59,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  42532,
+        "warmup":  false,
+        "working_set":  72761344
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34393,
+        "cycle":  60,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  39950,
+        "warmup":  false,
+        "working_set":  72892416
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  33776,
+        "cycle":  61,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  38243,
+        "warmup":  false,
+        "working_set":  72761344
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  39907,
+        "cycle":  62,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  44133,
+        "warmup":  false,
+        "working_set":  72892416
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32168,
+        "cycle":  63,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  38208,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  49289,
+        "cycle":  64,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  55424,
+        "warmup":  false,
+        "working_set":  72896512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  30396,
+        "cycle":  65,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  34793,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  43310,
+        "cycle":  66,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  49548,
+        "warmup":  false,
+        "working_set":  72896512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32779,
+        "cycle":  67,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  38300,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  44902,
+        "cycle":  68,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  49857,
+        "warmup":  false,
+        "working_set":  72896512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  45778,
+        "cycle":  69,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  49885,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  42125,
+        "cycle":  70,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  49818,
+        "warmup":  false,
+        "working_set":  72896512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  47155,
+        "cycle":  71,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  52990,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  39645,
+        "cycle":  72,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  47672,
+        "warmup":  false,
+        "working_set":  72896512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  49594,
+        "cycle":  73,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  56245,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  42272,
+        "cycle":  74,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117510144,
+                             4788224
+                         ],
+        "total_us":  46919,
+        "warmup":  false,
+        "working_set":  72896512
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  31321,
+        "cycle":  75,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  35071,
+        "warmup":  false,
+        "working_set":  72765440
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34653,
+        "cycle":  76,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  39026,
+        "warmup":  false,
+        "working_set":  72900608
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  31047,
+        "cycle":  77,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  35498,
+        "warmup":  false,
+        "working_set":  72769536
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4784128
+                       ],
+        "capture_us":  34241,
+        "cycle":  78,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  39109,
+        "warmup":  false,
+        "working_set":  72900608
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32400,
+        "cycle":  79,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  37523,
+        "warmup":  false,
+        "working_set":  72769536
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  51129,
+        "cycle":  80,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  55566,
+        "warmup":  false,
+        "working_set":  72900608
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  44777,
+        "cycle":  81,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  50479,
+        "warmup":  false,
+        "working_set":  72769536
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  38269,
+        "cycle":  82,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  42321,
+        "warmup":  false,
+        "working_set":  72900608
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37447,
+        "cycle":  83,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  42992,
+        "warmup":  false,
+        "working_set":  72769536
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  39411,
+        "cycle":  84,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  43994,
+        "warmup":  false,
+        "working_set":  72904704
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  45094,
+        "cycle":  85,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  49808,
+        "warmup":  false,
+        "working_set":  72777728
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37144,
+        "cycle":  86,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4521984
+                         ],
+        "total_us":  42271,
+        "warmup":  false,
+        "working_set":  72916992
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  31875,
+        "cycle":  87,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  37550,
+        "warmup":  false,
+        "working_set":  72785920
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32679,
+        "cycle":  88,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  39368,
+        "warmup":  false,
+        "working_set":  72916992
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  36625,
+        "cycle":  89,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  42764,
+        "warmup":  false,
+        "working_set":  72790016
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37304,
+        "cycle":  90,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  41924,
+        "warmup":  false,
+        "working_set":  72925184
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  38755,
+        "cycle":  91,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  42820,
+        "warmup":  false,
+        "working_set":  72794112
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37709,
+        "cycle":  92,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  43203,
+        "warmup":  false,
+        "working_set":  72925184
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  46599,
+        "cycle":  93,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  50353,
+        "warmup":  false,
+        "working_set":  72798208
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4784128
+                       ],
+        "capture_us":  34930,
+        "cycle":  94,
+        "event":  "cycle",
+        "private_bytes":  117219328,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  41373,
+        "warmup":  false,
+        "working_set":  73060352
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  41802,
+        "cycle":  95,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  49096,
+        "warmup":  false,
+        "working_set":  72798208
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  40196,
+        "cycle":  96,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  45747,
+        "warmup":  false,
+        "working_set":  72937472
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  45162,
+        "cycle":  97,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  51910,
+        "warmup":  false,
+        "working_set":  72806400
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  35998,
+        "cycle":  98,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  41280,
+        "warmup":  false,
+        "working_set":  72937472
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37489,
+        "cycle":  99,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  41844,
+        "warmup":  false,
+        "working_set":  72806400
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  37538,
+        "cycle":  100,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  43372,
+        "warmup":  false,
+        "working_set":  72937472
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  32530,
+        "cycle":  101,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4653056
+                         ],
+        "total_us":  37307,
+        "warmup":  false,
+        "working_set":  72806400
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  44938,
+        "cycle":  102,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4784128
+                         ],
+        "total_us":  51671,
+        "warmup":  false,
+        "working_set":  72937472
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  39402,
+        "cycle":  103,
+        "event":  "cycle",
+        "private_bytes":  116957184,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  46433,
+        "warmup":  false,
+        "working_set":  72847360
+    },
+    {
+        "active_gpu":  [
+                           150933504,
+                           4653056
+                       ],
+        "capture_us":  34891,
+        "cycle":  104,
+        "event":  "cycle",
+        "private_bytes":  117088256,
+        "released_gpu":  [
+                             117379072,
+                             4390912
+                         ],
+        "total_us":  40069,
+        "warmup":  false,
+        "working_set":  72990720
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  117088256,
+        "second":  0,
+        "working_set":  72994816
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  117088256,
+        "second":  1,
+        "working_set":  72990720
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  117088256,
+        "second":  2,
+        "working_set":  72990720
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  117088256,
+        "second":  3,
+        "working_set":  72990720
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116916224,
+        "second":  4,
+        "working_set":  72884224
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116916224,
+        "second":  5,
+        "working_set":  72884224
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116916224,
+        "second":  6,
+        "working_set":  72884224
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  7,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  8,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  9,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  10,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  11,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  12,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  13,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  14,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  15,
+        "working_set":  72331264
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  16,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  17,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  18,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  19,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  20,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  21,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  22,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  23,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  24,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  25,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  26,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  27,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  28,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  29,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  30,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  31,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  32,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  33,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  34,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  35,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116350976,
+        "second":  36,
+        "working_set":  72089600
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  37,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  38,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  39,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  40,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  41,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  42,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  43,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  44,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  45,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  46,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  47,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  48,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  49,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  50,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  51,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  52,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  53,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  54,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  55,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  56,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  57,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  58,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  59,
+        "working_set":  72036352
+    },
+    {
+        "event":  "idle",
+        "gpu":  [
+                    117379072,
+                    4390912
+                ],
+        "private_bytes":  116256768,
+        "second":  60,
+        "working_set":  72036352
+    },
+    {
+        "event":  "shutdown",
+        "owner_shutdown_us":  12556,
+        "visual_workers_balanced":  true
+    }
+]

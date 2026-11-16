@@ -1,0 +1,571 @@
+{
+  "scope": "Measured current-source desktop subgates only; not a complete P4, hardware matrix or independent accuracy qualification",
+  "canAdvance": false,
+  "analyzer_sha256": "2b1622c1b3c0e4f43198fc9a7ae2a904c41cc230983910536412eefbc09038cd",
+  "batch_summary_sha256": "8a0848e10f4abc392528839bf9245b92306c01eaea92e091b61a34920f4ca913",
+  "control": {
+    "summary_sha256": "f2ebc93454e06fdfe8be595f01e4b868c49aa958d8f45ddab4074f348d6b5fcc",
+    "sessions": 100,
+    "visual_completed": 0,
+    "peak_scope": "All events, including warmups and idle, plus external process samples; only latency percentiles exclude warmups.",
+    "capture_us": {
+      "samples": 100,
+      "min": 30396,
+      "p50": 37144,
+      "p95": 49289,
+      "max": 63768
+    },
+    "last20s_idle": {
+      "private_bytes": {
+        "min": 116256768,
+        "max": 116256768,
+        "range": 0
+      },
+      "working_set": {
+        "min": 72036352,
+        "max": 72036352,
+        "range": 0
+      }
+    },
+    "last20sessions": {
+      "private_bytes": {
+        "min": 116957184,
+        "max": 117219328,
+        "range": 262144
+      },
+      "working_set": {
+        "min": 72777728,
+        "max": 73060352,
+        "range": 282624
+      }
+    },
+    "observed_process_private_peak": 157495296,
+    "os_process_peak_working_set": 97972224,
+    "os_process_peak_paged_memory": 173731840,
+    "idle_cpu_seconds": 0.078125,
+    "shutdown": [
+      {
+        "event": "shutdown",
+        "owner_shutdown_us": 12556,
+        "visual_workers_balanced": true
+      }
+    ],
+    "observed_gpu_usage_peak": [
+      184406016,
+      12201984
+    ],
+    "last20s_idle_gpu_range": [
+      0,
+      0
+    ],
+    "zero_range_last20s": true,
+    "scope": "100 new captures/sources with precreated worker; not 100 process launches. OS peaks cover the complete test process, not pure visual allocations. Observed GPU usage includes the independent visible D2D host, capture and driver; explicit visual atlas is one 4MiB allocation."
+  },
+  "positive": {
+    "summary_sha256": "6282a5a9824bd3719f79bfd9c412b4ee6a1b4e1042881f6d5ea40d100af32359",
+    "sessions": 100,
+    "visual_completed": 100,
+    "peak_scope": "All events, including warmups and idle, plus external process samples; only latency percentiles exclude warmups.",
+    "capture_us": {
+      "samples": 100,
+      "min": 29373,
+      "p50": 45943,
+      "p95": 59400,
+      "max": 67722
+    },
+    "last20s_idle": {
+      "private_bytes": {
+        "min": 118591488,
+        "max": 118591488,
+        "range": 0
+      },
+      "working_set": {
+        "min": 74887168,
+        "max": 74887168,
+        "range": 0
+      }
+    },
+    "last20sessions": {
+      "private_bytes": {
+        "min": 123482112,
+        "max": 123621376,
+        "range": 139264
+      },
+      "working_set": {
+        "min": 79835136,
+        "max": 80191488,
+        "range": 356352
+      }
+    },
+    "observed_process_private_peak": 174559232,
+    "os_process_peak_working_set": 102842368,
+    "os_process_peak_paged_memory": 177741824,
+    "idle_cpu_seconds": 0.078125,
+    "shutdown": [
+      {
+        "event": "shutdown",
+        "owner_shutdown_us": 13124,
+        "visual_workers_balanced": true
+      }
+    ],
+    "observed_gpu_usage_peak": [
+      184406016,
+      21082112
+    ],
+    "last20s_idle_gpu_range": [
+      0,
+      0
+    ],
+    "source_cold_query_us": {
+      "samples": 100,
+      "min": 5910,
+      "p50": 8865,
+      "p95": 10958,
+      "max": 12446
+    },
+    "source_cold_controller_us": {
+      "samples": 100,
+      "min": 6445,
+      "p50": 9420,
+      "p95": 11508,
+      "max": 12994
+    },
+    "max_cpu_buffer_bound": 10002576,
+    "zero_range_last20s": true,
+    "scope": "100 new captures/sources with precreated worker; not 100 process launches. OS peaks cover the complete test process, not pure visual allocations. Observed GPU usage includes the independent visible D2D host, capture and driver; explicit visual atlas is one 4MiB allocation."
+  },
+  "warm_product_latency": [
+    {
+      "fixture": "T01",
+      "session": 0,
+      "query_ns": {
+        "samples": 22805,
+        "min": 198400,
+        "p50": 210600,
+        "p95": 422900,
+        "max": 15222900,
+        "p99_diagnostic_only": 819800
+      },
+      "owner_ns": {
+        "samples": 68569,
+        "min": 0,
+        "p50": 1100,
+        "p95": 4200,
+        "max": 138600,
+        "p99_diagnostic_only": 5300
+      },
+      "hot_ns": {
+        "samples": 22805,
+        "min": 100,
+        "p50": 200,
+        "p95": 400,
+        "max": 15700,
+        "p99_diagnostic_only": 500
+      }
+    },
+    {
+      "fixture": "T01",
+      "session": 1,
+      "query_ns": {
+        "samples": 15804,
+        "min": 199700,
+        "p50": 218200,
+        "p95": 490200,
+        "max": 3174600,
+        "p99_diagnostic_only": 977800
+      },
+      "owner_ns": {
+        "samples": 47489,
+        "min": 0,
+        "p50": 1200,
+        "p95": 4400,
+        "max": 178400,
+        "p99_diagnostic_only": 6100
+      },
+      "hot_ns": {
+        "samples": 15804,
+        "min": 100,
+        "p50": 200,
+        "p95": 500,
+        "max": 23700,
+        "p99_diagnostic_only": 600
+      }
+    },
+    {
+      "fixture": "T01",
+      "session": 2,
+      "query_ns": {
+        "samples": 15902,
+        "min": 203600,
+        "p50": 226400,
+        "p95": 498400,
+        "max": 2455400,
+        "p99_diagnostic_only": 1001800
+      },
+      "owner_ns": {
+        "samples": 47733,
+        "min": 0,
+        "p50": 1200,
+        "p95": 4400,
+        "max": 214700,
+        "p99_diagnostic_only": 6200
+      },
+      "hot_ns": {
+        "samples": 15902,
+        "min": 100,
+        "p50": 200,
+        "p95": 500,
+        "max": 56400,
+        "p99_diagnostic_only": 600
+      }
+    },
+    {
+      "fixture": "T21",
+      "session": 0,
+      "query_ns": {
+        "samples": 2564,
+        "min": 2086900,
+        "p50": 2215700,
+        "p95": 3937200,
+        "max": 6142200,
+        "p99_diagnostic_only": 4368400
+      },
+      "owner_ns": {
+        "samples": 8275,
+        "min": 0,
+        "p50": 3000,
+        "p95": 6600,
+        "max": 97700,
+        "p99_diagnostic_only": 12100
+      },
+      "hot_ns": {
+        "samples": 2564,
+        "min": 200,
+        "p50": 500,
+        "p95": 800,
+        "max": 3200,
+        "p99_diagnostic_only": 1700
+      }
+    },
+    {
+      "fixture": "T21",
+      "session": 1,
+      "query_ns": {
+        "samples": 2397,
+        "min": 2090500,
+        "p50": 2332700,
+        "p95": 4385300,
+        "max": 6382200,
+        "p99_diagnostic_only": 5109400
+      },
+      "owner_ns": {
+        "samples": 7834,
+        "min": 0,
+        "p50": 3100,
+        "p95": 7800,
+        "max": 54200,
+        "p99_diagnostic_only": 11100
+      },
+      "hot_ns": {
+        "samples": 2397,
+        "min": 200,
+        "p50": 500,
+        "p95": 1000,
+        "max": 7900,
+        "p99_diagnostic_only": 1500
+      }
+    },
+    {
+      "fixture": "T21",
+      "session": 2,
+      "query_ns": {
+        "samples": 2483,
+        "min": 2094600,
+        "p50": 2281100,
+        "p95": 4140300,
+        "max": 5448700,
+        "p99_diagnostic_only": 4701200
+      },
+      "owner_ns": {
+        "samples": 8054,
+        "min": 0,
+        "p50": 3100,
+        "p95": 7000,
+        "max": 79800,
+        "p99_diagnostic_only": 11000
+      },
+      "hot_ns": {
+        "samples": 2483,
+        "min": 200,
+        "p50": 500,
+        "p95": 900,
+        "max": 6300,
+        "p99_diagnostic_only": 1900
+      }
+    },
+    {
+      "fixture": "T10",
+      "session": 0,
+      "query_ns": {
+        "samples": 18534,
+        "min": 250500,
+        "p50": 267900,
+        "p95": 582800,
+        "max": 2904000,
+        "p99_diagnostic_only": 1098100
+      },
+      "owner_ns": {
+        "samples": 55728,
+        "min": 0,
+        "p50": 1600,
+        "p95": 4600,
+        "max": 113900,
+        "p99_diagnostic_only": 6400
+      },
+      "hot_ns": {
+        "samples": 18534,
+        "min": 100,
+        "p50": 300,
+        "p95": 500,
+        "max": 18500,
+        "p99_diagnostic_only": 600
+      }
+    },
+    {
+      "fixture": "T10",
+      "session": 1,
+      "query_ns": {
+        "samples": 14347,
+        "min": 248500,
+        "p50": 291700,
+        "p95": 687200,
+        "max": 3212800,
+        "p99_diagnostic_only": 1409900
+      },
+      "owner_ns": {
+        "samples": 43160,
+        "min": 0,
+        "p50": 1700,
+        "p95": 5500,
+        "max": 112900,
+        "p99_diagnostic_only": 7400
+      },
+      "hot_ns": {
+        "samples": 14347,
+        "min": 100,
+        "p50": 300,
+        "p95": 600,
+        "max": 46100,
+        "p99_diagnostic_only": 800
+      }
+    },
+    {
+      "fixture": "T10",
+      "session": 2,
+      "query_ns": {
+        "samples": 12903,
+        "min": 249900,
+        "p50": 284100,
+        "p95": 611900,
+        "max": 2459900,
+        "p99_diagnostic_only": 1202100
+      },
+      "owner_ns": {
+        "samples": 38759,
+        "min": 0,
+        "p50": 1200,
+        "p95": 4600,
+        "max": 112200,
+        "p99_diagnostic_only": 6500
+      },
+      "hot_ns": {
+        "samples": 12903,
+        "min": 100,
+        "p50": 200,
+        "p95": 500,
+        "max": 61000,
+        "p99_diagnostic_only": 600
+      }
+    },
+    {
+      "fixture": "T10-8k",
+      "session": 0,
+      "query_ns": {
+        "samples": 10828,
+        "min": 449300,
+        "p50": 481400,
+        "p95": 939200,
+        "max": 2802200,
+        "p99_diagnostic_only": 1438700
+      },
+      "owner_ns": {
+        "samples": 32695,
+        "min": 0,
+        "p50": 2000,
+        "p95": 4700,
+        "max": 134100,
+        "p99_diagnostic_only": 6500
+      },
+      "hot_ns": {
+        "samples": 10828,
+        "min": 100,
+        "p50": 300,
+        "p95": 500,
+        "max": 87400,
+        "p99_diagnostic_only": 1000
+      }
+    },
+    {
+      "fixture": "T10-8k",
+      "session": 1,
+      "query_ns": {
+        "samples": 9317,
+        "min": 455600,
+        "p50": 496900,
+        "p95": 1047300,
+        "max": 2901300,
+        "p99_diagnostic_only": 1661400
+      },
+      "owner_ns": {
+        "samples": 28154,
+        "min": 0,
+        "p50": 1800,
+        "p95": 5400,
+        "max": 106300,
+        "p99_diagnostic_only": 7300
+      },
+      "hot_ns": {
+        "samples": 9317,
+        "min": 100,
+        "p50": 300,
+        "p95": 600,
+        "max": 10600,
+        "p99_diagnostic_only": 1300
+      }
+    },
+    {
+      "fixture": "T10-8k",
+      "session": 2,
+      "query_ns": {
+        "samples": 8631,
+        "min": 456400,
+        "p50": 524700,
+        "p95": 1090400,
+        "max": 3816000,
+        "p99_diagnostic_only": 1685200
+      },
+      "owner_ns": {
+        "samples": 26118,
+        "min": 0,
+        "p50": 1800,
+        "p95": 5500,
+        "max": 137500,
+        "p99_diagnostic_only": 7300
+      },
+      "hot_ns": {
+        "samples": 8631,
+        "min": 100,
+        "p50": 300,
+        "p95": 600,
+        "max": 14900,
+        "p99_diagnostic_only": 1300
+      }
+    }
+  ],
+  "display_competition": [
+    {
+      "baseline_us": {
+        "samples": 1000,
+        "min": 12496.8,
+        "p50": 18748.3,
+        "p95": 18749.6,
+        "max": 25002.9,
+        "p99_diagnostic_only": 18760.8
+      },
+      "analysis_us": {
+        "samples": 1002,
+        "min": 12497.1,
+        "p50": 18748.3,
+        "p95": 18749.4,
+        "max": 25002.0,
+        "p99_diagnostic_only": 24998.0
+      },
+      "p95_delta_us": -0.19999999999708962,
+      "surface": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "baseline_us": {
+        "samples": 1000,
+        "min": 12484.8,
+        "p50": 18748.3,
+        "p95": 18749.5,
+        "max": 24998.6,
+        "p99_diagnostic_only": 24997.4
+      },
+      "analysis_us": {
+        "samples": 1002,
+        "min": 12498.3,
+        "p50": 18748.2,
+        "p95": 18749.5,
+        "max": 31249.0,
+        "p99_diagnostic_only": 24997.9
+      },
+      "p95_delta_us": 0.0,
+      "surface": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "baseline_us": {
+        "samples": 1000,
+        "min": 12485.4,
+        "p50": 18748.3,
+        "p95": 18749.5,
+        "max": 25005.6,
+        "p99_diagnostic_only": 24998.1
+      },
+      "analysis_us": {
+        "samples": 1002,
+        "min": 12498.3,
+        "p50": 18748.3,
+        "p95": 18749.3,
+        "max": 24999.6,
+        "p99_diagnostic_only": 24997.8
+      },
+      "p95_delta_us": -0.2000000000007276,
+      "surface": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "baseline_us": {
+        "samples": 1000,
+        "min": 12497.5,
+        "p50": 18748.2,
+        "p95": 18749.5,
+        "max": 25002.2,
+        "p99_diagnostic_only": 24998.1
+      },
+      "analysis_us": {
+        "samples": 1002,
+        "min": 12498.1,
+        "p50": 18748.2,
+        "p95": 18749.3,
+        "max": 24999.4,
+        "p99_diagnostic_only": 24998.1
+      },
+      "p95_delta_us": -0.2000000000007276,
+      "surface": [
+        3840,
+        2160
+      ]
+    }
+  ],
+  "observed_private_peak_positive_minus_control": 17063936,
+  "peak_attribution_limit": "Process and driver measurements include existing capture/rendering and test instrumentation; do not label their difference a strict pure-visual allocation peak."
+}

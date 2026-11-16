@@ -129,6 +129,7 @@ pub fn identity_for(probe: &CheapProbe) -> WindowIdentity {
         probe.hwnd,
         probe.process_id,
         class_name_hash(&probe.class_name),
+        0,
     )
 }
 
@@ -340,11 +341,11 @@ mod tests {
         let epoch = epochs.bump();
         let classified = vec![
             ClassifiedWindow {
-                identity: WindowIdentity::new(0xA, 1, 11),
+                identity: WindowIdentity::new(0xA, 1, 11, 1),
                 screen_bounds: rect(0, 0, 100, 100),
             },
             ClassifiedWindow {
-                identity: WindowIdentity::new(0xB, 2, 22),
+                identity: WindowIdentity::new(0xB, 2, 22, 1),
                 screen_bounds: rect(50, 50, 150, 150),
             },
         ];

@@ -3,10 +3,13 @@
 
 use crate::geometry::{Point, Rect};
 use serde::Serialize;
+pub(crate) mod allocation;
 
 pub(super) mod progressive;
 pub(super) mod proposals;
+#[cfg(test)]
 pub(super) mod reads;
+#[cfg(test)]
 mod tests;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -27,9 +30,11 @@ pub struct Image<'a> {
     reader: Option<&'a dyn Fn(Point) -> Option<[u8; 4]>>,
     prefetch: Option<&'a dyn Fn(Rect)>,
     pending: Option<&'a dyn Fn() -> bool>,
+    failure: Option<&'a dyn Fn(Completion)>,
 }
 
 impl<'a> Image<'a> {
+    #[cfg(test)]
     pub fn new(size: [usize; 2], bytes: &'a [u8]) -> Result<Self, Completion> {
         if size.iter().any(|&v| v > 16384) {
             return Err(Completion::UnsupportedSource);
@@ -48,6 +53,7 @@ impl<'a> Image<'a> {
             reader: None,
             prefetch: None,
             pending: None,
+            failure: None,
         })
     }
 
@@ -67,6 +73,7 @@ impl<'a> Image<'a> {
             reader: Some(reader),
             prefetch: None,
             pending: None,
+            failure: None,
         })
     }
 
@@ -74,12 +81,29 @@ impl<'a> Image<'a> {
         mut self,
         prefetch: &'a dyn Fn(Rect),
         pending: &'a dyn Fn() -> bool,
+        failure: &'a dyn Fn(Completion),
     ) -> Self {
         self.prefetch = Some(prefetch);
         self.pending = Some(pending);
+        self.failure = Some(failure);
         self
     }
 
+    fn fail(self, reason: Completion) {
+        if let Some(failure) = self.failure {
+            failure(reason);
+        }
+    }
+    fn reserve<T>(self, values: &mut Vec<T>, additional: usize, site: &'static str) -> bool {
+        if allocation::reserve(values, additional, site) {
+            true
+        } else {
+            self.fail(Completion::Failed);
+            false
+        }
+    }
+
+    #[cfg(test)]
     fn pending_reads(self) -> bool {
         self.pending.is_some_and(|pending| pending())
     }
@@ -93,6 +117,7 @@ impl<'a> Image<'a> {
         }
     }
 
+    #[cfg(test)]
     pub fn with_coverage(self, coverage: Rect) -> Result<Self, Completion> {
         if coverage.is_empty() || !self.coverage.contains_rect(coverage) {
             return Err(Completion::Failed);
@@ -100,6 +125,7 @@ impl<'a> Image<'a> {
         Ok(Self { coverage, ..self })
     }
 
+    #[cfg(test)]
     pub fn from_pixels(pixels: &'a yue_media::pixels::PixelBuffer) -> Result<Self, Completion> {
         if pixels.descriptor().format() != yue_media::PixelFormat::Bgra8Unorm
             || pixels.descriptor().encoding() != yue_media::pixels::PixelEncoding::Srgb
@@ -232,7 +258,7 @@ impl SideEvidence {
 #[derive(Debug, Clone, Serialize)]
 pub struct Candidate {
     #[serde(serialize_with = "serialize_rect")]
-    rect: Rect,
+    pub(crate) rect: Rect,
     sides: [SideEvidence; 4],
     qualified: bool,
     corner_extensions: usize,
@@ -249,11 +275,12 @@ fn serialize_rect<S: serde::Serializer>(rect: &Rect, serializer: S) -> Result<S:
 }
 
 /// Distinct integer tangent positions, corner exclusion fixed before sampling.
+#[cfg(test)]
 fn sample_positions(start: i32, end: i32) -> Vec<i32> {
-    sample_positions_limit(start, end, 64)
+    sample_positions_limit(Image::new([0, 0], &[]).unwrap(), start, end, 64)
 }
 
-fn sample_positions_limit(start: i32, end: i32, maximum: usize) -> Vec<i32> {
+fn sample_positions_limit(image: Image<'_>, start: i32, end: i32, maximum: usize) -> Vec<i32> {
     let length = end.saturating_sub(start);
     if length <= 0 {
         return Vec::new();
@@ -264,17 +291,20 @@ fn sample_positions_limit(start: i32, end: i32, maximum: usize) -> Vec<i32> {
     if count == 0 {
         return Vec::new();
     }
-    (0..count)
-        .map(|i| {
-            start
-                + corner
-                + if count == 1 {
-                    0
-                } else {
-                    (i * (available - 1) / (count - 1)) as i32
-                }
-        })
-        .collect()
+    let mut positions = Vec::new();
+    if !image.reserve(&mut positions, count, "validation_positions") {
+        return positions;
+    }
+    positions.extend((0..count).map(|i| {
+        start
+            + corner
+            + if count == 1 {
+                0
+            } else {
+                (i * (available - 1) / (count - 1)) as i32
+            }
+    }));
+    positions
 }
 
 fn request_probe(image: Image<'_>, position: [f32; 2], inward: [f32; 2]) {
@@ -296,7 +326,7 @@ fn request_validation(image: Image<'_>, rect: Rect) {
             2 => (rect.top, rect.left, rect.right, [0., 1.]),
             _ => (rect.bottom, rect.left, rect.right, [0., -1.]),
         };
-        for tangent in sample_positions(start, end) {
+        for tangent in sample_positions_limit(image, start, end, 64) {
             let p = if vertical {
                 [edge as f32, tangent as f32 + 0.5]
             } else {
@@ -455,6 +485,7 @@ fn validate_limit(
 
 /// Canonicalise the four rims as ONE outline. A paired edge on just one
 /// side is also a possible gap between filled neighbours and is left intact.
+#[cfg(test)]
 pub fn locate(image: Image<'_>, mut rect: Rect, parameters: Parameters) -> Candidate {
     let mut initial = validate(image, rect, parameters);
     let paired = |e: &SideEvidence| {
@@ -503,6 +534,7 @@ pub fn locate(image: Image<'_>, mut rect: Rect, parameters: Parameters) -> Candi
 }
 
 /// Geometry only. Native ownership and source policy belong to the P4 gate.
+#[cfg(test)]
 fn contained_chain(rectangles: &[Rect], selected: Rect) -> Vec<Rect> {
     let mut outer = rectangles
         .iter()
@@ -547,6 +579,7 @@ fn canonicalise(image: Image<'_>, initial: Candidate, parameters: Parameters) ->
     validate(image, rect, parameters)
 }
 
+#[cfg(test)]
 fn measure_side(image: Image<'_>, rect: Rect, side: usize, parameters: Parameters) -> SideEvidence {
     measure_side_limit(image, rect, side, parameters, 64)
 }
@@ -561,6 +594,7 @@ fn measure_side_limit(
     let mut evidence = SideEvidence::default();
     let vertical = side < 2;
     evidence.positions = sample_positions_limit(
+        image,
         if vertical { rect.top } else { rect.left },
         if vertical { rect.bottom } else { rect.right },
         maximum,

@@ -1,0 +1,26 @@
+﻿    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 19 tests
+test window_detection::native_baseline::native_baseline_hit_mapping_and_epoch_trace ... ok
+test window_detection::native_baseline::native_baseline_pending_preview_and_visible_layer_trace ... ok
+test window_detection::native_baseline::native_baseline_press_blocks_late_publish_and_threshold_is_inclusive ... ok
+test windows::capture_worker::tests::native_baseline_cancel_restart_completion_permutations ... ok
+test windows::overlay::native_baseline::native_baseline_capture_lifecycle_resource_probe ... ignored, L3: captures the desktop for 100 sessions, then observes 60s idle; no visible overlay or external writes
+test windows::overlay::native_baseline::native_baseline_confirm_publishes_exact_frozen_region ... ok
+test windows::overlay::native_baseline::native_baseline_confirmation_gate_cancel_restart_and_closed_owner ... ok
+test windows::overlay::native_baseline::native_baseline_confirmation_keeps_requested_same_owner_rectangle ... ok
+test windows::overlay::native_baseline::native_baseline_controller_preview_replacement_and_manual_path_trace ... ignored, L3: real D3D11/D2D renderer on a hidden window; injected native answers, no desktop capture
+test windows::overlay::native_baseline::native_baseline_other_owner_and_cleared_preview_reject_late_confirmation ... ok
+test windows::overlay::native_baseline::native_baseline_pressed_gesture_rejects_late_dwell_before_confirmation ... ok
+test windows::overlay::native_baseline::native_baseline_restart_cross_worker_completion_permutations ... ok
+test windows::overlay::native_baseline::selection_target_replay_controller_binds_geometry_source_and_native_levels ... ignored, L3: real hidden renderer; native paths injected, no clipboard or files
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_cached_native_path_requeries_visual_on_new_dwell ... ignored, L3 actual hidden controller and GPU; cached native path must not suppress new visual seeds
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_confirms_visual_pixels_and_protects_native_text ... ignored, L3 actual controller, hidden renderer, real GPU/worker; no clipboard/files/desktop capture
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_manual_choice_and_window_epoch_cannot_drift ... ignored, L3 actual hidden controller with fixed pixels; geometry/manual/epoch/Shift replay
+test windows::overlay::native_baseline::visual_replay::visual_replay_product_controller_latency_diagnostic ... ignored, L3 product controller timing on real GPU/worker and message wakeups; hidden fixed-pixel replay, no render-load qualification
+test windows::overlay::native_baseline::visual_replay_capture_lifecycle_resource_probe ... ignored, L3 actual desktop capture and native owner + product visual worker for 100 sessions and 60s idle
+test windows::refinement_worker::tests::native_baseline_transport_adoption_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 8 ignored; 0 measured; 692 filtered out; finished in 0.19s
+

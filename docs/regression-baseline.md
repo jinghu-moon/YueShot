@@ -89,3 +89,18 @@
 有界批量读回与分阶段CPU查询仍仅`cfg(test)`。当前20项视觉常规测试、137条渐进读取与完整源等价；与P2冻结输出的全部行为字段一致，仅实际耗时不作相等要求。最终完整显示器3840×2160 D2D/DComp/Present竞争下，四场景×1000暖查询×三会话全部正确：查询P95最高19.156ms，owner事件P95最高0.231ms；实际连续显示间隔P95增量约−0.1µs。105次offscreen D2D／取色交错、格式／容量／取消／Map错误分支、105次冷staging／Query与60s静止资源平台通过；不等于产品冷启动或完整会话E15已通过。CPU缓冲保守容量上界最高15096688 bytes，显式GPU atlas 4MiB；产品分配守卫仍在P4。
 
 解锁后完整回归capture593／99 ignored、media8、geometry10、native-baseline11、selection-target3、真实窗口3及9项原生／GPU定向测试全部通过。P0 golden未改，工程检查原始命令／退出码见final-engineering-check.json。此前Screen-saver桌面中的三项错误5及OCCLUDED失败记录保留，未把CPU提交间隔冒充显示间隔。本机单卡资格不外推其他厂商／HDR，P4完整产品链和P5独立统计尚未实施。原始失败及通过证据见[P3记录](acceptance/visual-candidate-p3/README.md)、[覆盖审核](acceptance/visual-candidate-p3/coverage-audit.md)与[阶段状态](acceptance/visual-candidate-p3/stage-gate.json)。
+
+## 视觉候选实施 P4（2026-11-17，进行中）
+
+当前产品接入A／CPU单线程与4MiB有界异步atlas读回，新增Visual来源；B仍仅测试。K01请求时矩形冻结、K02显式手动几何保持、K03 Shift分别清理已修改，对应旧日志不改。涉及Visual的不同几何保留1px滚轮层，纯原生跳过规则保持。详细源码、理由、前后合同和未过门项目见[P4记录](acceptance/visual-candidate-p4/README.md)。
+
+当前region合同后的稳定源码批次：`coverage-qualified-run8`33常规／31 ignored、29产品、1故障全过，四份P2行为报告精确相等；`coverage-final-regression`606 capture／122 ignored、media8、geometry10、native-baseline11、target3、真实窗口3及9项原生/GPU门全过；`coverage-final-engineering`cargo xtask check退出0；`coverage-final-idle`两个各60秒子合同全过；均有源码哈希／退出码及未变检查。Q05真实GPU权限三变体已补齐；T13含24排列和7不安全刷新拒绝。详见[P4记录](acceptance/visual-candidate-p4/README.md)、[覆盖审核](acceptance/visual-candidate-p4/coverage-audit.md)。
+
+修改region合同前的真实105轮配对／4K四场景三会话成功测量保留：冷源P95=10.958ms、暖路径最高4.3853ms，静止末20秒资源范围0；它们不认证后续region合同源码。最新实屏重测第一项GetCursorPos错误5失败，原始记录保存且runner停止。可见F5/F7/保存/贴图因native管道缺失未执行；同PID同类HWND复用没有创建token保证；完整交互时延、物理恢复与扩展硬件仍缺。P4未获全部资格、按要求未提交为完成阶段，P5未开始。[阶段门](acceptance/visual-candidate-p4/stage-gate.json)区分当前与历史证据。
+
+
+### P4开发门收尾／真机责任调整（2026-11-17）
+
+用户明确真机测试留待后续自行检测，因此自动化通过可提交推进；前述“未提交、不推进”是该指示前事实，不再是当前执行策略。E08新增provider私有窗口属性生命周期标签；零token不发视觉，旧token拒绝，未改名借用epoch。5项隐藏Win32 API测试、9维迟到键、T13的24种到达排列及8种不安全刷新均有覆盖。
+
+最终批次`lifetime-qualified`为33视觉常规／31 ignored、29产品、5生命周期、1传输故障通过；`lifetime-regression`为capture611／122 ignored、media8／geometry10／native-baseline11；另3项selection-target回放通过。两项各60秒idle、cargo xtask check和新exe构建通过；当前源码／日志／哈希见[P4阶段记录](acceptance/visual-candidate-p4/stage-gate.json)。四份P2行为报告精确等价。真实全操作、当前源码完整实屏性能、扩展硬件和P5独立真实统计仍待用户，不称最终升级成功。

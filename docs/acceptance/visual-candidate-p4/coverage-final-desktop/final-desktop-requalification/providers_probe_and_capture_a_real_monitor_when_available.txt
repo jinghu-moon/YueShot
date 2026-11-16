@@ -1,0 +1,27 @@
+﻿cargo.exe :     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.24s
+At D:\100_Projects\110_Daily\YueShot\tools\test-visual-candidate-p4-desktop.ps1:43 char:9
++         & cargo test -p yue-shot-capture --locked --lib $name -- --ig ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (    Finished `t...get(s) in 0.24s:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::providers::tests::providers_probe_and_capture_a_real_monitor_when_available ... FAILED
+
+failures:
+
+---- windows::providers::tests::providers_probe_and_capture_a_real_monitor_when_available stdout ----
+
+thread 'windows::providers::tests::providers_probe_and_capture_a_real_monitor_when_available' (50276) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\providers.rs:824:14:
+this test needs a monitor at the cursor (docs/31 D-14): "GetCursorPos failed with Win32 error 5"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    windows::providers::tests::providers_probe_and_capture_a_real_monitor_when_available
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 727 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

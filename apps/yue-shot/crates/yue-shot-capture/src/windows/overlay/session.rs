@@ -655,6 +655,7 @@ impl OverlayController {
     /// stale and is dropped on arrival, releasing its GPU references without the
     /// overlay ever waiting on the worker (docs/11 §3.3).
     pub(super) fn cancel(&mut self, reason: &str) {
+        self.invalidate_visual();
         let session_id = self.session_id();
         let was_active = self.session.state().is_active();
         log::debug!(
@@ -725,6 +726,8 @@ impl OverlayController {
         self.dwell_armed = None;
         self.snapshot_request = None;
         self.confirm_request = None;
+        self.confirming_preview = None;
+        self.manual_level = None;
         self.snapshot.release();
         self.disarm_dwell();
         self.disarm_hover_timer();

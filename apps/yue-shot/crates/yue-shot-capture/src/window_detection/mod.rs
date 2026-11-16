@@ -43,6 +43,7 @@ pub mod provider;
 pub mod snapshot;
 pub mod transition;
 pub mod uia;
+pub(crate) mod visual;
 
 #[cfg(test)]
 mod native_baseline;

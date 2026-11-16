@@ -1,0 +1,19 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0061]: this method takes 1 argument but 0 arguments were supplied
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\overlay\native_baseline\visual_replay\contracts.rs:185:72
+    |
+185 | ...                   let snapshot_request = replay.detector.request_refresh();
+    |                                                              ^^^^^^^^^^^^^^^-- argument #1 of type `&provider::Exclusions` is missing
+    |
+note: method defined here
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\detection_worker.rs:111:12
+    |
+111 |     pub fn request_refresh(&self, exclusions: &Exclusions) -> RequestId {
+    |            ^^^^^^^^^^^^^^^        -----------------------
+help: provide the argument
+    |
+185 |                                 let snapshot_request = replay.detector.request_refresh(/* &provider::Exclusions */);
+    |                                                                                        +++++++++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0061`.
+error: could not compile `yue-shot-capture` (lib test) due to 1 previous error

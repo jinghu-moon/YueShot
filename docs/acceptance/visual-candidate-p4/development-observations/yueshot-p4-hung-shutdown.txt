@@ -1,0 +1,11 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.23s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::visual_pipeline::tests::visual_replay_hung_map_cancel_and_shutdown_do_not_wait_for_gpu_completion ... VISUAL_GRAPHICS_SHUTDOWN fault=-2005270518 cancel_us=2 cpu_join_and_drop_us=209
+VISUAL_GRAPHICS_SHUTDOWN fault=-2005270523 cancel_us=1 cpu_join_and_drop_us=362
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 723 filtered out; finished in 0.20s
+

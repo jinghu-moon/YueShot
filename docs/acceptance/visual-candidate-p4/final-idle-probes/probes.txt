@@ -1,0 +1,81 @@
+    Blocking waiting for file lock on build directory
+    Finished `release` profile [optimized + debuginfo] target(s) in 11.81s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 2 tests
+test windows::visual_pipeline::tests::visual_replay_cached_selection_idle_resource_probe ... VISUAL_CACHED_IDLE second=0 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=1 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=2 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=3 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=4 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=5 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=6 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=7 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=8 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=9 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=10 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=11 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=12 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=13 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=14 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=15 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=16 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=17 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=18 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=19 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=20 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=21 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=22 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=23 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=24 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=25 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=26 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=27 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=28 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=29 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=30 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=31 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=32 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=33 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=34 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=35 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=36 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=37 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=38 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=39 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=40 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=41 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=42 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=43 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=44 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=45 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=46 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=47 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=48 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=49 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=50 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=51 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=52 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=53 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=54 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=55 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=56 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=57 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=58 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=59 jobs=22 polls=20 idle=true
+VISUAL_CACHED_IDLE second=60 jobs=22 polls=20 idle=true
+ok
+
+thread 'windows::visual_pipeline::tests::visual_replay_delayed_graphics_latest_query_idle_resource_probe' (12076) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\visual_pipeline.rs:576:13:
+assertion failed: pipeline.active.is_none()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::visual_pipeline::tests::visual_replay_delayed_graphics_latest_query_idle_resource_probe ... FAILED
+
+failures:
+
+failures:
+    windows::visual_pipeline::tests::visual_replay_delayed_graphics_latest_query_idle_resource_probe
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 725 filtered out; finished in 60.39s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

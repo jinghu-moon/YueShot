@@ -11,7 +11,7 @@ fn rect_value(rect: Rect) -> Value {
 }
 
 fn owner() -> WindowIdentity {
-    WindowIdentity::new(101, 7, 11)
+    WindowIdentity::new(101, 7, 11, 1)
 }
 
 fn layout(dpi: u32) -> MonitorLayout {
@@ -29,7 +29,7 @@ fn snapshot() -> WindowSnapshot {
         vec![
             WindowCandidate::new(owner(), Rect::new(-620, -100, -320, 300), 0, 17),
             WindowCandidate::new(
-                WindowIdentity::new(102, 8, 12),
+                WindowIdentity::new(102, 8, 12, 1),
                 Rect::new(-320, -100, -20, 300),
                 1,
                 17,

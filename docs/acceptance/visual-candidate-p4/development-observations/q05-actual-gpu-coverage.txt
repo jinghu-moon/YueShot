@@ -1,0 +1,58 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0433]: cannot find type `Instant` in this scope
+    --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer\tests.rs:1244:28
+     |
+1244 |             let deadline = Instant::now() + Duration::from_secs(2);
+     |                            ^^^^^^^ use of undeclared type `Instant`
+     |
+     = note: struct `crate::windows::visual_pipeline::tests::Instant` exists but is inaccessible
+help: consider importing this struct
+     |
+   1 + use std::time::Instant;
+     |
+
+error[E0433]: cannot find type `Duration` in this scope
+    --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer\tests.rs:1244:45
+     |
+1244 |             let deadline = Instant::now() + Duration::from_secs(2);
+     |                                             ^^^^^^^^ use of undeclared type `Duration`
+     |
+     = note: struct `crate::windows::visual_pipeline::tests::Duration` exists but is inaccessible
+help: consider importing this struct
+     |
+   1 + use std::time::Duration;
+     |
+
+error[E0433]: cannot find type `Instant` in this scope
+    --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer\tests.rs:1249:25
+     |
+1249 |                 assert!(Instant::now() < deadline);
+     |                         ^^^^^^^ use of undeclared type `Instant`
+     |
+     = note: struct `crate::windows::visual_pipeline::tests::Instant` exists but is inaccessible
+help: consider importing this struct
+     |
+   1 + use std::time::Instant;
+     |
+
+error[E0433]: cannot find type `Duration` in this scope
+    --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer\tests.rs:1250:36
+     |
+1250 |                 std::thread::sleep(Duration::from_micros(100));
+     |                                    ^^^^^^^^ use of undeclared type `Duration`
+     |
+     = note: struct `crate::windows::visual_pipeline::tests::Duration` exists but is inaccessible
+help: consider importing this struct
+     |
+   1 + use std::time::Duration;
+     |
+
+error[E0616]: field `qualified` of struct `visual_detection::Candidate` is private
+    --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer\tests.rs:1288:75
+     |
+1288 |                     .any(|candidate| candidate.rect == truth && candidate.qualified)
+     |                                                                           ^^^^^^^^^ private field
+
+Some errors have detailed explanations: E0433, E0616.
+For more information about an error, try `rustc --explain E0433`.
+error: could not compile `yue-shot-capture` (lib test) due to 5 previous errors

@@ -52,6 +52,12 @@
 
 复跑入口为 `pwsh -NoProfile -File tools/test-visual-candidate-baseline.ps1 -EvidenceDirectory <新证据目录> -Native`；脚本拒绝覆盖既有证据，每个指定原生测试须准确匹配1项。版本、命令、计数、退出码和原始日志哈希写入该目录的summary.json。
 
+## 视觉候选实施 P1（2026-11-16，通过）
+
+从`ad07e2c`开始原位统一目标，删除WindowTarget／TargetKind与无生产者ClientArea，无兼容别名。实际选区、owner、来源与冻结源身份分开表达；不接视觉，不夹带K01～K03修复。捕获库573通过／91 ignored，media／geometry为8／10通过；selection_target_replay含真实隐藏图形控制器3/3通过；新增3项真实窗口枚举／epoch／悬停资格各1/1，既有9项定向资格全部重测通过。P0规范化golden字节不变，原生trace保持；`cargo xtask check`退出0。
+
+[阶段记录](acceptance/visual-candidate-p1/README.md)、[门结果／源码与日志完整性](acceptance/visual-candidate-p1/stage-gate.json)、[完整定向批次](acceptance/visual-candidate-p1/complete-run/summary.json)已持久保存。真实宿主COM／完整操作链等后续资格仍按P0清单，未测不计通过。P2未开始。
+
 ## 视觉候选设计研究快照（2026-11-16）
 
 源码 HEAD：`7938581`。以下是设计初稿研究时实际执行、在评审修订时重新核对原始日志的计数摘要，**不是视觉算法已实现、P0 基线已补齐或完整升级已通过**。本次评审修订没有重跑代码测试。

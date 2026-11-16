@@ -139,7 +139,7 @@ impl Replay {
         controller
     }
 
-    fn preview(&mut self, target: WindowTarget, rect: Rect) {
+    fn preview(&mut self, target: SelectionTarget, rect: Rect) {
         let generation = self.gesture.dwell_generation();
         let before = self.session.selection();
         assert!(
@@ -149,7 +149,7 @@ impl Replay {
         self.sync_preview_rect();
     }
 
-    fn confirmation(&mut self, request: RequestId, target: WindowTarget, valid: bool) {
+    fn confirmation(&mut self, request: RequestId, target: SelectionTarget, valid: bool) {
         self.detector
             .publish_for_replay(DetectionResult::Confirmed {
                 request,
@@ -188,8 +188,8 @@ impl Drop for Replay {
     }
 }
 
-fn target(hwnd: isize) -> WindowTarget {
-    WindowTarget::top_level_window_frame(WindowCandidate::new(
+fn target(hwnd: isize) -> SelectionTarget {
+    SelectionTarget::window(WindowCandidate::new(
         WindowIdentity::new(hwnd, 7, 11),
         Rect::new(0, 0, 64, 48),
         0,
@@ -422,7 +422,7 @@ fn native_baseline_restart_cross_worker_completion_permutations() {
                             request: retired_snapshot,
                             snapshot: Ok(WindowSnapshot::new(
                                 17,
-                                vec![target.candidate],
+                                vec![target.owner],
                                 MonitorCache::from_bounds([target.screen_bounds()]),
                             )),
                         });
@@ -445,7 +445,6 @@ fn native_baseline_restart_cross_worker_completion_permutations() {
                     elapsed: Duration::ZERO,
                     outcome: RefinementOutcome::Target(Box::new(DeepTarget {
                         window: target.identity(),
-                        kind: crate::window_detection::TargetKind::UiElement,
                         screen_bounds: old_rect,
                         path: vec![PathLevel::new(old_rect, LevelKind::Button)],
                         stop_reason: crate::window_detection::deep::StopReason::Complete,
@@ -513,7 +512,6 @@ fn answer(replay: &mut Replay, path: Vec<PathLevel>) {
         elapsed: Duration::ZERO,
         outcome: RefinementOutcome::Target(Box::new(DeepTarget {
             window: job.window,
-            kind: crate::window_detection::TargetKind::UiElement,
             screen_bounds,
             path,
             stop_reason: crate::window_detection::deep::StopReason::Complete,
@@ -533,7 +531,7 @@ fn native_baseline_controller_preview_replacement_and_manual_path_trace() {
     let b = PathLevel::new(Rect::new(35, 8, 55, 20), LevelKind::Image);
     replay.snapshot = WindowSnapshot::new(
         17,
-        vec![target.candidate],
+        vec![target.owner],
         MonitorCache::from_bounds([frame.rect]),
     );
     replay.hover_target = Some(target);
@@ -614,6 +612,81 @@ fn native_baseline_controller_preview_replacement_and_manual_path_trace() {
         "P0 known Shift cleanup defect"
     );
     assert!(replay.session.selection().is_empty());
+}
+
+#[test]
+#[ignore = "L3: real hidden renderer; native paths injected, no clipboard or files"]
+fn selection_target_replay_controller_binds_geometry_source_and_native_levels() {
+    use crate::monitor_cache::MonitorCache;
+    use crate::window_detection::{SelectionSource, TargetOrigin};
+
+    let mut replay = Replay::build(true);
+    let owner = target(101);
+    let frame = PathLevel::window(owner.owner.screen_bounds);
+    let parent = PathLevel::new(Rect::new(4, 3, 50, 40), LevelKind::Pane);
+    let button = PathLevel::new(Rect::new(10, 8, 30, 20), LevelKind::Button);
+    replay.current_generation = 41;
+    replay.snapshot = WindowSnapshot::new(
+        17,
+        vec![owner.owner],
+        MonitorCache::from_bounds([frame.rect]),
+    );
+    replay.hover_target = Some(owner);
+    replay.cursor = Point::new(15, 12);
+    answer(&mut replay, vec![frame, parent, button]);
+    let preview = replay.gesture.snap_preview().unwrap();
+    assert_eq!(preview.selection, button.rect);
+    assert_eq!(preview.target.screen_bounds(), button.rect);
+    assert_eq!(preview.target.owner, owner.owner);
+    assert_eq!(preview.target.origin, TargetOrigin::Accessibility);
+    assert_eq!(preview.target.kind, Some(LevelKind::Button));
+    assert_eq!(
+        preview.target.source,
+        Some(SelectionSource {
+            capture_generation: 41,
+            pixels: replay.frozen.as_ref().unwrap().frame.source,
+        })
+    );
+    assert!(replay.step_deep_level(-1));
+    assert_eq!(
+        replay
+            .gesture
+            .snap_preview()
+            .unwrap()
+            .target
+            .screen_bounds(),
+        parent.rect
+    );
+    assert_eq!(
+        replay.gesture.snap_preview().unwrap().target.kind,
+        Some(LevelKind::Pane)
+    );
+    assert!(replay.step_deep_level(-1));
+    let walked = replay.gesture.snap_preview().unwrap();
+    assert_eq!(walked.target.origin, TargetOrigin::Window);
+    assert_eq!(walked.target.screen_bounds(), frame.rect);
+    assert_eq!(walked.target.source, preview.target.source);
+    assert!(replay.step_deep_level(1));
+    assert!(replay.step_deep_level(1));
+    let selected = replay.gesture.snap_preview().unwrap();
+    assert!(replay.confirm_snap_preview());
+    let request = replay.confirm_request.unwrap();
+    replay.confirmation(request, selected.target, true);
+    assert_eq!(replay.session.selection(), button.rect);
+    let shared = replay.shared.lock().unwrap();
+    let output = shared.selection.as_ref().unwrap();
+    assert_eq!(output.region, button.rect);
+    assert_eq!(output.frame.source, preview.target.source.unwrap().pixels);
+    for (i, pixel) in output
+        .pixels
+        .as_bytes()
+        .as_chunks::<4>()
+        .0
+        .iter()
+        .enumerate()
+    {
+        assert_eq!(pixel, &[(10 + i % 20) as u8, (8 + i / 20) as u8, 0, 255]);
+    }
 }
 
 #[test]

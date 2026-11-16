@@ -386,7 +386,7 @@ impl WalkOutcome {
     /// A walk that could not get past the window frame.
     pub fn window_only(window_bounds: Rect, stop_reason: StopReason) -> Self {
         Self {
-            path: vec![PathLevel::new(window_bounds, LevelKind::Window)],
+            path: vec![PathLevel::window(window_bounds)],
             target: window_bounds,
             stop_reason,
         }
@@ -466,13 +466,13 @@ pub fn fallback_hit_path(
         .iter()
         .copied()
         .filter(|rect| rect.contains(point))
-        .map(PathLevel::unknown)
+        .map(|rect| PathLevel {
+            rect,
+            origin: super::model::TargetOrigin::Window,
+            kind: LevelKind::Unknown,
+        })
         .collect();
-    push_if_useful(
-        &mut containing,
-        PathLevel::new(window_bounds, LevelKind::Window),
-        point,
-    );
+    push_if_useful(&mut containing, PathLevel::window(window_bounds), point);
     containing
 }
 
@@ -486,7 +486,7 @@ pub fn fallback_hit_path(
 /// The fallback is therefore only ever *appended* when it lies strictly inside the current
 /// tail.
 ///
-/// The result keeps [`super::model::WindowTarget`]'s documented order: `path[0]` is the
+/// The result keeps [`super::model::SelectionTarget`]'s documented order: `path[0]` is the
 /// window frame and the last entry is the most specific one, so `target = path.last()` is the
 /// control under the cursor.
 pub fn merge_hit_paths(
@@ -502,11 +502,11 @@ pub fn merge_hit_paths(
         .filter(|level| !level.rect.is_empty() && level.rect.contains(point))
         .collect();
     if path.is_empty() {
-        path.push(PathLevel::new(window_bounds, LevelKind::Window));
+        path.push(PathLevel::window(window_bounds));
     }
     if path.first().map(|first| first.rect) != Some(window_bounds) && window_bounds.contains(point)
     {
-        path.insert(0, PathLevel::new(window_bounds, LevelKind::Window));
+        path.insert(0, PathLevel::window(window_bounds));
     }
 
     // 2. Extend downward with fallback rectangles that are strictly inside the current tail.
@@ -811,10 +811,7 @@ mod tests {
         let window = rect(0, 0, 1000, 800);
         let mut outcome = WalkOutcome::window_only(window, StopReason::Complete);
         // The frame's level carries the one kind a walk can state without asking anyone (§5.24 B6).
-        assert_eq!(
-            outcome.path,
-            vec![PathLevel::new(window, LevelKind::Window)]
-        );
+        assert_eq!(outcome.path, vec![PathLevel::window(window)]);
         assert!(outcome.push(lvl(100, 100, 900, 700)));
         assert!(outcome.push(lvl(300, 300, 500, 500)));
         assert_eq!(outcome.target, rect(300, 300, 500, 500));
@@ -876,7 +873,7 @@ mod tests {
         );
         // A point on no child still yields the frame.
         let bare = fallback_hit_path(&children, window, Point::new(900, 750));
-        assert_eq!(bare, vec![PathLevel::new(window, LevelKind::Window)]);
+        assert_eq!(bare, vec![PathLevel::window(window)]);
     }
 
     #[test]
@@ -886,7 +883,7 @@ mod tests {
         let control = lvl(300, 300, 500, 400);
         let finer = lvl(320, 320, 480, 380);
         let point = Point::new(400, 350);
-        let frame = PathLevel::new(window, LevelKind::Window);
+        let frame = PathLevel::window(window);
 
         // The accessibility path runs frame → pane → control; the fallback knows something
         // deeper, so it is appended and the published rectangle gets finer.
@@ -916,7 +913,7 @@ mod tests {
         let inner = lvl(300, 300, 500, 400);
         let deepest = lvl(350, 330, 450, 370);
         let point = Point::new(400, 350);
-        let frame = PathLevel::new(window, LevelKind::Window);
+        let frame = PathLevel::window(window);
         // Same rectangles from both sources, in different orders.
         let merged = merge_hit_paths(&[outer, inner], &[deepest, inner, outer], window, point);
         let unique: Vec<PathLevel> = {
@@ -966,10 +963,7 @@ mod tests {
         let sibling = lvl(700, 600, 900, 780);
         let merged = merge_hit_paths(&[seed], &[sibling], window, Point::new(400, 350));
         // Frame first (the documented order), then the deepest entry that was published.
-        assert_eq!(
-            merged,
-            vec![PathLevel::new(window, LevelKind::Window), seed]
-        );
+        assert_eq!(merged, vec![PathLevel::window(window), seed]);
         assert_eq!(
             merged.last(),
             Some(&seed),

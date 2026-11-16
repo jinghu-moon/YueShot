@@ -1,0 +1,29 @@
+{
+  "stage": "P1",
+  "status": "passed",
+  "started_from": "ad07e2c",
+  "recorded_at_utc": "2026-11-16T13:12:32.289791+00:00",
+  "capture_regular_passed": 573,
+  "capture_ignored": 91,
+  "model_and_controller_contracts": 3,
+  "native_provider_qualification": 3,
+  "existing_targeted_native_probes": 9,
+  "baseline_trace_golden_sha256": "bc546c08b6a0551fe0e776b721e921c38bf13c746ff5917e6a1f0eae9ad38f43",
+  "golden_unchanged": true,
+  "old_definitions_or_forwarders": [],
+  "source_changes_after_run": [],
+  "log_hash_mismatches": [],
+  "evidence_sha256": {
+    "complete-run/summary.json": "c85b94eb17ef16c3c2da055b0184956de9c5fcf6fd8a4be770df8628f7c0e69f",
+    "engineering-check.json": "33eeb17eac42146aa4a455d4f7ec81dfa13ea1cc6ea6e963f1bdac1f898a5a68"
+  },
+  "known_defects_unchanged": [
+    "K01",
+    "K02",
+    "K03"
+  ],
+  "visual_origin_connected": false,
+  "visual_algorithm_tests": "not_run",
+  "p2_status": "not_started",
+  "later_qualification": "P0 outstanding L3/real-corpus list retained; no visual precision or whole desktop-flow claim"
+}

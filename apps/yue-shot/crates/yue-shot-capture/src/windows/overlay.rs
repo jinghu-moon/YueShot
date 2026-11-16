@@ -76,7 +76,7 @@ use crate::window_detection::{
     DEFAULT_DWELL_MS, DEFAULT_HOVER_REVALIDATE_MS, DEFAULT_SNAP_RADIUS_PX, DeepTarget, Exclusions,
     GestureState, HoverValidity, LevelChain, LevelKind, MoveOutcome, PathLevel, PressOutcome,
     RefinementJob, RefinementOutcome, RefinementScheduler, ReleaseOutcome, Replacement,
-    RingOptions, RingRole, WindowSnapshot, WindowTarget, chain_rings, classify_replacement,
+    RingOptions, RingRole, SelectionTarget, WindowSnapshot, chain_rings, classify_replacement,
     next_visible_stop, out_quad, preview_bounds, stops_from,
 };
 use crate::{CaptureError, CaptureResult, CaptureState};
@@ -538,7 +538,7 @@ struct OverlayController {
     /// selection; the gesture decides when a drag actually starts.
     gesture: GestureState,
     /// Window the cursor is over, in virtual-desktop screen coordinates.
-    hover_target: Option<WindowTarget>,
+    hover_target: Option<SelectionTarget>,
     /// Latest window snapshot. Replaced wholesale when a refresh lands, never mutated
     /// from the mouse path (except through `apply_candidate_update`).
     snapshot: WindowSnapshot,

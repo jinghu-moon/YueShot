@@ -12,9 +12,9 @@
 use crate::geometry::Rect;
 use crate::monitor_cache::MonitorCache;
 use crate::window_detection::model::{
-    EpochCounter, HoverValidity, WindowIdentity, WindowSnapshot, WindowTarget,
+    EpochCounter, HoverValidity, SelectionTarget, WindowIdentity, WindowSnapshot,
 };
-use crate::window_detection::provider::{Exclusions, WindowDetectionError, WindowTargetProvider};
+use crate::window_detection::provider::{Exclusions, WindowDetectionError, WindowProvider};
 use crate::window_detection::snapshot::{candidates_from_classified, class_name_hash, classify};
 
 use super::monitor;
@@ -73,7 +73,7 @@ impl TopLevelWindowProvider {
     }
 }
 
-impl WindowTargetProvider for TopLevelWindowProvider {
+impl WindowProvider for TopLevelWindowProvider {
     fn refresh(&mut self, exclusions: &Exclusions) -> Result<WindowSnapshot, WindowDetectionError> {
         self.refresh_monitors();
 
@@ -97,17 +97,17 @@ impl WindowTargetProvider for TopLevelWindowProvider {
         ))
     }
 
-    fn validate(&self, target: &WindowTarget) -> bool {
+    fn validate(&self, target: &SelectionTarget) -> bool {
         self.read_target(target.identity())
             .is_some_and(|bounds| !bounds.is_empty())
     }
 
-    fn revalidate_hover(&self, hover: &WindowTarget) -> HoverValidity {
+    fn revalidate_hover(&self, hover: &SelectionTarget) -> HoverValidity {
         match self.read_target(hover.identity()) {
             None => HoverValidity::Invalid,
-            Some(bounds) if bounds == hover.candidate.screen_bounds => HoverValidity::Valid,
+            Some(bounds) if bounds == hover.owner.screen_bounds => HoverValidity::Valid,
             Some(bounds) => HoverValidity::BoundsChanged {
-                epoch: hover.candidate.snapshot_epoch,
+                epoch: hover.owner.snapshot_epoch,
                 identity: hover.identity(),
                 new_bounds: bounds,
             },
@@ -260,14 +260,12 @@ mod tests {
     #[test]
     fn validating_an_unknown_handle_fails_closed() {
         let provider = TopLevelWindowProvider::new();
-        let target = WindowTarget::top_level_window_frame(
-            crate::window_detection::model::WindowCandidate::new(
-                WindowIdentity::new(0xDEAD, 1, 2),
-                Rect::new(0, 0, 10, 10),
-                0,
-                1,
-            ),
-        );
+        let target = SelectionTarget::window(crate::window_detection::model::WindowCandidate::new(
+            WindowIdentity::new(0xDEAD, 1, 2),
+            Rect::new(0, 0, 10, 10),
+            0,
+            1,
+        ));
         assert!(!provider.validate(&target));
         assert_eq!(provider.revalidate_hover(&target), HoverValidity::Invalid);
     }
@@ -312,11 +310,11 @@ mod tests {
             .candidates()
             .iter()
             .filter(|candidate| candidate.is_usable())
-            .map(|candidate| WindowTarget::top_level_window_frame(*candidate))
+            .map(|candidate| SelectionTarget::window(*candidate))
             .find(|target| provider.validate(target))
             .expect("no candidate from this refresh is still valid (docs/31 D-14)");
-        let candidate = candidate.candidate;
-        let target = WindowTarget::top_level_window_frame(candidate);
+        let candidate = candidate.owner;
+        let target = SelectionTarget::window(candidate);
 
         // A freshly snapped target is still valid and has not moved.
         assert!(provider.validate(&target));
@@ -325,7 +323,7 @@ mod tests {
         // The same window with a stale rectangle reports the new bounds, tagged with
         // the snapshot generation the overlay must match.
         let mut moved = target;
-        moved.candidate.screen_bounds = Rect::new(
+        moved.owner.screen_bounds = Rect::new(
             candidate.screen_bounds.left + 37,
             candidate.screen_bounds.top + 11,
             candidate.screen_bounds.right + 37,

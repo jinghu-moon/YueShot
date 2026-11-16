@@ -28,15 +28,12 @@
 //! | [`DEFAULT_SNAP_RADIUS_PX`] | 24 px | nearest-window search radius, physical pixels |
 //! | [`DEFAULT_HOVER_REVALIDATE_MS`] | 250 ms | worker re-validation cadence for the hovered window |
 //!
-//! ## Which target kinds exist
+//! ## Selection sources
 //!
-//! Two are live today: [`TargetKind::TopLevelWindowFrame`], the DWM top-level window
-//! frame including its title bar, which is what the window snap produces; and
-//! [`TargetKind::UiElement`], the sub-element the refinement workers produce when the
-//! walk got below the frame ([`crate::windows::uia_provider`],
-//! [`crate::windows::msaa_provider`]). [`TargetKind::ClientArea`] is declared with no
-//! producer yet. Refinement never widens a whole-window answer — a failed walk falls
-//! back to the frame, never the other way round (docs/14 §5.2, docs/18 §4).
+//! Window snapshot hits and native accessibility paths produce the same
+//! SelectionTarget contract. UIA and MSAA both use TargetOrigin::Accessibility;
+//! the owning window is distinct from the selected geometry. Paths retain their
+//! source and control kind per level. No visual producer is connected yet.
 
 pub mod deep;
 pub mod gesture;
@@ -63,12 +60,10 @@ pub use gesture::{
 };
 pub use hit_test::{point_distance_squared, rect_distance_squared};
 pub use model::{
-    EpochCounter, HoverValidity, LevelKind, PathLevel, RequestGate, RequestId, SnapshotEpoch,
-    TargetKind, WindowCandidate, WindowIdentity, WindowSnapshot, WindowTarget,
+    EpochCounter, HoverValidity, LevelKind, PathLevel, RequestGate, RequestId, SelectionSource,
+    SelectionTarget, SnapshotEpoch, TargetOrigin, WindowCandidate, WindowIdentity, WindowSnapshot,
 };
-pub use provider::{
-    Exclusions, WindowDetectionError, WindowTargetProvider, is_shell_surface_class,
-};
+pub use provider::{Exclusions, WindowDetectionError, WindowProvider, is_shell_surface_class};
 pub use snapshot::{
     CheapProbe, ClassifiedWindow, DwmRead, candidates_from_classified, class_name_hash, classify,
     identity_for, passes_cheap_policy, passes_dwm_policy,

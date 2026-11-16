@@ -1,0 +1,17 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s
+     Running unittests src\lib.rs (target\debug\deps\yue_geometry-3d3a4de108089e34.exe)
+
+running 10 tests
+test tests::a_rect_below_or_left_of_the_origin_still_measures_its_size ... ok
+test tests::clamp_keeps_the_size_and_pins_oversized_rects_inside_the_bounds ... ok
+test tests::drag_in_any_direction_normalises_the_rectangle ... ok
+test tests::inflate_and_translate_move_exactly_the_requested_amount ... ok
+test tests::monitors_left_of_the_origin_keep_negative_coordinates ... ok
+test tests::surrounds_with_no_hole_returns_the_whole_frame ... ok
+test tests::containment_counts_touching_edges_and_rejects_oversized_rects ... ok
+test tests::intersect_and_union_cover_the_disjoint_and_overlapping_cases ... ok
+test tests::width_is_signed_and_is_empty_is_the_guard_against_inverted_rects ... ok
+test tests::rectangles_surrounding_a_hole_cover_the_mask ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

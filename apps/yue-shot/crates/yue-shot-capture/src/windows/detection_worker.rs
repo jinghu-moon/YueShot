@@ -23,9 +23,9 @@ use ::windows::Win32::UI::WindowsAndMessaging::{PostThreadMessageW, WM_APP};
 
 use crate::diagnostics::WindowDetectionMetrics;
 use crate::window_detection::model::{
-    HoverValidity, RequestGate, RequestId, WindowSnapshot, WindowTarget,
+    HoverValidity, RequestGate, RequestId, SelectionTarget, WindowSnapshot,
 };
-use crate::window_detection::provider::{Exclusions, WindowDetectionError, WindowTargetProvider};
+use crate::window_detection::provider::{Exclusions, WindowDetectionError, WindowProvider};
 
 use super::top_level_provider::TopLevelWindowProvider;
 
@@ -40,11 +40,11 @@ enum Job {
     },
     Confirm {
         request: RequestId,
-        target: WindowTarget,
+        target: SelectionTarget,
     },
     Revalidate {
         request: RequestId,
-        target: WindowTarget,
+        target: SelectionTarget,
     },
     Shutdown,
 }
@@ -58,12 +58,12 @@ pub enum DetectionResult {
     },
     Confirmed {
         request: RequestId,
-        target: WindowTarget,
+        target: SelectionTarget,
         valid: bool,
     },
     Revalidated {
         request: RequestId,
-        target: WindowTarget,
+        target: SelectionTarget,
         validity: HoverValidity,
     },
 }
@@ -116,7 +116,7 @@ impl DetectionWorker {
     }
 
     /// Queue a confirmation check for one target.
-    pub fn request_confirm(&self, target: WindowTarget) -> RequestId {
+    pub fn request_confirm(&self, target: SelectionTarget) -> RequestId {
         self.enqueue(|request| Job::Confirm { request, target })
     }
 
@@ -124,7 +124,7 @@ impl DetectionWorker {
     ///
     /// The overlay keeps this single-flight: only one re-validation is outstanding at a
     /// time, so a fast-moving cursor cannot build a backlog of pointless DWM reads.
-    pub fn request_revalidate(&self, target: WindowTarget) -> RequestId {
+    pub fn request_revalidate(&self, target: SelectionTarget) -> RequestId {
         self.enqueue(|request| Job::Revalidate { request, target })
     }
 
@@ -288,8 +288,8 @@ mod tests {
         DetectionWorker::new(0, WindowDetectionMetrics::new())
     }
 
-    fn target() -> WindowTarget {
-        WindowTarget::top_level_window_frame(WindowCandidate::new(
+    fn target() -> SelectionTarget {
+        SelectionTarget::window(WindowCandidate::new(
             crate::window_detection::model::WindowIdentity::new(0xDEAD, 1, 2),
             crate::geometry::Rect::new(0, 0, 10, 10),
             0,

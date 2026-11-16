@@ -73,8 +73,7 @@ impl StopReason {
 pub struct DeepTarget {
     /// The window this path belongs to; always a window from the v1 snapshot.
     pub window: WindowIdentity,
-    pub kind: super::model::TargetKind,
-    /// Virtual-desktop physical pixels — the same space as [`super::model::WindowTarget`].
+    /// Virtual-desktop physical pixels — the same space as [`super::model::SelectionTarget`].
     pub screen_bounds: Rect,
     /// Top-down path; `path[0]` is the window frame and the last entry's rectangle equals
     /// `screen_bounds`. Empty only when nothing was resolved. Each level carries what kind of thing
@@ -935,7 +934,6 @@ fn points_close(left: Point, right: Point) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::super::model::TargetKind;
     use super::*;
 
     /// A path level with no kind: these tests are about geometry — collapse, merge, the cap, the
@@ -1083,11 +1081,7 @@ mod tests {
     fn a_walked_level_overrides_the_published_box_in_the_preview() {
         // A plain rectangle here: `preview_bounds` speaks in rectangles, not levels.
         let frame = boxed(0, 0, 1000, 800);
-        let control = deep_target(
-            TargetKind::UiElement,
-            rect(300, 300, 500, 400),
-            StopReason::Complete,
-        );
+        let control = deep_target(rect(300, 300, 500, 400), StopReason::Complete);
         // A level the user walked to wins over the published box while the target still answers…
         assert_eq!(
             preview_bounds(
@@ -1152,10 +1146,9 @@ mod tests {
 
     /// A target whose published box is `deepest` (a level, so its kind travels with it) under a
     /// 1000×800 frame.
-    fn deep_target(kind: TargetKind, deepest: PathLevel, stop_reason: StopReason) -> DeepTarget {
+    fn deep_target(deepest: PathLevel, stop_reason: StopReason) -> DeepTarget {
         DeepTarget {
             window: window(0x100),
-            kind,
             screen_bounds: deepest.rect,
             path: vec![rect(0, 0, 1000, 800), deepest],
             stop_reason,
@@ -1208,11 +1201,7 @@ mod tests {
         assert!(!scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(0, 0, 100, 100),
-                StopReason::Complete
-            )
+            deep_target(rect(0, 0, 100, 100), StopReason::Complete)
         ));
         assert!(scheduler.cached().is_none());
     }
@@ -1236,11 +1225,7 @@ mod tests {
         assert!(!scheduler.on_result(
             first.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(0, 0, 20, 20),
-                StopReason::Complete
-            )
+            deep_target(rect(0, 0, 20, 20), StopReason::Complete)
         ));
         assert!(scheduler.cached().is_none());
 
@@ -1251,11 +1236,7 @@ mod tests {
         assert!(scheduler.on_result(
             second.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(40, 40, 200, 200),
-                StopReason::Complete
-            )
+            deep_target(rect(40, 40, 200, 200), StopReason::Complete)
         ));
     }
 
@@ -1282,11 +1263,7 @@ mod tests {
         assert!(scheduler.on_result(
             parent.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(100, 100, 900, 700),
-                StopReason::Complete
-            )
+            deep_target(rect(100, 100, 900, 700), StopReason::Complete)
         ));
         let child = scheduler
             .take_follow_up()
@@ -1333,11 +1310,7 @@ mod tests {
         assert!(scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(100, 100, 300, 300),
-                StopReason::Complete
-            )
+            deep_target(rect(100, 100, 300, 300), StopReason::Complete)
         ));
         assert!(
             scheduler.take_follow_up().is_none(),
@@ -1366,11 +1339,7 @@ mod tests {
         assert!(scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(100, 100, 300, 300),
-                StopReason::Complete
-            )
+            deep_target(rect(100, 100, 300, 300), StopReason::Complete)
         ));
 
         // Moving *inside the resolved element* arms a fresh dwell: the deeper element under the
@@ -1399,11 +1368,7 @@ mod tests {
         assert!(scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(100, 100, 300, 300),
-                StopReason::BudgetExhausted
-            )
+            deep_target(rect(100, 100, 300, 300), StopReason::BudgetExhausted)
         ));
         assert!(
             scheduler.cached().is_some(),
@@ -1424,11 +1389,7 @@ mod tests {
         assert!(scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(100, 100, 300, 300),
-                StopReason::Complete
-            )
+            deep_target(rect(100, 100, 300, 300), StopReason::Complete)
         ));
         assert!(scheduler.cached().is_some());
 
@@ -1442,11 +1403,7 @@ mod tests {
         assert!(!scheduler.on_result(
             in_flight_job.request,
             2,
-            deep_target(
-                TargetKind::UiElement,
-                rect(0, 0, 10, 10),
-                StopReason::Complete
-            )
+            deep_target(rect(0, 0, 10, 10), StopReason::Complete)
         ));
     }
 
@@ -1458,11 +1415,7 @@ mod tests {
         assert!(!scheduler.on_result(
             job.request,
             2,
-            deep_target(
-                TargetKind::UiElement,
-                rect(0, 0, 10, 10),
-                StopReason::Complete
-            )
+            deep_target(rect(0, 0, 10, 10), StopReason::Complete)
         ));
         assert!(scheduler.cached().is_none());
     }
@@ -1506,11 +1459,7 @@ mod tests {
         assert!(!scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(100, 100, 200, 200),
-                StopReason::Complete
-            )
+            deep_target(rect(100, 100, 200, 200), StopReason::Complete)
         ));
         assert!(scheduler.cached().is_none());
     }
@@ -1522,11 +1471,7 @@ mod tests {
         assert!(scheduler.on_result(
             job.request,
             1,
-            deep_target(
-                TargetKind::UiElement,
-                rect(0, 0, 10, 10),
-                StopReason::Complete
-            )
+            deep_target(rect(0, 0, 10, 10), StopReason::Complete)
         ));
         scheduler.reset();
         assert!(scheduler.cached().is_none());
@@ -1585,11 +1530,7 @@ mod tests {
     /// position is on its way (docs/18 §13.5).
     #[test]
     fn a_pending_answer_keeps_the_last_verified_rectangle_of_the_window() {
-        let control = deep_target(
-            TargetKind::UiElement,
-            rect(300, 300, 500, 400),
-            StopReason::Complete,
-        );
+        let control = deep_target(rect(300, 300, 500, 400), StopReason::Complete);
         let frame = boxed(0, 0, 1000, 800);
         // The cursor left the control for its parent container: the frame must not flash while
         // the refinement answers, even though the control no longer covers the point.
@@ -1637,11 +1578,7 @@ mod tests {
     #[test]
     fn a_verified_target_for_another_window_never_leaks_into_this_one() {
         let frame = boxed(0, 0, 1000, 800);
-        let elsewhere = deep_target(
-            TargetKind::UiElement,
-            rect(100, 100, 200, 200),
-            StopReason::Complete,
-        );
+        let elsewhere = deep_target(rect(100, 100, 200, 200), StopReason::Complete);
         assert_eq!(
             preview_bounds(
                 Some(&elsewhere),
@@ -1669,11 +1606,7 @@ mod tests {
 
     #[test]
     fn a_target_that_still_covers_the_cursor_is_shown_even_when_nothing_is_pending() {
-        let control = deep_target(
-            TargetKind::UiElement,
-            rect(300, 300, 500, 400),
-            StopReason::Complete,
-        );
+        let control = deep_target(rect(300, 300, 500, 400), StopReason::Complete);
         assert_eq!(
             preview_bounds(
                 Some(&control),
@@ -1689,19 +1622,14 @@ mod tests {
 
     #[test]
     fn the_published_path_starts_at_the_window_frame_and_ends_at_the_target() {
-        let target = deep_target(
-            TargetKind::UiElement,
-            rect(100, 100, 300, 300),
-            StopReason::Complete,
-        );
+        let target = deep_target(rect(100, 100, 300, 300), StopReason::Complete);
         // Contract the overlay relies on when it draws the path outline.
         assert_eq!(target.path.first(), Some(&rect(0, 0, 1000, 800)));
         assert_eq!(
             target.path.last().map(|level| level.rect),
             Some(target.screen_bounds)
         );
-        assert!(target.kind.is_refined());
-        assert!(!TargetKind::TopLevelWindowFrame.is_refined());
+        assert!(target.path.len() > 1);
         assert!(StopReason::Complete.is_complete());
         for reason in [
             StopReason::BudgetExhausted,
@@ -1723,7 +1651,6 @@ mod tests {
         path.push(deepest);
         DeepTarget {
             window: window(0x100),
-            kind: TargetKind::UiElement,
             screen_bounds: path.last().expect("path").rect,
             path,
             stop_reason: StopReason::Complete,

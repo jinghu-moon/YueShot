@@ -135,9 +135,11 @@ impl OverlayController {
     /// and a thin outline instead of the accent preview: "we could not get below the window" should
     /// not look like a confident element pick.
     pub(super) fn preview_is_window(&self) -> bool {
-        if self.deep_target.as_ref().is_some_and(|deep| {
-            deep.kind == crate::window_detection::model::TargetKind::TopLevelWindowFrame
-        }) {
+        if self
+            .deep_target
+            .as_ref()
+            .is_some_and(|deep| deep.path.len() == 1)
+        {
             return true;
         }
         // The wheel can walk the preview all the way up to the frame itself (docs/21 §5.17), and
@@ -448,7 +450,7 @@ impl OverlayController {
                 &format!(
                     "hover hwnd={} z={} bounds=({},{})->({},{})",
                     target.identity().hwnd,
-                    target.candidate.z_order,
+                    target.owner.z_order,
                     target.screen_bounds().left,
                     target.screen_bounds().top,
                     target.screen_bounds().right,
@@ -509,7 +511,7 @@ impl OverlayController {
     /// Called for **every** cursor update, not just when the hovered window changes: the
     /// refinement target is the control under the pointer, and controls change far more
     /// often than windows do (docs/18 §2).
-    pub(super) fn drive_refinement(&mut self, screen: Point, target: Option<WindowTarget>) {
+    pub(super) fn drive_refinement(&mut self, screen: Point, target: Option<SelectionTarget>) {
         // A staged downgrade only survives while the cursor stays where it was staged.
         if let Some((_, staged)) = self.pending_downgrade
             && !points_close(staged, screen)
@@ -702,7 +704,7 @@ impl OverlayController {
                     &format!(
                         "auto-snap preview hwnd={} epoch={} local=({},{})->({},{})",
                         preview.target.identity().hwnd,
-                        preview.target.candidate.snapshot_epoch,
+                        preview.target.owner.snapshot_epoch,
                         preview.selection.left,
                         preview.selection.top,
                         preview.selection.right,
@@ -718,7 +720,7 @@ impl OverlayController {
     }
 
     /// Nearest window for the current cursor position, converted to monitor-local space.
-    pub(super) fn preview_for_cursor(&mut self) -> Option<(WindowTarget, Rect, Rect)> {
+    pub(super) fn preview_for_cursor(&mut self) -> Option<(SelectionTarget, Rect, Rect)> {
         if self.session.state() != CaptureState::Selecting {
             return None;
         }
@@ -747,6 +749,24 @@ impl OverlayController {
         if local.is_empty() {
             return None;
         }
+        // The selected rectangle and its native origin now travel together;
+        // owner bounds remain available only for window validation/rebinding.
+        let level = self
+            .deep_target
+            .as_ref()
+            .filter(|deep| deep.window == target.identity())
+            .and_then(|deep| deep.path.iter().rev().find(|level| level.rect == bounds))
+            .copied()
+            .unwrap_or_else(|| {
+                if bounds == target.owner.screen_bounds {
+                    PathLevel::window(bounds)
+                } else {
+                    PathLevel::unknown(bounds)
+                }
+            });
+        let target = target
+            .at_level(level)
+            .bind_source(self.current_generation, self.frozen.as_ref()?.frame.source);
         Some((target, local, self.session.selection()))
     }
 
@@ -818,7 +838,11 @@ impl OverlayController {
     /// written **back into the snapshot** first, and only then is hover/preview recomputed
     /// from the same data source. Updating the highlight without the snapshot would leave
     /// the next `hit_test` reading the old rectangle and the highlight jumping back.
-    pub(super) fn apply_hover_validity(&mut self, target: WindowTarget, validity: HoverValidity) {
+    pub(super) fn apply_hover_validity(
+        &mut self,
+        target: SelectionTarget,
+        validity: HoverValidity,
+    ) {
         let Some(current) = self.hover_target else {
             return;
         };
@@ -1183,7 +1207,7 @@ impl OverlayController {
                 "confirm requested hwnd={} epoch={} confirmation={} preview_local={} \
                  deep_local={} pending={} deep={} level={}",
                 preview.target.identity().hwnd,
-                preview.target.candidate.snapshot_epoch,
+                preview.target.owner.snapshot_epoch,
                 request.get(),
                 describe_rect(preview.selection),
                 deep_local.map_or_else(|| "none".to_owned(), describe_rect),
@@ -1197,7 +1221,7 @@ impl OverlayController {
     }
 
     /// Apply a validated confirmation (docs/14 §5.4).
-    pub(super) fn apply_confirmation(&mut self, target: WindowTarget, valid: bool) {
+    pub(super) fn apply_confirmation(&mut self, target: SelectionTarget, valid: bool) {
         let Some(preview) = self.gesture.snap_preview() else {
             return;
         };

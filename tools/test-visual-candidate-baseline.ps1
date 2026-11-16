@@ -2,9 +2,9 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$EvidenceDirectory,
-    [switch]$Native
+    [switch]$Native,
+    [switch]$SelectionTarget
 )
-
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
@@ -23,6 +23,12 @@ $suites = @(
     @{ Name = 'geometry'; Arguments = @('test', '-p', 'yue-geometry', '--locked', '--lib') },
     @{ Name = 'native-baseline'; Arguments = @('test', '-p', 'yue-shot-capture', '--locked', '--lib', 'native_baseline', '--', '--test-threads=1') }
 )
+if ($SelectionTarget) {
+    $suites += @{ Name = 'selection-target'; Arguments = @('test', '-p', 'yue-shot-capture', '--locked', '--lib', 'selection_target_replay', '--', '--include-ignored', '--test-threads=1'); ExpectedCount = 3 }
+    foreach ($name in @('refresh_builds_a_labelled_snapshot_with_ordered_candidates', 'each_refresh_advances_the_epoch_and_drops_the_previous_snapshot', 'hover_revalidation_reports_bounds_changes_and_stale_targets')) {
+        $suites += @{ Name = $name; ExactOne = $true; Arguments = @('test', '-p', 'yue-shot-capture', '--locked', '--lib', $name, '--', '--ignored', '--test-threads=1') }
+    }
+}
 if ($Native) {
     foreach ($name in @(
         'native_baseline_controller_preview_replacement_and_manual_path_trace',
@@ -73,6 +79,7 @@ foreach ($suite in $suites) {
     }
     $valid = $code -eq 0 -and $parsed -and $passed -gt 0 -and $failed -eq 0
     if ($suite.ExactOne) { $valid = $valid -and $passed -eq 1 -and $ignored -eq 0 }
+    if ($suite.ExpectedCount) { $valid = $valid -and $passed -eq $suite.ExpectedCount -and $ignored -eq 0 }
     $results += [ordered]@{
         name = $suite.Name; command = 'cargo ' + ($suite.Arguments -join ' ')
         started = $started; finished = (Get-Date -Format o); exitCode = $code

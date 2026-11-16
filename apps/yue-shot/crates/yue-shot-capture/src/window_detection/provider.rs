@@ -15,7 +15,7 @@
 use std::collections::HashSet;
 use std::fmt;
 
-use super::model::{HoverValidity, WindowSnapshot, WindowTarget};
+use super::model::{HoverValidity, SelectionTarget, WindowSnapshot};
 
 /// Why a detection provider could not produce a snapshot.
 ///
@@ -186,7 +186,7 @@ pub fn is_shell_surface_class(class_name: &str) -> bool {
 ///
 /// Implementations are owned by the detection worker. Implementations must not be
 /// `Sync`: the v1 provider caches probe state between calls.
-pub trait WindowTargetProvider {
+pub trait WindowProvider {
     /// Enumerate the desktop and build a fresh snapshot.
     ///
     /// Runs on the detection worker. `EnumWindows` and every DWM read happen here and
@@ -197,13 +197,13 @@ pub trait WindowTargetProvider {
     ///
     /// Runs on the detection worker; the overlay only checks
     /// `epoch + identity + confirmation_id` on the returned verdict.
-    fn validate(&self, target: &WindowTarget) -> bool;
+    fn validate(&self, target: &SelectionTarget) -> bool;
 
     /// Lightweight re-validation of the hovered window (docs/14 §5.5).
     ///
     /// Runs on the detection worker, never on the overlay thread: it performs a
     /// synchronous `DwmGetWindowAttribute` that would otherwise stall the message loop.
-    fn revalidate_hover(&self, hover: &WindowTarget) -> HoverValidity;
+    fn revalidate_hover(&self, hover: &SelectionTarget) -> HoverValidity;
 }
 
 #[cfg(test)]
@@ -298,17 +298,17 @@ mod tests {
         // The trait must be implementable by a pure test double: the overlay only
         // consumes its results, never its internals.
         struct Stub;
-        impl WindowTargetProvider for Stub {
+        impl WindowProvider for Stub {
             fn refresh(
                 &mut self,
                 _exclusions: &Exclusions,
             ) -> Result<WindowSnapshot, WindowDetectionError> {
                 Ok(WindowSnapshot::empty())
             }
-            fn validate(&self, _target: &WindowTarget) -> bool {
+            fn validate(&self, _target: &SelectionTarget) -> bool {
                 false
             }
-            fn revalidate_hover(&self, _hover: &WindowTarget) -> HoverValidity {
+            fn revalidate_hover(&self, _hover: &SelectionTarget) -> HoverValidity {
                 HoverValidity::Invalid
             }
         }

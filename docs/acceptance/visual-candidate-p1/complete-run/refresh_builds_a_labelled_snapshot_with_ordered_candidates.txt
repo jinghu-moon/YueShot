@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-7ddcff0d886fede0.exe)
+
+running 1 test
+test windows::top_level_provider::tests::refresh_builds_a_labelled_snapshot_with_ordered_candidates ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 663 filtered out; finished in 0.01s
+

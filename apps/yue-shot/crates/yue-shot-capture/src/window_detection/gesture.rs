@@ -21,7 +21,7 @@
 //! session is settled the overlay simply never produces a window target.
 
 use crate::geometry::{Point, Rect, ResizeMode};
-use crate::window_detection::model::WindowTarget;
+use crate::window_detection::model::SelectionTarget;
 
 /// The pointer's interaction state as the overlay sees it (docs/14 §4.2).
 ///
@@ -128,7 +128,7 @@ pub enum ReleaseOutcome {
 /// a confirmation that later fails validation restores it (docs/14 §5.4).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct SnapPreview {
-    pub target: WindowTarget,
+    pub target: SelectionTarget,
     /// Monitor-local rectangle the overlay paints for the preview.
     pub selection: Rect,
     pub selection_before_preview: Rect,
@@ -264,7 +264,7 @@ impl GestureState {
     pub fn apply_dwell(
         &mut self,
         generation: u64,
-        preview: Option<(WindowTarget, Rect, Rect)>,
+        preview: Option<(SelectionTarget, Rect, Rect)>,
     ) -> bool {
         if generation != self.dwell_generation || self.gesture.is_pressed() {
             return false;
@@ -315,8 +315,8 @@ mod tests {
     use super::*;
     use crate::window_detection::model::{SnapshotEpoch, WindowCandidate, WindowIdentity};
 
-    fn target(epoch: SnapshotEpoch) -> WindowTarget {
-        WindowTarget::top_level_window_frame(WindowCandidate::new(
+    fn target(epoch: SnapshotEpoch) -> SelectionTarget {
+        SelectionTarget::window(WindowCandidate::new(
             WindowIdentity::new(0x1234, 7, 0xABC),
             Rect::new(100, 100, 300, 200),
             0,
@@ -406,7 +406,7 @@ mod tests {
     }
 
     /// The target used by the dwell tests.
-    fn snap_target() -> WindowTarget {
+    fn snap_target() -> SelectionTarget {
         target(3)
     }
 

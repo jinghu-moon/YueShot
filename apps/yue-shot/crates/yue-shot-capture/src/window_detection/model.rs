@@ -158,34 +158,12 @@ impl WindowIdentity {
     }
 }
 
-/// What kind of region a [`WindowTarget`] describes.
-///
-/// [`Self::TopLevelWindowFrame`] is the whole-window answer and the fallback the snap
-/// path always produces; [`Self::UiElement`] is what the refinement providers
-/// (`crate::windows::uia_provider`, `crate::windows::msaa_provider`) produce once a
-/// walk got below the frame. Refinement must never widen or alter the whole-window
-/// path — a failed refinement falls back to the frame, never the other way round.
-/// [`Self::ClientArea`] is declared and has no producer yet.
+/// Where the selected geometry came from. UIA and MSAA are transports of the
+/// same accessibility source; neither implies a different selection policy.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum TargetKind {
-    /// DWM top-level window frame: includes the title bar, excludes the invisible
-    /// resize border.
-    TopLevelWindowFrame,
-    /// The window's client area (no title bar, no borders). No producer yet.
-    ClientArea,
-    /// The deepest interactive UI element under the cursor, from a refinement walk.
-    UiElement,
-}
-
-impl TargetKind {
-    /// Whether this target comes from a refinement walk.
-    ///
-    /// Used by the overlay to keep the two layers apart: a refined target may be walked
-    /// further or dropped back to the frame, while a frame is always the fallback
-    /// and never needs a refinement query of its own.
-    pub fn is_refined(self) -> bool {
-        matches!(self, Self::ClientArea | Self::UiElement)
-    }
+pub enum TargetOrigin {
+    Window,
+    Accessibility,
 }
 
 /// One level of a deep path: where it is, and what kind of thing it is (docs/21 §5.24, B6).
@@ -199,12 +177,25 @@ pub struct PathLevel {
     /// Screen bounds in virtual-desktop physical pixels, the same space as
     /// [`WindowCandidate::screen_bounds`].
     pub rect: Rect,
+    pub origin: TargetOrigin,
     pub kind: LevelKind,
 }
 
 impl PathLevel {
     pub const fn new(rect: Rect, kind: LevelKind) -> Self {
-        Self { rect, kind }
+        Self {
+            rect,
+            origin: TargetOrigin::Accessibility,
+            kind,
+        }
+    }
+
+    pub const fn window(rect: Rect) -> Self {
+        Self {
+            rect,
+            origin: TargetOrigin::Window,
+            kind: LevelKind::Window,
+        }
     }
 
     /// A level whose kind the transport could not say — an MSAA ancestor chain, or a provider that
@@ -212,6 +203,7 @@ impl PathLevel {
     pub const fn unknown(rect: Rect) -> Self {
         Self {
             rect,
+            origin: TargetOrigin::Accessibility,
             kind: LevelKind::Unknown,
         }
     }
@@ -424,35 +416,68 @@ impl WindowCandidate {
     }
 }
 
-/// A candidate the overlay may preview or confirm (docs/14 §5.1).
-///
-/// Deliberately carries no monitor-local geometry: the target is expressed in
-/// virtual-desktop physical pixels and the overlay clips it to its own monitor.
+/// The frozen acquisition and pixel interpretation attached at preview creation.
+/// Capture cancellation and pixel-source generations remain distinct counters.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct WindowTarget {
-    pub candidate: WindowCandidate,
-    pub target_kind: TargetKind,
+pub struct SelectionSource {
+    pub capture_generation: u64,
+    pub pixels: yue_media::pixels::PixelSource,
 }
 
-impl WindowTarget {
-    pub const fn top_level_window_frame(candidate: WindowCandidate) -> Self {
+/// One selection record, in virtual-desktop physical pixels. The selected bounds
+/// are independent of the owning window's bounds. The bounded ancestor path is
+/// owned by DeepTarget; copying a preview never clones that path or its pixels.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct SelectionTarget {
+    pub rect_screen: Rect,
+    pub origin: TargetOrigin,
+    pub kind: Option<LevelKind>,
+    pub owner: WindowCandidate,
+    /// Window-snapshot hits are unbound; the overlay binds its frozen source
+    /// before publishing a preview. The window provider only validates owner.
+    pub source: Option<SelectionSource>,
+}
+
+impl SelectionTarget {
+    pub const fn window(owner: WindowCandidate) -> Self {
         Self {
-            candidate,
-            target_kind: TargetKind::TopLevelWindowFrame,
+            rect_screen: owner.screen_bounds,
+            origin: TargetOrigin::Window,
+            kind: Some(LevelKind::Window),
+            owner,
+            source: None,
         }
     }
 
+    pub const fn at_level(mut self, level: PathLevel) -> Self {
+        self.rect_screen = level.rect;
+        self.origin = level.origin;
+        self.kind = Some(level.kind);
+        self
+    }
+
+    pub const fn bind_source(
+        mut self,
+        capture_generation: u64,
+        pixels: yue_media::pixels::PixelSource,
+    ) -> Self {
+        self.source = Some(SelectionSource {
+            capture_generation,
+            pixels,
+        });
+        self
+    }
+
     pub fn identity(&self) -> WindowIdentity {
-        self.candidate.identity
+        self.owner.identity
     }
 
     pub fn screen_bounds(&self) -> Rect {
-        self.candidate.screen_bounds
+        self.rect_screen
     }
 
-    /// Whether this target still belongs to the snapshot generation `epoch`.
     pub fn is_stale_for(&self, epoch: SnapshotEpoch) -> bool {
-        self.candidate.snapshot_epoch != epoch
+        self.owner.snapshot_epoch != epoch
     }
 }
 
@@ -744,12 +769,75 @@ mod tests {
     #[test]
     fn a_target_knows_when_its_snapshot_generation_is_gone() {
         let epoch = 5;
-        let target = WindowTarget::top_level_window_frame(candidate(0x10, 0, epoch));
-        assert_eq!(target.target_kind, TargetKind::TopLevelWindowFrame);
+        let target = SelectionTarget::window(candidate(0x10, 0, epoch));
+        assert_eq!(target.origin, TargetOrigin::Window);
         assert_eq!(target.identity(), identity(0x10));
         assert_eq!(target.screen_bounds(), rect(0, 0, 100, 100));
         assert!(!target.is_stale_for(epoch));
         assert!(target.is_stale_for(epoch + 1));
+    }
+
+    #[test]
+    fn selection_target_replay_keeps_selected_geometry_separate_from_owner_and_source() {
+        use yue_media::pixels::{PixelDescriptor, PixelSource};
+
+        let owner = WindowCandidate::new(identity(0x10), rect(-640, -120, 0, 360), 2, 17);
+        let hit = SelectionTarget::window(owner);
+        let button = PathLevel::new(rect(-590, -60, -500, 0), LevelKind::Button);
+        let pixels = PixelSource::new(PixelDescriptor::bgra8(), 99);
+        let selected = hit.at_level(button).bind_source(41, pixels);
+        assert_eq!(selected.screen_bounds(), button.rect);
+        assert_eq!(selected.owner, owner);
+        assert_ne!(selected.screen_bounds(), selected.owner.screen_bounds);
+        assert_eq!(selected.identity(), owner.identity);
+        assert_eq!(selected.origin, TargetOrigin::Accessibility);
+        assert_eq!(selected.kind, Some(LevelKind::Button));
+        assert!(!selected.is_stale_for(17));
+        assert!(selected.is_stale_for(18));
+        assert_eq!(
+            selected.source,
+            Some(SelectionSource {
+                capture_generation: 41,
+                pixels
+            })
+        );
+        assert_eq!(hit.source, None);
+        assert_ne!(
+            selected.source,
+            Some(SelectionSource {
+                capture_generation: 42,
+                pixels
+            })
+        );
+        assert_ne!(
+            selected.source,
+            Some(SelectionSource {
+                capture_generation: 41,
+                pixels: PixelSource::new(PixelDescriptor::bgra8(), 100),
+            })
+        );
+    }
+
+    #[test]
+    fn selection_target_replay_origin_is_not_inferred_from_control_kind() {
+        let bounds = rect(0, 0, 100, 100);
+        let native_frame = PathLevel::window(bounds);
+        let accessible_window = PathLevel::new(bounds, LevelKind::Window);
+        assert_eq!(native_frame.kind, accessible_window.kind);
+        assert_eq!(native_frame.rect, accessible_window.rect);
+        assert_eq!(native_frame.origin, TargetOrigin::Window);
+        assert_eq!(accessible_window.origin, TargetOrigin::Accessibility);
+        let owner = candidate(0x10, 0, 5);
+        assert_eq!(
+            SelectionTarget::window(owner).at_level(native_frame).origin,
+            TargetOrigin::Window
+        );
+        assert_eq!(
+            SelectionTarget::window(owner)
+                .at_level(accessible_window)
+                .origin,
+            TargetOrigin::Accessibility
+        );
     }
 
     #[test]

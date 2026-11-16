@@ -43,10 +43,9 @@ fn deep() -> DeepTarget {
     let bounds = Rect::new(-590, -60, -500, 0);
     DeepTarget {
         window: owner(),
-        kind: TargetKind::UiElement,
         screen_bounds: bounds,
         path: vec![
-            PathLevel::new(Rect::new(-620, -100, -320, 300), LevelKind::Window),
+            PathLevel::window(Rect::new(-620, -100, -320, 300)),
             PathLevel::new(Rect::new(-610, -90, -330, 290), LevelKind::Pane),
             // A near duplicate must not consume a visible wheel step.
             PathLevel::new(Rect::new(-609, -89, -331, 289), LevelKind::Group),

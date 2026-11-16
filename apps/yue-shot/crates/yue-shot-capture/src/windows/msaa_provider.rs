@@ -25,7 +25,7 @@ use crate::geometry::{Point, Rect};
 use crate::window_detection::deep::{
     DeepSelectionProvider, DeepTarget, QueryControl, RefinementJob, RefinementOutcome, StopReason,
 };
-use crate::window_detection::model::{LevelKind, PathLevel, TargetKind};
+use crate::window_detection::model::PathLevel;
 use crate::window_detection::uia::level_kind_of_msaa_role;
 
 use super::timed_call::{TimedCallRunner, TimedOutcome};
@@ -190,18 +190,12 @@ impl DeepSelectionProvider for MsaaDeepSelectionProvider {
             }
             Ok(hit) => {
                 let box_level = PathLevel::new(hit.visible, level_kind_of_msaa_role(hit.role));
-                let mut path = vec![PathLevel::new(window_bounds, LevelKind::Window)];
+                let mut path = vec![PathLevel::window(window_bounds)];
                 if box_level.rect != window_bounds && !box_level.rect.is_empty() {
                     path.push(box_level);
                 }
-                let kind = if path.len() > 1 {
-                    TargetKind::UiElement
-                } else {
-                    TargetKind::TopLevelWindowFrame
-                };
                 RefinementOutcome::Target(Box::new(DeepTarget {
                     window: job.window,
-                    kind,
                     screen_bounds: path.last().expect("the path always holds the frame").rect,
                     path,
                     stop_reason: StopReason::Complete,

@@ -27,7 +27,7 @@ use crate::geometry::{Point, Rect};
 use crate::window_detection::deep::{
     DeepSelectionProvider, DeepTarget, QueryControl, RefinementJob, RefinementOutcome, StopReason,
 };
-use crate::window_detection::model::{PathLevel, SnapshotEpoch, TargetKind};
+use crate::window_detection::model::{PathLevel, SnapshotEpoch};
 use crate::window_detection::uia::{
     WalkBudget, WalkNode, WalkOutcome, fallback_hit_path, is_descendable, is_structural_wrapper,
     is_text_run_inside_element, is_unspecific_hit, level_kind_of_control_type, merge_hit_paths,
@@ -908,14 +908,8 @@ fn finish(outcome: WalkOutcome, job: &RefinementJob) -> DeepTarget {
     // `UiElement` only when the walk actually got below the window frame; a
     // window-only answer keeps saying "whole frame" so the overlay renders it exactly like a
     // window-snap target.
-    let kind = if outcome.path.len() > 1 {
-        TargetKind::UiElement
-    } else {
-        TargetKind::TopLevelWindowFrame
-    };
     DeepTarget {
         window: job.window,
-        kind,
         screen_bounds: outcome.target,
         path: outcome.path,
         stop_reason: outcome.stop_reason,

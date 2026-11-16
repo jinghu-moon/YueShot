@@ -36,7 +36,7 @@ use crate::window_detection::deep::{
     DeepSelectionProvider, DeepTarget, QueryControl, RefinementJob, RefinementOutcome, StopReason,
 };
 use crate::window_detection::model::{
-    PathLevel, RequestGate, RequestId, SnapshotEpoch, TargetKind, WindowIdentity,
+    PathLevel, RequestGate, RequestId, SnapshotEpoch, WindowIdentity,
 };
 use crate::window_detection::uia::{MAX_PATH_LEN, level_kind_of_msaa_role, should_adopt_msaa_box};
 
@@ -234,7 +234,15 @@ fn push_box(target: &mut DeepTarget, box_level: PathLevel, ancestors: &[Rect]) -
         .iter()
         .copied()
         .filter(|level| level.contains_rect(bounds))
-        .map(PathLevel::unknown)
+        .map(|rect| {
+            let mut level = PathLevel::unknown(rect);
+            if target.path.first().is_some_and(|frame| {
+                frame.origin == crate::window_detection::TargetOrigin::Window && frame.rect == rect
+            }) {
+                level.origin = crate::window_detection::TargetOrigin::Window;
+            }
+            level
+        })
         .collect();
     if path.is_empty() {
         // The chain always starts at the window frame; keep it if a caller ever gets here without one.
@@ -250,7 +258,6 @@ fn push_box(target: &mut DeepTarget, box_level: PathLevel, ancestors: &[Rect]) -
     }
     target.path = path;
     target.screen_bounds = bounds;
-    target.kind = TargetKind::UiElement;
     true
 }
 
@@ -595,7 +602,6 @@ mod tests {
     use super::*;
     use crate::window_detection::RefinementScheduler;
     use crate::window_detection::deep::{DeepTarget, StopReason};
-    use crate::window_detection::model::TargetKind;
     use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
     use std::time::Duration;
 
@@ -606,13 +612,9 @@ mod tests {
     fn deep(bounds: Rect, reason: StopReason) -> DeepTarget {
         DeepTarget {
             window: window(),
-            kind: TargetKind::UiElement,
             screen_bounds: bounds,
             path: vec![
-                PathLevel::new(
-                    Rect::new(0, 0, 1000, 800),
-                    crate::window_detection::LevelKind::Window,
-                ),
+                PathLevel::window(Rect::new(0, 0, 1000, 800)),
                 PathLevel::unknown(bounds),
             ],
             stop_reason: reason,
@@ -1049,10 +1051,9 @@ mod tests {
             );
             let mut target = DeepTarget {
                 window: window(),
-                kind: TargetKind::UiElement,
                 screen_bounds: broad,
                 path: vec![
-                    PathLevel::new(frame, LevelKind::Window),
+                    PathLevel::window(frame),
                     PathLevel::new(broad, LevelKind::Pane),
                 ],
                 stop_reason: StopReason::Complete,

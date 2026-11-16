@@ -24,7 +24,7 @@
 
 use crate::geometry::Point;
 use crate::window_detection::model::{
-    HoverValidity, WindowCandidate, WindowSnapshot, WindowTarget,
+    HoverValidity, SelectionTarget, WindowCandidate, WindowSnapshot,
 };
 
 /// Squared Euclidean distance from `point` to a rectangle, in physical pixels².
@@ -63,12 +63,12 @@ impl WindowSnapshot {
     /// established that `WindowFromPoint` is the wrong tool while a full-screen overlay
     /// exists (it would return the overlay itself), and that a Z-ordered scan answers
     /// the question the user is really asking — *which window am I pointing at?*
-    pub fn hit_test(&self, point: Point) -> Option<WindowTarget> {
+    pub fn hit_test(&self, point: Point) -> Option<SelectionTarget> {
         self.candidates
             .iter()
             .filter(|candidate| self.is_live(candidate))
             .find(|candidate| candidate.screen_bounds.contains(point))
-            .map(|candidate| WindowTarget::top_level_window_frame(*candidate))
+            .map(|candidate| SelectionTarget::window(*candidate))
     }
 
     /// The nearest live candidate within `snap_radius` physical pixels, or `None`.
@@ -78,7 +78,7 @@ impl WindowSnapshot {
     /// between two windows — are resolved by preferring the candidate that contains the
     /// point, and only then by Z order. `snap_radius` is the documented initial 24 px
     /// ([`crate::window_detection::DEFAULT_SNAP_RADIUS_PX`]).
-    pub fn nearest_target(&self, point: Point, snap_radius: u32) -> Option<WindowTarget> {
+    pub fn nearest_target(&self, point: Point, snap_radius: u32) -> Option<SelectionTarget> {
         let limit = i64::from(snap_radius) * i64::from(snap_radius);
         // (distance², 0 when the point is inside, z_order) — lexicographic.
         let mut best: Option<(i64, u8, u32, WindowCandidate)> = None;
@@ -101,7 +101,7 @@ impl WindowSnapshot {
                 best = Some((distance, outside, candidate.z_order, *candidate));
             }
         }
-        best.map(|(_, _, _, candidate)| WindowTarget::top_level_window_frame(candidate))
+        best.map(|(_, _, _, candidate)| SelectionTarget::window(candidate))
     }
 
     /// Write a re-validation result back into the snapshot (docs/14 §5.5).

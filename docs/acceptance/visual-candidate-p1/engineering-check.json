@@ -1,0 +1,7 @@
+{
+  "command": "cargo xtask check",
+  "started": "2026-11-16T21:09:04.3920251+08:00",
+  "finished": "2026-11-16T21:11:46.8753652+08:00",
+  "exitCode": 0,
+  "logSha256": "75917e221c293bd21c63a4377fe9c733d99ecb8896a635fc40506e357c5cd2b0"
+}

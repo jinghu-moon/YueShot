@@ -32,3 +32,21 @@
 
 真实断网、断电、注册表写失败、重复恢复循环和资源稳定性仍需独立资格，不能因为上表已有相关测试名称而视作完成。
 性能结论必须有前后指标；本轮工程收尾不作没有测量依据的性能承诺。
+
+## 视觉候选设计研究快照（2026-11-16）
+
+源码 HEAD：`7938581`。以下是设计初稿研究时实际执行、在评审修订时重新核对原始日志的计数摘要，**不是视觉算法已实现、P0 基线已补齐或完整升级已通过**。本次评审修订没有重跑代码测试。
+
+| 范围 | 通过 | 失败 | ignored |
+| --- | --- | --- | --- |
+| capture：window_detection | 113 | 0 | 0 |
+| capture：refinement_worker | 6 | 0 | 0 |
+| capture：overlay | 31 | 0 | 1 |
+| capture：capture_worker | 5 | 0 | 1 |
+| capture：providers | 14 | 0 | 2 |
+| capture：session / artifact / sampler / geometry | 24 / 8 / 16 / 51 | 0 | 0 |
+| yue-media / yue-geometry | 8 / 10 | 0 | 0 |
+| 本项目合计 | 286 | 0 | 4 |
+| mark-shot 区域模块临时独立 harness（另计） | 5 | 0 | 0 |
+
+命令、参考版本哈希及证据边界见[设计文档附录 A](visual-candidate-pipeline.md#附录-a初稿研究执行记录)。原始日志仍位于临时目录，摘要持久化不等于原始日志已归档；ignored、完整 `cargo xtask check`、新 golden、新算法和正式性能对照未在该轮执行。实施时须将新批次的原始日志、环境、退出码及未覆盖项持久保存到 `docs/acceptance/`，不能借用本摘要作为新候选资格。

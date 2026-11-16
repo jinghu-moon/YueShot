@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>视觉候选链路 · 测试素材与合同</title>
+<style>
+:root{--bg:#f3f4f6;--fg:#1b1d21;--mut:#5d6370;--ln:#d5d8de;--cd:#fff;--ac:#1f6f8b}
+@media(prefers-color-scheme:dark){:root{--bg:#15171a;--fg:#e8eaee;--mut:#a7adba;--ln:#3b414b;--cd:#1e2125;--ac:#6cc3dd}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.65 "Segoe UI","Microsoft YaHei",sans-serif}
+header,footer,main{max-width:1260px;margin:auto;padding:18px 24px}h1{font-size:22px;margin:0 0 8px}p{margin:6px 0;color:var(--mut)}
+.bar,.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button,select{font:inherit;border:1px solid var(--ln);background:var(--cd);color:var(--fg);padding:5px 12px;border-radius:6px;cursor:pointer}
+button.on{background:var(--ac);color:var(--bg)}button:disabled{opacity:.6;cursor:wait}button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+main{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:14px;padding-top:0}article{background:var(--cd);border:1px solid var(--ln);border-radius:8px;padding:12px;min-width:0}article[hidden]{display:none}
+a{color:var(--ac)}h2{font-size:15px;margin:0}h2 b{color:var(--ac);margin-right:8px}.tag,.status{font-size:12px;color:var(--mut)}.cv{position:relative;line-height:0;border:1px solid var(--ln);overflow:hidden}.cv canvas{display:block;width:100%;height:auto;image-rendering:pixelated}.cv .ov{position:absolute;inset:0;pointer-events:none}body.nogt .ov{display:none}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.5 Consolas,monospace;max-height:320px;overflow:auto;background:var(--bg);padding:8px}summary{cursor:pointer}.notice{border-left:3px solid var(--ac);padding-left:12px}#health[role=alert]{color:#c44339}label{display:inline-flex;gap:6px;align-items:center}.legend span{margin-right:15px}footer{border-top:1px solid var(--ln)}
+.comparison{grid-column:1/-1}.pairs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px}.variant{min-width:0;border-top:1px solid var(--ln);padding-top:10px}.variant .cv{max-width:256px;margin:8px 0}.variant label{display:flex;flex-direction:column;align-items:flex-start;width:100%;margin-top:6px;gap:4px}.variant select{width:100%;max-width:100%;min-width:0}.verdict{display:inline-block;padding:1px 7px;border:1px solid var(--ln);border-radius:4px;font-size:12px}.pair-note{font-size:13px}.detail-pixels{display:block;width:256px;max-width:100%;height:auto;image-rendering:pixelated;border:1px solid var(--ln);margin:8px 0}
+</style></head><body>
+<header><h1>视觉候选链路 · 测试素材与合同</h1>
+<p id="count"></p><p class="notice">这是合成素材与结构化测试合同，未运行 YueShot 检测器。输入自检通过 ≠ 算法测试通过。原生事件、FP16、设备与资源测试仍需执行器／实机；合成图不能替代真实宿主验收。</p>
+<p>参考：<a href="../visual-candidate-pipeline.md">视觉候选生成链路设计文档</a> §§4、6～8。坐标：图像局部物理像素；rect 为 [x,y,width,height]，右下不含。阴影不计入卡片几何外沿。</p>
+<p class="notice">重点：Q 系列是边界与相似对照。每组固定画布／尺度，仅改变注明的条件；各变体单独导出纯图，页面排版和标签不进入输入。明确区分“要求检出／拒绝”“待标定”“阶段合同”；校准样本不能冒充独立验收样本。</p>
+<div class="bar" id="bar"></div><div class="bar" id="actions"></div>
+<p id="health" role="status" aria-live="polite">正在检查素材合同…</p>
+<p class="legend"><span style="color:#1f9d6b">绿：要求候选</span><span style="color:#e5484d">红：禁止目标／区域</span><span style="color:#9763be">紫：几何存在但应拒绝／探索</span><span style="color:#2f6fed">蓝：ROI</span><span style="color:#b88600">黄：当前查询</span></p>
+</header><main id="main"></main>
+<footer><p>导出包包含纯底图、阶段掩码、像素描述、SHA-256、逐点查询和测试合同。所有算法结果均为 runner_required，不把卡片数当执行通过数。浏览器文字／阴影可能因环境变化；固定导出的 PNG＋JSON 后再作 golden。</p><p>边界对应：A01→T03，A02→T04，A03→T05，A04→T06，A05→T07/T19，A06→T10，A07→E05，A08→T08，A09→E07，A10→T12，A11→T13，A12→T20，A13→T09，A14→T14，A15→E04，A16→E09/E10，A17→T19，A18→T21。</p></footer>
+<script>
+'use strict';
+const VERSION='4.0.0';
+const PROFILE={id:'synthetic-development-v4',status:'experimental_not_product_qualification',sampling:{corner_fraction:.10,corner_rounding:'ceil',minimum_distinct:8},integer_edge_tolerance_px:0,aa_end_to_end_tolerance_px:1,aa_localization_stage_tolerance_px:0,calibration_freeze:'P2开发集选型结束；P5真实验收集独立冻结，不将Q变体算独立统计样本'};
+const $=s=>document.querySelector(s);
+let seed=7;const rnd=()=>(seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296;
+const F=(x,c,a,b,w,h)=>{x.fillStyle=c;x.fillRect(a,b,w,h)};
+const B=(x,c,a,b,w,h,t)=>{F(x,c,a,b,w,t);F(x,c,a,b+h-t,w,t);F(x,c,a,b,t,h);F(x,c,a+w-t,b,t,h)};
+const L='#e8e4da',D='#2f4b7c';
+const P=(rect,name)=>({rect,name,role:'target',acceptance:'required'});
+const N=(rect,name)=>({rect,name,role:'forbidden',acceptance:'reject'});
+const R=(rect,name)=>({rect,name,role:'geometry',acceptance:'reject'});
+const O=(rect,name)=>({rect,name,role:'geometry',acceptance:'exploratory'});
+const K={target:'#1f9d6b',forbidden:'#e5484d',geometry:'#9763be',roi:'#2f6fed'};
+function affine(ctx,w,h){const d=ctx.createImageData(w,h);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=(y*w+x)*4;for(let k=0;k<3;k++)d.data[i+k]=Math.round(40+k*25+x*.12+y*.08);d.data[i+3]=255;}ctx.putImageData(d,0,0);}
+// Analytic pixel coverage, independent of Canvas stroke rasterisation.
+function aaRing(ctx,outer,t){const [x,y,w,h]=outer,a=Math.floor(x),b=Math.floor(y),r=Math.ceil(x+w),z=Math.ceil(y+h),d=ctx.createImageData(r-a,z-b);
+ const area=(px,py,q)=>Math.max(0,Math.min(px+1,q[0]+q[2])-Math.max(px,q[0]))*Math.max(0,Math.min(py+1,q[1]+q[3])-Math.max(py,q[1]));
+ const inner=[x+t,y+t,w-2*t,h-2*t];for(let py=b;py<z;py++)for(let px=a;px<r;px++){const v=Math.round(255-(255-34)*(area(px,py,outer)-area(px,py,inner))),i=((py-b)*(r-a)+px-a)*4;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}ctx.putImageData(d,a,b);}
+const V=[
+
+['T01','奇偶坐标的填充矩形','像素场景','精修落在真实边，不系统性偏 1 px',400,200,x=>{F(x,L,0,0,400,200);F(x,'#2a2d36',200,0,200,200);F(x,D,41,31,100,70);F(x,L,240,40,100,70);return{gt:[P([41,31,100,70],'奇坐标'),P([240,40,100,70],'偶坐标')],cur:[90,65]}}],
+['T02','指定灰度相等、色相不同','像素场景','77R+150G+29B 灰度严格相等；不是 CIE 亮度等值',400,200,x=>{F(x,'#289650',0,0,400,200);F(x,'#be4950',90,50,220,100);return{gt:[P([90,50,220,100],'异色矩形')],cur:[200,100]}}],
+['T03','内部渐变加文字，外框清晰','像素场景','外框保留，内部高方差不是拒绝原因',320,200,x=>{F(x,L,0,0,320,200);const g=x.createLinearGradient(60,40,260,40);g.addColorStop(0,'#cfe3ff');g.addColorStop(1,'#ffd9c2');x.fillStyle=g;x.fillRect(60,40,200,120);B(x,'#33415c',60,40,200,120,2);x.fillStyle='#33415c';x.font='16px sans-serif';x.fillText('Quarterly report',84,105);return{gt:[P([60,40,200,120],'外框')],cur:[160,100]}}],
+['T04','量化仿射渐变，无真实矩形','像素场景','浮点参考残差为 0；PNG 残差允许量化误差，不能通过伪框',400,200,(x,w,h)=>{affine(x,w,h);return{gt:[N([80,50,180,100],'注入提案')],cur:[170,100]}}],
+['T05','软阴影与纯光晕','像素场景','有真实分界者保留，仅光晕者拒绝',420,190,x=>{F(x,'#dfe6ee',0,0,420,190);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=16;x.shadowOffsetY=6;F(x,'#fff',30,40,150,110);x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;B(x,'#b8bec8',30,40,150,110,1);const g=x.createRadialGradient(310,95,6,310,95,72);g.addColorStop(0,'#ffc850');g.addColorStop(1,'rgba(255,200,80,0)');x.fillStyle=g;x.fillRect(230,20,160,150);return{gt:[P([30,40,150,110],'真实分界'),N([238,23,144,144],'仅光晕')],cur:[105,95]}}],
+['T06','1/2/4 px 线框与抗锯齿','像素场景','线框模式成立，取描边外接框而非内沿',440,240,x=>{F(x,'#fff',0,0,440,240);[[30,1],[170,2],[310,4]].forEach(([a,t])=>B(x,'#222',a,30,100,70,t));x.strokeStyle='#222';x.lineWidth=1;x.strokeRect(30.5,150.5,99,69);aaRing(x,[169.5,149.5,101.5,71.5],1.5);return{gt:[P([30,30,100,70],'1px'),P([170,30,100,70],'2px'),P([310,30,100,70],'4px'),P([30,150,100,70],'1px 对齐'),P([169,149,102,72],'抗锯齿像素覆盖')],cur:[80,65]}}],
+['T07','按钮、假字形、棋盘纹理','像素场景','合法按钮保留；无外框的字符和纹理不抢默认目标',460,150,x=>{F(x,L,0,0,460,150);F(x,'#e7f0ff',30,40,120,44);B(x,'#2f6fed',30,40,120,44,2);x.fillStyle='#1d3f8a';x.font='bold 16px sans-serif';x.fillText('OPEN',66,68);for(let i=0;i<90;i++)F(x,'#444',(190+rnd()*130)|0,(30+rnd()*62)|0,3,8);for(let i=0;i<20;i++)for(let j=0;j<20;j++)if((i+j)%2)F(x,'#333',350+i*4,30+j*4,4,4);return{gt:[P([30,40,120,44],'合法按钮'),N([190,30,140,70],'密集假字形'),N([350,30,80,80],'棋盘纹理')],cur:[90,62]}}],
+['T08','三层嵌套，含 2 px 间隔','像素场景','不同层保留，重复来源合并，滚轮始终是包含关系',420,240,x=>{F(x,L,0,0,420,240);B(x,'#222',20,20,380,200,2);B(x,'#555',24,24,372,192,1);F(x,'#fff',60,60,300,120);B(x,'#888',60,60,300,120,1);return{gt:[P([20,20,380,200],'外层'),P([24,24,372,192],'中层'),P([60,60,300,120],'内层')],cur:[210,120]}}],
+['T09','两个交叉矩形','像素场景','指针落在交集时默认结果确定，不产生假祖先链',320,220,x=>{F(x,L,0,0,320,220);x.fillStyle='rgba(47,111,237,.12)';x.fillRect(30,30,170,110);x.fillStyle='rgba(229,138,31,.14)';x.fillRect(120,80,170,110);B(x,'#2f6fed',30,30,170,110,2);B(x,'#e58a1f',120,80,170,110,2);return{gt:[P([30,30,170,110],'A'),P([120,80,170,110],'B，与 A 交叉')],cur:[160,110]}}],
+['T10','4K 小控件与 ROI 边缘','像素场景','每个框有独立查询；8px 为探索样本，不宣称必命中；另导出 8K 成对样本',3840,2160,x=>{F(x,L,0,0,3840,2160);const g=[];[8,12,16,24,32].forEach((s,i)=>{const a=1740+i*70;F(x,D,a,1060,s,s);g.push(P([a,1060,s,s],s+'px'))});F(x,D,2168,1090,16,16);g.push(P([2168,1090,16,16],'跨 ROI 右缘'));F(x,D,200,200,16,16);g.push(P([200,200,16,16],'ROI 之外'));g.push({rect:[1664,824,512,512],role:'roi',name:'固定裁切 ROI（独立区域测试）'});return{gt:g,cur:[1920,1080]}}],
+['E05','边长 7/8/63/64/65 与大圆角','像素场景','排除角部后不足 8 个独立位置须拒绝；圆角案例要求完整四边',420,120,x=>{F(x,'#fff',0,0,420,120);const g=[];let a=10;[7,8,63,64,65].forEach(s=>{B(x,'#222',a,20,s,s,1);g.push(s<10?R([a,20,s,s],s+'px：采样不足'):P([a,20,s,s],s+'px'));a+=s+16});x.strokeStyle='#222';x.beginPath();x.roundRect(a+.5,20.5,63,29,15);x.stroke();g.push(N([a,20,64,30],'药丸形'));return{gt:g,cur:[40,50]}}],
+['E07','图像四角与边缘裁切','像素场景','被图像边裁切的边不得当作真实边界',320,200,x=>{F(x,L,0,0,320,200);F(x,D,0,0,80,60);F(x,D,240,140,80,60);F(x,D,260,0,60,40);F(x,D,110,70,100,60);return{gt:[N([0,0,80,60],'左上裁切'),N([240,140,80,60],'右下裁切'),N([260,0,60,40],'右上裁切'),P([110,70,100,60],'完整矩形')],cur:[160,100]}}],
+['E09','随机噪声与 1 px 棋盘','像素场景','像素图测纹理负例；另导出 76,800 个隔离组件的阶段掩码，确定性测标签上限',360,160,x=>{const d=x.createImageData(360,160);for(let y=0;y<160;y++)for(let a=0;a<360;a++){const i=(y*360+a)*4,v=a<180?rnd()*255:((a+y)%2?0:255);d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}x.putImageData(d,0,0);return{gt:[N([0,0,180,160],'随机噪声'),N([180,0,180,160],'1px 棋盘')],cur:[90,80]}}]
+];
+
+V.push(
+ ['T19','无边框文字：首版非目标','像素场景','文字的包围盒不等于消息／段落边界；不得自动造框',480,240,x=>{F(x,'#f4f4f4',0,0,480,240);x.fillStyle='#333';x.font='16px sans-serif';['Message one with no border','Second line of the same message','','Another message or paragraph?','Only whitespace separates them'].forEach((t,i)=>x.fillText(t,30,35+i*35));return{gt:[N([20,12,420,205],'无框文字区域')],cur:[160,70]}}],
+ ['T21','文字种子、大框与接触中层','像素场景','A/B 同输入对照；几何真值先定，不要求算法彼此输出相同',900,680,x=>{F(x,L,0,0,900,680);B(x,'#222',20,20,860,640,2);B(x,'#555',20,60,800,560,2);F(x,'#fff',300,230,280,160);B(x,'#555',300,230,280,160,2);x.fillStyle='#222';x.font='bold 22px sans-serif';x.fillText('SEED ON TEXT',330,310);return{gt:[P([20,20,860,640],'外层'),P([20,60,800,560],'接触外沿的中层'),P([300,230,280,160],'文字卡片')],cur:[410,302]}}]
+);
+const assert=(op,args={})=>({op,...args});
+const event=(type,args={})=>({type,...args});
+const rectA=[40,40,180,120],rectB=[70,60,60,40];
+const source={capture_generation:1,pixel_generation:1,window_epoch:1};
+const owner={hwnd:'fixture-window-1',pid:101,creation_token:'fixture-owner-1',bounds:[0,0,640,480],z:0};
+const state={phase:'Selecting',source,frame:{size:[640,640],encoding:'sRGB'},windows:[{...owner,bounds:[0,0,640,640],synthetic:true}],owner:owner.hwnd};
+const nativeKinds=['Unknown','Button','CheckBox','ComboBox','Edit','Hyperlink','Image','ListItem','List','Menu','ProgressBar','RadioButton','ScrollBar','Slider','Tab','Text','ToolBar','Tree','Table','DataGrid','DataItem','Document','Window','TitleBar','Header','Custom','Group','Pane'];
+const broad=new Set(['Unknown','Custom','Document','Window','Group','Pane']);
+const C={};
+function spec(id,title,type,expect,input,assertions,extra={}){C[id]={id,title,type,expect,input,assertions,...extra};}
+function replay(id,title,expect,events,assertions,extra={}){spec(id,title,'事件回放',expect,{initial:state,events},assertions,extra);}
+function numeric(id,title,expect,vectors,assertions,extra={}){spec(id,title,'数值与资源',expect,{vectors},assertions,extra);}
+
+spec('T11','原生类型穷举与视觉细化','事件回放','28 种 LevelKind；Text 采纳开／关分别测试',{
+ initial:state,variants:nativeKinds.map(kind=>({kind,adopt_text_runs:true,native_rect:rectA,visual_rect:rectB,expected_default:broad.has(kind)?'Visual':'Accessibility'})).concat([{kind:'Text',adopt_text_runs:false,native_adopted:false,visual_rect:rectB,expected_default:'Visual'}])
+},[assert('default_origin_matches_variant'),assert('level_kind_enum_coverage',{count:28}),assert('no_change_to_adopt_text_runs_policy')]);
+numeric('T12','重叠窗口、负原点与 DPI','坐标只映射一次；跨前窗候选不自动采纳',[
+ ...[120,144,192].map(dpi=>({dpi,monitor_origin:[-1920,-1080],rect_local:[40,50,120,80],expected_screen:[-1880,-1030,120,80]})),
+ {windows:[{id:'front',z:0,rect:[100,80,200,180]},{id:'back',z:1,rect:[0,0,640,480]}],candidate:{owner:'back',rect:[70,90,120,80]},expected:'reject'}
+],[assert('screen_rect_equals_expected'),assert('reject_occlusion_conflict')]);
+replay('T13','按下／确认在途','同 owner 的晚到矩形也不能改确认意图',[
+ event('preview',{target:'A',rect:rectA}),event('pointer_down'),event('request_confirm',{id:7}),event('publish_visual',{target:'B',rect:rectB}),event('confirm_result',{id:7,valid:true})
+],[assert('confirmed_rect',{equals:rectA}),assert('no_late_selection_overwrite')],{variants:{permute_events:['publish_visual','native_result','window_refresh'],keep_order:['request_confirm','confirm_result'],window_refresh:'same_identity_same_bounds'}});
+replay('T14','滚轮选层按几何保持','插入新子级不按数组下标跳层；离开后解除',[
+ event('publish_chain',{rects:[rectA,rectB]}),event('wheel_select',{rect:rectA}),event('publish_chain',{rects:[rectA,[55,50,100,80],rectB]}),event('checkpoint',{name:'locked'}),event('pointer_move',{point:[600,450]})
+],[assert('selected_at_checkpoint',{checkpoint:'locked',rect:rectA}),assert('manual_lock_after_exit',{equals:false})]);
+spec('T15','非 Selecting 与 Shift','事件回放','显式展开 phase×Shift；Selecting 且未按 Shift 是允许发布的对照',{
+ scenarios:['Selecting','Selected','Annotating','Exporting'].flatMap(phase=>[false,true].map(shift=>({id:`${phase}-shift-${shift}`,initial:structuredClone(state),events:[event('start_visual'),event('set_phase',{phase}),event('set_shift',{pressed:shift}),event('visual_complete',{rect:rectB,qualified:true,owner:owner.hwnd})],assertions:[assert('preview_visible',{equals:phase==='Selecting'&&!shift}),assert('selection_unchanged')]})))
+},[assert('run_each_scenario_independently')]);
+numeric('T16','分析与导出隔离','同源同选区比较导出像素；分析提示不进入图像',[
+ {fixture:'T01',selection:[41,31,100,70],analysis:false},{fixture:'T01',selection:[41,31,100,70],analysis:true}
+],[assert('export_rgba_equal'),assert('pixel_descriptor_equal'),assert('source_hash_unchanged'),assert('no_overlay_in_export')],{requires:['export_integration_runner']});
+spec('T17','来源故障隔离','事件回放','每种故障有完整事件及独立预期；全部失败也应保留手动',{
+ scenarios:['native_only','visual_only','both','visual_late_failure'].map(fault=>{
+  const events=[],assertions=[];
+  if(fault==='visual_only'){events.push(event('native_result',{status:'Complete',kind:'Button',rect:rectA}),event('visual_failure',{reason:'injected'}));assertions.push(assert('default_origin',{equals:'Accessibility'}));}
+  else {events.push(event('native_result',{status:'Unsupported'}));if(fault==='both'){events.push(event('visual_failure',{reason:'injected'}));assertions.push(assert('no_visual_default'));}else {events.push(event('visual_complete',{rect:rectA,qualified:true,owner:owner.hwnd}),event('checkpoint',{name:'visual_available'}));assertions.push(assert('default_at_checkpoint',{checkpoint:'visual_available',origin:'Visual'}));if(fault==='visual_late_failure')events.push(event('visual_failure',{reason:'injected'}));}}
+  events.push(event('checkpoint',{name:'before_manual'}),event('manual_drag',{from:[10,10],to:[80,70]}));
+  return{id:fault,initial:structuredClone(state),events,assertions:[...assertions.map(a=>a.op==='default_origin'||a.op==='no_visual_default'?{...a,checkpoint:'before_manual'}:a),assert('manual_selection',{equals:[10,10,70,60]}),assert('ui_responsive')]};
+ })
+},[assert('run_each_scenario_independently')]);
+replay('T18','A 的像素复用与 B 的候选复用','A 换停留点重算链，但不重复 ROI 读回；B 查候选',[
+ event('roi_complete',{rect:[0,0,512,512],point:[80,80]}),event('pointer_move',{point:[220,180]}),event('dwell',{ms:80}),event('checkpoint',{name:'new_point'}),event('idle',{ms:60000})
+],[assert('roi_readback_increment',{equals:0}),assert('A_query_point',{equals:[220,180]}),assert('A_new_query_count',{equals:1}),assert('B_new_detection_count',{equals:0}),assert('idle_new_dispatch_or_poll',{equals:0})],{variants:{algorithm:['A','B'],scope:'仅断言所选路线的 A_ 或 B_ 字段'}});
+spec('T20','桌面关闭、Custom 与明确类型','事件回放','无 owner 不发布；Custom 可细化；Text/Image 不被抢占',{
+ initial:state,variants:[{owner:null,expected:'no_visual_default'},...['Custom','Unknown','Text','Image'].map(kind=>({owner:owner.hwnd,kind,rect:rectA,visual:rectB,expected:broad.has(kind)?'Visual':'Accessibility'}))]
+},[assert('default_matches_policy'),assert('no_fake_hwnd'),assert('source_gate_valid')]);
+numeric('T22','分片与条带接缝','同一输入分片前后几何与证据对照',[
+ {fixture:'T01',mode:'unsliced'},{fixture:'T01',mode:'sliced',slice_boundary_x:[41,141],slice_boundary_y:[31,101],halo:'derived_from_sampling'}
+],[assert('geometry_equivalent',{max_edge_error_px:1}),assert('evidence_equivalent',{tolerance:'locked_by_P2'}),assert('d2d_state_restored'),assert('source_hash_unchanged')],{requires:['selected_backend_runner'],applies_to:'CPU区域传输或选中GPU分片；不强迫CPU新增shader'});
+replay('T23','混合层级与滚轮停靠','去掉重复停靠，不按面积比删真实细层',[
+ event('publish_chain',{rects:[[10,10,200,160],[10,10,200,160],[11,11,198,158],[40,40,100,80]]}),event('wheel_walk_all')
+],[assert('identical_rect_stop_count',{equals:1}),assert('reachable_rect',{rect:[11,11,198,158]}),assert('chain_strict_containment'),assert('record_wheel_steps'),assert('manual_geometry_stable')]);
+
+numeric('E01','极小、奇数与极窄尺寸','不足邻域返回空；正常大图不因尺寸列表直接判空',[
+ ...[[0,0],[1,1],[2,100],[100,2]].map(size=>({size,expected:'CompleteEmpty'})),
+ ...[[1281,721],[4097,2305],[1,4097],[4097,1]].map(size=>({size,expected:'checked_no_upsampling_or_panic',full_frame_empty:size.includes(1)}))
+],[assert('dimensions_contract'),assert('no_panic'),assert('no_forced_short_side_upsampling')]);
+numeric('E02','尺寸溢出与设备上限','先校验再分配；不能把超大数塞给浏览器Canvas',[
+ {width:'4294967295',height:'4294967295',stride:'34359738360',expected:['Failed','UnsupportedSource']},{width:16385,height:16385,device_max_texture:16384,expected:['UnsupportedSource']}
+],[assert('reject_before_allocation'),assert('checked_integer_arithmetic')]);
+numeric('E03','长度、stride、描述不符','越界输入必须在读内存／建 view 前拒绝',[
+ {size:[4,2],format:'BGRA8',stride:15,length:32}, {size:[4,2],format:'BGRA8',stride:16,length:31},
+ {size:[4,2],format:'RGBA16F',texture_format:'BGRA8',stride:32,length:64}
+],[assert('reject_invalid_descriptor_or_storage'),assert('no_partial_candidates')]);
+numeric('E04','FP16、Alpha 与源位','NaN/Inf 拒绝；负 scRGB 合法，必须按映射资格处理',[
+ {format:'RGBA16F',encoding:'scRGB',half_bits:['0x7e00','0x0000','0x0000','0x3c00'],expected:'reject'},
+ {format:'RGBA16F',encoding:'scRGB',half_bits:['0x7c00','0x0000','0x0000','0x3c00'],expected:'reject'},
+ {format:'RGBA16F',encoding:'scRGB',half_bits:['0xb800','0x3c00','0x0000','0x3c00'],expected:'map_if_qualified_else_UnsupportedSource'},
+ {format:'BGRA8',rgba:[0,0,0,0],alpha:'premultiplied',expected:'no_divide_by_zero'},
+ {format:'BGRA8',rgba:[64,32,16,255],alpha:'straight',expected:'source_unchanged'}
+],[assert('numeric_result_matches_vector'),assert('source_bits_unchanged')]);
+numeric('E06','交叉精修与搜索边缘','倒置／无证据矩形不可发布',[
+ {proposal:[40,40,20,20],refined_ltrb:[61,40,59,60],expected:'reject'},
+ {proposal:[40,40,100,80],search_radius:16,peak_offset:16,expected:'uncertain_or_requery'},
+ {proposal:[40,40,100,80],refined_support:[1,1,0,1],expected:'reject'}
+],[assert('no_inverted_rect'),assert('no_stale_quality'),assert('boundary_peak_not_blindly_accepted')]);
+replay('E08','源／请求／HWND 复用','旧结果不得进入第二会话',[
+ event('capture_start',{generation:1}),event('start_visual',{request:1}),event('cancel'),event('capture_start',{generation:2}),event('visual_complete',{capture_generation:1,request:1}),event('native_confirm',{owner_token:'old-token'})
+],[assert('stale_results_published',{equals:0}),assert('session_generation',{equals:2}),assert('second_session_operable')],{variants:{mutate:['capture_generation','pixel_generation','request','owner_creation_token']}});
+const budgetLimits={A:{peaks_per_side:4,validation_requests:64,levels:24,extra_readback_bytes:1048576},B:{lines_per_direction:192,proposals:2048,global_validations:256,roi_validations:64,retained_candidates:320,labels:65536}};
+numeric('E10','逐项容量临界与组合超限','每个守卫独立测 limit−1/limit/limit＋1，其他计数均低于上限；不生成无界对象',
+ Object.entries(budgetLimits).flatMap(([algorithm,limits])=>[
+  ...Object.entries(limits).flatMap(([resource,limit])=>[-1,0,1].map(delta=>({id:`${algorithm}-${resource}-${delta}`,entry:'budget_guard',algorithm,resource,limit,value:limit+delta,other_counters:Object.fromEntries(Object.entries(limits).filter(([key])=>key!==resource).map(([key,n])=>[key,n-1])),expected:delta>0?'BudgetExceeded':'Complete',expected_violations:delta>0?[resource]:[]}))),
+  {id:algorithm+'-combined',entry:'budget_guard',algorithm,counters:Object.fromEntries(Object.entries(limits).map(([key,n])=>[key,n+1])),expected:'BudgetExceeded',expected_violation_at_least_one_of:Object.keys(limits)}
+ ]),[assert('budget_vectors_match_expected'),assert('bounded_allocation'),assert('overflow_counter_visible')]);
+replay('E11','1000 次移动与在途延迟','只保留最新查询，单在途，不忙轮询',[
+ event('delay_backend_completion',{ms:200}),event('repeat',{count:1000,action:{type:'pointer_move',points:[[80,80],[600,400]],pattern:'alternating'}}),event('release_backend'),event('idle',{ms:60000})
+],[assert('max_inflight_cpu',{lte:1}),assert('max_inflight_graphics',{lte:1}),assert('max_pending_latest',{lte:1}),assert('stale_roi_published',{equals:0}),assert('idle_poll_count',{equals:0})]);
+numeric('E12','每个分配点故障注入','逐分配点失败，不允许只是某一处失败',[
+ {inject:'each_allocation_site',include:['ROI','scratch','staging','result','worker_mailbox'],scope:'selected_product_path'}
+],[assert('no_leak_or_partial_publish'),assert('visual_unavailable'),assert('manual_and_native_operable')],{requires:['fault_injection_runner']});
+replay('E13','图形未完成、设备移除','取消不能提前复用GPU在用资源',[
+ event('submit_graphics',{resource:'R'}),event('delay_backend_completion',{ms:10000}),event('cancel'),event('capture_start',{generation:2}),event('device_removed')
+],[assert('no_synchronous_wait'),assert('no_reuse_before_safe_completion',{resource:'R'}),assert('no_stale_publish'),assert('shutdown_nonblocking')],{variants:{fault:['hang','device_removed','sleep_resume','display_change']},requires:['graphics_lifecycle_runner']});
+numeric('E14','8K、集显与共享GPU负载','预算／呈现同时过门，不静默换算法或后端',[
+ {size:[7680,4320],gpu:['iGPU','dGPU'],load:['idle','qualified_busy'],session:['local','remote'],power:['AC','battery']}
+],[assert('latency_and_render_budgets'),assert('record_actual_memory_peaks'),assert('no_unselected_backend_fallback')],{requires:['hardware_measurement'],budget_reference:'../visual-candidate-pipeline.md §4.7、§8.4'});
+replay('E15','100 会话与静止 60 秒','资源计数平衡，结束后无空转',[
+ event('repeat',{count:100,action:{type:'capture_start_then_cancel'}}),event('idle',{ms:60000}),event('shutdown')
+],[assert('lifetime_counts_balanced'),assert('idle_new_analysis_jobs',{equals:0}),assert('memory_no_growth_plateau'),assert('no_orphan_worker')],{requires:['resource_measurement']});
+numeric('E16','厂商浮点与确定平局','几何／证据容差对照，不要求驱动字节相同',[
+ {fixture:'T06',backends:['selected_cpu_or_gpu'],devices:['qualified_devices'],tie_order:'evidence_then_geometry'}
+],[assert('repeat_geometry_stable'),assert('max_edge_error_px',{lte:1}),assert('evidence_within_locked_tolerance'),assert('report_driver_and_device')],{requires:['selected_backend_runner']});
+
+const metamorphic=[
+ ['M01','整数平移','平移图像、指针和owner；不裁切halo',{kind:'translate',dx:16,dy:12},'geometry_translation'],
+ ['M02','RGB 反相','固定sRGB数值反相；无新裁切／平局',{kind:'invert'},'geometry_equal'],
+ ['M03','整数最近邻放大','倍率2；固定d与ROI导致资格改变时须记录，不作无条件集合等价',{kind:'nearest_scale',factor:2},'geometry_scale_if_qualified'],
+ ['M04','亮度偏移','每通道+8，所有值均不饱和；不做色调映射',{kind:'offset',value:8},'geometry_equal']
+];
+for(const [id,title,expect,transform,op] of metamorphic) spec(id,title,'等变与稳定性',expect,{fixture:'T01',transform,conditions:['strong_boundary','no_budget_overflow','no_rank_tie','target_and_halo_inside']},[assert(op,{max_edge_error_px:1}),assert('transform_pointer_and_owner')],{generate_pair:true});
+spec('M05','真实主题与 DPI 稳定性','等变与稳定性','真实渲染布局／字体可变；必须各自人工标注，不伪造等变',{
+ hosts:['Chromium_a11y_off','Chromium_a11y_on','Electron','Qt_custom','Win32'],themes:['light','dark'],dpi_percent:[125,150,200],fixtures:[]
+},[assert('each_render_matches_own_ground_truth'),assert('record_host_version_native_exposure_and_sample_count')],{requires:['real_host_capture','independent_annotations'],readiness:'external_input_required'});
+
+const canvases=new Map(),assets=new Map(),manifest=[];
+const inside=(p,r)=>p[0]>=r[0]&&p[0]<r[0]+r[2]&&p[1]>=r[1]&&p[1]<r[1]+r[3];
+const contains=(a,b)=>b[0]>=a[0]&&b[1]>=a[1]&&b[0]+b[2]<=a[0]+a[2]&&b[1]+b[3]<=a[1]+a[3];
+const center=r=>[r[0]+Math.floor(r[2]/2),r[1]+Math.floor(r[3]/2)];
+function makeCanvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
+function ctx(c){return c.getContext('2d',{colorSpace:'srgb',willReadFrequently:true});}
+function annotate(id,r){
+ const annotations=r.gt.map((g,i)=>({...g,id:`${id}-g${i+1}`,edge_tolerance_px:1}));
+ if(id==='T01')annotations.forEach(a=>a.edge_tolerance_px=0);
+ if(id==='T06')annotations.slice(0,4).forEach(a=>a.edge_tolerance_px=0);
+ if(id==='T10')annotations[0].acceptance='exploratory';
+ if(id==='T06')Object.assign(annotations.at(-1),{boundary_definition:'integer_pixel_coverage_bounds',ideal_outer_ltrb:[169.5,149.5,271,221],edge_tolerance_px:1});
+ function queryFor(point,g,qid){
+  const available=annotations.filter(a=>a.role==='target'&&a.acceptance==='required'&&inside(point,a.rect));
+  const nested=available.every(a=>available.every(b=>contains(a.rect,b.rect)||contains(b.rect,a.rect)));
+  const sorted=available.slice().sort((a,b)=>b.rect[2]*b.rect[3]-a.rect[2]*a.rect[3]);
+  const rejection=g.acceptance==='reject';
+  return {id:qid,point,subject:g.id,mode:g.acceptance==='exploratory'?'observe_only':'assert',
+   expected_default:rejection?{kind:'no_visual_target_in_region',region:g.rect}:g.acceptance==='exploratory'?{kind:'record_outcome'}:{kind:'one_of_annotations',ids:nested?[sorted.at(-1).id]:available.map(a=>a.id)},
+   required_candidates:g.acceptance==='required'?(nested?sorted.map(a=>a.id):[g.id]):[],
+   forbidden_default_regions:rejection?[g.rect]:[],forbidden_exact_candidates:g.role==='forbidden'?[g.id]:[],
+   expected_chain:nested&&available.length?sorted.map(a=>a.id):null,
+   edge_tolerance_px:g.edge_tolerance_px};
+ }
+ const subjects=annotations.filter(g=>g.role!=='roi'),queries=subjects.map((g,i)=>queryFor(center(g.rect),g,`${id}-q${i+1}`));
+ if(r.cur&&!queries.some(q=>q.point.every((v,i)=>v===r.cur[i]))){const targets=subjects.filter(g=>g.role==='target'&&inside(r.cur,g.rect)).sort((a,b)=>a.rect[2]*a.rect[3]-b.rect[2]*b.rect[3]);const g=targets[0]||subjects.find(g=>inside(r.cur,g.rect));if(g)queries.push({...queryFor(r.cur,g,id+'-scene-seed'),purpose:'explicit_scene_seed'});}
+ // Each crossing target also has a query in its exclusive interior; A may emit one chain per point.
+ for(const g of subjects.filter(a=>a.role==='target')){
+  const crosses=subjects.some(a=>a!==g&&a.role==='target'&&!contains(a.rect,g.rect)&&!contains(g.rect,a.rect)&&a.rect[0]<g.rect[0]+g.rect[2]&&g.rect[0]<a.rect[0]+a.rect[2]&&a.rect[1]<g.rect[1]+g.rect[3]&&g.rect[1]<a.rect[1]+a.rect[3]);
+  if(crosses){const points=[.05,.2,.5,.8,.95].flatMap(fx=>[.05,.2,.5,.8,.95].map(fy=>[g.rect[0]+Math.floor(g.rect[2]*fx),g.rect[1]+Math.floor(g.rect[3]*fy)])),point=points.find(p=>subjects.filter(a=>a.role==='target'&&inside(p,a.rect)).length===1);if(point)queries.push({...queryFor(point,g,g.id+'-exclusive'),purpose:'exclusive_target_recall'});}
+ }
+ if(id==='T09'){
+  queries.push({id:'T09-intersection',point:[160,110],mode:'assert',expected_default:{kind:'one_of_annotations',ids:annotations.map(a=>a.id)},required_candidates:[],forbidden_default_regions:[],forbidden_exact_candidates:[],expected_chain:null,edge_tolerance_px:1});
+ }
+ return {annotations,queries};
+}
+function pixelCase(v){
+ const [id,title,type,expect,w,h,draw]=v;seed=7;const c=makeCanvas(w,h),r=draw(ctx(c),w,h);canvases.set(id,c);assets.set(`${id}.png`,c);
+ const {annotations,queries}=annotate(id,r);
+ const m={id,title,type,expect,readiness:'generated_input',algorithm_status:'runner_required',seed:7,
+  input:{image:`${id}.png`,size:[w,h],pixel_source:{format:'RGBA8Unorm',encoding:'sRGB',alpha:'straight',row_order:'top_down',row_stride:w*4,conversion_to_yueshot:'exact RGBA→BGRA channel permutation; no color conversion'},
+   origin_screen:[0,0],source_key:{...source},native_path:[],windows:[{...owner,bounds:[0,0,w,h],synthetic:true}],scene_query_point:r.cur||null,annotation_scope:'partial; unlisted rectangles are not implicitly forbidden'},
+  annotations,queries,assertions:[assert('query_expectations'),assert('no_source_mutation')],variants:[]};
+ if(id==='T02')m.assertions.push(assert('gray_equal',{formula:'77*R+150*G+29*B',rgb:[[40,150,80],[190,73,80]],expected:27900}));
+ if(id==='T04'){
+  m.input.proposals=[[80,50,180,100]];
+  m.assertions.push(assert('all_injected_proposals_rejected'),assert('affine_png_residual',{d:[1,2,4],max_rgb_code_residual:2}));
+  m.numeric_oracle={color_function:'C_k(x,y)=40+25*k+0.12*x+0.08*y',representation:'unquantized_float64',normal:[1,0],distances:[1,2,4],formula:'(C(d)-C(-d))-((C(-d)-C(-3d))+(C(3d)-C(d)))/2',expected:0,abs_tolerance:1e-12};
+ }
+ if(id==='T08')m.assertions.push(assert('duplicate_proposal_merge'),assert('all_true_nested_layers_reachable'));
+ if(id==='T09'){
+  m.stage_vectors={entry:'candidate_fusion',candidates:annotations.map(a=>({id:a.id,rect:a.rect,qualified:true,owner:owner.hwnd})),point:[160,110],permutations:'all'};
+  m.assertions.push(assert('crossing_rects_not_parent_child'),assert('arrival_order_invariant'));
+ }
+ if(id==='T10'){
+  m.input.fixed_roi={rect:[1664,824,512,512],scope:'ROI裁切单元测试；不假设自动查询ROI一定采用该原点'};
+  m.assertions.push(assert('report_global_local_small_target_recall'),assert('no_artificial_roi_edge'));
+  m.variants.push({id:'T10-8k',transform:{kind:'tile_to_8k_preserve_physical_target_sizes'},size:[7680,4320],export:'generated_on_request',note:'平移复制目标，8/12/16/24/32px不随8K画布放大；不是整数缩放精度测试'});
+ }
+ if(id==='E05'){
+  m.input.sampling_contract={corner_exclusion_per_end:'ceil(edge_length*0.10); golden profile v2',minimum_distinct_along_positions:8};
+  annotations.filter(a=>a.name.includes('px')).forEach(a=>a.distinct_positions=a.rect[2]-2*Math.ceil(a.rect[2]*.1));
+  m.assertions.push(assert('reject_if_insufficient_distinct_samples'),assert('no_repeated_sample_inflation'));
+ }
+ if(id==='E07')m.assertions.push(assert('source_edge_not_boundary_evidence'));
+ if(id==='E09'){
+  const mask=makeCanvas(640,480),mx=ctx(mask),d=mx.createImageData(640,480);
+  for(let y=0;y<480;y++)for(let x=0;x<640;x++){const i=(y*640+x)*4,v=x%2===0&&y%2===0?255:0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}mx.putImageData(d,0,0);assets.set('E09-isolated-mask.png',mask);
+  m.stage_vectors={entry:'connected_components_before_morphology',image:'E09-isolated-mask.png',size:[640,480],foreground:255,connectivity:[4,8],expected_unbounded_component_count:76800,label_limit:65536,expected_status:'BudgetExceeded',applies_to:'B_only'};
+  m.assertions.push(assert('stage_mask_label_budget'),assert('texture_image_not_assumed_to_overflow_labels'));
+ }
+ return m;
+}
+for(const v of V)manifest.push(pixelCase(v));
+// Q groups contain independent inputs, never a montage fed back to the detector.
+const comparisons=[];
+function contrastGroup(id,title,variable,basis,note){const g={id,title,type:'边界与相似对照',expect:note,readiness:'generated_comparison',algorithm_status:'runner_required',comparison:{changed_variable:variable,basis,note,panel_size:[256,192],display:'equal scale; each panel is a separate source',evaluation:'members independent; no inference from visual similarity alone'},members:[],assertions:[assert('run_each_member_independently'),assert('report_hard_and_calibration_separately')]};comparisons.push(g);return g;}
+function contrastMember(g,key,label,value,outcome,gt,draw,extra={}){
+ const id=g.id+'-'+key,m=pixelCase([id,label,'边界与相似对照',outcome,256,192,x=>{draw(x);return{gt};}]);
+ m.comparison_member={group:g.id,label,value,outcome,evaluation:gt.some(a=>a.acceptance==='exploratory')?'calibration':'hard_assertion',...extra};
+ g.members.push(m);return m;
+}
+const qr=[64,48,128,96];
+const gray=v=>`rgb(${v},${v},${v})`;
+function planeStep(x,slope,step){const d=x.createImageData(256,192);for(let y=0;y<192;y++)for(let a=0;a<256;a++){const i=(y*256+a)*4,v=Math.round(50+slope*a+slope*.5*y+(inside([a,y],qr)?step:0));d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}x.putImageData(d,0,0);}
+{
+ const g=contrastGroup('Q01','渐变与真边：2×2 对照','背景斜率 × 矩形阶跃','F05；D03；§4.3；T03/T04','不能用框内方差或内外均值差代替真实跨界突变。固定矩形，分别开关渐变与阶跃。');
+ for(const slope of [0,.18])for(const step of [0,80])contrastMember(g,`${slope?'ramp':'flat'}-${step}`,`${slope?'渐变':'纯色'}＋阶跃 ${step}`,{slope,step},step?'要求检出：内部渐变不应成为拒绝理由':'拒绝：注入矩形没有真实边界',[step?P(qr,'真实阶跃矩形'):N(qr,'无边界提案')],x=>planeStep(x,slope,step));
+}
+{
+ const g=contrastGroup('Q02','弱对比阈值两侧：只改一个色阶','sRGB 单通道阶跃 Δ（R=G=B）','F05；D03；§4.7 阈值是假设','0 是硬负例，64 是清晰正例；1～18 只测召回／误吸附转折，不能把起点 5 当已定验收线。');
+ for(const delta of [0,1,2,3,4,5,6,8,12,18,64])contrastMember(g,String(delta),`Δ=${delta}/255`,delta,delta===0?'拒绝：与背景完全相同':delta===64?'要求检出：清晰对照':'待标定：记录最弱边证据与默认结果',[delta===0?N(qr,'零对比'):delta===64?P(qr,'清晰阶跃'):O(qr,'弱对比几何')],x=>{F(x,gray(96),0,0,256,192);F(x,gray(96+delta),...qr);});
+}
+{
+ const g=contrastGroup('Q03','四边相似：完整、断点与缺一整边','上边中部连续缺口长度','D03、D06；§4.5 连续性门；A08','固定 1 px 线框，仅擦除上边。小缺口是否可容忍待标定；整条上边消失必须拒绝，禁止闭运算虚构证据。');
+ for(const gap of [0,1,4,12,48,128])contrastMember(g,String(gap),`上边缺口 ${gap}px`,gap,gap===0?'要求检出：完整细框':gap===128?'拒绝：缺失整条上边':'待标定：报告有效支持率及最大断裂',[gap===0?P(qr,'完整外沿'):gap===128?N(qr,'开口框提案'):O(qr,'断裂线框')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...qr,1);if(gap)F(x,'#fff',64+Math.floor((128-gap)/2),48,gap,1);});
+}
+{
+ const g=contrastGroup('Q04','离源边只差 1px：可见不等于证据充分','矩形左侧距源边距离','D06；A09；E07；§4.3 法线 ±3d','固定目标大小、颜色与查询相对位置。源边 0px 无外侧证据；1～12px 测可用尺度与越界拒绝；13px 是有足够外侧空间的清晰对照。');
+ for(const margin of [0,1,2,3,4,8,12,13]){const r=[margin,48,128,96];contrastMember(g,String(margin),`左侧余量 ${margin}px`,margin,margin===0?'拒绝：源边不构成真实左边':margin===13?'要求检出：四边及外侧邻域完整':'待标定：不得越界／钳位伪造支持',[margin===0?N(r,'源边裁切'):margin===13?P(r,'完整邻域'):O(r,'近源边')],x=>{F(x,'#fff',0,0,256,192);F(x,'#444',...r);});}
+}
+{
+ const g=contrastGroup('Q05','同一像素：ROI 假边与补查真边','允许读取的区域／补查权限','F01、F04；D05、D06；A09','三张源图逐字节相同。ROI 仅覆盖目标中段；只看裁片不能把裁片左右边认作目标，补查必须从源取真实边。');
+ const r=[24,32,208,128],roi=[48,16,160,160];
+ for(const [key,label,access] of [['full','完整源','full_source'],['crop','仅固定 ROI，禁止补查','roi_only'],['recover','固定 ROI，允许有界源补查','roi_with_requery']]){
+  const m=contrastMember(g,key,label,access,access==='roi_only'?'拒绝：现有覆盖缺左右两条真边':'要求检出原框；不能改为 ROI 边框',[access==='roi_only'?N(r,'不可完整验证的目标'):P(r,'真实外框'),{rect:roi,role:'roi',name:'固定读取 ROI'}],x=>{F(x,'#fff',0,0,256,192);F(x,'#444',...r);},{evaluation:'hard_assertion',stage:'region_read_and_validation'});
+  m.input.region_access={mode:access,initial_roi:roi,additional_source_access:access!=='roi_only',restriction:'runner must enforce read coverage; all source PNGs intentionally equal'};
+  m.assertions.push(assert('no_artificial_roi_edge'),assert('honor_declared_read_coverage'));
+ }
+}
+{
+ const g=contrastGroup('Q06','采样临界点：尺寸增大反而失去资格','方框边长 9/10/11/12/13','D06；E05；demo ceil(10%) 实验 profile','只验证去角后的独立位置数：7/8/7/8/9。ceil 会使 10→11 非单调；这是待 P2 评估的取整 profile，不是已定产品规则。8 个位置仅代表采样资格，不保证检测成功。');
+ for(const length of [9,10,11,12,13]){
+  const n=length-2*Math.ceil(length*.1),r=[120,88,length,length];
+  const m=contrastMember(g,String(length),`${length}px → ${n} 个位置`,length,n<8?'阶段硬断言：不足 8 个独立位置，必须拒绝':'阶段硬断言：采样资格通过；检测结果只观察',[n<8?R(r,'采样不足'):O(r,'采样资格通过')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...r,1);},{evaluation:'stage_assertion',distinct_positions:n});
+  m.stage_vectors={entry:'edge_sampling_qualification',edge_length:length,corner_exclusion_per_end:Math.ceil(length*.1),expected_distinct_positions:n,minimum_distinct_positions:8,expected_eligible:n>=8,profile:'demo ceil(10%); experimental'};
+  m.assertions.push(assert('distinct_sampling_positions_match_vector'),assert('no_repeated_sample_inflation'));
+ }
+}
+{
+ const g=contrastGroup('Q07','近邻框：嵌套、重复与交叉不可混同','框间空白／提案关系（分子对照）','F03；D07；T08/T09/T23','空白 1/2px 的真嵌套不能当重复；相同矩形重复只能停靠一次；交叉只能作替代项。几何阶段单独注入，避免用检测漏框掩盖融合错误。');
+ const outer=[40,32,176,128];
+ for(const gap of [1,2]){const inset=gap+1,inner=[40+inset,32+inset,176-2*inset,128-2*inset];const m=contrastMember(g,'nested'+gap,`真嵌套：空白 ${gap}px`,{kind:'nested',gap},'要求保留两个真层，外→内可达',[P(outer,'外层'),P(inner,'内层')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...outer,1);B(x,'#222',...inner,1);});m.stage_vectors={entry:'candidate_fusion',point:[128,96],candidates:[outer,inner].map(rect=>({rect,qualified:true,owner:owner.hwnd})),expected_stop_count:2,expected_chain_rects:[outer,inner]};m.assertions.push(assert('stage_fusion_matches_expected_chain'));}
+ const dupe=contrastMember(g,'duplicate','相同外框的重复提案',{kind:'duplicate'},'图像检出一层；阶段注入相同矩形两次仍只停靠一次',[P(outer,'单一外框')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...outer,1);});
+ dupe.stage_vectors={entry:'candidate_fusion',point:[128,96],candidates:[outer,outer].map(rect=>({rect,qualified:true,owner:owner.hwnd})),expected_stop_count:1,expected_chain_rects:[outer]};dupe.assertions.push(assert('stage_fusion_matches_expected_chain'));
+ const cross=[80,64,160,112],m=contrastMember(g,'cross','交叉：右、下超出外框',{kind:'crossing'},'两框可作替代项，不能形成父子链',[P(outer,'矩形 A'),P(cross,'矩形 B')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...outer,1);B(x,'#666',...cross,1);});
+ m.stage_vectors={entry:'candidate_fusion',point:[128,96],candidates:[outer,cross].map(rect=>({rect,qualified:true,owner:owner.hwnd})),expected_relation:'crossing_alternatives',permutations:'all'};m.assertions.push(assert('crossing_rects_not_parent_child'),assert('arrival_order_invariant'));
+}
+{
+ const g=contrastGroup('Q08','亚像素相位与整数平移：禁止恒定输出','几何外沿平移 0/.25/.5/.75/1/1.25/2.5px','D06；T06；§4.5 定位合同','解析覆盖是定位阶段的精确真值（容差0）；端到端抗锯齿允许1px，但不能用它替代阶段测试。增加跨整数相位，组内记录四边有符号均值与最大偏差。');
+ g.assertions.push(assert('localization_signed_bias',{entry:'boundary_location',max_abs_mean_error_px:0}));
+ for(const phase of [0,.25,.5,.75,1,1.25,2.5]){const ideal=[64+phase,48+phase,128,96],bounds=[Math.floor(ideal[0]),Math.floor(ideal[1]),Math.ceil(ideal[0]+128)-Math.floor(ideal[0]),Math.ceil(ideal[1]+96)-Math.floor(ideal[1])];const m=contrastMember(g,String(phase),`相位 ${phase}px`,phase,'端到端≤1px；定位阶段精确覆盖外沿，组内无系统偏差',[P(bounds,'解析像素覆盖')],x=>{F(x,'#fff',0,0,256,192);aaRing(x,ideal,1);});Object.assign(m.annotations[0],{ideal_outer_xywh:ideal,boundary_definition:'integer_pixel_coverage_bounds',edge_tolerance_px:1});m.stage_vectors={entry:'boundary_location',image:m.input.image,proposal:[60,44,140,108],ideal_outer_xywh:ideal,expected_rect:bounds,edge_tolerance_px:0};m.assertions.push(assert('boundary_location_matches_vector'));}
+}
+{
+ const g=contrastGroup('Q09','同图异上下文：像素无法给出控件语义','原生类型／owner；纯图完全不变','F02；D08、D09；§4.6；T11/T20','这是融合政策对照，不是像素算法的分类题。保持候选和查询相同；Text/Image 受保护，Custom 可细化，无 owner 不发布视觉默认。');
+ for(const kind of ['Custom','Text','Image','no_owner']){
+  const m=contrastMember(g,kind,kind,kind,kind==='Custom'?'融合硬断言：默认 Visual':kind==='no_owner'?'融合硬断言：不发布 Visual':'融合硬断言：保留 Accessibility',[O(qr,'已验证视觉几何（阶段注入）')],x=>{F(x,'#fff',0,0,256,192);F(x,'#444',...qr);},{evaluation:'stage_assertion',stage:'candidate_fusion'});
+  m.input.windows=kind==='no_owner'?[]:m.input.windows;m.input.native_path=['Text','Image','Custom'].includes(kind)?[{kind,rect:[24,24,208,144],adopted:true}]:[];
+  m.stage_vectors={entry:'candidate_fusion',point:[128,96],native_kind:kind==='no_owner'?null:kind,adopt_text_runs:true,native_rect:[24,24,208,144],visual_rect:qr,visual_qualified:true,owner:kind==='no_owner'?null:owner.hwnd,expected_default:kind==='Custom'?'Visual':kind==='no_owner'?'no_visual_default':'Accessibility'};
+  m.assertions.push(assert('default_matches_policy'));
+ }
+}
+{
+ const g=contrastGroup('Q10','文字块与卡片：只加一圈边框','文字完全相同，仅开关 1px 外框','F02、F05；D03、D08；A17；T19','无框文字不猜段落／消息边界；明确外框成立时，内部文字与高方差不能成为拒绝理由。字形渲染受字体环境影响，固定 PNG 哈希后回放。');
+ for(const border of [false,true])contrastMember(g,border?'border':'text',border?'同文字＋1px 外框':'仅文字与留白',border,border?'要求检出外框':'拒绝：不把留白包装为消息边界',[border?P(qr,'文字卡片'):N(qr,'无框文字提案')],x=>{F(x,'#fff',0,0,256,192);x.fillStyle='#333';x.font='14px sans-serif';x.fillText('Same text',80,82);x.fillText('Another line',80,112);if(border)B(x,'#222',...qr,1);});
+}
+function eraseEdge(x,r,side,start,length){const [l,t,w,h]=r;if(side==='top'||side==='bottom')F(x,'#fff',l+start,side==='top'?t:t+h-1,length,1);else F(x,'#fff',side==='left'?l:l+w-1,t+start,1,length);}
+{
+ const g=contrastGroup('Q11','断点方向、位置与分布','四边×起始/中部/末端；相同缺口总量的不同分布','D03、D06；A08；§4.5','全部是连续性校准输入。近角断点可能被去角规则排除；同样12px缺口分成1段或3段，不能只凭总支持率判断等价。');
+ for(const side of ['top','bottom','left','right']){const len=['top','bottom'].includes(side)?128:96;for(const [position,start] of [['start',2],['middle',Math.floor((len-8)/2)],['end',len-10]])contrastMember(g,side+'-'+position,`${side} / ${position}`,{side,runs:[[start,8]]},'待标定：报告去角前后位置、最长断裂及有效支持',[O(qr,'断裂框')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...qr,1);eraseEdge(x,qr,side,start,8);});}
+ for(const [key,runs] of [['contiguous',[[58,12]]],['distributed',[[30,4],[62,4],[94,4]]]])contrastMember(g,key,key,{side:'top',runs},'待标定：缺口总量相同，连续性不同',[O(qr,'分布对照')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...qr,1);for(const [start,length] of runs)eraseEdge(x,qr,'top',start,length);});
+}
+{
+ const g=contrastGroup('Q12','源边方向对照：上／右／下','源边方向×外侧余量0/3/12/13px','D06；A09；E07；Q04','补齐Q04的左侧测试。0px拒绝；13px清晰对照；中间余量记录可用采样尺度，不允许钳位伪造边界。');
+ for(const side of ['top','right','bottom'])for(const margin of [0,3,12,13]){const r=side==='top'?[64,margin,128,96]:side==='right'?[256-margin-128,48,128,96]:[64,192-margin-96,128,96];contrastMember(g,side+'-'+margin,`${side} / ${margin}px`,{side,margin},margin===0?'拒绝：缺少源外证据':margin===13?'要求检出：完整邻域':'待标定：有效尺度与越界检查',[margin===0?N(r,'源边裁切'):margin===13?P(r,'完整邻域'):O(r,'近源边')],x=>{F(x,'#fff',0,0,256,192);F(x,'#444',...r);});}
+}
+{
+ const g=contrastGroup('Q13','并排近邻：接触与1/2px间隙','水平／垂直×同色填充间隙0/1/2px','F02、F05；D06、D07；A08','0px同色接触在像素上只有一个合并区域，不虚构两个语义对象；1/2px真实空白应保留独立框，不被形态学桥接。');
+ for(const axis of ['x','y'])for(const gap of [0,1,2]){const a=axis==='x'?[40,60,80,72]:[80,24,96,64],b=axis==='x'?[120+gap,60,80,72]:[80,88+gap,96,64],merged=axis==='x'?[40,60,160,72]:[80,24,96,128];contrastMember(g,axis+'-'+gap,`${axis} / gap=${gap}`,{axis,gap,rects:[a,b]},gap?'要求分别命中两个独立框':'要求命中合并外框，不能猜两个对象',gap?[P(a,'近邻A'),P(b,'近邻B')]:[P(merged,'同色连续区域')],x=>{F(x,'#fff',0,0,256,192);F(x,'#333',...a);F(x,'#333',...b);});}
+}
+{
+ const g=contrastGroup('Q14','非线性渐变与光晕：开关真实阶跃','连续颜色场类型×是否叠加矩形阶跃','F05；D03、D06；A03；R02','数值函数直接生成：二次曲面和椭圆高斯光晕。无阶跃时不接受注入框；加80色阶时四边应成立。该组仅验证声明的两种场，不保证所有非线性背景。');
+ for(const field of ['quadratic','glow'])for(const step of [0,80]){const m=contrastMember(g,field+'-'+step,`${field} / step=${step}`,{field,step},step?'要求检出：曲面背景上的真阶跃':'拒绝注入框：颜色场连续，无真实矩形',[step?P(qr,'阶跃卡片'):N(qr,'连续场提案')],x=>{const d=x.createImageData(256,192);for(let y=0;y<192;y++)for(let a=0;a<256;a++){const base=field==='quadratic'?40+.0006*(a-128)**2+.0008*(y-96)**2:40+55*Math.exp(-((a-128)**2/900+(y-96)**2/500)),v=Math.round(base+(inside([a,y],qr)?step:0)),i=(y*256+a)*4;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255;}x.putImageData(d,0,0);});m.stage_vectors={entry:'rectangle_validation',image:m.input.image,proposals:[qr],expected_qualified:step>0};m.assertions.push(assert('injected_proposal_qualification_matches_vector'));}
+}
+{
+ const g=contrastGroup('Q15','纹理与外框：噪声内容不应误杀卡片','内部纹理类型×明确外框开关','F02、F05；D03、D08；A05；T07','无框纹理不猜整体卡片；同一份内部纹理加明确外框后应保留。只改变边框像素，不要求把内容里的所有小矩形都判为负例。');
+ for(const texture of ['checker','noise'])for(const border of [false,true])contrastMember(g,texture+'-'+border,`${texture} / border=${border}`,{texture,border},border?'要求保留纹理卡片外框':'阶段拒绝整体提案；内容中的其他小框仅观察',[border?P(qr,'纹理卡片'):O(qr,'无框纹理整体提案')],x=>{F(x,'#fff',0,0,256,192);for(let y=64;y<128;y++)for(let a=80;a<176;a++){const v=texture==='checker'?((Math.floor(a/4)+Math.floor(y/4))%2?35:180):Math.floor(35+rnd()*146);F(x,gray(v),a,y,1,1);}if(border)B(x,'#222',...qr,1);},{evaluation:border?'hard_assertion':'stage_assertion'});
+}
+{
+ const g=contrastGroup('Q16','近框干扰：距离尺度不能越过邻边','真嵌套框间空白1/2/4/8/13px','D03、D06、D07；§4.3 d=1/2/4；Q07','两条线间距接近采样法线跨度时，大d可能被邻框污染。端到端仍要求真层可达；另报告各d的原始证据，不要求每个d都独立通过。');
+ const outer=[32,24,192,144];for(const gap of [1,2,4,8,13]){const k=gap+1,inner=[32+k,24+k,192-2*k,144-2*k],m=contrastMember(g,String(gap),`空白 ${gap}px`,{gap,d:[1,2,4]},'要求两个真实层；记录各尺度证据及采用尺度',[P(outer,'外框'),P(inner,'邻接内框')],x=>{F(x,'#fff',0,0,256,192);B(x,'#222',...outer,1);B(x,'#222',...inner,1);});m.assertions.push(assert('record_multiscale_side_evidence',{distances:[1,2,4]}));}
+}
+manifest.push(...comparisons);
+for(const g of comparisons)for(const m of g.members){
+ const a=m.annotations[0].rect;
+ if(['Q01','Q02','Q03','Q11','Q15'].includes(g.id)){
+  const acceptance=m.annotations[0].acceptance;
+  const qualification=g.id==='Q15'?m.comparison_member.value.border:acceptance==='exploratory'?null:acceptance==='required';
+  m.stage_vectors={entry:'rectangle_validation',image:m.input.image,proposals:[a],expected_qualified:qualification,null_semantics:'observe_only; threshold not frozen'};
+  m.assertions.push(assert(qualification===null?'record_proposal_evidence':'injected_proposal_qualification_matches_vector'));
+ }
+ if(m.comparison_member.evaluation==='calibration')m.calibration_report={required_fields:['default_rect_or_none','candidate_rects','per_side_evidence','valid_distinct_positions','sample_coordinates_before_and_after_corner_exclusion','max_unsupported_run','rejection_reason','elapsed_raw'],precision_gate:'excluded until independent profile and acceptance set frozen',independent_statistical_sample:false};
+ if(g.id==='Q03')m.comparison_member.detail_crop=[112,40,32,24];
+ if(['Q04','Q06','Q07','Q08','Q12','Q13','Q16'].includes(g.id))m.comparison_member.detail_crop=[Math.max(0,a[0]-4),Math.max(0,a[1]-4),32,32];
+ if(g.id==='Q11'){const {side,runs}=m.comparison_member.value,start=runs[0][0],horizontal=side==='top'||side==='bottom';m.comparison_member.detail_crop=horizontal?[64+start-4,side==='top'?44:139,32,24]:[side==='left'?60:187,48+start-4,24,32];}
+ if(g.id==='Q12'){const side=m.comparison_member.value.side;m.comparison_member.detail_crop=side==='right'?[Math.min(224,a[0]+a[2]-16),72,32,32]:side==='bottom'?[96,Math.min(160,a[1]+a[3]-16),32,32]:[96,Math.max(0,a[1]-4),32,32];}
+ if(g.id==='Q13'){const {axis,rects}=m.comparison_member.value,[l,t,w,h]=rects[0];m.comparison_member.detail_crop=axis==='x'?[l+w-12,t+20,32,32]:[l+20,t+h-12,32,32];}
+}
+for(const c of Object.values(C))manifest.push({algorithm_status:'runner_required',readiness:'runner_contract',...c});
+const order={Q:0,T:1,E:2,M:3};manifest.sort((a,b)=>order[a.id[0]]-order[b.id[0]]||Number(a.id.slice(1))-Number(b.id.slice(1)));
+function transformed(base,tr){
+ const src=ctx(base).getImageData(0,0,base.width,base.height),factor=tr.kind==='nearest_scale'?tr.factor:1;
+ const w=base.width*factor,h=base.height*factor,c=makeCanvas(w,h),x=ctx(c),out=x.createImageData(w,h);
+ for(let py=0;py<h;py++)for(let px=0;px<w;px++){
+  let sx=Math.floor(px/factor),sy=Math.floor(py/factor);if(tr.kind==='translate'){sx-=tr.dx;sy-=tr.dy;}
+  const i=(py*w+px)*4,j=(sy*base.width+sx)*4,valid=sx>=0&&sy>=0&&sx<base.width&&sy<base.height;
+  for(let k=0;k<3;k++){let v=valid?src.data[j+k]:[232,228,218][k];if(tr.kind==='invert')v=255-v;if(tr.kind==='offset'){if(v+tr.value>255||v+tr.value<0)throw Error('M04 saturates');v+=tr.value;}out.data[i+k]=v;}out.data[i+3]=255;
+ }x.putImageData(out,0,0);return c;
+}
+function transformRect(r,tr){const f=tr.kind==='nearest_scale'?tr.factor:1,dx=tr.dx||0,dy=tr.dy||0;return[r[0]*f+dx,r[1]*f+dy,r[2]*f,r[3]*f];}
+for(const m of manifest.filter(m=>m.generate_pair)){
+ const base=manifest.find(m=>m.id==='T01'),tr=m.input.transform,c=transformed(canvases.get('T01'),tr),file=`${m.id}-transformed.png`;
+ canvases.set(m.id,c);assets.set(file,c);
+ m.readiness='generated_pair';m.input.base_image='T01.png';m.input.transformed_image=file;m.input.size=[c.width,c.height];
+ m.expected_geometry=base.annotations.filter(a=>a.role==='target').map(a=>({base_annotation:a.id,rect:transformRect(a.rect,tr)}));
+ m.queries=base.queries.map(q=>({base_query:q.id,point:transformRect([...q.point,0,0],tr).slice(0,2),expected_annotation_ids:q.expected_default.ids}));
+ m.transformed_window={...owner,bounds:transformRect([0,0,base.input.size[0],base.input.size[1]],tr),synthetic:true};
+}
+function paintOverlay(c,m,index){
+ const x=ctx(c);x.clearRect(0,0,c.width,c.height);const scale=Math.max(1,c.width/400);x.lineWidth=1.5*scale;x.font=`${11*scale}px sans-serif`;
+ const a=m.annotations||m.expected_geometry?.map(g=>({rect:g.rect,name:g.base_annotation,role:'target'}))||[];
+ for(const g of a){const [l,t,w,h]=g.rect;x.strokeStyle=x.fillStyle=K[g.role];x.setLineDash(g.role==='target'?[]:[5*scale,3*scale]);x.strokeRect(l,t,w,h);x.fillText(g.name,l,Math.max(t-4*scale,12*scale));}
+ const q=m.queries?.[index];if(q){const [px,py]=q.point,r=6*scale;x.setLineDash([]);x.strokeStyle='#d49b00';x.beginPath();x.moveTo(px-r,py);x.lineTo(px+r,py);x.moveTo(px,py-r);x.lineTo(px,py+r);x.stroke();}
+}
+function action(text,fn){const b=document.createElement('button');b.textContent=text;b.onclick=async()=>{b.disabled=true;try{await fn();}catch(e){$('#health').textContent='操作失败：'+e.message;$('#health').setAttribute('role','alert');}finally{b.disabled=false;}};return b;}
+function card(m,member=false){
+ const a=document.createElement(member?'section':'article');a.dataset.type=m.type;a.dataset.case=m.id;if(member)a.className='variant';if(m.members)a.className='comparison';
+ const h=document.createElement('h2'),id=document.createElement('b');id.textContent=m.id;h.append(id,document.createTextNode(m.title));a.append(h);
+ const tag=document.createElement('div');tag.className='tag';tag.textContent=m.type+' · '+({generated_input:'已生成输入，待执行器',generated_comparison:'成组独立输入，待执行器',generated_pair:'已生成变换对，待执行器',runner_contract:'合同待执行器',external_input_required:'需真实外部输入'}[m.readiness]||m.readiness);a.append(tag);
+ const p=document.createElement('p');p.textContent=m.expect;a.append(p);
+ if(m.comparison_member){const b=document.createElement('span');b.className='verdict';b.textContent={hard_assertion:'硬性断言',calibration:'待标定 · 不计通过率',stage_assertion:'阶段合同 · 单独执行'}[m.comparison_member.evaluation];a.append(b);}
+ if(m.members){
+  const note=document.createElement('p');note.className='pair-note';note.textContent='变化条件：'+m.comparison.changed_variable+'。依据：'+m.comparison.basis+'。所有面板同尺度，原图均为 256×192；小框可导出原图放大检查。';a.append(note);
+  const panels=document.createElement('div');panels.className='pairs';for(const v of m.members)panels.append(card(v,true));a.append(panels);
+ }
+ const c=canvases.get(m.id);
+ if(c){
+  const view=document.createElement('div');view.className='cv';const o=makeCanvas(c.width,c.height);o.className='ov';c.className='sc';c.dataset.id=m.id;
+  view.append(c,o);a.append(view);paintOverlay(o,m,0);
+  if(m.queries?.length){const label=document.createElement('label');label.textContent='查询点';const sel=document.createElement('select');sel.setAttribute('aria-label',m.id+' 查询点');m.queries.forEach((q,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=(q.id||q.base_query)+' · '+q.point.join(',')+(q.mode==='observe_only'?' · 仅观察':'');sel.append(opt);});sel.onchange=()=>paintOverlay(o,m,Number(sel.value));label.append(sel);a.append(label);}
+  if(m.comparison_member?.detail_crop){const crop=m.comparison_member.detail_crop,d=document.createElement('details'),s=document.createElement('summary');s.textContent='放大像素细节（仅查看，不作为输入）';d.append(s);d.addEventListener('toggle',()=>{if(!d.open||d.dataset.drawn)return;d.dataset.drawn='true';const z=makeCanvas(crop[2],crop[3]),x=ctx(z);x.imageSmoothingEnabled=false;x.drawImage(c,...crop,0,0,crop[2],crop[3]);z.className='detail-pixels';const p=document.createElement('p');p.textContent='原图裁片 [x,y,w,h] = '+JSON.stringify(crop)+'，最近邻放大，无标注叠加。';d.append(z,p);});a.append(d);}
+ }
+ const row=document.createElement('div');row.className='row';
+ if(c)row.append(action('导出纯 PNG',async()=>download(await png(c),m.id+'.png')));
+ row.append(action('导出合同 JSON',async()=>download(jsonBlob(await caseExport(m)),m.id+'.json')));
+ row.append(action('导出案例 ZIP',async()=>download(await bundle([m]),m.id+'.zip')));
+ if(m.id==='T10')row.append(action('导出 8K 变体 ZIP',export8k));
+ a.append(row);
+ const details=document.createElement('details'),summary=document.createElement('summary'),pre=document.createElement('pre');summary.textContent='查看查询／断言合同';pre.textContent=JSON.stringify(m,null,2);details.append(summary,pre);a.append(details);return a;
+}
+for(const m of manifest)$('#main').append(card(m));
+const comparisonMembers=comparisons.flatMap(g=>g.members);
+$('#count').textContent=`重点：${comparisons.length} 组边界与相似对照、${comparisonMembers.length} 个独立变体；T01–T23、E01–E16、M01–M05 共 44 个基础案例。当前共 ${manifest.length} 个顶层合同；变体另计，均未运行算法。`;
+let filter='边界与相似对照';
+for(const name of ['边界与相似对照','全部','像素场景','事件回放','数值与资源','等变与稳定性']){
+ const b=action(name,()=>{filter=name;$('#bar').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.textContent===name));document.querySelectorAll('article').forEach(a=>a.hidden=name!=='全部'&&a.dataset.type!==name);});if(name===filter)b.className='on';$('#bar').append(b);
+}
+document.querySelectorAll('article').forEach(a=>a.hidden=a.dataset.type!==filter);document.body.classList.add('nogt');
+$('#actions').append(action('显示／隐藏标注（初始关闭）',()=>document.body.classList.toggle('nogt')),action('导出边界对照 ZIP',async()=>download(await bundle(comparisons),'visual-candidate-boundaries-v4.zip')),action('导出全部素材 ZIP',async()=>download(await bundle(manifest),'visual-candidate-fixtures-v4.zip')),action('导出清单 JSON',async()=>download(jsonBlob(await manifestExport(manifest)),'visual-candidate-cases-v4.json')),action('重新自检输入',runValidation),action('运行合同回归检查',()=>{const r=contractRegression();$('#health').textContent=`合同回归：${r.passed}/${r.total} 通过；检测算法未运行。`;if(r.errors.length)throw Error(r.errors.join('；'));}));
+
+const pngCache=new WeakMap(),assetInfoCache=new Map();
+function png(c){if(!pngCache.has(c))pngCache.set(c,new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(Error('PNG 编码失败')),'image/png')));return pngCache.get(c);}
+async function sha(bytes){if(!globalThis.crypto?.subtle)throw Error('当前浏览器无法计算SHA-256；请用localhost或支持安全上下文的浏览器打开');return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');}
+function dependencyClosure(cases,universe=manifest){
+ const index=new Map(),selected=new Set();function indexNode(m,select=false){if(index.has(m.id)&&index.get(m.id)!==m)throw Error('重复案例ID '+m.id);index.set(m.id,m);if(select)selected.add(m.id);for(const child of m.members||[])indexNode(child,select);}
+ universe.forEach(m=>indexNode(m));cases.forEach(m=>{if(!index.has(m.id))indexNode(m);function mark(n){selected.add(n.id);(n.members||[]).forEach(mark);}mark(m);});
+ const names=new Set(),dependencies=[],done=new Set(),active=new Set();
+ function visit(m){if(active.has(m.id))throw Error('案例依赖环 '+m.id);if(done.has(m.id))return;active.add(m.id);
+  function walk(v,key){if(typeof v==='string'){if(key==='fixture'){const ref=index.get(v);if(!ref)throw Error('缺失案例引用 '+v);visit(ref);if(!selected.has(v)&&!dependencies.some(d=>d.id===v))dependencies.push(ref);}else if(v.endsWith('.png')){if(!assets.has(v))throw Error('缺失图像 '+v);names.add(v);}}else if(Array.isArray(v))v.forEach(x=>walk(x,key));else if(v&&typeof v==='object')for(const [k,x] of Object.entries(v))walk(x,k);}
+  walk(m);active.delete(m.id);done.add(m.id);
+ }
+ cases.forEach(visit);return{dependencies,asset_names:[...names].sort()};
+}
+async function assetInfo(name){
+ if(!assetInfoCache.has(name))assetInfoCache.set(name,(async()=>{const c=assets.get(name),b=await png(c);return{file:name,size:[c.width,c.height],encoding:'sRGB',storage:'RGBA8, straight alpha, top-down, tightly packed',rgba_sha256:await sha(ctx(c).getImageData(0,0,c.width,c.height).data),png_sha256:await sha(await b.arrayBuffer()),png_bytes:b.size};})());
+ return assetInfoCache.get(name);
+}
+async function caseExport(m){const resolved=dependencyClosure([m]);assertContracts([m,...resolved.dependencies]);return{schema:'yueshot.visual-candidate-case',schema_version:VERSION,profile:PROFILE,coordinates:{rect:'xywh',bounds:'half-open',unit:'physical source pixels'},operation_semantics:operationSemantics,contract_vocabulary:contractVocabulary(),case:m,dependencies:resolved.dependencies,assets:await Promise.all(resolved.asset_names.map(assetInfo)),assertion_execution:'runner_required'};}
+const operationSemantics={
+ query_expectations:'对每个mode=assert的query在指定point运行；required_candidates按edge_tolerance_px作一对一匹配，同一输出不能同时满足两个标注；expected_default必须满足；observe_only只记录，不计精度通过。expected_chain仅用于真包含层，外→内，真实不同层须不同矩形且严格包含。',
+ one_of_annotations:'默认Visual矩形须匹配ids之一；不是任意包含该点的矩形。非穷举标注图不对未声明候选作全局否定。',
+ no_visual_target_in_region:'该query不得产生默认Visual框覆盖该point且与region相交；原生Window/Accessibility与手动不在此禁止范围。',
+ forbidden_exact_candidates:'不允许发布与列出的标注矩形在容差内相等的已验证候选；不等于禁止该区域的一切几何。',
+ stage_vectors:'直接向entry指定阶段注入；不得将connected_components掩码经颜色边缘／形态学后宣称同一标签真值。',
+ expected_chain:'按标注ID定义外→内可到达层级；交叉矩形不得以父子关系通过。',
+ replay:'input.initial和events是执行器的抽象输入；variants是须展开的独立情境。checkpoint断言在相应事件处检查；同一源前提被破坏时另用E08/E13断言，不与T13静态刷新混合。',
+ numeric:'JSON保留十进制字符串／half_bits，执行器按位构造异常输入；浏览器不把NaN/Inf序列化成null冒充向量。',
+ metamorphic:'只变换满足conditions的场景；固定d、线宽资格、预算或裁切不成立时记录资格变化，不自动算等变通过。'
+ ,comparison:'Q组的members是独立完整案例，各自以input.image为唯一底图；禁止将页面拼图作为输入。comparison_member.evaluation=calibration的query仅观察，不计准确率／召回通过；stage_assertion按stage_vectors执行，不能以像素检测结果替代阶段注入。硬性成员仍按其queries和assertions执行。图像相同且上下文不同，须分别回放上下文。',
+ calibration:'冻结前报告全部变体的逐边证据、有效采样／断裂、默认结果、拒绝原因和原始耗时；阈值变化导致的行为分界需记录，不得先看验收集再调阈值。候选的变化不假定随Δ／尺寸单调；同组变体不是独立统计样本。'
+ ,scenarios:'input.scenarios中的每一项自带initial/events/assertions，独立重置后执行；带checkpoint的断言在该检查点检查，其余在事件结束后检查。不从variants描述猜测或拼装事件。未展开的旧研究变体不冒充已执行。',
+ matching:'矩形误差按[l,t,r,b]逐边计算，r=x+w、b=y+h。匹配须owner/源/资格一致且包含查询点；几何要求max(abs(actual−truth))≤标注容差。required_candidates作最大基数一对一匹配，相同输出几何先去重；同证据按稳定几何键破平局，不用面积/IoU替代边误差。',
+ localization:'T01及T06整数清晰边容差0；Q08端到端AA容差1，另须执行boundary_location阶段的精确覆盖向量（容差0）及组内四边有符号均值检查。端到端通过不能替代定位阶段通过。',
+ unsupported_operation:'assertions中的未知op、未知stage entry或未实现的所需操作必须报UnsupportedContract并使该项未通过；禁止跳过或按成功计数。PROFILE是合成开发规范，不代表已冻结产品阈值。'
+};
+async function manifestExport(cases){
+ const resolved=dependencyClosure(cases);assertContracts([...cases,...resolved.dependencies]);const info=[];for(const n of resolved.asset_names)info.push(await assetInfo(n));
+ return {schema:'yueshot.visual-candidate-fixtures',schema_version:VERSION,profile:PROFILE,design_reference:'docs/visual-candidate-pipeline.md §§4,6–8',coordinates:{rect:'xywh',bounds:'half-open',unit:'physical source pixels',origin:'image-local'},generator:{version:VERSION,seed:7,browser:navigator.userAgent,device_pixel_ratio:devicePixelRatio,canvas_color_space:'sRGB',note:'所有底图Canvas用固有尺寸，与CSS显示宽度和DPR无关；文字/阴影受浏览器字体和渲染环境影响。导出的资产哈希才是固定输入身份。'},execution:{algorithm:'not_run',required:'application replay/numeric/backend runner',input_validation:validateInputs()},operation_semantics:operationSemantics,contract_vocabulary:contractVocabulary(),assets:info,cases,dependencies:resolved.dependencies};
+}
+const jsonBlob=v=>new Blob([JSON.stringify(v,null,2)+'\n'],{type:'application/json;charset=utf-8'});
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+// ZIP store format: no runtime dependencies and no multiple-download browser prompt.
+const crcTable=Uint32Array.from({length:256},(_,n)=>{for(let k=0;k<8;k++)n=n&1?0xedb88320^(n>>>1):n>>>1;return n>>>0;});
+function crc32(bytes){let n=0xffffffff;for(const b of bytes)n=crcTable[(n^b)&255]^(n>>>8);return(n^0xffffffff)>>>0;}
+function zip(entries){
+ const parts=[],directory=[];let offset=0,centralSize=0;
+ for(const {name,bytes} of entries){const filename=new TextEncoder().encode(name),crc=crc32(bytes),local=new Uint8Array(30),l=new DataView(local.buffer);
+  l.setUint32(0,0x04034b50,true);l.setUint16(4,20,true);l.setUint16(6,0x800,true);l.setUint16(12,33,true);l.setUint32(14,crc,true);l.setUint32(18,bytes.length,true);l.setUint32(22,bytes.length,true);l.setUint16(26,filename.length,true);
+  const central=new Uint8Array(46),d=new DataView(central.buffer);d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint16(8,0x800,true);d.setUint16(14,33,true);d.setUint32(16,crc,true);d.setUint32(20,bytes.length,true);d.setUint32(24,bytes.length,true);d.setUint16(28,filename.length,true);d.setUint32(42,offset,true);
+  parts.push(local,filename,bytes);directory.push(central,filename);offset+=30+filename.length+bytes.length;centralSize+=46+filename.length;
+ }
+ const end=new Uint8Array(22),e=new DataView(end.buffer);e.setUint32(0,0x06054b50,true);e.setUint16(8,entries.length,true);e.setUint16(10,entries.length,true);e.setUint32(12,centralSize,true);e.setUint32(16,offset,true);return new Blob([...parts,...directory,end],{type:'application/zip'});
+}
+async function bundle(cases){const data=await manifestExport(cases),entries=[{name:'manifest.json',bytes:new TextEncoder().encode(JSON.stringify(data,null,2)+'\n')}];for(const a of data.assets)entries.push({name:a.file,bytes:new Uint8Array(await(await png(assets.get(a.file))).arrayBuffer())});return zip(entries);}
+async function export8k(){
+ const base=manifest.find(m=>m.id==='T10'),c=makeCanvas(7680,4320),x=ctx(c);F(x,L,0,0,c.width,c.height);const annotations=[],queries=[];
+ for(const [tileX,tileY] of [[0,0],[3840,0],[0,2160],[3840,2160]])for(const a of base.annotations.filter(a=>a.role!=='roi')){
+  const rect=[a.rect[0]+tileX,a.rect[1]+tileY,a.rect[2],a.rect[3]],id=`T10-8k-${tileX}-${tileY}-${a.id}`;F(x,D,...rect);const n={...a,id,rect};annotations.push(n);queries.push({id:id+'-q',subject:id,point:center(rect),mode:a.acceptance==='exploratory'?'observe_only':'assert',expected_default:a.acceptance==='exploratory'?{kind:'record_outcome'}:{kind:'one_of_annotations',ids:[id]},required_candidates:a.acceptance==='required'?[id]:[],forbidden_default_regions:[],forbidden_exact_candidates:[],expected_chain:a.acceptance==='required'?[id]:null,edge_tolerance_px:1});
+ }
+ const name='T10-8k.png';assets.set(name,c);assetInfoCache.delete(name);
+ const m={...base,id:'T10-8k',title:'8K小目标（保持原图物理大小）',input:{...base.input,image:name,size:[7680,4320],pixel_source:{...base.input.pixel_source,row_stride:7680*4},windows:[{...owner,synthetic:true,bounds:[0,0,7680,4320]}]},annotations,queries,variants:[]};delete m.input.fixed_roi;
+ try{download(await bundle([m]),'T10-8k.zip');}finally{assets.delete(name);assetInfoCache.delete(name);c.width=c.height=1;}
+}
+// Contract checking and geometry oracles only; none of these functions detects screen objects.
+const CONTRACT_OPS=new Set(`A_new_query_count A_query_point B_new_detection_count affine_png_residual all_injected_proposals_rejected all_true_nested_layers_reachable arrival_order_invariant boundary_location_matches_vector boundary_peak_not_blindly_accepted bounded_allocation budget_vectors_match_expected chain_strict_containment checked_integer_arithmetic confirmed_rect crossing_rects_not_parent_child d2d_state_restored default_at_checkpoint default_matches_policy default_origin default_origin_matches_variant dimensions_contract distinct_sampling_positions_match_vector duplicate_proposal_merge each_render_matches_own_ground_truth evidence_equivalent evidence_within_locked_tolerance export_rgba_equal geometry_equivalent geometry_translation geometry_equal geometry_scale_if_qualified gray_equal honor_declared_read_coverage identical_rect_stop_count idle_new_analysis_jobs idle_new_dispatch_or_poll idle_poll_count injected_proposal_qualification_matches_vector latency_and_render_budgets level_kind_enum_coverage lifetime_counts_balanced localization_signed_bias manual_and_native_operable manual_geometry_stable manual_lock_after_exit manual_selection max_edge_error_px max_inflight_cpu max_inflight_graphics max_pending_latest memory_no_growth_plateau no_artificial_roi_edge no_change_to_adopt_text_runs_policy no_fake_hwnd no_forced_short_side_upsampling no_inverted_rect no_late_selection_overwrite no_leak_or_partial_publish no_orphan_worker no_overlay_in_export no_panic no_partial_candidates no_repeated_sample_inflation no_reuse_before_safe_completion no_source_mutation no_stale_publish no_stale_quality no_synchronous_wait no_unselected_backend_fallback no_visual_default numeric_result_matches_vector overflow_counter_visible pixel_descriptor_equal preview_visible query_expectations reachable_rect record_actual_memory_peaks record_host_version_native_exposure_and_sample_count record_multiscale_side_evidence record_proposal_evidence record_wheel_steps reject_before_allocation reject_if_insufficient_distinct_samples reject_invalid_descriptor_or_storage reject_occlusion_conflict repeat_geometry_stable report_driver_and_device report_global_local_small_target_recall report_hard_and_calibration_separately roi_readback_increment run_each_member_independently run_each_scenario_independently screen_rect_equals_expected second_session_operable selected_at_checkpoint selection_unchanged session_generation shutdown_nonblocking source_bits_unchanged source_edge_not_boundary_evidence source_gate_valid source_hash_unchanged stage_fusion_matches_expected_chain stage_mask_label_budget stale_results_published stale_roi_published texture_image_not_assumed_to_overflow_labels transform_pointer_and_owner ui_responsive visual_unavailable`.split(/\s+/));
+const CONTRACT_EVENTS=new Set(`preview pointer_down request_confirm publish_visual confirm_result publish_chain wheel_select checkpoint pointer_move start_visual set_phase set_shift visual_complete native_result visual_failure manual_drag roi_complete dwell idle wheel_walk_all capture_start cancel native_confirm delay_backend_completion repeat release_backend submit_graphics device_removed capture_start_then_cancel shutdown`.split(/\s+/));
+const CONTRACT_STAGES=new Set(['rectangle_validation','edge_sampling_qualification','candidate_fusion','boundary_location','connected_components_before_morphology','budget_guard']);
+function contractVocabulary(){return{assertions:[...CONTRACT_OPS].sort(),events:[...CONTRACT_EVENTS].sort(),stages:[...CONTRACT_STAGES].sort(),capability_rule:'runner must preflight all required operations; missing implementation = UnsupportedContract, never passed'};}
+const validRect=r=>Array.isArray(r)&&r.length===4&&r.every(Number.isFinite)&&r[2]>0&&r[3]>0;
+const nonnegative=v=>Number.isFinite(v)&&v>=0;
+const rectEdges=r=>[r[0],r[1],r[0]+r[2],r[1]+r[3]];
+function compareRect(actual,expected,tolerance){
+ if(!validRect(actual)||!validRect(expected)||!nonnegative(tolerance))throw Error('InvalidGeometryContract');
+ const b=rectEdges(expected),signed=rectEdges(actual).map((v,i)=>v-b[i]),max_error=Math.max(...signed.map(Math.abs));return{matched:max_error<=tolerance,signed,max_error};
+}
+function matchAnnotations(expected,rects){
+ if(expected.some(a=>typeof a.id!=='string'||!validRect(a.rect)||!nonnegative(a.edge_tolerance_px))||new Set(expected.map(a=>a.id)).size!==expected.length)throw Error('InvalidExpectedAnnotation');
+ expected=expected.slice().sort((a,b)=>a.id<b.id?-1:a.id>b.id?1:0);
+ const actual=[...new Map(rects.map(r=>{if(!validRect(r))throw Error('InvalidOutputRect');return[JSON.stringify(r),r];})).values()].sort((a,b)=>{for(let i=0;i<4;i++)if(a[i]!==b[i])return a[i]-b[i];return 0;}),used=new Map(),matches=new Map();
+ function assign(i,seen){for(let j=0;j<actual.length;j++)if(!seen.has(j)&&compareRect(actual[j],expected[i].rect,expected[i].edge_tolerance_px).matched){seen.add(j);if(!used.has(j)||assign(used.get(j),seen)){used.set(j,i);return true;}}return false;}
+ expected.forEach((_,i)=>assign(i,new Set()));for(const [j,i] of used)matches.set(expected[i].id,actual[j]);return{matched:matches.size===expected.length,matches:Object.fromEntries(matches),unmatched:expected.filter(a=>!matches.has(a.id)).map(a=>a.id)};
+}
+function localizationReport(group,outputs){
+ const errors=[],signed=[];for(const m of group.members){const actual=outputs[m.id];if(!actual){errors.push('missing '+m.id);continue;}try{const r=compareRect(actual,m.stage_vectors.expected_rect,m.stage_vectors.edge_tolerance_px);signed.push(r.signed);if(!r.matched)errors.push('location '+m.id);}catch(e){errors.push(e.message);}}
+ const mean=Array.from({length:4},(_,k)=>signed.length?signed.reduce((sum,v)=>sum+v[k],0)/signed.length:null);if(mean.some(v=>v===null||Math.abs(v)>0))errors.push('signed bias');return{passed:errors.length===0,errors,mean_signed_edges:mean};
+}
+function contractErrors(cases){
+ const errors=[],ids=new Set(),check=(ok,msg)=>{if(!ok)errors.push(msg);};
+ function assertions(list,label,checkpoints=new Set()){check(Array.isArray(list)&&list.length>0,'missing assertions '+label);for(const a of list||[]){check(CONTRACT_OPS.has(a.op),'UnsupportedContract op '+a.op+' '+label);if(a.checkpoint)check(checkpoints.has(a.checkpoint),'unknown checkpoint '+label);for(const [k,v] of Object.entries(a))if(k.includes('tolerance_px')||k==='max_abs_mean_error_px')check(nonnegative(v),'bad tolerance '+label);}}
+ function events(list,label){check(Array.isArray(list),'missing events '+label);const points=new Set();for(const e of list||[]){if(!e){errors.push('missing event '+label);continue;}check(CONTRACT_EVENTS.has(e.type),'UnsupportedContract event '+e.type+' '+label);if(e.type==='checkpoint'){check(typeof e.name==='string'&&!points.has(e.name),'duplicate/missing checkpoint '+label);points.add(e.name);}if(e.type==='set_shift')check(typeof e.pressed==='boolean','invalid Shift '+label);if(e.type==='set_phase')check(['Selecting','Selected','Annotating','Exporting'].includes(e.phase),'invalid phase '+label);if(e.type==='repeat'){check(Number.isSafeInteger(e.count)&&e.count>0,'repeat count '+label);events([e.action],label);}}return points;}
+ function stage(s,label){if(!s)return;check(CONTRACT_STAGES.has(s.entry),'UnsupportedContract stage '+s.entry+' '+label);if(s.entry==='rectangle_validation'){check(Array.isArray(s.proposals)&&s.proposals.length>0&&s.proposals.every(validRect),'invalid proposals '+label);check(s.expected_qualified===null||typeof s.expected_qualified==='boolean','invalid qualification '+label);}if(s.entry==='boundary_location')check(validRect(s.proposal)&&validRect(s.expected_rect)&&nonnegative(s.edge_tolerance_px),'invalid localization '+label);if(s.entry==='edge_sampling_qualification')check(Number.isSafeInteger(s.edge_length)&&s.edge_length>0&&Number.isSafeInteger(s.expected_distinct_positions)&&s.expected_distinct_positions>=0&&typeof s.expected_eligible==='boolean','invalid sampling '+label);if(s.entry==='candidate_fusion'){check(Array.isArray(s.point)&&s.point.length===2&&s.point.every(Number.isFinite),'invalid fusion point '+label);if(s.candidates)check(s.candidates.every(c=>validRect(c.rect)&&typeof c.qualified==='boolean'),'invalid fusion candidates '+label);else check(validRect(s.visual_rect)&&typeof s.visual_qualified==='boolean','invalid fusion visual '+label);}}
+ function node(m){check(typeof m.id==='string'&&!ids.has(m.id),'duplicate/missing ID '+m.id);ids.add(m.id);const checkpoints=m.input?.events?events(m.input.events,m.id):new Set();assertions(m.assertions,m.id,checkpoints);stage(m.stage_vectors,m.id);
+  const ann=new Map();for(const a of m.annotations||[]){check(!ann.has(a.id),'duplicate annotation '+a.id);ann.set(a.id,a);check(validRect(a.rect),'invalid rect '+a.id);check(nonnegative(a.edge_tolerance_px),'invalid tolerance '+a.id);check(['target','forbidden','geometry','roi'].includes(a.role),'invalid role '+a.id);if(a.role!=='roi')check(['required','reject','exploratory'].includes(a.acceptance),'invalid acceptance '+a.id);}
+  const qids=new Set();for(const q of m.queries||[]){const qid=q.id||q.base_query;check(typeof qid==='string'&&!qids.has(qid),'duplicate/missing query '+m.id);qids.add(qid);check(Array.isArray(q.point)&&q.point.length===2&&q.point.every(Number.isFinite),'invalid point '+qid);if(q.base_query)continue;
+   check(['assert','observe_only'].includes(q.mode),'invalid query mode '+qid);check(nonnegative(q.edge_tolerance_px),'invalid query tolerance '+qid);check(ann.has(q.subject)||q.id==='T09-intersection','invalid subject '+qid);
+   const kind=q.expected_default?.kind;check(['one_of_annotations','no_visual_target_in_region','record_outcome'].includes(kind),'invalid default kind '+qid);if(kind==='one_of_annotations')check(q.expected_default.ids?.length>0,'empty acceptable set '+qid);if(kind==='no_visual_target_in_region')check(validRect(q.expected_default.region),'bad rejection region '+qid);if(q.mode==='observe_only')check(kind==='record_outcome','observe-only has hard default '+qid);
+   for(const key of ['required_candidates','forbidden_exact_candidates','expected_chain']){const refs=q[key]||[];check(new Set(refs).size===refs.length,'duplicate reference '+qid);for(const id of refs)check(ann.has(id),'unknown annotation '+id);}for(const id of q.expected_default?.ids||[])check(ann.has(id),'unknown default '+id);
+   for(let i=1;i<(q.expected_chain||[]).length;i++){const a=ann.get(q.expected_chain[i-1])?.rect,b=ann.get(q.expected_chain[i])?.rect;check(a&&b&&contains(a,b)&&JSON.stringify(a)!==JSON.stringify(b),'non-strict chain '+qid);}
+  }
+  const scenarioIds=new Set();for(const s of m.input?.scenarios||[]){check(typeof s.id==='string'&&!scenarioIds.has(s.id),'duplicate scenario '+m.id);scenarioIds.add(s.id);check(s.initial?.phase==='Selecting','missing independent initial '+m.id+'/'+s.id);assertions(s.assertions,m.id+'/'+s.id,events(s.events,m.id+'/'+s.id));}
+  for(const v of m.input?.vectors||[])if(v.entry){stage(v,m.id);if(v.entry==='budget_guard'){check(['A','B'].includes(v.algorithm)&&['Complete','BudgetExceeded'].includes(v.expected),'invalid budget vector '+m.id);if(v.resource){const limits=budgetLimits[v.algorithm]||{};check(Number.isSafeInteger(v.value)&&v.value>=0&&v.limit===limits[v.resource],'invalid budget limit '+m.id);check(v.expected===(v.value>v.limit?'BudgetExceeded':'Complete'),'budget expected mismatch '+v.id);check(Object.entries(v.other_counters||{}).length===Object.keys(limits).length-1&&Object.entries(v.other_counters||{}).every(([key,n])=>key!==v.resource&&Number.isSafeInteger(n)&&n>=0&&n<limits[key]),'non-isolated budget vector '+v.id);}}}
+  for(const member of m.members||[])node(member);
+ }
+ cases.forEach(node);return errors;
+}
+function assertContracts(cases){const errors=contractErrors(cases);if(errors.length)throw Error(errors.join('; '));}
+function contractRegression(){
+ const errors=[],names=[],test=(name,fn)=>{names.push(name);try{if(!fn())errors.push(name);}catch(e){errors.push(name+': '+e.message);}},get=id=>manifest.find(c=>c.id===id);
+ const rejected=mutate=>{const m=structuredClone(get('Q08').members[0]);mutate(m);return contractErrors([m]).length>0;};
+ test('negative tolerance rejected',()=>rejected(m=>m.annotations[0].edge_tolerance_px=-1));test('unknown op rejected',()=>rejected(m=>m.assertions.push({op:'invented_op'})));test('unknown stage rejected',()=>rejected(m=>m.stage_vectors.entry='invented_stage'));test('missing query annotation rejected',()=>rejected(m=>m.queries[0].required_candidates=['missing']));test('invalid stage geometry rejected',()=>rejected(m=>m.stage_vectors.expected_rect=[0,0,-1,10]));test('unknown event rejected',()=>{const m=structuredClone(get('T15'));m.input.scenarios[0].events.push({type:'invented_event'});return contractErrors([m]).length>0;});test('missing checkpoint rejected',()=>{const m=structuredClone(get('T17'));m.input.scenarios[0].assertions.push({op:'default_at_checkpoint',checkpoint:'missing'});return contractErrors([m]).length>0;});
+ test('integer inner edge rejected',()=>!compareRect([31,31,98,68],[30,30,100,70],0).matched);test('one output cannot satisfy two targets',()=>!matchAnnotations([{id:'a',rect:[0,0,10,10],edge_tolerance_px:1},{id:'b',rect:[1,1,10,10],edge_tolerance_px:1}],[[0,0,10,10],[0,0,10,10]]).matched);
+ test('matching uses augmenting path and is order stable',()=>{const e=[{id:'a',rect:[0,0,10,10],edge_tolerance_px:1},{id:'b',rect:[0,0,10,10],edge_tolerance_px:0}],r=[[0,0,10,10],[1,0,10,10]],a=matchAnnotations(e,r),b=matchAnnotations(e.slice().reverse(),r.slice().reverse());return a.matched&&b.matched&&JSON.stringify(a.matches)===JSON.stringify(b.matches);});
+ test('Q08 constant outputs rejected',()=>!localizationReport(get('Q08'),Object.fromEntries(get('Q08').members.map(m=>[m.id,[64,48,128,96]]))).passed);test('Q08 precise stage outputs accepted',()=>localizationReport(get('Q08'),Object.fromEntries(get('Q08').members.map(m=>[m.id,m.stage_vectors.expected_rect]))).passed);
+ test('T16 transitive fixture resolves',()=>dependencyClosure([get('T16')]).asset_names.includes('T01.png'));test('T22 transitive fixture resolves',()=>dependencyClosure([get('T22')]).asset_names.includes('T01.png'));test('E16 referenced fixture resolves',()=>dependencyClosure([get('E16')]).asset_names.includes('T06.png'));
+ test('missing dependency rejected',()=>{try{dependencyClosure([{id:'fake',input:{fixture:'missing'}}]);return false;}catch{return true;}});test('dependency cycle rejected',()=>{const a={id:'a',input:{fixture:'b'}},b={id:'b',input:{fixture:'a'}};try{dependencyClosure([a],[a,b]);return false;}catch{return true;}});
+ test('missing image rejected',()=>{try{dependencyClosure([{id:'fake',input:{image:'missing.png'}}]);return false;}catch{return true;}});
+ test('T21 explicit text seed retained',()=>get('T21').queries.some(q=>q.purpose==='explicit_scene_seed'&&q.point[0]===410&&q.point[1]===302));test('Selecting+Shift independently covered',()=>get('T15').input.scenarios.some(s=>s.events.some(e=>e.type==='set_phase'&&e.phase==='Selecting')&&s.events.some(e=>e.type==='set_shift'&&e.pressed)&&s.assertions.some(a=>a.op==='preview_visible'&&a.equals===false)));
+ test('source failures have distinct expectations',()=>get('T17').input.scenarios.find(s=>s.id==='both').assertions.some(a=>a.op==='no_visual_default')&&get('T17').input.scenarios.find(s=>s.id==='visual_only').assertions.some(a=>a.op==='default_origin'&&a.equals==='Accessibility'));
+ test('each budget has 3 isolated boundary vectors',()=>Object.entries(budgetLimits).every(([algorithm,limits])=>Object.entries(limits).every(([resource,limit])=>[-1,0,1].every(delta=>get('E10').input.vectors.some(v=>v.algorithm===algorithm&&v.resource===resource&&v.value===limit+delta&&Object.entries(v.other_counters).every(([k,n])=>n<limits[k])&&v.expected===(delta>0?'BudgetExceeded':'Complete'))))));
+ test('crossing targets have exclusive queries',()=>get('Q07').members.find(m=>m.id.endsWith('cross')).annotations.every(a=>get('Q07').members.find(m=>m.id.endsWith('cross')).queries.some(q=>q.subject===a.id&&q.purpose==='exclusive_target_recall'&&q.required_candidates.includes(a.id))));
+ return{scope:'fixture_contract_and_geometry_oracle_only',total:names.length,passed:names.length-errors.length,errors,names,algorithm_tests:'not_run'};
+}
+function validateInputs(){
+ const errors=[],check=(ok,msg)=>{if(!ok)errors.push(msg);},all=[...manifest,...comparisonMembers],ids=new Set(all.map(m=>m.id));
+ for(const [prefix,count] of [['T',23],['E',16],['M',5]])for(let i=1;i<=count;i++)check(ids.has(prefix+String(i).padStart(2,'0')),'missing case '+prefix+i);
+ for(let i=1;i<=16;i++)check(ids.has('Q'+String(i).padStart(2,'0')),'missing comparison Q'+i);
+ errors.push(...contractErrors(manifest));try{dependencyClosure(manifest);}catch(e){errors.push(e.message);}
+ check(ids.size===all.length,'duplicate case IDs');
+ for(const m of all){
+  check(m.algorithm_status==='runner_required','algorithm status '+m.id);check(m.assertions?.length>0,'no assertions '+m.id);
+  const c=canvases.get(m.id);if(!c)continue;
+  for(const a of m.annotations||[]){check(a.rect.length===4&&a.rect.every(Number.isFinite)&&a.rect[2]>0&&a.rect[3]>0,'bad rect '+a.id);check(a.rect[0]>=0&&a.rect[1]>=0&&a.rect[0]+a.rect[2]<=c.width&&a.rect[1]+a.rect[3]<=c.height,'out of image '+a.id);}
+  for(const q of m.queries||[]){check(inside(q.point,[0,0,c.width,c.height]),'query outside '+(q.id||q.base_query));for(const id of [...q.required_candidates||[],...q.forbidden_exact_candidates||[],...q.expected_default?.ids||[],...q.expected_chain||[]])check(m.annotations.some(a=>a.id===id),'unknown annotation '+id);}
+  for(const a of (m.annotations||[]).filter(a=>a.role==='target'))check(m.queries.some(q=>q.subject===a.id),'missing target query '+a.id);
+  if(m.comparison_member?.evaluation==='calibration')check(m.queries.every(q=>q.mode==='observe_only'),'calibration has hard detection gate '+m.id);
+ }
+ const image=id=>{const c=canvases.get(id);return ctx(c).getImageData(0,0,c.width,c.height).data;};
+ const samePixels=(a,b)=>{const av=image(a),bv=image(b);return av.length===bv.length&&av.every((v,i)=>v===bv[i]);};
+ for(const g of comparisons){check(g.members.length>=2,'comparison needs members '+g.id);for(const m of g.members)check(m.input.size[0]===256&&m.input.size[1]===192&&m.comparison_member.group===g.id,'comparison panel contract '+m.id);}
+ for(const m of comparisons.find(g=>g.id==='Q01').members){const {slope,step}=m.comparison_member.value,d=image(m.id);let exact=true;for(let y=0;y<192;y++)for(let x=0;x<256;x++){const i=(y*256+x)*4,v=Math.round(50+slope*x+slope*.5*y+(inside([x,y],qr)?step:0));if(d[i]!==v||d[i+1]!==v||d[i+2]!==v||d[i+3]!==255)exact=false;}check(exact,'Q01 plane/step pixels '+m.id);}
+ for(const m of comparisons.find(g=>g.id==='Q02').members){const delta=m.comparison_member.value,d=image(m.id);let exact=true;for(let y=0;y<192;y++)for(let x=0;x<256;x++){const i=(y*256+x)*4,v=96+(inside([x,y],qr)?delta:0);if(d[i]!==v||d[i+1]!==v||d[i+2]!==v||d[i+3]!==255)exact=false;}check(exact,'Q02 only contrast changes '+m.id);}
+ for(const m of comparisons.find(g=>g.id==='Q03').members){const gap=m.comparison_member.value,d=image(m.id);let missing=0;for(let x=64;x<192;x++)if(d[(48*256+x)*4]===255)missing++;check(missing===gap,'Q03 exact gap '+m.id);check(d[(143*256+128)*4]===34,'Q03 bottom unchanged '+m.id);}
+ for(const m of comparisons.find(g=>g.id==='Q04').members){const margin=m.comparison_member.value,d=image(m.id);check(d[(48*256+margin)*4]===68&&d[(48*256+margin+127)*4]===68&&d[(48*256+margin+128)*4]===255,'Q04 margin geometry '+m.id);}
+ for(const id of ['Q05-crop','Q05-recover'])check(samePixels('Q05-full',id),'Q05 must have identical source '+id);
+ for(const m of comparisons.find(g=>g.id==='Q06').members){const s=m.stage_vectors,positions=[];for(let i=s.corner_exclusion_per_end;i<s.edge_length-s.corner_exclusion_per_end;i++)positions.push(i);check(new Set(positions).size===s.expected_distinct_positions,'Q06 independent positions '+m.id);check((positions.length>=8)===s.expected_eligible,'Q06 eligibility '+m.id);}
+ const relation=manifest.find(g=>g.id==='Q07').members;for(const m of relation){const s=m.stage_vectors,a=s.candidates[0].rect,b=s.candidates[1].rect;if(m.id.includes('nested'))check(contains(a,b)&&!contains(b,a),'Q07 nested relation '+m.id);if(m.id.endsWith('duplicate'))check(JSON.stringify(a)===JSON.stringify(b),'Q07 duplicate geometry');if(m.id.endsWith('cross'))check(!contains(a,b)&&!contains(b,a)&&inside(s.point,a)&&inside(s.point,b),'Q07 crossing relation');}
+ for(const m of comparisons.find(g=>g.id==='Q08').members){const d=image(m.id);let b=[256,192,0,0];for(let y=0;y<192;y++)for(let x=0;x<256;x++)if(d[(y*256+x)*4]<255)b=[Math.min(b[0],x),Math.min(b[1],y),Math.max(b[2],x+1),Math.max(b[3],y+1)];check(JSON.stringify([b[0],b[1],b[2]-b[0],b[3]-b[1]])===JSON.stringify(m.annotations[0].rect),'Q08 analytic coverage '+m.id);}
+ for(const id of ['Q09-Text','Q09-Image','Q09-no_owner'])check(samePixels('Q09-Custom',id),'Q09 identical pixels '+id);
+ {const m=manifest.find(c=>c.id==='T21'),point=m.input.scene_query_point,d=image('T21'),i=(point[1]*m.input.size[0]+point[0])*4;check(m.queries.some(q=>q.purpose==='explicit_scene_seed'&&q.point.every((v,k)=>v===point[k])),'T21 missing scene seed');check(d[i]<250&&d[i+1]<250&&d[i+2]<250,'T21 seed must hit text ink');}
+ for(const m of comparisons.find(g=>g.id==='Q11').members){const {side,runs}=m.comparison_member.value,d=image(m.id),len=['top','bottom'].includes(side)?128:96;let missing=0;for(let n=1;n<len-1;n++){const [px,py]=side==='top'?[64+n,48]:side==='bottom'?[64+n,143]:side==='left'?[64,48+n]:[191,48+n];if(d[(py*256+px)*4]===255)missing++;}check(missing===runs.reduce((sum,r)=>sum+r[1],0),'Q11 exact gap distribution '+m.id);}
+ const contract_checks=contractRegression();errors.push(...contract_checks.errors.map(e=>'contract regression '+e));
+ {const a=image('Q10-text'),b=image('Q10-border');let changed=0,onlyBorder=true;for(let y=0;y<192;y++)for(let x=0;x<256;x++){const i=(y*256+x)*4;if(a[i]!==b[i]){changed++;if(!inside([x,y],qr)||inside([x,y],[65,49,126,94]))onlyBorder=false;}}check(onlyBorder&&changed===128*96-126*94,'Q10 only 1px border differs');}
+ const e5=manifest.find(m=>m.id==='E05');for(const a of e5.annotations.filter(a=>a.distinct_positions!==undefined))check((a.distinct_positions<8)===(a.acceptance==='reject'),'E05 sampling '+a.id);
+ check(77*40+150*150+29*80===77*190+150*73+29*80,'T02 gray equality');
+ const mask=assets.get('E09-isolated-mask.png'),d=ctx(mask).getImageData(0,0,mask.width,mask.height).data;let count=0;
+ for(let y=0;y<mask.height;y++)for(let x=0;x<mask.width;x++)if(d[(y*mask.width+x)*4]===255){count++;check(x%2===0&&y%2===0,'mask isolation');}
+ check(count===76800&&count>65536,'E09 stage components');
+ const c6=canvases.get('T06'),a=ctx(c6).getImageData(160,140,120,90).data;let bounds=[Infinity,Infinity,-1,-1];for(let y=0;y<90;y++)for(let x=0;x<120;x++){const i=(y*120+x)*4;if(a[i]<255||a[i+1]<255||a[i+2]<255)bounds=[Math.min(bounds[0],160+x),Math.min(bounds[1],140+y),Math.max(bounds[2],161+x),Math.max(bounds[3],141+y)];}
+ check(JSON.stringify(bounds)===JSON.stringify([169,149,271,221]),'T06 analytic AA coverage');
+ const c4=canvases.get('T04'),v=ctx(c4).getImageData(0,0,c4.width,c4.height).data,at=(x,y,k)=>v[(y*c4.width+x)*4+k];let max=0;
+ for(const dist of [1,2,4])for(let y=12;y<c4.height-12;y+=13)for(let x=12;x<c4.width-12;x+=11)for(let k=0;k<3;k++){const j=(at(x+dist,y,k)-at(x-dist,y,k))-((at(x-dist,y,k)-at(x-3*dist,y,k))+(at(x+3*dist,y,k)-at(x+dist,y,k)))/2;max=Math.max(max,Math.abs(j));}
+ check(max<=2,'T04 quantization residual');
+ return {scope:'generator_inputs_and_contracts_only',status:errors.length?'failed':'passed',errors,contract_checks,case_count:manifest.length,comparison_groups:comparisons.length,comparison_variants:comparisonMembers.length,comparison_hard_members:comparisonMembers.filter(m=>m.comparison_member.evaluation==='hard_assertion').length,comparison_calibration_members:comparisonMembers.filter(m=>m.comparison_member.evaluation==='calibration').length,comparison_stage_members:comparisonMembers.filter(m=>m.comparison_member.evaluation==='stage_assertion').length,pixel_scenes:V.length+comparisonMembers.length,generated_pairs:metamorphic.length,E09_stage_components:count,T04_sampled_max_residual_rgb_codes:max,T06_aa_bounds_ltrb:bounds,algorithm_tests:'not_run'};
+}
+function runValidation(){const result=validateInputs();$('#health').setAttribute('role',result.errors.length?'alert':'status');$('#health').textContent=result.errors.length?'输入自检失败：'+result.errors.join('；'):`输入自检通过：${result.comparison_groups} 组对照／${result.comparison_variants} 个变体（硬断言 ${result.comparison_hard_members}、待标定 ${result.comparison_calibration_members}、阶段合同 ${result.comparison_stage_members}）；基础T/E/M共44项；合同回归${result.contract_checks.passed}/${result.contract_checks.total}。检测算法未运行。`;return result;}
+// Explicit inspection API for offline runners and page verification; never labels detection as passed.
+window.visualCandidateFixtures={version:VERSION,profile:PROFILE,cases:manifest,assets,validate:runValidation,validateContracts:contractErrors,resolveDependencies:dependencyClosure,compareRect,matchAnnotations,localizationReport,contractRegression,exportManifest:()=>manifestExport(manifest),exportBundle:()=>bundle(manifest),caseExport,export8k};
+runValidation();
+</script></body></html>

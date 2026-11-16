@@ -4,3 +4,7 @@ __pycache__/
 *.pyc
 *.log
 !/vendor/garb/benchmarks/*.log
+
+# Local research inputs and generated assistant workflow files.
+/refer/
+/.spec-workflow/

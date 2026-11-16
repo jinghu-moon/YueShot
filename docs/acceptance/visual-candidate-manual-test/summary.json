@@ -1,0 +1,36 @@
+{
+  "scope": "manual test interface only; no product capture/save/pin qualification",
+  "recordedAt": "2026-11-17T06:18:59.126586+08:00",
+  "groupCount": 31,
+  "sceneCount": 114,
+  "allMetadataMatchesFrozenManifest": true,
+  "browserConsoleErrors": 0,
+  "checks": [
+    "All 31 groups / 114 PNGs loaded in browser",
+    "Focus mode removes annotations and restores with Escape",
+    "Physical/CSS/fit sizing and physical-origin alignment",
+    "Native input and button usable",
+    "18-segment document scroll without inner scrolling",
+    "File input and synthetic paste-event image decode with exact dimensions",
+    "Record persistence and JSON download preserve unexecuted states",
+    "420px narrow viewport has no whole-page horizontal overflow"
+  ],
+  "sourceSha256": {
+    "docs/design/visual-candidate-manual-test.html": "f55f224d9bdc0ee67b28a8ba76e6dea793433b8aaf24dc9afec75433cb0fd68c",
+    "docs/design/visual-candidate-manual-test.md": "616bca11d13b1327ba235956cf31425c48a9aa612398f37bfc5545c62bd7c17e",
+    "apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-v4.1/manifest.json": "94d2bd9a83cb6ce507d05e4a95c28aa1337c1d75a16eefef66a23ac93ee3dfcc",
+    "apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-v4.1/dataset-lock.json": "5dcac4227ca88534f586f796a38c4f12752088ee0fb625f4b4800c19f41e61b0",
+    "docs/design/visual-candidate-test-cases.html": "4c2307854def42b692bd9480d494fb9744ded8d8bae79f6b49edc900640d55b6"
+  },
+  "evidenceSha256": {
+    "all-scenes.json": "eb70d91518928d798c0251953097ddc7745cba7786e41264411df666edb91acd",
+    "browser-workflows.json": "b6d23f24c2ae64beeb359d7340886ef018ff89ddb3c25c86362de0e00146388d",
+    "responsive.json": "82afa8330585f66d15a830e82f97fde863eb8eb0949ff406ce3e78c412fbf298"
+  },
+  "productSourceChanges": false,
+  "limitations": [
+    "Actual YueShot F5/F7/save/pin and real system clipboard remain user acceptance",
+    "Image material boundaries differ from frozen screen-source boundaries",
+    "HTTP browser verification; direct file opening not automated because browser tool blocks file protocol"
+  ]
+}

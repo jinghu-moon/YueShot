@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "mobileWidths": [
+    {
+      "tab": "pixels",
+      "width": 420,
+      "scrollWidth": 405
+    },
+    {
+      "tab": "pairs",
+      "width": 420,
+      "scrollWidth": 405
+    },
+    {
+      "tab": "native",
+      "width": 420,
+      "scrollWidth": 405
+    },
+    {
+      "tab": "long",
+      "width": 420,
+      "scrollWidth": 405
+    },
+    {
+      "tab": "paste",
+      "width": 420,
+      "scrollWidth": 405
+    },
+    {
+      "tab": "check",
+      "width": 420,
+      "scrollWidth": 405
+    }
+  ]
+}

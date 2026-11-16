@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "results": [
+    "Q13 six panels; reference toggle; focus clears annotations; Escape restores",
+    "physical / CSS / fit mapping",
+    "native button and editable input",
+    {
+      "long": {
+        "count": 18,
+        "scroll": 5301,
+        "viewport": 1000,
+        "internals": 0
+      }
+    },
+    "image file and paste-event decode; exact dimensions; clear",
+    "record persistence and JSON export preserves unexecuted states"
+  ],
+  "scope": "Browser interface verification; no actual YueShot capture/save/pin or system clipboard operation"
+}

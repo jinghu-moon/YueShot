@@ -1,0 +1,11 @@
+test_changed_manifest_is_rejected (test_visual_candidate_fixtures.FrozenFixtureTests.test_changed_manifest_is_rejected) ... ok
+test_changed_or_missing_png_is_rejected (test_visual_candidate_fixtures.FrozenFixtureTests.test_changed_or_missing_png_is_rejected) ... ok
+test_committed_inputs_decode_to_browser_rgba (test_visual_candidate_fixtures.FrozenFixtureTests.test_committed_inputs_decode_to_browser_rgba) ... ok
+test_extra_asset_and_refreeze_are_rejected (test_visual_candidate_fixtures.FrozenFixtureTests.test_extra_asset_and_refreeze_are_rejected) ... ok
+test_invalid_archive_does_not_publish_partial_dataset (test_visual_candidate_fixtures.FrozenFixtureTests.test_invalid_archive_does_not_publish_partial_dataset) ... ok
+test_png_file_hash_alone_cannot_validate_pixels (test_visual_candidate_fixtures.FrozenFixtureTests.test_png_file_hash_alone_cannot_validate_pixels) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.956s
+
+OK

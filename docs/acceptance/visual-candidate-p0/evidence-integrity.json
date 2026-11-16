@@ -1,0 +1,30 @@
+{
+  "recorded_at_utc": "2026-11-16T12:23:42.623340+00:00",
+  "revision": "2b88e591ca97c980ed976a4d2a7b64c713c1e335",
+  "source_files_at_run": 89,
+  "source_differences_after_run": [
+    {
+      "file": "docs/visual-candidate-pipeline.md",
+      "at_run": "28174c05d4587dfc830e55ef81b28eca574bed688c14bd01bfd18b9eae7efbab",
+      "current": "41b8ac4b8477d35d2a2d3c84c11ab053198f99877ef44a7d4caf1c654f013780"
+    }
+  ],
+  "only_documentation_changed_after_run": true,
+  "suite_count": 13,
+  "all_suite_gates_passed": true,
+  "raw_log_hash_mismatches": [],
+  "missing_local_markdown_links": [],
+  "final_engineering_check": {
+    "exit_code": 0,
+    "log_sha256": "75ba17a5988c707a13d982b91e73328f70f47f378d928e397db75a974af09961"
+  },
+  "golden": {
+    "path": "apps/yue-shot/crates/yue-shot-capture/src/window_detection/native-baseline.json",
+    "sha256": "bc546c08b6a0551fe0e776b721e921c38bf13c746ff5917e6a1f0eae9ad38f43",
+    "rect_format": "ltrb physical half-open; explicitly produced by rect_value()"
+  },
+  "demo_source_hash_matches": true,
+  "visual_algorithm_tests": "not_run",
+  "p0_status": "in_progress",
+  "p1_status": "not_started"
+}

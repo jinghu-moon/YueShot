@@ -47,6 +47,9 @@ pub mod snapshot;
 pub mod transition;
 pub mod uia;
 
+#[cfg(test)]
+mod native_baseline;
+
 pub use deep::{
     ChainPlan, ChainRing, DeepSelectionProvider, DeepTarget, LevelChain, QueryControl,
     REFINEMENT_BUDGET_MS, REFINEMENT_CALL_LIMIT_MS, REFINEMENT_DWELL_MS,

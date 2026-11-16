@@ -1,0 +1,5 @@
+{
+  "command": "cargo test -p yue-shot-capture --locked --offline --lib native_baseline -- --include-ignored --test-threads=1",
+  "exitCode": 0,
+  "finished": "2026-11-16T20:06:23.9726904+08:00"
+}

@@ -1,0 +1,18 @@
+{
+  "revision": "2b88e591ca97c980ed976a4d2a7b64c713c1e335",
+  "started": "2026-11-16T20:34:45.8116486+08:00",
+  "finished": "2026-11-16T20:35:52.3236203+08:00",
+  "command": "D:\\100_Projects\\110_Daily\\YueShot\\target\\debug\\deps\\yue_shot_capture-7ddcff0d886fede0.exe --exact windows::overlay::native_baseline::native_baseline_capture_lifecycle_resource_probe --ignored --test-threads=1 --nocapture",
+  "executableSha256": "3ab5f37f821ff530c1ac39d118ab3853a937584783d53413839644482234e7f5",
+  "exitCode": 0,
+  "gatePassed": true,
+  "warmups": 5,
+  "measuredSessions": 100,
+  "idleSeconds": 60,
+  "idleSamples": 115,
+  "gpuAccounting": "DXGI per-process local/nonlocal usage, actual adapter recorded in probe-events.json",
+  "scope": "real frozen capture, hidden renderer, confirmation/save/cancel; no visible HWND or message pump; process sampling includes test instrumentation",
+  "idleCpuSeconds": 0.109375,
+  "samplesSha256": "a9499f55aa5af14070efd89a68b04400d8cb6e181a96b561617a04735e89b1c5",
+  "stdoutSha256": "495047e52d830a44e492737ca970b9a6e6cc1138617ad84294bb48b98f97590f"
+}

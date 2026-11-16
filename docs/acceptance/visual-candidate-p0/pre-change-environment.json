@@ -1,0 +1,10 @@
+{
+  "revision": "2b88e591ca97c980ed976a4d2a7b64c713c1e335",
+  "started": "2026-11-16T19:55:09.1580155+08:00",
+  "finished": "2026-11-16T19:55:24.6140519+08:00",
+  "command": "cargo test -p yue-shot-capture -p yue-media -p yue-geometry --locked --offline --lib -- --test-threads=1",
+  "exitCode": 0,
+  "os": "Microsoft Windows NT 10.0.26100.0",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "cargo": "cargo 1.98.1 (797e8a9bc 2026-08-05)"
+}

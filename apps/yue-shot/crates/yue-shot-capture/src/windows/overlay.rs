@@ -909,6 +909,9 @@ mod session;
 mod state;
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod native_baseline;
 mod window_host;
 mod window_restore;
 

@@ -1,0 +1,5 @@
+{
+  "command": "python -m unittest discover -s tools/tests -p test_visual_candidate_fixtures.py -v",
+  "exitCode": 0,
+  "logSha256": "247ebab6b6c235670ad6197827e0ce6d5afbffafea087e2b824a2d9d90ae12ad"
+}

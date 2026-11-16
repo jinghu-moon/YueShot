@@ -607,4 +607,62 @@ mod tests {
             "the mailbox holds one consumable result"
         );
     }
+
+    #[test]
+    fn native_baseline_cancel_restart_completion_permutations() {
+        // Cancellation/restart have already happened; enumerate every ordering
+        // of old completion, new completion and result drain. Include failure
+        // and successful frozen-frame payloads, rather than only error sentinels.
+        for success in [false, true] {
+            for order in [
+                [0, 1, 2],
+                [0, 2, 1],
+                [1, 0, 2],
+                [1, 2, 0],
+                [2, 0, 1],
+                [2, 1, 0],
+            ] {
+                let mailbox = Mailbox::new();
+                let old = request(mailbox.next_generation());
+                mailbox.invalidate();
+                let current = request(mailbox.next_generation());
+                let mut seen = Vec::new();
+                let mut drain = || {
+                    if let Some(event) = mailbox.take_result() {
+                        match event {
+                            WorkerEvent::Ready(frame) => seen.push(frame.unwrap().generation),
+                            WorkerEvent::InitializationFailed(_) => seen.push(current.generation),
+                        }
+                    }
+                };
+                for event in order {
+                    if event == 2 {
+                        drain();
+                        continue;
+                    }
+                    let req = if event == 0 { &old } else { &current };
+                    let result = if success {
+                        WorkerEvent::Ready(Box::new(Ok(super::PreparedFrame {
+                            generation: req.generation,
+                            frozen: super::super::providers::test_frozen_frame(2, 2),
+                            monitor: req.monitor.clone(),
+                            captured_at: Instant::now(),
+                        })))
+                    } else {
+                        WorkerEvent::InitializationFailed(CaptureError::ProviderUnavailable(
+                            "injected".into(),
+                        ))
+                    };
+                    mailbox.complete(req, result);
+                }
+                drain();
+                assert_eq!(
+                    seen,
+                    vec![current.generation],
+                    "success={success} order={order:?}"
+                );
+                assert!(mailbox.take_result().is_none());
+            }
+        }
+    }
 }

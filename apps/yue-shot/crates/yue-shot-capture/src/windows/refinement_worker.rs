@@ -942,4 +942,167 @@ mod tests {
             crate::window_detection::DEFAULT_ADOPT_TEXT_RUNS
         );
     }
+
+    #[test]
+    fn native_baseline_transport_adoption_matrix() {
+        use crate::diagnostics::PrecisionOutcome;
+        use crate::window_detection::LevelKind;
+
+        let frame = Rect::new(0, 0, 1000, 800);
+        let broad = Rect::new(20, 20, 980, 780);
+        let finer = Rect::new(100, 100, 300, 200);
+        // Current merge policy, not visual fusion policy. No COM calls are made.
+        for (name, adopt_text, hit, uia_outcome, expected_bounds, expected_outcome) in [
+            (
+                "specific UIA; MSAA not consulted",
+                true,
+                None,
+                Some(PrecisionOutcome::Adopted),
+                broad,
+                PrecisionOutcome::Adopted,
+            ),
+            (
+                "broad UIA; MSAA button",
+                true,
+                Some(Ok((finer, 0x2b, 0))),
+                Some(PrecisionOutcome::NotFiner),
+                finer,
+                PrecisionOutcome::Adopted,
+            ),
+            (
+                "unsupported UIA; MSAA image",
+                true,
+                Some(Ok((finer, 0x28, 0))),
+                None,
+                finer,
+                PrecisionOutcome::Adopted,
+            ),
+            (
+                "broad UIA; unavailable MSAA",
+                true,
+                Some(Err(MsaaHitFailure::Unavailable)),
+                Some(PrecisionOutcome::NotFiner),
+                broad,
+                PrecisionOutcome::NotFiner,
+            ),
+            (
+                "both unavailable",
+                true,
+                Some(Err(MsaaHitFailure::Unavailable)),
+                None,
+                broad,
+                PrecisionOutcome::Unavailable,
+            ),
+            (
+                "MSAA timeout",
+                true,
+                Some(Err(MsaaHitFailure::TimedOut)),
+                None,
+                broad,
+                PrecisionOutcome::Unavailable,
+            ),
+            (
+                "same rectangle is not finer",
+                true,
+                Some(Ok((broad, 0x2b, 0))),
+                None,
+                broad,
+                PrecisionOutcome::NotFiner,
+            ),
+            (
+                "standalone text enabled",
+                true,
+                Some(Ok((finer, 0x29, 0))),
+                None,
+                finer,
+                PrecisionOutcome::Adopted,
+            ),
+            (
+                "standalone text disabled",
+                false,
+                Some(Ok((finer, 0x29, 0))),
+                None,
+                broad,
+                PrecisionOutcome::NotFiner,
+            ),
+            (
+                "button label is not a target",
+                true,
+                Some(Ok((finer, 0x29, 0x2b))),
+                None,
+                broad,
+                PrecisionOutcome::NotFiner,
+            ),
+            (
+                "hit does not contain cursor",
+                true,
+                Some(Ok((Rect::new(400, 400, 600, 600), 0x2b, 0))),
+                None,
+                broad,
+                PrecisionOutcome::NotFiner,
+            ),
+        ] {
+            let fallback = FallbackDeepSelection::new(
+                WindowDetectionMetrics::new(),
+                win32::HitTestPassThrough::default(),
+                adopt_text,
+            );
+            let mut target = DeepTarget {
+                window: window(),
+                kind: TargetKind::UiElement,
+                screen_bounds: broad,
+                path: vec![
+                    PathLevel::new(frame, LevelKind::Window),
+                    PathLevel::new(broad, LevelKind::Pane),
+                ],
+                stop_reason: StopReason::Complete,
+            };
+            let hit = hit.map(|hit| {
+                hit.map(|(visible, role, parent_role)| MsaaHitBox {
+                    raw: visible,
+                    visible,
+                    role,
+                    parent_role,
+                    name: name.into(),
+                    depth: 1,
+                    ancestors: vec![frame, broad],
+                })
+            });
+            let uia = uia_outcome.map(|outcome| super::super::uia_provider::HitDecision {
+                outcome,
+                note: name.into(),
+                answered_specifically: hit.is_none(),
+            });
+            let (outcome, _) = fallback.adopt_msaa_hit(
+                &mut target,
+                hit.as_ref(),
+                uia.as_ref(),
+                &job_for(17, Point::new(150, 150)),
+            );
+            assert_eq!(outcome, expected_outcome, "{name}");
+            assert_eq!(target.screen_bounds, expected_bounds, "{name}");
+            assert_eq!(target.path.last().unwrap().rect, expected_bounds, "{name}");
+            assert_eq!(target.path.first().unwrap().rect, frame, "{name}");
+            assert!(
+                target
+                    .path
+                    .windows(2)
+                    .all(|p| p[0].rect.contains_rect(p[1].rect)),
+                "{name}"
+            );
+            if expected_bounds == finer {
+                assert_eq!(target.path.len(), 3, "{name}");
+                assert_eq!(target.path[1].rect, broad, "{name}");
+                assert_eq!(
+                    target.path[2].kind,
+                    crate::window_detection::level_kind_of_msaa_role(
+                        hit.as_ref().unwrap().as_ref().unwrap().role
+                    ),
+                    "{name}"
+                );
+            } else {
+                assert_eq!(target.path.len(), 2, "{name}");
+            }
+        }
+    }
 }

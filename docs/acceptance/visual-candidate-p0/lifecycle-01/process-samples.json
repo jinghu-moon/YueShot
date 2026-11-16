@@ -1,0 +1,1145 @@
+[
+  {
+    "utc": "2026-11-16T12:34:45.8512921Z",
+    "phase": "capture",
+    "privateBytes": 483328,
+    "workingSet": 2613248,
+    "handles": 36,
+    "threads": 1,
+    "cpuSeconds": 0.015625
+  },
+  {
+    "utc": "2026-11-16T12:34:46.3863094Z",
+    "phase": "capture",
+    "privateBytes": 59203584,
+    "workingSet": 58486784,
+    "handles": 442,
+    "threads": 29,
+    "cpuSeconds": 0.390625
+  },
+  {
+    "utc": "2026-11-16T12:34:46.9143736Z",
+    "phase": "capture",
+    "privateBytes": 59449344,
+    "workingSet": 58957824,
+    "handles": 446,
+    "threads": 29,
+    "cpuSeconds": 0.5
+  },
+  {
+    "utc": "2026-11-16T12:34:47.4304728Z",
+    "phase": "capture",
+    "privateBytes": 59449344,
+    "workingSet": 58970112,
+    "handles": 446,
+    "threads": 29,
+    "cpuSeconds": 0.578125
+  },
+  {
+    "utc": "2026-11-16T12:34:47.9582644Z",
+    "phase": "capture",
+    "privateBytes": 59641856,
+    "workingSet": 59170816,
+    "handles": 452,
+    "threads": 30,
+    "cpuSeconds": 0.703125
+  },
+  {
+    "utc": "2026-11-16T12:34:48.4891712Z",
+    "phase": "capture",
+    "privateBytes": 59772928,
+    "workingSet": 59314176,
+    "handles": 452,
+    "threads": 30,
+    "cpuSeconds": 0.765625
+  },
+  {
+    "utc": "2026-11-16T12:34:49.0155171Z",
+    "phase": "capture",
+    "privateBytes": 59801600,
+    "workingSet": 59293696,
+    "handles": 446,
+    "threads": 29,
+    "cpuSeconds": 0.90625
+  },
+  {
+    "utc": "2026-11-16T12:34:49.5453382Z",
+    "phase": "capture",
+    "privateBytes": 59805696,
+    "workingSet": 59305984,
+    "handles": 442,
+    "threads": 29,
+    "cpuSeconds": 1.015625
+  },
+  {
+    "utc": "2026-11-16T12:34:50.0693350Z",
+    "phase": "capture",
+    "privateBytes": 59977728,
+    "workingSet": 59465728,
+    "handles": 451,
+    "threads": 30,
+    "cpuSeconds": 1.1875
+  },
+  {
+    "utc": "2026-11-16T12:34:50.5979626Z",
+    "phase": "capture",
+    "privateBytes": 59977728,
+    "workingSet": 59465728,
+    "handles": 452,
+    "threads": 30,
+    "cpuSeconds": 1.25
+  },
+  {
+    "utc": "2026-11-16T12:34:51.1267489Z",
+    "phase": "capture",
+    "privateBytes": 60067840,
+    "workingSet": 59572224,
+    "handles": 441,
+    "threads": 29,
+    "cpuSeconds": 1.359375
+  },
+  {
+    "utc": "2026-11-16T12:34:51.6515664Z",
+    "phase": "capture",
+    "privateBytes": 59981824,
+    "workingSet": 59478016,
+    "handles": 452,
+    "threads": 30,
+    "cpuSeconds": 1.46875
+  },
+  {
+    "utc": "2026-11-16T12:34:52.1723540Z",
+    "phase": "idle",
+    "privateBytes": 59932672,
+    "workingSet": 59445248,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:52.6988148Z",
+    "phase": "idle",
+    "privateBytes": 59932672,
+    "workingSet": 59445248,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:53.2292647Z",
+    "phase": "idle",
+    "privateBytes": 59932672,
+    "workingSet": 59445248,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:53.7458099Z",
+    "phase": "idle",
+    "privateBytes": 59932672,
+    "workingSet": 59445248,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:54.2775424Z",
+    "phase": "idle",
+    "privateBytes": 59932672,
+    "workingSet": 59445248,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:54.7919350Z",
+    "phase": "idle",
+    "privateBytes": 59547648,
+    "workingSet": 59211776,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:55.3195621Z",
+    "phase": "idle",
+    "privateBytes": 59547648,
+    "workingSet": 59211776,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:55.8379830Z",
+    "phase": "idle",
+    "privateBytes": 59547648,
+    "workingSet": 59211776,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:56.3569629Z",
+    "phase": "idle",
+    "privateBytes": 59547648,
+    "workingSet": 59211776,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:56.8835766Z",
+    "phase": "idle",
+    "privateBytes": 59547648,
+    "workingSet": 59211776,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:57.4057379Z",
+    "phase": "idle",
+    "privateBytes": 59547648,
+    "workingSet": 59211776,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:57.9343048Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:58.4647321Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.5
+  },
+  {
+    "utc": "2026-11-16T12:34:58.9873152Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:34:59.5191768Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:35:00.0500220Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:35:00.5779352Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:35:01.1080349Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:35:01.6358565Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:35:02.1649908Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.515625
+  },
+  {
+    "utc": "2026-11-16T12:35:02.6890848Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:03.2163351Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:03.7399748Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:04.2660262Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:04.7868697Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:05.3110330Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:05.8379180Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:06.3644122Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:06.8902355Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:07.4186500Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:07.9482581Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:08.4888941Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:09.0184950Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:09.5376181Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:10.0523010Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:10.5796661Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:11.0997403Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:11.6157220Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:12.1300408Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:12.6562522Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:13.1761620Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:13.7072411Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:14.2325975Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:14.7478446Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:15.2616389Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:15.7911295Z",
+    "phase": "idle",
+    "privateBytes": 59281408,
+    "workingSet": 58945536,
+    "handles": 435,
+    "threads": 29,
+    "cpuSeconds": 1.53125
+  },
+  {
+    "utc": "2026-11-16T12:35:16.3053196Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.546875
+  },
+  {
+    "utc": "2026-11-16T12:35:16.8329136Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.546875
+  },
+  {
+    "utc": "2026-11-16T12:35:17.3760420Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.546875
+  },
+  {
+    "utc": "2026-11-16T12:35:17.8928861Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:18.4086395Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:18.9391344Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:19.4514863Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:19.9688116Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:20.4821200Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:21.0144045Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:21.5277294Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:22.0452505Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:22.5761990Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:23.0944787Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:23.6119036Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:24.1280907Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:24.6438374Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:25.1774518Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:25.6971539Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58327040,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:26.2264151Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58298368,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:26.7408398Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58298368,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:27.2577129Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58298368,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:27.7865319Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58249216,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:28.3057326Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58249216,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.5625
+  },
+  {
+    "utc": "2026-11-16T12:35:28.8339731Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58249216,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.578125
+  },
+  {
+    "utc": "2026-11-16T12:35:29.3468650Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58249216,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.578125
+  },
+  {
+    "utc": "2026-11-16T12:35:29.8605840Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:30.3930950Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:30.9219428Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:31.4375920Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:31.9535071Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:32.4689625Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:32.9838271Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:33.4998674Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:34.0293194Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:34.5442002Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:35.0716184Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:35.5926791Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:36.1095737Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:36.6394555Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:37.1583761Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:37.6767823Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:38.1937317Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.59375
+  },
+  {
+    "utc": "2026-11-16T12:35:38.7109884Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:39.2259946Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:39.7561762Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:40.2747595Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:40.7927173Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:41.3085037Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:41.8251793Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 433,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:42.3429132Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:42.8705611Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:43.3875672Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:43.9077829Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:44.4238180Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:44.9383643Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:45.4676428Z",
+    "phase": "idle",
+    "privateBytes": 58585088,
+    "workingSet": 58179584,
+    "handles": 434,
+    "threads": 28,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:45.9837328Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:46.4997089Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:47.0147954Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:47.5446353Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:48.0615709Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:48.5781705Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:49.1076389Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 432,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:49.6249954Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 434,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:50.1547734Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 434,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:50.6816027Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 434,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:51.2011795Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 434,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  },
+  {
+    "utc": "2026-11-16T12:35:51.7161467Z",
+    "phase": "idle",
+    "privateBytes": 58486784,
+    "workingSet": 58122240,
+    "handles": 434,
+    "threads": 25,
+    "cpuSeconds": 1.609375
+  }
+]

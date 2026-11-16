@@ -1,0 +1,5 @@
+{
+  "command": "cargo test -p yue-shot-capture --locked --offline --lib native_baseline_controller_preview_replacement_and_manual_path_trace -- --ignored --test-threads=1",
+  "exitCode": 101,
+  "expected": "nonzero: desired Shift invariant is violated before the fix"
+}

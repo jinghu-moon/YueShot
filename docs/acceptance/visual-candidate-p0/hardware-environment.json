@@ -1,0 +1,26 @@
+{
+  "revision": "2b88e591ca97c980ed976a4d2a7b64c713c1e335",
+  "os": "Microsoft Windows NT 10.0.26100.0",
+  "cpu": [
+    {
+      "Name": "13th Gen Intel(R) Core(TM) i5-13600KF",
+      "NumberOfCores": 14,
+      "NumberOfLogicalProcessors": 20
+    }
+  ],
+  "video": [
+    {
+      "Name": "GameViewer Virtual Display Adapter",
+      "AdapterCompatibility": "GameViewer",
+      "DriverVersion": "15.6.5.199",
+      "VideoModeDescription": null
+    },
+    {
+      "Name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+      "AdapterCompatibility": "NVIDIA",
+      "DriverVersion": "32.0.16.2101",
+      "VideoModeDescription": "3840 x 2160 x 4294967296 种颜色"
+    }
+  ],
+  "utc": "2026-11-16T12:09:12.4282998Z"
+}

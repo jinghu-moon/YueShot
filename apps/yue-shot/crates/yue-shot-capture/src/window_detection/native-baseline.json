@@ -1,0 +1,35 @@
+{
+  "hit_mapping": [
+    {"dpi":96,"point":[-620,-100],"hit":101,"nearest":101,"local":[20,20,320,420]},
+    {"dpi":96,"point":[-320,0],"hit":102,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":96,"point":[4,0],"hit":null,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":96,"point":[5,0],"hit":null,"nearest":null,"local":null},
+    {"dpi":120,"point":[-620,-100],"hit":101,"nearest":101,"local":[20,20,320,420]},
+    {"dpi":120,"point":[-320,0],"hit":102,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":120,"point":[4,0],"hit":null,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":120,"point":[5,0],"hit":null,"nearest":null,"local":null},
+    {"dpi":144,"point":[-620,-100],"hit":101,"nearest":101,"local":[20,20,320,420]},
+    {"dpi":144,"point":[-320,0],"hit":102,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":144,"point":[4,0],"hit":null,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":144,"point":[5,0],"hit":null,"nearest":null,"local":null},
+    {"dpi":192,"point":[-620,-100],"hit":101,"nearest":101,"local":[20,20,320,420]},
+    {"dpi":192,"point":[-320,0],"hit":102,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":192,"point":[4,0],"hit":null,"nearest":102,"local":[320,20,620,420]},
+    {"dpi":192,"point":[5,0],"hit":null,"nearest":null,"local":null},
+    {"updated":false},
+    {"released_epoch":0,"released_nearest":false,"released_monitors":0}
+  ],
+  "preview_layers": [
+    {"event":"first_pending","preview":null},
+    {"event":"first_empty","preview":[20,20,320,420]},
+    {"event":"inside_verified","preview":[50,60,140,120]},
+    {"event":"outside_pending","preview":[50,60,140,120]},
+    {"event":"outside_empty","preview":[20,20,320,420]},
+    {"direction":-1,"moved":true,"index":2,"kind":"Group","preview":[31,31,309,409],"rings":[[0,"Outer"],[2,"Selected"],[3,"Inner"]],"shallower":1,"deeper":1},
+    {"direction":-1,"moved":true,"index":0,"kind":"Window","preview":[20,20,320,420],"rings":[[0,"Selected"],[1,"Inner"],[3,"Inner"]],"shallower":0,"deeper":2},
+    {"direction":-1,"moved":false,"index":0,"kind":"Window","preview":[20,20,320,420],"rings":[[0,"Selected"],[1,"Inner"],[3,"Inner"]],"shallower":0,"deeper":2},
+    {"direction":1,"moved":true,"index":1,"kind":"Pane","preview":[30,30,310,410],"rings":[[0,"Outer"],[1,"Selected"],[3,"Inner"]],"shallower":1,"deeper":1},
+    {"direction":1,"moved":true,"index":3,"kind":"Button","preview":[50,60,140,120],"rings":[[0,"Outer"],[1,"Outer"],[2,"Outer"],[3,"Selected"]],"shallower":2,"deeper":0},
+    {"direction":1,"moved":false,"index":3,"kind":"Button","preview":[50,60,140,120],"rings":[[0,"Outer"],[1,"Outer"],[2,"Outer"],[3,"Selected"]],"shallower":2,"deeper":0}
+  ]
+}

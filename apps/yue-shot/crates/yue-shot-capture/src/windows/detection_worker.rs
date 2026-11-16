@@ -135,6 +135,13 @@ impl DetectionWorker {
         Some(result)
     }
 
+    /// Inject at the worker boundary so P0 replays exercise the real controller's
+    /// request gate and mailbox drain. The replay shuts down the native worker first.
+    #[cfg(test)]
+    pub(crate) fn publish_for_replay(&self, result: DetectionResult) {
+        publish(&self.shared, &self.metrics, result);
+    }
+
     /// Stop the worker.
     ///
     /// Idempotent. If a Win32 call is already in flight the join waits for that one call

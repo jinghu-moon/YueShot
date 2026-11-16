@@ -1,0 +1,42 @@
+{
+  "stage": "P0",
+  "status": "passed",
+  "scope": "pre-change L1/L2 characterization, current-device targeted L3 and resource baseline, frozen HTML development corpus, preregistered real collection/split protocol",
+  "recorded_at_utc": "2026-11-16T12:57:30.449970+00:00",
+  "baseline_revision": "2b88e591ca97c980ed976a4d2a7b64c713c1e335",
+  "capture_regular_passed": 571,
+  "capture_ignored": 90,
+  "native_characterization_regular": 11,
+  "native_characterization_graphics": 1,
+  "lifecycle_probes": 1,
+  "capture_mailbox_permutations": 12,
+  "controller_cross_worker_arrival_permutations": 120,
+  "targeted_native_tests": 9,
+  "fixed_html_assets": 119,
+  "fixture_integrity_tests": 6,
+  "raw_log_hash_mismatches": [],
+  "rust_source_differences_after_baseline_run": [],
+  "evidence_sha256": {
+    "stage-gate-run/summary.json": "587d5403f2b25419fc828a10b10548a7521af73eb12b7c439956bff4ff3823b6",
+    "engineering-check-stage-gate.json": "7499ef2837365b64b4a9b8d7a84cf66ebd3ac52c91869084c6dd4b6de388473c",
+    "frozen-html-fixtures.json": "fae943658dcfaa7bf75c96abb364c78e91c21a632064f2d2066d6cbea0d56089",
+    "frozen-html-fixture-tests.json": "05371aa30089af4482ba5abea7e9afc135c77a0c05d7404c0557db3b4c87d948",
+    "lifecycle-02/summary.json": "c853d48f3229d4047e37ff7460ffaebb34f4e54f6d392ecdd84a2322cd78b8d2",
+    "lifecycle-analysis.json": "576a991057a2696be04b4b8e7c7f03209c4fc236cdb36e9fa76373b56c97cc2c"
+  },
+  "open_known_defects": [
+    "K01 confirmation uses mutable same-owner preview",
+    "K02 manual layer geometry drifts with ancestor removal",
+    "K03 Shift short-circuits the second cleanup"
+  ],
+  "not_qualified": [
+    "real-host COM exposure and visible F5/F6/F7/save desktop flow",
+    "mixed-DPI display switching, iGPU, device removal and HDR real-screen qualification",
+    "real independent acceptance assets and reviewer; no real statistical precision claim",
+    "visible overlay message-loop idle and chosen visual-backend post-upgrade resources"
+  ],
+  "p1_status": "not_started",
+  "visual_algorithm_tests": "not_run",
+  "real_acceptance_samples": 0,
+  "interpretation": "Baseline facts frozen; not a claim that existing defects are fixed or visual functionality is delivered. Future phase-specific qualification gates remain mandatory."
+}

@@ -1,0 +1,98 @@
+{
+  "scope": "pre-upgrade hidden-controller lifecycle baseline; not visible message-loop or visual-algorithm qualification",
+  "inputs_sha256": {
+    "summary.json": "c853d48f3229d4047e37ff7460ffaebb34f4e54f6d392ecdd84a2322cd78b8d2",
+    "probe-events.json": "e8b9db085173c295c9da2e159fdbdd60f7733d0709aed647ffdf7d79a4c2dcbe",
+    "process-samples.json": "d000ddc3eb6c1af3af9a3b42498780b5f8e0b86435e24986850f69bed76e9650"
+  },
+  "method": "quantiles use nearest rank ceil(n*p); 5 warmups excluded; no P99 claim",
+  "adapter": {
+    "device": 9865,
+    "dpi": 144,
+    "event": "adapter",
+    "name": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "size": [
+      3840,
+      2160
+    ],
+    "vendor": 4318
+  },
+  "measured_sessions": 100,
+  "lifecycle_gate_passed": true,
+  "capture_us": {
+    "samples": 100,
+    "p50": 36962,
+    "p95": 39952,
+    "min": 31370,
+    "max": 46117
+  },
+  "capture_confirm_cancel_us": {
+    "samples": 100,
+    "p50": 42189,
+    "p95": 45988,
+    "min": 35645,
+    "max": 50512
+  },
+  "released_gpu_bytes": {
+    "first": [
+      8421376,
+      790528
+    ],
+    "last": [
+      8421376,
+      806912
+    ],
+    "max": [
+      8421376,
+      1200128
+    ]
+  },
+  "active_gpu_bytes_max": [
+    41975808,
+    1183744
+  ],
+  "idle": {
+    "wall_seconds_declared": 60,
+    "gpu_first": [
+      8421376,
+      806912
+    ],
+    "gpu_last": [
+      8421376,
+      806912
+    ],
+    "cpu_seconds_sampled": 0.046875,
+    "process": {
+      "privateBytes": {
+        "first": 59527168,
+        "last": 58740736,
+        "min": 58740736,
+        "max": 59527168
+      },
+      "workingSet": {
+        "first": 59109376,
+        "last": 58327040,
+        "min": 58327040,
+        "max": 59109376
+      },
+      "handles": {
+        "first": 436,
+        "last": 435,
+        "min": 433,
+        "max": 436
+      },
+      "threads": {
+        "first": 29,
+        "last": 25,
+        "min": 25,
+        "max": 29
+      }
+    }
+  },
+  "limitations": [
+    "500ms process samples can miss short-lived peaks; not exact allocation accounting",
+    "test instrumentation and driver threads included",
+    "hidden HWND; no dispatching of a visible overlay message loop",
+    "no new visual worker/backend exists yet; P5 must repeat against chosen implementation"
+  ]
+}

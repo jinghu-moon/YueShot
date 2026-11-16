@@ -1,0 +1,6 @@
+{
+  "command": "cargo xtask check",
+  "started": "2026-11-16T20:20:25.5753289+08:00",
+  "finished": "2026-11-16T20:22:23.9181440+08:00",
+  "exitCode": 0
+}

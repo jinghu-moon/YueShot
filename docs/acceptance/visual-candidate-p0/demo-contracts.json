@@ -1,0 +1,1596 @@
+{
+  "version": "4.0.0",
+  "validation": {
+    "scope": "generator_inputs_and_contracts_only",
+    "status": "passed",
+    "errors": [],
+    "contract_checks": {
+      "scope": "fixture_contract_and_geometry_oracle_only",
+      "total": 23,
+      "passed": 23,
+      "errors": [],
+      "names": [
+        "negative tolerance rejected",
+        "unknown op rejected",
+        "unknown stage rejected",
+        "missing query annotation rejected",
+        "invalid stage geometry rejected",
+        "unknown event rejected",
+        "missing checkpoint rejected",
+        "integer inner edge rejected",
+        "one output cannot satisfy two targets",
+        "matching uses augmenting path and is order stable",
+        "Q08 constant outputs rejected",
+        "Q08 precise stage outputs accepted",
+        "T16 transitive fixture resolves",
+        "T22 transitive fixture resolves",
+        "E16 referenced fixture resolves",
+        "missing dependency rejected",
+        "dependency cycle rejected",
+        "missing image rejected",
+        "T21 explicit text seed retained",
+        "Selecting+Shift independently covered",
+        "source failures have distinct expectations",
+        "each budget has 3 isolated boundary vectors",
+        "crossing targets have exclusive queries"
+      ],
+      "algorithm_tests": "not_run"
+    },
+    "case_count": 60,
+    "comparison_groups": 16,
+    "comparison_variants": 99,
+    "comparison_hard_members": 49,
+    "comparison_calibration_members": 39,
+    "comparison_stage_members": 11,
+    "pixel_scenes": 114,
+    "generated_pairs": 4,
+    "E09_stage_components": 76800,
+    "T04_sampled_max_residual_rgb_codes": 1,
+    "T06_aa_bounds_ltrb": [
+      169,
+      149,
+      271,
+      221
+    ],
+    "algorithm_tests": "not_run"
+  },
+  "regression": {
+    "scope": "fixture_contract_and_geometry_oracle_only",
+    "total": 23,
+    "passed": 23,
+    "errors": [],
+    "names": [
+      "negative tolerance rejected",
+      "unknown op rejected",
+      "unknown stage rejected",
+      "missing query annotation rejected",
+      "invalid stage geometry rejected",
+      "unknown event rejected",
+      "missing checkpoint rejected",
+      "integer inner edge rejected",
+      "one output cannot satisfy two targets",
+      "matching uses augmenting path and is order stable",
+      "Q08 constant outputs rejected",
+      "Q08 precise stage outputs accepted",
+      "T16 transitive fixture resolves",
+      "T22 transitive fixture resolves",
+      "E16 referenced fixture resolves",
+      "missing dependency rejected",
+      "dependency cycle rejected",
+      "missing image rejected",
+      "T21 explicit text seed retained",
+      "Selecting+Shift independently covered",
+      "source failures have distinct expectations",
+      "each budget has 3 isolated boundary vectors",
+      "crossing targets have exclusive queries"
+    ],
+    "algorithm_tests": "not_run"
+  },
+  "coordinates": {
+    "rect": "xywh",
+    "bounds": "half-open",
+    "unit": "physical source pixels",
+    "origin": "image-local"
+  },
+  "assets": [
+    {
+      "file": "E05.png",
+      "size": [
+        420,
+        120
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "a420ce9aabe79829c3c4214c0469a5ff5c26eed849bd7a51b244130c7778921c",
+      "png_sha256": "2535d833262c149b5b60b018d7acdcd3ce868d68ff9c4a93e80f0d46ded50fee",
+      "png_bytes": 2692
+    },
+    {
+      "file": "E07.png",
+      "size": [
+        320,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bae7229e4e8a6f9ece6b3268ce07cbf3b94a19208fe095dde181b433645d6e32",
+      "png_sha256": "9545ccfd9fcb72b668a42c115abaf2438eaccc452e8de6b98b5b0b71063e2d68",
+      "png_bytes": 2211
+    },
+    {
+      "file": "E09-isolated-mask.png",
+      "size": [
+        640,
+        480
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "66234e9f258c3c1199c5d347312f58d5a435e114950394358b2dab8ab0cefb23",
+      "png_sha256": "e3a31d9132ff27fb57b7a01fa98686e5978ce73d44293831a92775db2a7ec428",
+      "png_bytes": 13174
+    },
+    {
+      "file": "E09.png",
+      "size": [
+        360,
+        160
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "667e00983fb7aff4e971aa5a37cdd8ed453e61390d3c8eb76962d6d3a2f9aa20",
+      "png_sha256": "b24ded0e8e32d41dc54e00ccee1d4cebd85fb18489aba162c56e4252ad07b28a",
+      "png_bytes": 51215
+    },
+    {
+      "file": "M01-transformed.png",
+      "size": [
+        400,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "20564c77d98957bac18e6bee4db3bf5787989afe1413db27931810f8f7578d24",
+      "png_sha256": "f57266bbd22941f3133bd14a6d022c28fb28ce8e3d35a60e25019a6b4defb554",
+      "png_bytes": 2514
+    },
+    {
+      "file": "M02-transformed.png",
+      "size": [
+        400,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "5d40a9dccaf6672836d0e7e67e519128e04b7ffcb1276c07e095a4e7d26e268a",
+      "png_sha256": "c81e60e72574c6e153d2d2ab482b4421f7e6decef6f062fea00030ac64909587",
+      "png_bytes": 2521
+    },
+    {
+      "file": "M03-transformed.png",
+      "size": [
+        800,
+        400
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "11da93a72bd7ffe43123b28822ae556b48e7cdab7b08237bde54ea08c51c6a8f",
+      "png_sha256": "ae1f50e606713b70e873e3c503bc053e78e07d901690cb9f98b5344afa853ecc",
+      "png_bytes": 8014
+    },
+    {
+      "file": "M04-transformed.png",
+      "size": [
+        400,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "e3d2ae827730854e72bb482edb80b1d6d14809ce514e4b8e711930e64b33e74a",
+      "png_sha256": "f1c7f720db84f07a19b167c900cba4db6dd023c449d4d32f6a2087e562384804",
+      "png_bytes": 2519
+    },
+    {
+      "file": "Q01-flat-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "b209577e31ad8d7f7aabfd9681259765ee75bbc5d9db4189542fd94fef835bcc",
+      "png_sha256": "43a3fc9596ca1a86e031bf5c3ccb3e9f0135a5c1271022fa96d8c1191e90c012",
+      "png_bytes": 1809
+    },
+    {
+      "file": "Q01-flat-80.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "c5aa4ee3381e15fe3af0c12686903f7a1419dddbfa8c0fae88c428c9603b5850",
+      "png_sha256": "a7efbc721831944be90165bb804b47fa991e56d9a71eee1009985bdaa707beb9",
+      "png_bytes": 1831
+    },
+    {
+      "file": "Q01-ramp-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "809fe396773c3c5663cea38b30307367689ae75ce33b454ec79709c8c5e01ca1",
+      "png_sha256": "31052e2dab4f30009a5b0aa2d94637d8105627a614647cfed5949ca5db5b71a6",
+      "png_bytes": 8125
+    },
+    {
+      "file": "Q01-ramp-80.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "84aa292eacb881c7d7caff85cb93085ef5dad6aec3259776b516abcaa6c828ca",
+      "png_sha256": "c5c112f09242c78c74d566e73f2c45d88c08d4d82bac92ec5f79f7ef4ccbf832",
+      "png_bytes": 8155
+    },
+    {
+      "file": "Q02-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "2a76bcff6d894608d6ee53dd242000187e30efa447bdda593cb3c5ad9ff10810",
+      "png_sha256": "f6d7ef766c9cfcd38d6a15b903ff1e2808be1ef9e934aa850ee32d9558d3269e",
+      "png_bytes": 1809
+    },
+    {
+      "file": "Q02-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "7763e997b4eaf0b381f8190beb7becb486237ffec07154e68e80dee0a3da4405",
+      "png_sha256": "ec0a06d08d30ef1af090c5b11fa701d53b55817cf2274496ac911bea90340ac5",
+      "png_bytes": 1829
+    },
+    {
+      "file": "Q02-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "c8b5e3ff6f1bf18aa7aa6651c6a03520c15a430e22e895700227c5a6bc4e3fc9",
+      "png_sha256": "311c281a4c9f7e9d4f501c5e6888a2667e0876fa60050e2f660e21dcd86264b9",
+      "png_bytes": 1829
+    },
+    {
+      "file": "Q02-18.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "87666aee201f0d8e16fc4fefe9bac67bc4fa42629af737c0b69f28402de43248",
+      "png_sha256": "dc6a6d61855fbcfd04003c569d39e38671de63a665b0f3b02b18c36c69f51e1c",
+      "png_bytes": 1830
+    },
+    {
+      "file": "Q02-2.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "574facd119e3bb459dc25479121361249244a7dca28769ad73b1d0f62fd72835",
+      "png_sha256": "622b07a85279ccb1b312c45168f8cd656d3958c7fed52aefc3395660805a3cd9",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q02-3.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "96aadfd1ba6492a973cd184321ba44e6d468005bd95101f1708dcbb7cde0b42e",
+      "png_sha256": "8bf93cc4cde5617e603f72fa829851fa1eb02b17cfbfedfe978adc1e18b36880",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q02-4.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ff3ec6c31d1e2777e8f5b04f5ffafcbe126def90a9b4b4b6af82dc2da9635396",
+      "png_sha256": "5688564acb0dad561b20f8477707e1c7f425b324af02d4701718c5a0f0eccb05",
+      "png_bytes": 1828
+    },
+    {
+      "file": "Q02-5.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "e1dc9c82ea235f4ffd7f5e2701c767ad66c4e6c66825cdc3f54ab9dfb0899ddd",
+      "png_sha256": "f4d9808edd7393b1f835f44a6b0596134146ddeb3f0c5609195ebba2450a1db1",
+      "png_bytes": 1829
+    },
+    {
+      "file": "Q02-6.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "025f93a7b6108271f60584542bbc9231a1a843cfe583044b7993616c37335b58",
+      "png_sha256": "89783334eee2fe8e26f00b59f20756a07190632f1bad7957dcbf497946071bc3",
+      "png_bytes": 1829
+    },
+    {
+      "file": "Q02-64.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "68ae6227fc59ef89d3a4c4ae14983f86f58e15ba5105ef92f824a405f0906f37",
+      "png_sha256": "780e414cae88c563ae9539c3714df23a8947d04fd6e4e2fdda574d1f09bebfc3",
+      "png_bytes": 1831
+    },
+    {
+      "file": "Q02-8.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "10d5fede2fd23c8cbd40a16884306ab111f61330dc04fabbce10fdf2a692fd91",
+      "png_sha256": "3158feb70c07b525e5dcaa60d6b757e80a10d262884db48b93b00fd28b3fc09e",
+      "png_bytes": 1829
+    },
+    {
+      "file": "Q03-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "642901ebe391b07379b5165c17256f866dae20049144ddf79e488c911de3c4a7",
+      "png_sha256": "812d6f8d506b75c40918e4cdf5e6bb5986da953b3e92d65ac37017ab28cf67ba",
+      "png_bytes": 1835
+    },
+    {
+      "file": "Q03-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "d687508fd58077bbba00d20bb307b6801d7e2a43dc5f71eb903c9ddc259e68e9",
+      "png_sha256": "b98d840204bcf431da799092b55d3a6f84866ba4901631a15bdb480ea79b0e07",
+      "png_bytes": 1843
+    },
+    {
+      "file": "Q03-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "f38b1d6e662fa0a2190a12e27ad4628d50f4861d3e1cca099e9a9ff9cec3b29b",
+      "png_sha256": "940e3c74a8f336669c60e606129b2db573f61ce6a0ca1d79bb1be75fe114b713",
+      "png_bytes": 1852
+    },
+    {
+      "file": "Q03-128.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "4f49b984d964137064a2b733cd5abe74b9edfaef9b44c129faf09493ac6cb21d",
+      "png_sha256": "3106594a5fd0ba55e965153bab368bf879720c375859ee57f2fd94c22a065d87",
+      "png_bytes": 1832
+    },
+    {
+      "file": "Q03-4.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "dd7f92925ccf52cafeabd0ddc4a9a4dfda47914b18901f998258e1d0ca2969a9",
+      "png_sha256": "d4233a1ecdf266facbeed8cb4664e52818b2f2e92d75d9561454b9cff160a7f9",
+      "png_bytes": 1850
+    },
+    {
+      "file": "Q03-48.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "09c29e797f1706d1f5c53c9d53b17c7a6be2239853b53c7003b88647f311e13b",
+      "png_sha256": "628d7919f9c27a347249d51c096ee6885dfaeb45c7ea7b45c27375d2be4ea7b4",
+      "png_bytes": 1852
+    },
+    {
+      "file": "Q04-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "d86786320141ada8794c938e06c65bdb2f99c2ed5a27cb6daaacb15805a301f5",
+      "png_sha256": "64dfd60cbd54b3d9cef1c3a6eaf594c6fdbc303195c63677395a4aaa50e75114",
+      "png_bytes": 1820
+    },
+    {
+      "file": "Q04-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "2f17bce5d1e56be92580198b7bf96fbfe8f63a5bcfbff70f9f62106cd6c772ed",
+      "png_sha256": "a0c616a5176cf249bdc697e0f1fc6f53701d448d52f43482c8de1cca07f51264",
+      "png_bytes": 1825
+    },
+    {
+      "file": "Q04-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "857dda4aa8d94ae803d564624cb6b314cab7823840db299ae52904c0d8431913",
+      "png_sha256": "dfe991724642686b9ee77a439cadee8467b42593d291df8538c8a257ed89f48b",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q04-13.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bbcca7e7a10e4f3ba0a40c7daf9e6ee32490516f4497f034c2700b5fba56a22d",
+      "png_sha256": "64323b7ea55f2bef7864b61fe20adfb73792034ae52d73b975275310aed25ec1",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q04-2.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "192a592e17e09824fc5692fb7193881044dcdcd5fb4d452a9fdbec147e51a92d",
+      "png_sha256": "57bec75e17ed872b0182ec873585334965d2f74390dae3cbbbabcad34099b6fb",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q04-3.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "20209709084d03fab5d8b35b776e7d2e1c096ba0796dfdec928e8f41396fc955",
+      "png_sha256": "a0e0ff010c7c8e2ed9674d11f7d157ef748b6a7b7a8a2d6383d6a30fd15eb853",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q04-4.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ae741e694c0cfea0936510c3b9937e77766bf9056f16649cd9d1306c4280b208",
+      "png_sha256": "a4dba533f60ee7de3fdabb1c58fd1100f7f45056bc951496aa3e14e2b461dbc9",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q04-8.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "485fd4e7b3fc9cce5b5c7d1d994232e32c4efefaea980fad862bf931d2ffbaf8",
+      "png_sha256": "85ab8c4d8ec6d50ad2b8c8b9f056d7143706df4b86f9a8f2737b0fed0c442909",
+      "png_bytes": 1825
+    },
+    {
+      "file": "Q05-crop.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bb742b091678d042d47054bf8a7cddb235d6064ad94fff42ec2b9644f9d3ee09",
+      "png_sha256": "5d757f56b85da8c39e0883c0bd4fccd25e8d0c63a5157e4bf931eb13cdad747c",
+      "png_bytes": 1830
+    },
+    {
+      "file": "Q05-full.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bb742b091678d042d47054bf8a7cddb235d6064ad94fff42ec2b9644f9d3ee09",
+      "png_sha256": "5d757f56b85da8c39e0883c0bd4fccd25e8d0c63a5157e4bf931eb13cdad747c",
+      "png_bytes": 1830
+    },
+    {
+      "file": "Q05-recover.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bb742b091678d042d47054bf8a7cddb235d6064ad94fff42ec2b9644f9d3ee09",
+      "png_sha256": "5d757f56b85da8c39e0883c0bd4fccd25e8d0c63a5157e4bf931eb13cdad747c",
+      "png_bytes": 1830
+    },
+    {
+      "file": "Q06-10.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "cbf4b8c76ccbf8ac272c54dbd2230968f3db015a9459c4e25dfddc77b92a8855",
+      "png_sha256": "42b3f96c936daabcd9e677e4d4aae5a36d4f2bea9da435ed4b1f4e637594573e",
+      "png_bytes": 1848
+    },
+    {
+      "file": "Q06-11.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "371ec3b91b98193128f29f2cca1f847f34f8b30a090b7589f40afb8e9b60d9cb",
+      "png_sha256": "f0011397f4a592146db6c706547f35c0415f08a8f097fb0bd209c18f8dd9ba94",
+      "png_bytes": 1847
+    },
+    {
+      "file": "Q06-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "9e50929a1f2ee56729729a511d47ccca35860f09f1c480b568398eec87b09a90",
+      "png_sha256": "0f0eac4cb7c60542a14270eeb85be13f91ec65c51daec901aaafe6d6974a6e26",
+      "png_bytes": 1849
+    },
+    {
+      "file": "Q06-13.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "13d094d3cdf5f5028122470a15f2a1b2277a55bd49514b425b724f2983f72973",
+      "png_sha256": "a415156af2e650a1c3bd25ffb1c9ed49698df8a7b4b921bea7eeeb2bac7ce9b9",
+      "png_bytes": 1848
+    },
+    {
+      "file": "Q06-9.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "0da2d420bcca4fd6f6a4ff57383818c852ccb86c0ebe50b94310702a4a28d327",
+      "png_sha256": "44c007e7dbc2839a0f3a454904445ae92c155fdd8c7a186d3e0f8fb4f8dbbc58",
+      "png_bytes": 1848
+    },
+    {
+      "file": "Q07-cross.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "3d6b0af013fba2aa850825d97afec5ba1e8d92762fb91fa2b321cdc45cb50354",
+      "png_sha256": "71a94f3fdc147f7e6f3c64b6a8ce1bf904a5f71031ec3e86ce7c169c3c5f2afa",
+      "png_bytes": 1914
+    },
+    {
+      "file": "Q07-duplicate.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "26a8daaebc480fd0e1e5bb4e82de63fbb77976377c56467a78fa4b4b73e8dd60",
+      "png_sha256": "0c73d88a205a4f6f1a8e7a016beb2ebde4cfaabb438ec2eacea3c9268b7390aa",
+      "png_bytes": 1841
+    },
+    {
+      "file": "Q07-nested1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "5bd89364eceedf256d99ec1f28e5a82daac3f55e826a6491441e2d6031a514fd",
+      "png_sha256": "3f2d04ae2e7ec1ae371f59d45b0373bf50b82e1f29ba290f4593e75a91215d6b",
+      "png_bytes": 1880
+    },
+    {
+      "file": "Q07-nested2.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "a9b77777304faa875ea74b6dbbf79094e5f7b400e9546872c2800aac3d8ab1a1",
+      "png_sha256": "c27a45c6a5b9fd01ac44bf45ed9cbaf8328f9e76f042a4c2ca49c600a7f3d9bb",
+      "png_bytes": 1876
+    },
+    {
+      "file": "Q08-0.25.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "87c9f873b4835b5d8bbb158ff1aeb7ff350f15ea0659834bd32f8e613398de01",
+      "png_sha256": "36dee4fae97199b96616693248bbe9a91eacb1f15d4879818d238629440ad26a",
+      "png_bytes": 1921
+    },
+    {
+      "file": "Q08-0.5.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "74c5d04d0e141da53ef3b76a952ef69208970c82bb5ea607869873252d06654b",
+      "png_sha256": "bf56ca4aa223571ea0d94cb28aaef78369d02a186e4e078c03068fd25f4477ad",
+      "png_bytes": 1888
+    },
+    {
+      "file": "Q08-0.75.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ca24e649c1e642760fb2a812aea520af2d937bb311992291a6bcffabf1d15d00",
+      "png_sha256": "6ee7f3dc78eef689775a6fef317440c1a0486962649e1ecda007c9bd3ff4821d",
+      "png_bytes": 1920
+    },
+    {
+      "file": "Q08-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "642901ebe391b07379b5165c17256f866dae20049144ddf79e488c911de3c4a7",
+      "png_sha256": "812d6f8d506b75c40918e4cdf5e6bb5986da953b3e92d65ac37017ab28cf67ba",
+      "png_bytes": 1835
+    },
+    {
+      "file": "Q08-1.25.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "97c0881e79c97af731ad66567041097b8c2e895ed1253253b58a28f593156cac",
+      "png_sha256": "e485508c96f7d18486288c9453ca0e176e8bcd26dc001b3e66e4c94ad52f9a6c",
+      "png_bytes": 1923
+    },
+    {
+      "file": "Q08-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "401eaa80127a4fec7fcbba66e7577ad6cee8f9e3e6508ddc407cb856936278dd",
+      "png_sha256": "e373e59782a9e819d35f3d52b00d617043034b2d80f9b39df6f6c27f2761b334",
+      "png_bytes": 1834
+    },
+    {
+      "file": "Q08-2.5.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "4b259c381d232d03c166ee61eba413deed678810d69b57384abfadab520c24b5",
+      "png_sha256": "ec0c65c991e1d26f8d24bea87c60883c6072d134889234dc1832076d0d19cf46",
+      "png_bytes": 1892
+    },
+    {
+      "file": "Q09-Custom.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "63ff21b91dffedb8bf283a276611bcd7ba35affd5c85a9cf1ac44b3ee2ca4489",
+      "png_sha256": "92ee7330c68ccbcd2ca501f68050d631c264709b5e6cc8deef20cab2d2601669",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q09-Image.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "63ff21b91dffedb8bf283a276611bcd7ba35affd5c85a9cf1ac44b3ee2ca4489",
+      "png_sha256": "92ee7330c68ccbcd2ca501f68050d631c264709b5e6cc8deef20cab2d2601669",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q09-Text.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "63ff21b91dffedb8bf283a276611bcd7ba35affd5c85a9cf1ac44b3ee2ca4489",
+      "png_sha256": "92ee7330c68ccbcd2ca501f68050d631c264709b5e6cc8deef20cab2d2601669",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q09-no_owner.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "63ff21b91dffedb8bf283a276611bcd7ba35affd5c85a9cf1ac44b3ee2ca4489",
+      "png_sha256": "92ee7330c68ccbcd2ca501f68050d631c264709b5e6cc8deef20cab2d2601669",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q10-border.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "14d1fbdf0b159e275a6537220ae2fc47f7718d84d0899dc67f1d7c66cbf73009",
+      "png_sha256": "27cec68db546e21f01804ec63418e73a869f4bcd9f0930808fb5023c5558380f",
+      "png_bytes": 4773
+    },
+    {
+      "file": "Q10-text.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "07b9e0ce2cdbb9cf25f309516a102e759f887a51f9f58d3e4c4b42c0fc792ac4",
+      "png_sha256": "0be53a2be6dfa9fec08a8d57ba0efce77627f1274af626a8426ad06d3381f2df",
+      "png_bytes": 4749
+    },
+    {
+      "file": "Q11-bottom-end.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "d755fe0da8ce9e1ade586b00f77faf1cec1fb19033fc1190fc1058b0099a75c3",
+      "png_sha256": "69f302935a85955209cdcd72b79c58a761a9c555df06fcb0731f7396a0a0e99d",
+      "png_bytes": 1850
+    },
+    {
+      "file": "Q11-bottom-middle.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "d75a911aa81f584102e439da60f92cc48a6d990590ba1d2ba7f1bc30ac6b8712",
+      "png_sha256": "f5bdc8aea1780578d43129d020e9fd1c9f877feb95c61fc8add026fd7dacbcee",
+      "png_bytes": 1850
+    },
+    {
+      "file": "Q11-bottom-start.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ffcf20d82776fcc0ac00208f2a3607d37adc0060cd9392e69a13a9a3a9f84532",
+      "png_sha256": "f2acf857420c54ecd6080a4d3ac007d0349e28eb1938707d2a6edcb348f828e5",
+      "png_bytes": 1855
+    },
+    {
+      "file": "Q11-contiguous.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "f38b1d6e662fa0a2190a12e27ad4628d50f4861d3e1cca099e9a9ff9cec3b29b",
+      "png_sha256": "940e3c74a8f336669c60e606129b2db573f61ce6a0ca1d79bb1be75fe114b713",
+      "png_bytes": 1852
+    },
+    {
+      "file": "Q11-distributed.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "e96e26ae6995858a9b89c4b6fb6f126bbd7f2f9e9caab30063561a4f4fcb427a",
+      "png_sha256": "623df2926753be25d734fae1f06de49735dd5c4009763aa50c6448873db1caff",
+      "png_bytes": 1852
+    },
+    {
+      "file": "Q11-left-end.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bd4a01e14cf362176a9a4163fdc34b8036868599cf9fab9cf62c43f31f0223c2",
+      "png_sha256": "0b7be0690d58514255b20a6ea268c5a9d21b5c6635bd5571a2232534dfa53b5d",
+      "png_bytes": 1847
+    },
+    {
+      "file": "Q11-left-middle.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "5f5db7a3308e5f7f2603c21dac434aaa1461b6fda515ca2b3e70e2775fe51da0",
+      "png_sha256": "721fed28775c34634982894c917fad53e8a211b3f48ea8514a2ea758660d9f99",
+      "png_bytes": 1844
+    },
+    {
+      "file": "Q11-left-start.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "5022cfe67f9ffb2fa6faeed7dca0239674fff4081e85e0484415ff4c8768da4e",
+      "png_sha256": "a096fa17744e4a913cbb7dda58d04bf052aea700fa976e3033a5269effb70b79",
+      "png_bytes": 1846
+    },
+    {
+      "file": "Q11-right-end.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "b7d7a0fd0e4425377a4b3085c5b3125cb0b44716b2beb9a2c0f41b1e19e76108",
+      "png_sha256": "dc6e57c6b1716327e9ab3e131efdf580463fd6d0898b0a12d26041830662e619",
+      "png_bytes": 1854
+    },
+    {
+      "file": "Q11-right-middle.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "37deb6d79f764146c7e14ae0c1868dbda31ef08ff4900da07c4cedb86c3aa574",
+      "png_sha256": "aa8e1e3a8dfd48766678bab63f5c76e065590b6e99b2f0680bcbcb92c6b6a2cf",
+      "png_bytes": 1850
+    },
+    {
+      "file": "Q11-right-start.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "eca3e5ac8fea7986f131651aae52b5e2fb442d71ac32f3fb4e5486c287d7b0dc",
+      "png_sha256": "79363087839a5c970213a1979123ab5ad5e08b1049bed438feaabf301d4d0887",
+      "png_bytes": 1854
+    },
+    {
+      "file": "Q11-top-end.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "56ef8cad8efc23383f27c64cc62afbe52683f937ded49ca287308c9d52ae4a57",
+      "png_sha256": "ccf0f127566e13a996e5f0a0232e9a54df5fcece09598cf70dc829c1eee6b5c9",
+      "png_bytes": 1850
+    },
+    {
+      "file": "Q11-top-middle.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "8ee3c3e58fcc4874ed70b67abe54a209d489c618d1bd6fece6050f846456031c",
+      "png_sha256": "39984899832226e46582c3a5128566d5ce6fa38c3c7b315752c9b77ce23e52bc",
+      "png_bytes": 1851
+    },
+    {
+      "file": "Q11-top-start.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "60fc53dd1a4bcd3c27fb254af22297628e32470028a82c1d374c7d00a332f336",
+      "png_sha256": "fbaa9f3a5cd5e43a3f70a226bfeda589083dd453b95a362c8eb0eac4ad0a17c8",
+      "png_bytes": 1855
+    },
+    {
+      "file": "Q12-bottom-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "09ca245351c0ce09689545bae1f91f3fab9f9f4c68e540c8bef08f2725db3cee",
+      "png_sha256": "9dbe20cf8c2c07cea57fb251d4c76e6361517be2d18943d395ae17e9f95f427d",
+      "png_bytes": 1812
+    },
+    {
+      "file": "Q12-bottom-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "6226a01c1e5e8bc50cc57260e313bfbcc5c5bd6060838f60f1dc09e93b0c44e0",
+      "png_sha256": "d0aaad3d8c9e863cb80968dd6305228cbab073804fcfd0c1a52621e8c0f71f2c",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q12-bottom-13.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "c517739b5d4b81357682052c21c1a35f4f4bf6eee2ee9caa2a2673af317de25f",
+      "png_sha256": "b1222f8f228cccc13c6fda5c11b20fa5a509f07abbb805faeb410ecc2c40e697",
+      "png_bytes": 1820
+    },
+    {
+      "file": "Q12-bottom-3.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "1c09159dcc2212ef1b804de80147e6811589eb1632c57042d1a9a02019a93443",
+      "png_sha256": "fc22e6b293966eb273030b2d996af5e21eab4804064fb97a9fd5940b5ad2811a",
+      "png_bytes": 1819
+    },
+    {
+      "file": "Q12-right-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bdfe0d9ea1ea9882fbcd05c4f197b3894238e546802d3723a379db9b87bea644",
+      "png_sha256": "5433e7ad977b0952fd557566ba2c5b64328a9608d2a6ecd1caf6972b3cf08a6e",
+      "png_bytes": 1817
+    },
+    {
+      "file": "Q12-right-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "e8c6053f9c2fb24aa19bae139ccf135b38965808ce0879b7a65518e95efb97ae",
+      "png_sha256": "6729488ba017fbfdcaed1ad60f28599fe9c5eb2917c5d9bc9b1abe9aaa7a7ab9",
+      "png_bytes": 1823
+    },
+    {
+      "file": "Q12-right-13.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "89abe02ff865bc27fcd7f145c5c6041aa1a8d41948610255c601cd85be519b94",
+      "png_sha256": "942c7bc5e0b611b98c5b4adc06a696c8ec513e6d66a64e236a827a487969c902",
+      "png_bytes": 1824
+    },
+    {
+      "file": "Q12-right-3.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "e75eb9e37a25d3d726b8606a635b8206d9a5d1cd1955e76bf56070c907cef7b7",
+      "png_sha256": "50ff3abd518f5801a73f4a67fb2b63d92f2fb795a8adea078b3ec52d295363c6",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q12-top-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "b6d94d21d0d8ed0cf2a676df32a2f421d9628fc6f79689b881a367e08cb13e5b",
+      "png_sha256": "dc1436844ba63621ce09020caf940ea6ed1d923fe478d5c54ecf984d125519cf",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q12-top-12.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "b5e3ea358e6b744ecf8241974c8eac00c32528fd77d3ae07d426f77a89e04670",
+      "png_sha256": "632a54c20345c2dcc35751e46d1931931bd003ccd837069de9d47eb9001c6dcd",
+      "png_bytes": 1821
+    },
+    {
+      "file": "Q12-top-13.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "84bdb1b416564d2a9b36d6f9325dbf2c18238158ba61e1d113b4879244e49f34",
+      "png_sha256": "114fabaed79c6c253fff277705dfec3db446cdc1600a49e6b3b1f9ccb7aff9a2",
+      "png_bytes": 1818
+    },
+    {
+      "file": "Q12-top-3.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ff5b51736fdaf8d06d597d44c505fe4969c06b72fb9b75919a5fa41c0287d637",
+      "png_sha256": "e55d8991519e85459883c5cdb2f20b79276daf68b7c6ce6709fbf61338b2d045",
+      "png_bytes": 1820
+    },
+    {
+      "file": "Q13-x-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "bb9e961eb82c322a98072c6db65f396b8ecbf5503bd2ef1a564fb50ff1eabf35",
+      "png_sha256": "4c47d8f913e3c85eb90bbac1e3da8bbc744a1e716d55c3401d404eca9b4cc9fd",
+      "png_bytes": 1827
+    },
+    {
+      "file": "Q13-x-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "56a779dd72da0e5416011c17170372388b9b6ec1af0936e86943a31bd7c2f948",
+      "png_sha256": "6b70f30e5ffe1cd880ddca9909e9000854059bccfad3b36422614924e8eb92bb",
+      "png_bytes": 1837
+    },
+    {
+      "file": "Q13-x-2.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "9ab042ee0cb31af18a1e6a84ef32e310ccd430e9c6bd167bd7d6c9a6eb99c866",
+      "png_sha256": "9006de8d5b928ec50d75548971724f51d2fe70b9de6dd92f331b3b613abc27a2",
+      "png_bytes": 1838
+    },
+    {
+      "file": "Q13-y-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "50df12b2a31b999cba5fe21c7a111fb9de4110d1f49f84239ab5f05069d846b9",
+      "png_sha256": "c050e81e815f3c579a32d2305f391b54831f063d0688bd34d372c84ba0746772",
+      "png_bytes": 1826
+    },
+    {
+      "file": "Q13-y-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "3755f5480ff7195a10ddede89d52988fae1d766008d333144d39abc7b9903579",
+      "png_sha256": "497660cb036f7278445ff4f9f66e6b3a234b64ad44e18cc8eaa978e108796f28",
+      "png_bytes": 1842
+    },
+    {
+      "file": "Q13-y-2.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "c0942dd21dc42c74b18bbf1eb0485e03dfb83246ef614bf1463b40bbe5e627dd",
+      "png_sha256": "81597010e6d709927b6b940502c4181434073a7033f2ae3ac3f354bb8a6b4241",
+      "png_bytes": 1843
+    },
+    {
+      "file": "Q14-glow-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "ee47da48138c129536b0b7b3158526203cb6326506dce41abc98d1cf11e299fc",
+      "png_sha256": "206ea85dcaf2e651380648d4dd72b6226217352633c5c3077046fe20f2677bd2",
+      "png_bytes": 6476
+    },
+    {
+      "file": "Q14-glow-80.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "0f7e7dc33fb0dcfc8435eae60b57ade7a473d156e6f559e9b2a5f70ba513fba8",
+      "png_sha256": "d49ad454672fe57781574f849d9e89ee148b141f0d90286fb256093e77844e47",
+      "png_bytes": 6504
+    },
+    {
+      "file": "Q14-quadratic-0.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "113701b81820494f23561f749f562fe69e7f7591d3c67e19578bf24e0b76d35c",
+      "png_sha256": "6a008165405ef10c008ab035304311d7fa2ebce0934539f4c3ea2baf57c0a5b5",
+      "png_bytes": 9298
+    },
+    {
+      "file": "Q14-quadratic-80.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "434e5bb7a6d55e0b12284d90909ffc8110c23d696d14b9c64032ba3bded5b186",
+      "png_sha256": "38979318616a5904306973a162d239ba675b034a781b0d01418627619c66568f",
+      "png_bytes": 9333
+    },
+    {
+      "file": "Q15-checker-false.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "18a18fba9ce8bd77d2022f88f1d4a5712406202165f0de27f596162a33b81335",
+      "png_sha256": "a7736f798ec5b53cb041823c95d559bb9ea2825676001aa64da7625e26df5cde",
+      "png_bytes": 2810
+    },
+    {
+      "file": "Q15-checker-true.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "a8606bfd16e5eeeb7af15a8d41189de8690e529808349053088683ec68eaf5aa",
+      "png_sha256": "707c80783fc130f3b27af6b90491497f741deb059690019ff642bc7f3a3f30c4",
+      "png_bytes": 2838
+    },
+    {
+      "file": "Q15-noise-false.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "2e2f57f6490bdc06441be1d3bcba1cfcdb959cb6d1978cbb451a94bced7d110c",
+      "png_sha256": "17d4a3856a182a2cabbb72ac969766986fce8bfba085443831e91a589c83bdaf",
+      "png_bytes": 13812
+    },
+    {
+      "file": "Q15-noise-true.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "802bf238ebda061488d2ae758132abb3a1354afc142eb2c7200c23272bbd1e41",
+      "png_sha256": "e6214a8dd361a0636e1b41ac1704b4fab5a80f26faea6418dbbed24a1cfc3a4d",
+      "png_bytes": 13835
+    },
+    {
+      "file": "Q16-1.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "8779b1d0b484f89ee08bc5b310890f050d61c1765e3e5d3a1be54424425dfaf6",
+      "png_sha256": "cb9387887de48d40bc497932239658dc0e009cf1af8210dbe0f2f6989e202c90",
+      "png_bytes": 1889
+    },
+    {
+      "file": "Q16-13.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "56b019515082a1af88314c6a23b2b4260d0da6347a916765f020e6fabd1d5da6",
+      "png_sha256": "618b464cfa9325c3e398493db06c043c0f54f9f6dea94cc07878f442323602c5",
+      "png_bytes": 1894
+    },
+    {
+      "file": "Q16-2.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "f9913105c796128de5f39cfc649f4d2fc6954bf261988c2e01be28404d5f0bab",
+      "png_sha256": "4bf41e6cf986cd2be4463501651e0a872281393006456885a09c1416cddd62cc",
+      "png_bytes": 1872
+    },
+    {
+      "file": "Q16-4.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "68f63476109e66d14005775e5a58fab02588292aeefa31393011347ef65426ef",
+      "png_sha256": "5c63d62f6ad847ffd8c067822814af99c5cc12501174eb40dbeda388c3305f37",
+      "png_bytes": 1874
+    },
+    {
+      "file": "Q16-8.png",
+      "size": [
+        256,
+        192
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "1390d67853df16ec2d2e7def6cbe33fee014246a0bdb653e9803c2dc4e594c50",
+      "png_sha256": "4f657f83b181d3ad290a60d870f426d2cbd5c472f7759c4517912be8185fb1ba",
+      "png_bytes": 1887
+    },
+    {
+      "file": "T01.png",
+      "size": [
+        400,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "940a6d37e1a27b0b57e05718629695b2fc3024e39469cb6fd2d20aef062ee40f",
+      "png_sha256": "66b2ceadba1c751f4e743eaedbf2d95b16c2ada7db024b971de2a288d18aa0ee",
+      "png_bytes": 2520
+    },
+    {
+      "file": "T02.png",
+      "size": [
+        400,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "1a0861ca993764314915c7184d981397bc962aa42f062e1b9f79c4045fc440da",
+      "png_sha256": "4ade852ab30686f1569da50b857cdc78e3175ed5334d4bfdf85a2d0d6682954a",
+      "png_bytes": 2478
+    },
+    {
+      "file": "T03.png",
+      "size": [
+        320,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "51a4a21e89465539b510426a2608976b305833d9739950fd648084d786579b50",
+      "png_sha256": "3e02d14de05b9a6cbb6512fe19a7af85fc4f8631dae32deafbe630ab7b18c511",
+      "png_bytes": 32549
+    },
+    {
+      "file": "T04.png",
+      "size": [
+        400,
+        200
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "8d529b0438e450fccd6cb302c0ac0354d22cefd63f57cd4084b4f0e74d11d8eb",
+      "png_sha256": "fc8073436dc2831b93ca746ae92b6767acbe08816cc982e55d9de848f83976f6",
+      "png_bytes": 19334
+    },
+    {
+      "file": "T05.png",
+      "size": [
+        420,
+        190
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "38a36ceb92bf293b908d45153003986df9c911875b5965a0e8ebbb0064916d88",
+      "png_sha256": "c20ff988f9032dbbda109620a14865fa208450c56138010527365cff6cb4a732",
+      "png_bytes": 26166
+    },
+    {
+      "file": "T06.png",
+      "size": [
+        440,
+        240
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "4328741caddc52421d3f246c23a57295f7b0edc8bb6c7625274dd8b833b31da2",
+      "png_sha256": "e088f71f73e2a596ce664b002ae2e19a644d67f522e28f02c5b46eccccf323dc",
+      "png_bytes": 3328
+    },
+    {
+      "file": "T07.png",
+      "size": [
+        460,
+        150
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "a0004183014ee07c01d70ece9e72fc6e5787f3065e8b17f2aee4d2f4aaa8caa3",
+      "png_sha256": "03a22c774219922a4bebd8eea793a3c07dc9bad6152e2e698f42b1d22c13179b",
+      "png_bytes": 5523
+    },
+    {
+      "file": "T08.png",
+      "size": [
+        420,
+        240
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "5ea7b5c3330ed0db8fedc910690c12d407e95f7bee8116d85069b61975855721",
+      "png_sha256": "e2c10ee994b418f075d5635e52070cceac6b645c273a392d50ac7cdd6cec348b",
+      "png_bytes": 3154
+    },
+    {
+      "file": "T09.png",
+      "size": [
+        320,
+        220
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "19f6d82c96d7bac79b41559374fa7f3be2ba4ee7318face7c389e693df12d273",
+      "png_sha256": "2129df4b9846e1b8d084849616e356a5dacf5262e30f4f40d30d0759f62ed39c",
+      "png_bytes": 2516
+    },
+    {
+      "file": "T10.png",
+      "size": [
+        3840,
+        2160
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "b4c8a6ff83e5e46f79e49df6df13ff09615e7bc71e426b44c5c4a0f5ba63a699",
+      "png_sha256": "fcdb984db43ecbe7cc9723478d3795feb0470566d19709fb6cf089db1d20ba01",
+      "png_bytes": 165135
+    },
+    {
+      "file": "T19.png",
+      "size": [
+        480,
+        240
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "331fd524e3af9ec7a5be0c661e29e6c7a0fcfd3a2f55609876e3318016be21ce",
+      "png_sha256": "09753cc221c6b4128d7fe9e2491768bcf7ebc6049cd766a476e59c82ef2cad39",
+      "png_bytes": 18016
+    },
+    {
+      "file": "T21.png",
+      "size": [
+        900,
+        680
+      ],
+      "encoding": "sRGB",
+      "storage": "RGBA8, straight alpha, top-down, tightly packed",
+      "rgba_sha256": "0920748af83e5a0fcbd61a8da3f3aaecbb732a72103400bb68b4590dd83ddbca",
+      "png_sha256": "3f488270d2ff9d6af11c04e178cffc7a4c346394ca41241e1e2cff4998459bf7",
+      "png_bytes": 18364
+    }
+  ],
+  "case_ids": [
+    "Q01",
+    "Q02",
+    "Q03",
+    "Q04",
+    "Q05",
+    "Q06",
+    "Q07",
+    "Q08",
+    "Q09",
+    "Q10",
+    "Q11",
+    "Q12",
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16",
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08",
+    "T09",
+    "T10",
+    "T11",
+    "T12",
+    "T13",
+    "T14",
+    "T15",
+    "T16",
+    "T17",
+    "T18",
+    "T19",
+    "T20",
+    "T21",
+    "T22",
+    "T23",
+    "E01",
+    "E02",
+    "E03",
+    "E04",
+    "E05",
+    "E06",
+    "E07",
+    "E08",
+    "E09",
+    "E10",
+    "E11",
+    "E12",
+    "E13",
+    "E14",
+    "E15",
+    "E16",
+    "M01",
+    "M02",
+    "M03",
+    "M04",
+    "M05"
+  ],
+  "algorithm_tests": "not_run",
+  "demo_source_sha256": "8a2668e47315625484365a8f03944eba95ba66a90395c1d60f26d3026c4fb8a2",
+  "console_errors": [
+    {
+      "url": "http://127.0.0.1:8765/favicon.ico",
+      "status": 404,
+      "classification": "missing favicon; no fixture script failure"
+    }
+  ]
+}

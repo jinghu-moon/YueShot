@@ -1,0 +1,14 @@
+{
+  "VISUAL_COMPARISON": {
+    "exact_json_equal": false
+  },
+  "VISUAL_STAGE": {
+    "exact_json_equal": true
+  },
+  "VISUAL_LOCATION": {
+    "exact_json_equal": true
+  },
+  "VISUAL_DEMAND": {
+    "exact_json_equal": true
+  }
+}

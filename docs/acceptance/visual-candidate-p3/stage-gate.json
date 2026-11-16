@@ -1,0 +1,38 @@
+{
+  "stage": "P3",
+  "status": "passed",
+  "canAdvance": true,
+  "allStageTasksComplete": true,
+  "publication": "This gate and evidence are included in the stage commit; verify publication with git log and origin/main.",
+  "recorded_at_utc": "2026-11-16T18:16:06.352731+00:00",
+  "base_revision": "36e62ba86b613ab1753618be3aa411d067bf9adc",
+  "prototypeSourceUnchanged": true,
+  "checks": {
+    "reference20_and_progressive137": true,
+    "p2_frozen_behavior_equivalence": true,
+    "full_monitor_4scenes_1000x3_25ms_and_owner_1ms": true,
+    "actual_display_interval_p95_regression_1ms": true,
+    "D2D_sampler_interleave_and_source_105": true,
+    "format_capacity_cancel_and_map_fault_branches": true,
+    "cold_staging_query_105_and_60s_platform": true,
+    "cpu_buffer_capacity_bound_16MiB": true,
+    "gpu_atlas_32MiB": true,
+    "all_unlocked_regression_suites": true,
+    "engineering_xtask_check": true,
+    "coverage_audit": true
+  },
+  "evidence": {
+    "qualification": "full-monitor-qualification-run/summary.json",
+    "precision": "full-monitor-qualification-run/p2-behavior-equivalence.json",
+    "performance": "full-monitor-qualification-run/performance-summary.json",
+    "regression": "unlocked-regression-run/summary.json",
+    "engineering": "final-engineering-check.json",
+    "audit": "coverage-audit.md"
+  },
+  "limits": [
+    "Test prototype on RTX 4070 Ti SUPER / Windows 26100; product integration is P4.",
+    "No physical device removal, multi-vendor/iGPU/HDR or GPU-saturation qualification.",
+    "Cold staging/Query is not process-cold-start or complete product session E15.",
+    "Independent real-host accuracy qualification remains P5."
+  ]
+}

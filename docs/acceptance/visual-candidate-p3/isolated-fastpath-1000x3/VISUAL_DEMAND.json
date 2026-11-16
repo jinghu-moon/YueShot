@@ -1,0 +1,1238 @@
+{
+  "rows": [
+    {
+      "calls": 1,
+      "case": "Q01-flat-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q01-flat-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q01-flat-80",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q01-flat-80-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q01-ramp-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q01-ramp-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q01-ramp-80",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q01-ramp-80-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q02-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q02-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q02-64",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q02-64-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q03-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q03-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q03-128",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q03-128-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q04-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q04-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q04-13",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q04-13-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q05-full",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q05-full-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q05-recover",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q05-recover-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q06-9",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q06-9-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q06-11",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q06-11-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-nested1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-nested1-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-nested1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-nested1-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-nested2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-nested2-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-nested2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-nested2-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-duplicate",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-duplicate-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-cross",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-cross-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-cross",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-cross-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-cross",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-cross-g1-exclusive",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q07-cross",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q07-cross-g2-exclusive",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-0.25",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-0.25-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-0.5",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-0.5-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-0.75",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-0.75-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-1-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-1.25",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-1.25-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q08-2.5",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q08-2.5-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q10-text",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q10-text-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q10-border",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q10-border-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q12-top-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q12-top-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q12-top-13",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q12-top-13-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q12-right-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q12-right-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q12-right-13",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q12-right-13-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q12-bottom-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q12-bottom-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q12-bottom-13",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q12-bottom-13-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-x-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-x-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-x-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-x-1-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-x-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-x-1-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-x-2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-x-2-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-x-2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-x-2-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-y-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-y-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-y-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-y-1-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-y-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-y-1-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-y-2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-y-2-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q13-y-2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q13-y-2-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q14-quadratic-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q14-quadratic-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q14-quadratic-80",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q14-quadratic-80-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q14-glow-0",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q14-glow-0-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q14-glow-80",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q14-glow-80-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q15-checker-true",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q15-checker-true-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q15-noise-true",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q15-noise-true-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-1-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-1",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-1-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-2-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-2",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-2-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-4",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-4-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-4",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-4-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-8",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-8-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-8",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-8-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-13",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-13-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "Q16-13",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 196608,
+      "query": "Q16-13-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T01",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 320000,
+      "query": "T01-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T01",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 320000,
+      "query": "T01-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T01",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 320000,
+      "query": "T01-scene-seed",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T02",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 320000,
+      "query": "T02-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T03",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 256000,
+      "query": "T03-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T04",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 320000,
+      "query": "T04-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 319200,
+      "query": "T05-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 319200,
+      "query": "T05-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T06",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 422400,
+      "query": "T06-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T06",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 422400,
+      "query": "T06-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T06",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 422400,
+      "query": "T06-q3",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T06",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 422400,
+      "query": "T06-q4",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T06",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 422400,
+      "query": "T06-q5",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 276000,
+      "query": "T07-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 276000,
+      "query": "T07-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 276000,
+      "query": "T07-q3",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T08",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 403200,
+      "query": "T08-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T08",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 403200,
+      "query": "T08-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T08",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 403200,
+      "query": "T08-q3",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 281600,
+      "query": "T09-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 281600,
+      "query": "T09-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 281600,
+      "query": "T09-scene-seed",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 281600,
+      "query": "T09-g1-exclusive",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 281600,
+      "query": "T09-g2-exclusive",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 281600,
+      "query": "T09-intersection",
+      "same": true
+    },
+    {
+      "calls": 3756,
+      "case": "T10",
+      "extra_bytes": 240320,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-q2",
+      "same": true
+    },
+    {
+      "calls": 3753,
+      "case": "T10",
+      "extra_bytes": 240128,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-q3",
+      "same": true
+    },
+    {
+      "calls": 3736,
+      "case": "T10",
+      "extra_bytes": 239040,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-q4",
+      "same": true
+    },
+    {
+      "calls": 3733,
+      "case": "T10",
+      "extra_bytes": 238848,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-q5",
+      "same": true
+    },
+    {
+      "calls": 3784,
+      "case": "T10",
+      "extra_bytes": 242112,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-q6",
+      "same": true
+    },
+    {
+      "calls": 3733,
+      "case": "T10",
+      "extra_bytes": 238848,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-q7",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T19",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 460800,
+      "query": "T19-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "T19",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 460800,
+      "query": "T19-scene-seed",
+      "same": true
+    },
+    {
+      "calls": 7335,
+      "case": "T21",
+      "extra_bytes": 469376,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T21-q1",
+      "same": true
+    },
+    {
+      "calls": 7308,
+      "case": "T21",
+      "extra_bytes": 467648,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T21-q2",
+      "same": true
+    },
+    {
+      "calls": 6822,
+      "case": "T21",
+      "extra_bytes": 436544,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T21-q3",
+      "same": true
+    },
+    {
+      "calls": 6660,
+      "case": "T21",
+      "extra_bytes": 426176,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T21-scene-seed",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 201600,
+      "query": "E05-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 201600,
+      "query": "E05-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 201600,
+      "query": "E05-q3",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 201600,
+      "query": "E05-q4",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 201600,
+      "query": "E05-q5",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E05",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 201600,
+      "query": "E05-q6",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 256000,
+      "query": "E07-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 256000,
+      "query": "E07-q2",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 256000,
+      "query": "E07-q3",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E07",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 256000,
+      "query": "E07-q4",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 230400,
+      "query": "E09-q1",
+      "same": true
+    },
+    {
+      "calls": 1,
+      "case": "E09",
+      "extra_bytes": 0,
+      "failure": null,
+      "initial_bytes": 230400,
+      "query": "E09-q2",
+      "same": true
+    },
+    {
+      "calls": 8432,
+      "case": "T10-8k",
+      "extra_bytes": 539584,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-0-T10-g2-q",
+      "same": true
+    },
+    {
+      "calls": 8437,
+      "case": "T10-8k",
+      "extra_bytes": 539904,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-0-T10-g3-q",
+      "same": true
+    },
+    {
+      "calls": 8392,
+      "case": "T10-8k",
+      "extra_bytes": 537024,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-0-T10-g4-q",
+      "same": true
+    },
+    {
+      "calls": 8387,
+      "case": "T10-8k",
+      "extra_bytes": 536704,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-0-T10-g5-q",
+      "same": true
+    },
+    {
+      "calls": 8468,
+      "case": "T10-8k",
+      "extra_bytes": 541888,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-0-T10-g6-q",
+      "same": true
+    },
+    {
+      "calls": 8289,
+      "case": "T10-8k",
+      "extra_bytes": 530432,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-0-T10-g7-q",
+      "same": true
+    },
+    {
+      "calls": 8432,
+      "case": "T10-8k",
+      "extra_bytes": 539584,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-0-T10-g2-q",
+      "same": true
+    },
+    {
+      "calls": 8437,
+      "case": "T10-8k",
+      "extra_bytes": 539904,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-0-T10-g3-q",
+      "same": true
+    },
+    {
+      "calls": 8392,
+      "case": "T10-8k",
+      "extra_bytes": 537024,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-0-T10-g4-q",
+      "same": true
+    },
+    {
+      "calls": 8387,
+      "case": "T10-8k",
+      "extra_bytes": 536704,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-0-T10-g5-q",
+      "same": true
+    },
+    {
+      "calls": 8468,
+      "case": "T10-8k",
+      "extra_bytes": 541888,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-0-T10-g6-q",
+      "same": true
+    },
+    {
+      "calls": 8289,
+      "case": "T10-8k",
+      "extra_bytes": 530432,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-0-T10-g7-q",
+      "same": true
+    },
+    {
+      "calls": 8432,
+      "case": "T10-8k",
+      "extra_bytes": 539584,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-2160-T10-g2-q",
+      "same": true
+    },
+    {
+      "calls": 8437,
+      "case": "T10-8k",
+      "extra_bytes": 539904,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-2160-T10-g3-q",
+      "same": true
+    },
+    {
+      "calls": 8392,
+      "case": "T10-8k",
+      "extra_bytes": 537024,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-2160-T10-g4-q",
+      "same": true
+    },
+    {
+      "calls": 8387,
+      "case": "T10-8k",
+      "extra_bytes": 536704,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-2160-T10-g5-q",
+      "same": true
+    },
+    {
+      "calls": 8468,
+      "case": "T10-8k",
+      "extra_bytes": 541888,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-2160-T10-g6-q",
+      "same": true
+    },
+    {
+      "calls": 8289,
+      "case": "T10-8k",
+      "extra_bytes": 530432,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-0-2160-T10-g7-q",
+      "same": true
+    },
+    {
+      "calls": 8432,
+      "case": "T10-8k",
+      "extra_bytes": 539584,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-2160-T10-g2-q",
+      "same": true
+    },
+    {
+      "calls": 8437,
+      "case": "T10-8k",
+      "extra_bytes": 539904,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-2160-T10-g3-q",
+      "same": true
+    },
+    {
+      "calls": 8392,
+      "case": "T10-8k",
+      "extra_bytes": 537024,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-2160-T10-g4-q",
+      "same": true
+    },
+    {
+      "calls": 8387,
+      "case": "T10-8k",
+      "extra_bytes": 536704,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-2160-T10-g5-q",
+      "same": true
+    },
+    {
+      "calls": 8468,
+      "case": "T10-8k",
+      "extra_bytes": 541888,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-2160-T10-g6-q",
+      "same": true
+    },
+    {
+      "calls": 8289,
+      "case": "T10-8k",
+      "extra_bytes": 530432,
+      "failure": null,
+      "initial_bytes": 1048576,
+      "query": "T10-8k-3840-2160-T10-g7-q",
+      "same": true
+    }
+  ],
+  "scope": "synchronous demand-read reference; small calls deliberately included, no product batching claim"
+}

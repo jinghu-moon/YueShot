@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::overlay::native_baseline::native_baseline_controller_preview_replacement_and_manual_path_trace ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 691 filtered out; finished in 0.18s
+

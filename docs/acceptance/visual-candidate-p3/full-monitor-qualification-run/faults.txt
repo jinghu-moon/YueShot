@@ -1,0 +1,9 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.27s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+test windows::win::d3d11::visual_transfer::visual_transfer_formats_capacity_and_map_failures_preserve_lifecycle ... VISUAL_TRANSFER_FAULTS {"byte_limit":1048576,"cancel_keeps_pending_until_complete":true,"device_error_no_result":true,"live_transfers_after_drop":0,"partial_submission_map_rejected":true,"region_limit":16384,"scope":"real format/budget/cancel tests; Map still-drawing and device-removed outcomes injected into the real completion branch, not physical device removal","source_unchanged":true}
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 691 filtered out; finished in 0.20s
+

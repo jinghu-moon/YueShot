@@ -1,0 +1,1 @@
+{"byte_limit":1048576,"cancel_keeps_pending_until_complete":true,"device_error_no_result":true,"live_transfers_after_drop":0,"partial_submission_map_rejected":true,"region_limit":16384,"scope":"real format/budget/cancel tests; Map still-drawing and device-removed outcomes injected into the real completion branch, not physical device removal","source_unchanged":true}

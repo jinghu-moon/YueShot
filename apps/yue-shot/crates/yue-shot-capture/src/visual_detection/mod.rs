@@ -4,6 +4,7 @@
 use crate::geometry::{Point, Rect};
 use serde::Serialize;
 
+pub(super) mod progressive;
 pub(super) mod proposals;
 pub(super) mod reads;
 mod tests;
@@ -24,6 +25,8 @@ pub struct Image<'a> {
     bytes: &'a [u8],
     coverage: Rect,
     reader: Option<&'a dyn Fn(Point) -> Option<[u8; 4]>>,
+    prefetch: Option<&'a dyn Fn(Rect)>,
+    pending: Option<&'a dyn Fn() -> bool>,
 }
 
 impl<'a> Image<'a> {
@@ -43,6 +46,8 @@ impl<'a> Image<'a> {
             bytes,
             coverage: Rect::new(0, 0, size[0] as i32, size[1] as i32),
             reader: None,
+            prefetch: None,
+            pending: None,
         })
     }
 
@@ -60,7 +65,32 @@ impl<'a> Image<'a> {
             bytes: &[],
             coverage: Rect::new(0, 0, size[0] as i32, size[1] as i32),
             reader: Some(reader),
+            prefetch: None,
+            pending: None,
         })
+    }
+
+    pub fn with_prefetch(
+        mut self,
+        prefetch: &'a dyn Fn(Rect),
+        pending: &'a dyn Fn() -> bool,
+    ) -> Self {
+        self.prefetch = Some(prefetch);
+        self.pending = Some(pending);
+        self
+    }
+
+    fn pending_reads(self) -> bool {
+        self.pending.is_some_and(|pending| pending())
+    }
+
+    fn request(self, region: Rect) {
+        if let Some(prefetch) = self.prefetch {
+            let clipped = region.intersect(self.coverage);
+            if !clipped.is_empty() {
+                prefetch(clipped);
+            }
+        }
     }
 
     pub fn with_coverage(self, coverage: Rect) -> Result<Self, Completion> {
@@ -108,6 +138,22 @@ impl<'a> Image<'a> {
         let top = y.floor() as i32;
         let fx = x - left as f32;
         let fy = y - top as f32;
+        // Axis-aligned probes keep one coordinate at a pixel centre. Avoid the
+        // general four-neighbour loop for that measured hot path, retaining
+        // the same weights and addition order (including zero-weight reads).
+        if fx == 0.0 && fy == 0.0 {
+            return self.pixel(Point::new(left, top));
+        }
+        if fy == 0.0 {
+            let a = self.pixel(Point::new(left, top))?;
+            let b = self.pixel(Point::new(left + 1, top))?;
+            return Some(std::array::from_fn(|k| (1.0 - fx) * a[k] + fx * b[k]));
+        }
+        if fx == 0.0 {
+            let a = self.pixel(Point::new(left, top))?;
+            let b = self.pixel(Point::new(left, top + 1))?;
+            return Some(std::array::from_fn(|k| (1.0 - fy) * a[k] + fy * b[k]));
+        }
         let mut out = [0.0; 3];
         // Zero-weight neighbours are deliberately not read. A valid source-edge
         // centre is not rejected just because its unused bilinear neighbour is out.
@@ -231,12 +277,46 @@ fn sample_positions_limit(start: i32, end: i32, maximum: usize) -> Vec<i32> {
         .collect()
 }
 
+fn request_probe(image: Image<'_>, position: [f32; 2], inward: [f32; 2]) {
+    let x = position[0].floor() as i32;
+    let y = position[1].floor() as i32;
+    image.request(if inward[0] != 0.0 {
+        Rect::new(x - 13, y - 1, x + 14, y + 2)
+    } else {
+        Rect::new(x - 1, y - 13, x + 2, y + 14)
+    });
+}
+
+fn request_validation(image: Image<'_>, rect: Rect) {
+    for side in 0..4 {
+        let vertical = side < 2;
+        let (edge, start, end, normal) = match side {
+            0 => (rect.left, rect.top, rect.bottom, [1., 0.]),
+            1 => (rect.right, rect.top, rect.bottom, [-1., 0.]),
+            2 => (rect.top, rect.left, rect.right, [0., 1.]),
+            _ => (rect.bottom, rect.left, rect.right, [0., -1.]),
+        };
+        for tangent in sample_positions(start, end) {
+            let p = if vertical {
+                [edge as f32, tangent as f32 + 0.5]
+            } else {
+                [tangent as f32 + 0.5, edge as f32]
+            };
+            request_probe(image, p, normal);
+        }
+    }
+}
+
 fn probe(
     image: Image<'_>,
     position: [f32; 2],
     inward: [f32; 2],
     parameters: Parameters,
 ) -> Option<(bool, bool, bool, [f32; 3], usize)> {
+    // A request describes evidence needed by this calculation, never a result.
+    // It lets a worker collect one batch instead of requiring a blocking read
+    // at every sample. Direct byte/oracle inputs ignore this hint.
+    request_probe(image, position, inward);
     let sample = |offset: f32| {
         image.sample(
             position[0] + offset * inward[0],

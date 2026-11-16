@@ -1,0 +1,9 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.26s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+test windows::win::d3d11::visual_transfer::visual_transfer_atlas_keeps_exact_pixels_while_drawing_and_sampling ... VISUAL_INTERLEAVE {"exact_repetitions":105,"owner_copy_events_us":[61,25,26,46,125,36,32,53,45,35,87,46,29,35,56,40,52,51,31,45,56,31,57,25,51,31,91,102,52,27,20,23,24,22,35,58,25,70,27,50,54,59,101,36,49,27,34,53,27,35,26,24,30,39,64,42,36,113,64,40,26,61,76,25,59,55,52,55,55,60,55,61,60,37,53,69,110,37,23,65,61,52,51,49,37,48,24,23,20,53,27,30,34,21,20,55,54,54,59,57],"render_baseline_us":[60,75,48,42,112,71,83,39,72,46,133,100,92,77,56,134,92,66,90,167,49,46,52,44,40,48,49,98,52,70,35,75,68,59,71,65,68,52,80,64,52,48,53,86,79,52,47,85,95,50,76,90,80,97,85,58,49,81,81,76,152,83,100,48,61,68,57,46,58,86,84,76,68,49,50,47,52,53,39,85,123,62,42,28,41,56,65,82,57,50,79,136,82,27,56,47,92,40,51,44],"render_interleaved_us":[115,15,27,26,193,65,41,14,14,62,282,62,54,29,24,13,14,19,59,14,12,53,55,16,15,15,195,15,15,14,16,14,13,11,24,29,15,15,15,13,16,16,229,54,16,14,15,13,15,17,17,17,38,75,14,14,28,14,15,39,13,16,118,14,12,13,13,15,12,14,14,29,27,27,17,24,49,15,14,14,28,81,15,14,15,14,28,16,16,15,15,29,14,13,12,14,15,13,18,14],"scope":"real offscreen D2D draw submission and sampler interleaving; not presentation interval/UI qualification","size":[1281,721],"source_unchanged":true}
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 690 filtered out; finished in 0.56s
+

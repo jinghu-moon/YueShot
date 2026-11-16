@@ -6,6 +6,8 @@
 
 #[cfg(test)]
 mod visual_readback;
+#[cfg(test)]
+mod visual_transfer;
 
 use ::windows::Win32::Foundation::HWND;
 use ::windows::Win32::Graphics::Direct2D::Common::{

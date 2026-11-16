@@ -1,0 +1,165 @@
+{
+  "scope": "P3 test prototype on this device; not product integration or independent accuracy qualification",
+  "revision": "36e62ba86b613ab1753618be3aa411d067bf9adc",
+  "started": "2026-11-17T01:46:46.5075240+08:00",
+  "sourceSha256": {
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/mod.rs": "38d5b6d013f07adff9da6a3d40ac30012863a9ed4761d8c5e17830deed02712f",
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/progressive.rs": "ea62fb5bed0ccd33dc0dc352c9fb78dde8d4d2f6e8b3aa224e9d7925397cca57",
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/proposals.rs": "461fcc853114fc729ef4f36d96e144cbd39dae784803abe82c119634fd687032",
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/reads.rs": "e0d9fc6582cc4b53ba1e493cc48310292f644cfff12cef10af92f13e46f9b8ac",
+    "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/tests.rs": "50b719a7a9208efc92c54d235b7680fcca3c4de5aad66042112a09eceb782b64",
+    "apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11.rs": "70b17e2418e802a6b57f4682590f87e0901aaffea79bc19e502394153fa2c106",
+    "apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11/visual_transfer.rs": "c27a2f50a5bc82f1d90e972219f27d9e9fb85a2b427737eeb4a34b623aec88ba",
+    "apps/yue-shot/crates/yue-shot-capture/src/windows/proc_mem.rs": "1a09691d2ab7382b272bb343859e65b1b2a5672f344efb19da0a176fbccc199c",
+    "apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-v4.1/dataset-lock.json": "5dcac4227ca88534f586f796a38c4f12752088ee0fb625f4b4800c19f41e61b0",
+    "apps/yue-shot/crates/yue-shot-capture/tests/fixtures/visual-candidate-8k-v4/dataset-lock.json": "c93be111cf7f8a1e28aae2b3dc28b34242a927f5d89717775b48bc090a0ce975",
+    "Cargo.lock": "79fe19f0724df4b0c18ccad3d39eaca7f586f9a508a08a553e5802dbcc8d3c30",
+    "tools/test-visual-candidate-p3.ps1": "0c1cf1e239e495bb447e0e9cffa26570401315a58319a2e6a904acf9a1f31018"
+  },
+  "samples": 1000,
+  "sessions": 3,
+  "visibleSurface": true,
+  "suites": [
+    {
+      "name": "reference",
+      "command": "cargo test -p yue-shot-capture --release --locked --lib visual -- --nocapture --test-threads=1",
+      "started": "2026-11-17T01:46:46.5130677+08:00",
+      "finished": "2026-11-17T01:46:50.2269409+08:00",
+      "exitCode": 0,
+      "expectedPassed": 20,
+      "expectedIgnored": 7,
+      "result": "test result: ok. 20 passed; 0 failed; 7 ignored; 0 measured; 664 filtered out; finished in 3.14s",
+      "passed": true,
+      "logSha256": "6f11bcbfe00a8d379efb0f09632bf231b00e2d49548798d8b366822808f5fe4c"
+    },
+    {
+      "name": "transfer",
+      "command": "cargo test -p yue-shot-capture --release --locked --lib visual_transfer_progressive_worker_development_costs -- --nocapture --test-threads=1 --ignored",
+      "started": "2026-11-17T01:46:50.2418667+08:00",
+      "finished": "2026-11-17T01:49:14.5483850+08:00",
+      "exitCode": 0,
+      "expectedPassed": 1,
+      "expectedIgnored": 0,
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 690 filtered out; finished in 143.29s",
+      "passed": true,
+      "logSha256": "0352d4733026ddc045742049c5dd8b2577f7c97ba1f6660a54eed59500cf658f"
+    },
+    {
+      "name": "interleave",
+      "command": "cargo test -p yue-shot-capture --release --locked --lib visual_transfer_atlas_keeps_exact_pixels_while_drawing_and_sampling -- --nocapture --test-threads=1 --ignored",
+      "started": "2026-11-17T01:49:14.5554488+08:00",
+      "finished": "2026-11-17T01:49:15.5955732+08:00",
+      "exitCode": 0,
+      "expectedPassed": 1,
+      "expectedIgnored": 0,
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 690 filtered out; finished in 0.57s",
+      "passed": true,
+      "logSha256": "fe77581280fb846f891975cd50b49a89f5e889d8f8f1c068b02edd6e7f3bda95"
+    },
+    {
+      "name": "resource",
+      "command": "cargo test -p yue-shot-capture --release --locked --lib visual_transfer_cold_sessions_and_idle_resource_reference -- --nocapture --test-threads=1 --ignored",
+      "started": "2026-11-17T01:49:15.5980114+08:00",
+      "finished": "2026-11-17T01:51:16.8489627+08:00",
+      "exitCode": 101,
+      "expectedPassed": 1,
+      "expectedIgnored": 0,
+      "result": "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 690 filtered out; finished in 120.79s",
+      "passed": false,
+      "logSha256": "c78b3c4eef8f9582fecec6c580864ffcbf97ca191e446baa3ceaf73f640b427f"
+    }
+  ],
+  "metrics": [
+    {
+      "session": 0,
+      "fixture": "T01.png",
+      "p95_us": 2305,
+      "owner_p95_us": 92,
+      "passed": true
+    },
+    {
+      "session": 0,
+      "fixture": "T21.png",
+      "p95_us": 19398,
+      "owner_p95_us": 195,
+      "passed": true
+    },
+    {
+      "session": 0,
+      "fixture": "T10.png",
+      "p95_us": 11284,
+      "owner_p95_us": 143,
+      "passed": true
+    },
+    {
+      "session": 0,
+      "fixture": "T10-8k.png",
+      "p95_us": 17131,
+      "owner_p95_us": 222,
+      "passed": true
+    },
+    {
+      "session": 1,
+      "fixture": "T01.png",
+      "p95_us": 2199,
+      "owner_p95_us": 84,
+      "passed": true
+    },
+    {
+      "session": 1,
+      "fixture": "T21.png",
+      "p95_us": 17846,
+      "owner_p95_us": 184,
+      "passed": true
+    },
+    {
+      "session": 1,
+      "fixture": "T10.png",
+      "p95_us": 11604,
+      "owner_p95_us": 140,
+      "passed": true
+    },
+    {
+      "session": 1,
+      "fixture": "T10-8k.png",
+      "p95_us": 17050,
+      "owner_p95_us": 216,
+      "passed": true
+    },
+    {
+      "session": 2,
+      "fixture": "T01.png",
+      "p95_us": 2267,
+      "owner_p95_us": 89,
+      "passed": true
+    },
+    {
+      "session": 2,
+      "fixture": "T21.png",
+      "p95_us": 19717,
+      "owner_p95_us": 198,
+      "passed": true
+    },
+    {
+      "session": 2,
+      "fixture": "T10.png",
+      "p95_us": 11740,
+      "owner_p95_us": 130,
+      "passed": true
+    },
+    {
+      "session": 2,
+      "fixture": "T10-8k.png",
+      "p95_us": 18492,
+      "owner_p95_us": 234,
+      "passed": true
+    }
+  ],
+  "prototypeChecksPassed": false,
+  "stageStatus": "in_progress",
+  "presentSubmissionP95Delta_us": -54,
+  "displayStatisticsAvailable": true,
+  "displayedP95Delta_us": -0.09999999999854481,
+  "sourceUnchanged": true,
+  "finished": "2026-11-17T01:51:18.0966544+08:00"
+}

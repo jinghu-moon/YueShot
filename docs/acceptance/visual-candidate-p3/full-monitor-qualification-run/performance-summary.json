@@ -1,0 +1,233 @@
+{
+  "scope": "full 3840x2160 monitor D2D/Present load on this device; frozen development inputs, not independent accuracy qualification",
+  "rows": [
+    {
+      "session": 0,
+      "fixture": "T01.png",
+      "n": 1000,
+      "p50_us": 1599,
+      "p95_us": 2536,
+      "p99_us": 3142,
+      "max_us": 4464,
+      "p99_95pct_order_stat_interval_us": [
+        3031,
+        3623
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 92,
+      "owner_max_us": 273,
+      "first_use_us": 1227,
+      "extra_bytes_max": 0,
+      "cpu_buffer_bound_bytes": 6621888
+    },
+    {
+      "session": 0,
+      "fixture": "T21.png",
+      "n": 1000,
+      "p50_us": 14941,
+      "p95_us": 17740,
+      "p99_us": 19133,
+      "max_us": 20358,
+      "p99_95pct_order_stat_interval_us": [
+        18485,
+        19857
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 190,
+      "owner_max_us": 761,
+      "first_use_us": 16173,
+      "extra_bytes_max": 512000,
+      "cpu_buffer_bound_bytes": 8628348
+    },
+    {
+      "session": 0,
+      "fixture": "T10.png",
+      "n": 1000,
+      "p50_us": 9837,
+      "p95_us": 11551,
+      "p99_us": 12320,
+      "max_us": 13782,
+      "p99_95pct_order_stat_interval_us": [
+        12097,
+        13237
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 142,
+      "owner_max_us": 900,
+      "first_use_us": 9065,
+      "extra_bytes_max": 282560,
+      "cpu_buffer_bound_bytes": 10035184
+    },
+    {
+      "session": 0,
+      "fixture": "T10-8k.png",
+      "n": 1000,
+      "p50_us": 13875,
+      "p95_us": 16897,
+      "p99_us": 18550,
+      "max_us": 20388,
+      "p99_95pct_order_stat_interval_us": [
+        17941,
+        19476
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 231,
+      "owner_max_us": 809,
+      "first_use_us": 14337,
+      "extra_bytes_max": 832064,
+      "cpu_buffer_bound_bytes": 15096688
+    },
+    {
+      "session": 1,
+      "fixture": "T01.png",
+      "n": 1000,
+      "p50_us": 1604,
+      "p95_us": 2356,
+      "p99_us": 2858,
+      "max_us": 4068,
+      "p99_95pct_order_stat_interval_us": [
+        2676,
+        3068
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 99,
+      "owner_max_us": 317,
+      "first_use_us": 1673,
+      "extra_bytes_max": 0,
+      "cpu_buffer_bound_bytes": 6621888
+    },
+    {
+      "session": 1,
+      "fixture": "T21.png",
+      "n": 1000,
+      "p50_us": 15394,
+      "p95_us": 19156,
+      "p99_us": 20522,
+      "max_us": 22806,
+      "p99_95pct_order_stat_interval_us": [
+        20042,
+        21760
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 200,
+      "owner_max_us": 843,
+      "first_use_us": 17897,
+      "extra_bytes_max": 512000,
+      "cpu_buffer_bound_bytes": 8628348
+    },
+    {
+      "session": 1,
+      "fixture": "T10.png",
+      "n": 1000,
+      "p50_us": 9389,
+      "p95_us": 11408,
+      "p99_us": 12400,
+      "max_us": 14265,
+      "p99_95pct_order_stat_interval_us": [
+        12245,
+        13071
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 138,
+      "owner_max_us": 855,
+      "first_use_us": 9315,
+      "extra_bytes_max": 282560,
+      "cpu_buffer_bound_bytes": 10035184
+    },
+    {
+      "session": 1,
+      "fixture": "T10-8k.png",
+      "n": 1000,
+      "p50_us": 13626,
+      "p95_us": 16794,
+      "p99_us": 18195,
+      "max_us": 21668,
+      "p99_95pct_order_stat_interval_us": [
+        17600,
+        19501
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 227,
+      "owner_max_us": 695,
+      "first_use_us": 15788,
+      "extra_bytes_max": 832064,
+      "cpu_buffer_bound_bytes": 15096688
+    },
+    {
+      "session": 2,
+      "fixture": "T01.png",
+      "n": 1000,
+      "p50_us": 1521,
+      "p95_us": 2229,
+      "p99_us": 2799,
+      "max_us": 4117,
+      "p99_95pct_order_stat_interval_us": [
+        2640,
+        3386
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 88,
+      "owner_max_us": 276,
+      "first_use_us": 1210,
+      "extra_bytes_max": 0,
+      "cpu_buffer_bound_bytes": 6621888
+    },
+    {
+      "session": 2,
+      "fixture": "T21.png",
+      "n": 1000,
+      "p50_us": 14625,
+      "p95_us": 17557,
+      "p99_us": 18862,
+      "max_us": 20850,
+      "p99_95pct_order_stat_interval_us": [
+        18666,
+        19750
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 188,
+      "owner_max_us": 774,
+      "first_use_us": 16406,
+      "extra_bytes_max": 512000,
+      "cpu_buffer_bound_bytes": 8628348
+    },
+    {
+      "session": 2,
+      "fixture": "T10.png",
+      "n": 1000,
+      "p50_us": 10081,
+      "p95_us": 12095,
+      "p99_us": 13078,
+      "max_us": 14312,
+      "p99_95pct_order_stat_interval_us": [
+        12897,
+        13646
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 164,
+      "owner_max_us": 779,
+      "first_use_us": 10848,
+      "extra_bytes_max": 282560,
+      "cpu_buffer_bound_bytes": 10035184
+    },
+    {
+      "session": 2,
+      "fixture": "T10-8k.png",
+      "n": 1000,
+      "p50_us": 13681,
+      "p95_us": 16929,
+      "p99_us": 18382,
+      "max_us": 19462,
+      "p99_95pct_order_stat_interval_us": [
+        17915,
+        18901
+      ],
+      "p99_interval_assumption": "within-session IID; across-session differences retained",
+      "owner_p95_us": 228,
+      "owner_max_us": 707,
+      "first_use_us": 13791,
+      "extra_bytes_max": 832064,
+      "cpu_buffer_bound_bytes": 15096688
+    }
+  ]
+}

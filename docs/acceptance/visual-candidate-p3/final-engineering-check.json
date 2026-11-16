@@ -1,0 +1,9 @@
+{
+  "command": "cargo xtask check",
+  "started": "2026-11-17T02:11:32.6037589+08:00",
+  "finished": "2026-11-17T02:14:59.0045240+08:00",
+  "exitCode": 0,
+  "log": "final-engineering-check.txt",
+  "sha256": "b603739620db6125cfc6103f411061df94034d049ff6e7b9cbdcf0f9ad1291e3",
+  "sourceManifest": "full-monitor-qualification-run/summary.json"
+}

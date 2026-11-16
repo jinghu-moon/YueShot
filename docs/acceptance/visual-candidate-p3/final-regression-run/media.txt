@@ -1,0 +1,15 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.26s
+     Running unittests src\lib.rs (target\debug\deps\yue_media-5fd67136fca7877b.exe)
+
+running 8 tests
+test pixel_color::tests::pq_export_has_known_codes_and_linear_alpha ... ok
+test pixel_color::tests::transparent_premultiplied_pixels_do_not_divide_by_zero ... ok
+test pixel_color::tests::sdr_derivative_preserves_source_and_alpha_and_matches_yue_mapping ... ok
+test pixel_color::tests::pq_iterator_reports_invalid_later_pixels_and_rejects_relative_sources ... ok
+test tests::image_dimensions_keep_the_wire_format ... ok
+test pixel_color::tests::pq_rejects_out_of_gamut_and_over_ten_thousand_nits ... ok
+test tests::pixel_format_strings_and_sizes_are_stable ... ok
+test pixel_color::tests::sdr_derivatives_vary_by_source_peak_while_the_hdr_master_stays_identical ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

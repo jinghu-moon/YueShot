@@ -1,0 +1,19 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 18s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+
+thread 'windows::win::d3d11::visual_transfer::visual_transfer_progressive_worker_development_costs' (72676) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:358:14:
+GPU event fired before nonblocking Map was ready
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::win::d3d11::visual_transfer::visual_transfer_progressive_worker_development_costs ... FAILED
+
+failures:
+
+failures:
+    windows::win::d3d11::visual_transfer::visual_transfer_progressive_worker_development_costs
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 688 filtered out; finished in 0.20s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

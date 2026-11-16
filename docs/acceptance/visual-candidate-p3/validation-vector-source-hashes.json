@@ -1,0 +1,10 @@
+{
+  "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/mod.rs": "78b721629a44a3769ec50acf53562883e63e1d7302adde01caf9513702c067eb",
+  "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/progressive.rs": "fb726c6bedc7b27e181d32f320f9ebb79e25702666f66b84cc621f6daa91cf35",
+  "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/proposals.rs": "461fcc853114fc729ef4f36d96e144cbd39dae784803abe82c119634fd687032",
+  "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/reads.rs": "e0d9fc6582cc4b53ba1e493cc48310292f644cfff12cef10af92f13e46f9b8ac",
+  "apps/yue-shot/crates/yue-shot-capture/src/visual_detection/tests.rs": "50b719a7a9208efc92c54d235b7680fcca3c4de5aad66042112a09eceb782b64",
+  "apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11.rs": "70b17e2418e802a6b57f4682590f87e0901aaffea79bc19e502394153fa2c106",
+  "apps/yue-shot/crates/yue-shot-capture/src/windows/win/d3d11/visual_transfer.rs": "6b58c3abc66ec859de15bbff7052648a1d84ab11e90616d61f6c96eab75b8c83",
+  "apps/yue-shot/crates/yue-shot-capture/src/windows/proc_mem.rs": "042dae0c38961e040d7bd9eff707bb769ed768583bc9f7c260bff65e6bdfc4f8"
+}

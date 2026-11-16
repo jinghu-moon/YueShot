@@ -1,0 +1,15 @@
+{
+  "recorded_at_utc": "2026-11-16T16:56:41.524326+00:00",
+  "method": "GetProcessWindowStation/GetThreadDesktop(GetCurrentThreadId)/OpenInputDesktop; names via GetUserObjectInformationW(UOI_NAME); read-only probe, input desktop handle closed",
+  "observed": {
+    "process_session": 1,
+    "window_station": "WinSta0",
+    "thread_desktop": "Default",
+    "input_desktop": "Screen-saver"
+  },
+  "present_evidence": "displayed-baseline-failed.json",
+  "present_hresult": 142213121,
+  "present_hresult_hex": "0x087a0001",
+  "present_status": "DXGI_STATUS_OCCLUDED",
+  "display_gate_passed": false
+}

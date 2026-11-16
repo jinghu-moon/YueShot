@@ -1,0 +1,20 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.28s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+
+thread 'windows::win::d3d11::visual_transfer::visual_transfer_cold_sessions_and_idle_resource_reference' (52760) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\win\d3d11\visual_transfer.rs:750:5:
+assertion `left == right` failed
+  left: Number(380)
+ right: Number(375)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::win::d3d11::visual_transfer::visual_transfer_cold_sessions_and_idle_resource_reference ... FAILED
+
+failures:
+
+failures:
+    windows::win::d3d11::visual_transfer::visual_transfer_cold_sessions_and_idle_resource_reference
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 690 filtered out; finished in 60.75s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

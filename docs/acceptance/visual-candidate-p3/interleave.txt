@@ -1,0 +1,10 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 18s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+test windows::win::d3d11::visual_transfer::visual_transfer_atlas_keeps_exact_pixels_while_drawing_and_sampling ... VISUAL_INTERLEAVE {"exact_repetitions":105,"owner_copy_events_us":[92,30,61,32,98,57,48,30,28,125,118,36,27,67,86,31,42,25,25,24,36,45,25,26,23,31,82,27,23,31,40,57,60,57,30,26,35,27,32,31,72,65,114,29,32,39,104,36,26,98,34,89,31,52,128,24,23,46,36,24,27,25,54,27,53,22,138,27,37,23,23,21,27,27,30,24,32,42,25,21,22,21,40,26,54,55,59,84,58,55,59,50,74,107,28,54,27,74,25,85],"render_baseline_us":[103,134,145,105,72,66,48,139,107,92,102,150,75,67,91,65,151,90,85,94,112,140,95,84,78,89,92,142,59,80,58,87,37,63,41,77,66,69,128,65,82,106,93,153,157,114,90,63,56,82,102,87,90,183,139,81,95,81,148,84,113,119,69,118,91,105,79,132,102,102,70,94,66,100,156,109,51,116,54,30,36,28,56,101,94,69,81,45,117,139,145,62,65,63,132,97,122,93,101,53],"render_interleaved_us":[191,55,19,67,232,13,51,57,53,12,210,22,14,14,13,48,23,15,23,12,41,16,13,17,12,33,173,15,12,49,34,18,14,12,73,15,17,15,30,28,36,30,243,65,81,14,15,76,14,30,69,132,65,52,23,15,13,81,98,72,17,54,12,62,12,14,16,16,42,16,14,13,30,78,67,14,88,20,13,13,14,16,28,14,14,12,13,32,22,12,15,12,114,16,65,98,56,13,18,19],"scope":"real offscreen D2D draw submission and sampler interleaving; not presentation interval/UI qualification","size":[1281,721],"source_unchanged":true}
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 689 filtered out; finished in 0.55s
+

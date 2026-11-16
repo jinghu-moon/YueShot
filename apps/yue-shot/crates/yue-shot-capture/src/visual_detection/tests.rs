@@ -1001,3 +1001,99 @@ fn visual_detection_odd_large_dimensions_do_not_mean_empty_or_upscale() {
         }
     }
 }
+
+#[test]
+fn visual_progressive_batches_preserve_full_reference_and_report_all_costs() {
+    let manifest = manifest();
+    let mut rows = Vec::new();
+    for case in case_nodes(&manifest) {
+        let Some(name) = case["input"]["image"].as_str() else {
+            continue;
+        };
+        let Some(queries) = case["queries"].as_array() else {
+            continue;
+        };
+        if case["input"]["region_access"]["additional_source_access"] == false {
+            continue;
+        }
+        let (size, rgba) = decode(name);
+        let read = |rect: Rect| {
+            let mut bytes = Vec::with_capacity(rect.area() as usize * 4);
+            for y in rect.top..rect.bottom {
+                let at = (y as usize * size[0] + rect.left as usize) * 4;
+                bytes.extend_from_slice(&rgba[at..at + rect.width() as usize * 4]);
+            }
+            bytes
+        };
+        for q in queries.iter().filter(|q| q["mode"] == "assert") {
+            let point = Point::new(
+                q["point"][0].as_i64().unwrap() as i32,
+                q["point"][1].as_i64().unwrap() as i32,
+            );
+            let roi = progressive::Query::initial_region(size, point).unwrap();
+            let mut query = progressive::Query::new(size, point, read(roi)).unwrap();
+            let expected = proposals::seed(Image::new(size, &rgba).unwrap(), point);
+            let started = Instant::now();
+            let mut copies = 1;
+            let mut batches = 1;
+            let mut max_boxes = 0;
+            let (same, status) = loop {
+                match query.step() {
+                    progressive::Step::Read(regions) => {
+                        max_boxes = max_boxes.max(regions.len());
+                        copies += regions.len();
+                        batches += 1;
+                        query
+                            .apply(regions.into_iter().map(|r| (r, read(r))).collect())
+                            .unwrap();
+                    }
+                    progressive::Step::Complete(actual) => {
+                        break (
+                            serde_json::to_value(actual).unwrap()
+                                == serde_json::to_value(&expected).unwrap(),
+                            Completion::Complete,
+                        );
+                    }
+                    progressive::Step::Unavailable(reason) => break (false, reason),
+                }
+            };
+            rows.push(json!({"case":case["id"],"query":q["id"],"same":same,"status":status,"passes":query.passes,"batches":batches,"copies":copies,"max_batch_boxes":max_boxes,"extra_bytes":query.extra_bytes,"stage_us":query.stage_us,"elapsed_us":started.elapsed().as_micros()}));
+        }
+    }
+    println!(
+        "VISUAL_PROGRESSIVE {}",
+        json!({"scope":"owned-input progressive transfer experiment; all repeated CPU passes included","rows":rows})
+    );
+    assert_eq!(rows.len(), 137);
+    assert!(
+        rows.iter().all(|r| r["same"] == true),
+        "progressive plan differs or exceeds budget; inspect report"
+    );
+}
+
+#[test]
+fn visual_progressive_incomplete_wrong_batches_and_large_indices_fail_closed() {
+    assert!(matches!(
+        progressive::Query::new([16384, 16384], Point::new(0, 0), vec![255; 512 * 512 * 4]),
+        Err(Completion::BudgetExceeded)
+    ));
+    assert!(progressive::Query::new([1024, 1024], Point::new(0, 0), vec![0; 1]).is_err());
+    let mut query =
+        progressive::Query::new([1024, 1024], Point::new(0, 0), vec![255; 512 * 512 * 4]).unwrap();
+    let progressive::Step::Read(regions) = query.step() else {
+        panic!("missing source requires explicit evidence request");
+    };
+    assert!(!regions.is_empty());
+    assert!(
+        matches!(
+            query.step(),
+            progressive::Step::Unavailable(Completion::Failed)
+        ),
+        "cannot proceed while owned pixels are pending"
+    );
+    assert_eq!(query.apply(vec![]), Err(Completion::Failed));
+    assert!(matches!(
+        query.step(),
+        progressive::Step::Unavailable(Completion::Failed)
+    ));
+}

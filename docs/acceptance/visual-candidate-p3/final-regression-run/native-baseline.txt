@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 14 tests
+test window_detection::native_baseline::native_baseline_hit_mapping_and_epoch_trace ... ok
+test window_detection::native_baseline::native_baseline_pending_preview_and_visible_layer_trace ... ok
+test window_detection::native_baseline::native_baseline_press_blocks_late_publish_and_threshold_is_inclusive ... ok
+test windows::capture_worker::tests::native_baseline_cancel_restart_completion_permutations ... ok
+test windows::overlay::native_baseline::native_baseline_capture_lifecycle_resource_probe ... ignored, L3: captures the desktop for 100 sessions, then observes 60s idle; no visible overlay or external writes
+test windows::overlay::native_baseline::native_baseline_confirm_publishes_exact_frozen_region ... ok
+test windows::overlay::native_baseline::native_baseline_confirmation_gate_cancel_restart_and_closed_owner ... ok
+test windows::overlay::native_baseline::native_baseline_controller_preview_replacement_and_manual_path_trace ... ignored, L3: real D3D11/D2D renderer on a hidden window; injected native answers, no desktop capture
+test windows::overlay::native_baseline::native_baseline_known_defect_confirmation_uses_replaced_same_owner_rectangle ... ok
+test windows::overlay::native_baseline::native_baseline_other_owner_and_cleared_preview_reject_late_confirmation ... ok
+test windows::overlay::native_baseline::native_baseline_pressed_gesture_rejects_late_dwell_before_confirmation ... ok
+test windows::overlay::native_baseline::native_baseline_restart_cross_worker_completion_permutations ... ok
+test windows::overlay::native_baseline::selection_target_replay_controller_binds_geometry_source_and_native_levels ... ignored, L3: real hidden renderer; native paths injected, no clipboard or files
+test windows::refinement_worker::tests::native_baseline_transport_adoption_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 3 ignored; 0 measured; 677 filtered out; finished in 0.14s
+

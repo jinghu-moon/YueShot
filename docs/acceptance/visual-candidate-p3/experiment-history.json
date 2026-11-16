@@ -1,0 +1,52 @@
+[
+  {
+    "experiment": "whole_lines",
+    "logSha256": "4e2a5c7609bfbcd3ca05a81213d2a88be65512659835711c2282e4a4ee41bb1f",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "queries": 137,
+    "same": 110,
+    "result": "failed"
+  },
+  {
+    "experiment": "two_pixel_tiles",
+    "logSha256": "91a507cf53a156bda0023ade7ccc0248dfc88f26687fe850f218a229664ac372",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "queries": 137,
+    "same": 117,
+    "result": "failed"
+  },
+  {
+    "experiment": "bounded_expansion",
+    "logSha256": "f2d88269b103f7093dc78c57f600b99cd3606477ae83eb8e6c774adfe7e2c37d",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "queries": 137,
+    "same": 137,
+    "result": "passed_experiment_only"
+  },
+  {
+    "experiment": "phased_four_pixel",
+    "logSha256": "7d88eb2f147792f79581920de8adfe09b59597ac6149a0dae16d0912031ba031",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "queries": 137,
+    "same": 137,
+    "result": "passed_experiment_only"
+  },
+  {
+    "experiment": "sync_poll_worker",
+    "logSha256": "a0a8f6dcfd69e1053290d21865c5f0405bc06772199c6b20267cb67dc738948b",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "result": "passed_experiment_only"
+  },
+  {
+    "experiment": "dxgi_event",
+    "logSha256": "cf200899847561286208dadcd5cccd3b2cd426def9ec506642d23586dac4374d",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "result": "failed"
+  },
+  {
+    "experiment": "dxgi_event_order",
+    "logSha256": "cbd9032e7330ae940a653ae5600cab042709acbf5060d0a47d54fae2c065e8a6",
+    "scope": "historical P3 experiment; not current source or stage qualification",
+    "result": "failed"
+  }
+]

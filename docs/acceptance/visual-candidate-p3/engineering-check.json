@@ -1,0 +1,9 @@
+{
+  "command": "cargo xtask check",
+  "started": "2026-11-17T01:07:58.0986572+08:00",
+  "exitCode": 0,
+  "finished": "2026-11-17T01:12:01.6227992+08:00",
+  "logSha256": "dba7d6cade7a970a4df1ef84da3ac5a457f1c35ca2347e6e5f4524d01057ceba",
+  "sourceReference": "isolated-fastpath-final-1000x3/summary.json",
+  "prototypeSourceUnchangedAfterCheck": true
+}

@@ -1,0 +1,31 @@
+{
+  "source_summary": "summary.json",
+  "raw_log": "reference.txt",
+  "p2_reference": "../../visual-candidate-p2/stage-reference-run",
+  "excluded_only": [
+    "VISUAL_COMPARISON.rows[].elapsed_us",
+    "VISUAL_COMPARISON.rows[].global_prepare_once_us"
+  ],
+  "reports": {
+    "VISUAL_COMPARISON": {
+      "all_behavior_fields_exact_equal": true,
+      "p2_sha256": "a02d10bcc210f0d6a70153ffaa9b229190fc225845c2f61fbce931b150739153",
+      "current_sha256": "a02d10bcc210f0d6a70153ffaa9b229190fc225845c2f61fbce931b150739153"
+    },
+    "VISUAL_STAGE": {
+      "all_behavior_fields_exact_equal": true,
+      "p2_sha256": "f9d8b494b38b984b0a26b4beec342ab8fc32f84626af982a77f7758df3675504",
+      "current_sha256": "f9d8b494b38b984b0a26b4beec342ab8fc32f84626af982a77f7758df3675504"
+    },
+    "VISUAL_LOCATION": {
+      "all_behavior_fields_exact_equal": true,
+      "p2_sha256": "9fae91fc90682de2614a346c4f4ae816af015cfd84be80b7340a961fef164c11",
+      "current_sha256": "9fae91fc90682de2614a346c4f4ae816af015cfd84be80b7340a961fef164c11"
+    },
+    "VISUAL_DEMAND": {
+      "all_behavior_fields_exact_equal": true,
+      "p2_sha256": "31ec1338f4cec9cae1a3f1b73aa2ecba98cccc1ade5d3490860d5e059d4bb090",
+      "current_sha256": "31ec1338f4cec9cae1a3f1b73aa2ecba98cccc1ade5d3490860d5e059d4bb090"
+    }
+  }
+}

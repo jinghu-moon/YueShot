@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src\lib.rs (target\debug\deps\yue_shot_capture-46095b76348c53d2.exe)
+
+running 1 test
+test windows::providers::tests::a_300x200_selection_reads_back_only_its_own_bytes ... FAILED
+
+failures:
+
+---- windows::providers::tests::a_300x200_selection_reads_back_only_its_own_bytes stdout ----
+
+thread 'windows::providers::tests::a_300x200_selection_reads_back_only_its_own_bytes' (82904) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\providers.rs:847:14:
+this test needs a monitor at the cursor (docs/31 D-14): "GetCursorPos failed with Win32 error 5"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    windows::providers::tests::a_300x200_selection_reads_back_only_its_own_bytes
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 690 filtered out; finished in 0.18s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

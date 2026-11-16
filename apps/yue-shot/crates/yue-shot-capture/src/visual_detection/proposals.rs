@@ -55,7 +55,7 @@ pub struct Detection {
     pub candidates: Vec<Candidate>,
 }
 
-fn finish(
+pub(super) fn finish(
     image: Image<'_>,
     proposals: Vec<Rect>,
     point: Point,
@@ -165,6 +165,34 @@ pub(super) fn scan_peaks(image: Image<'_>, point: Point, side: usize) -> (Vec<i3
     let coordinate = if vertical { point.x } else { point.y };
     let offset = ((tangent_max - tangent_min) / 8).clamp(1, 32);
     let tangents = [centre - offset, centre, centre + offset];
+    // Five tangential rows cover the roughness probe without another round trip
+    // on smaller sources. Reserve half the append budget for subsequent edge
+    // evidence; larger sources keep the exact one-row plan.
+    let scan_halo =
+        if 3usize * (image.coverage.width() as usize + image.coverage.height() as usize) * 8 * 4
+            <= A_LIMITS[3].1 / 2
+        {
+            2
+        } else {
+            0
+        };
+    for tangent in tangents {
+        image.request(if vertical {
+            Rect::new(
+                start,
+                tangent - scan_halo,
+                normal_limit,
+                tangent + 1 + scan_halo,
+            )
+        } else {
+            Rect::new(
+                tangent - scan_halo,
+                start,
+                tangent + 1 + scan_halo,
+                normal_limit,
+            )
+        });
+    }
     let mut peaks = Vec::new();
     for at in start + 1..normal_limit {
         if (side.is_multiple_of(2) && at > coordinate)
@@ -257,13 +285,45 @@ pub fn seed(image: Image<'_>, point: Point) -> Detection {
             candidates: Vec::new(),
         };
     }
-    let lists = std::array::from_fn::<_, 4, _>(|side| scan_peaks(image, point, side));
+    let lists = seed_peaks(image, point);
+    if image.pending_reads() {
+        return finish(image, Vec::new(), point, 64, Completion::Failed);
+    }
     let completion = if lists.iter().any(|l| l.1) {
         Completion::BudgetExceeded
     } else {
         Completion::Complete
     };
+    let rectangles = seed_rectangles(image, point, &lists);
+    if image.pending_reads() {
+        return finish(image, Vec::new(), point, 64, Completion::Failed);
+    }
+    finish(image, rectangles, point, 64, completion)
+}
+
+pub(super) type SeedPeaks = [(Vec<i32>, bool); 4];
+
+pub(super) fn seed_peaks(image: Image<'_>, point: Point) -> SeedPeaks {
+    std::array::from_fn(|side| scan_peaks(image, point, side))
+}
+
+pub(super) fn seed_rectangles(image: Image<'_>, point: Point, lists: &SeedPeaks) -> Vec<Rect> {
     let mut rectangles = Vec::new();
+    // All three seed rays can hit the same long edge. Reuse only a fully read
+    // contiguous span inside this proposal pass; missing pixels never cache a
+    // shortened edge. This removes repeated O(edge length) traces.
+    let mut spans: Vec<(i32, usize, i32, i32)> = Vec::new();
+    let mut span = |edge, tangent, side| {
+        if let Some(&(_, _, start, end)) = spans
+            .iter()
+            .find(|&&(e, s, a, b)| e == edge && s == side && a <= tangent && tangent < b)
+        {
+            return Some((start, end));
+        }
+        let result = line_span(image, edge, tangent, side)?;
+        spans.push((edge, side, result.0, result.1));
+        Some(result)
+    };
     for (side, (edges, _)) in lists.iter().enumerate() {
         let vertical = side < 2;
         let centre = if vertical { point.y } else { point.x };
@@ -275,7 +335,7 @@ pub fn seed(image: Image<'_>, point: Point) -> Detection {
         let offset = (extent / 8).clamp(1, 32);
         for &edge in edges {
             for tangent in [centre - offset, centre, centre + offset] {
-                let Some((start, end)) = line_span(image, edge, tangent, side) else {
+                let Some((start, end)) = span(edge, tangent, side) else {
                     continue;
                 };
                 // Trace connected edge runs to actual corners instead of making
@@ -289,9 +349,7 @@ pub fn seed(image: Image<'_>, point: Point) -> Detection {
                     } else {
                         edge - 1
                     };
-                    let Some((other_start, other_end)) =
-                        line_span(image, corner, inside, other_side)
-                    else {
+                    let Some((other_start, other_end)) = span(corner, inside, other_side) else {
                         continue;
                     };
                     let rect = if vertical {
@@ -308,7 +366,7 @@ pub fn seed(image: Image<'_>, point: Point) -> Detection {
     }
     rectangles.sort_by_key(|r| (r.area(), r.left, r.top, r.right, r.bottom));
     rectangles.dedup();
-    finish(image, rectangles, point, 64, completion)
+    rectangles
 }
 
 fn line_span(image: Image<'_>, edge: i32, tangent: i32, side: usize) -> Option<(i32, i32)> {
@@ -324,20 +382,40 @@ fn line_span(image: Image<'_>, edge: i32, tangent: i32, side: usize) -> Option<(
         } else {
             (Point::new(t, edge - 1), Point::new(t, edge))
         };
-        match (image.pixel(a), image.pixel(b)) {
-            (Some(a), Some(b)) => norm(difference(a, b)) >= Parameters::default().threshold,
-            _ => false,
+        let pixels = image.pixel(a).zip(image.pixel(b));
+        if pixels.is_none() {
+            let radius = (t - tangent)
+                .unsigned_abs()
+                .saturating_add(1)
+                .max(256)
+                .next_power_of_two() as i32;
+            image.request(if vertical {
+                Rect::new(
+                    edge - 1,
+                    (tangent - radius).max(low),
+                    edge + 1,
+                    (tangent + radius).min(high),
+                )
+            } else {
+                Rect::new(
+                    (tangent - radius).max(low),
+                    edge - 1,
+                    (tangent + radius).min(high),
+                    edge + 1,
+                )
+            });
         }
+        pixels.map(|(a, b)| norm(difference(a, b)) >= Parameters::default().threshold)
     };
-    if tangent < low || tangent >= high || !supported(tangent) {
+    if tangent < low || tangent >= high || !supported(tangent)? {
         return None;
     }
     let mut start = tangent;
     let mut end = tangent + 1;
-    while start > low && supported(start - 1) {
+    while start > low && supported(start - 1)? {
         start -= 1;
     }
-    while end < high && supported(end) {
+    while end < high && supported(end)? {
         end += 1;
     }
     (end - start >= 10).then_some((start, end))

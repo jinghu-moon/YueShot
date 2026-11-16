@@ -83,3 +83,9 @@
 最后回归：capture591／95 ignored，media8、geometry10、native-baseline11、selection-target3、真实窗口3以及既有9项原生／GPU资格全部实跑通过；ignored未执行者不算通过。P0 golden字节不变。`cargo xtask check`退出0。源位不变、数值／定位／采样／容量／等变合同均有独立结果；[记录与覆盖表](acceptance/visual-candidate-p2/README.md)、[阶段门](acceptance/visual-candidate-p2/stage-gate.json)。
 
 真实按需GPU小Map约153～302ms，性能失败；CPU计算P95最高约2.478ms，8K ROI同步读回P95约1.737ms。因此进入P3有界批量异步传输，不引入计算shader；P3/P4/P5尚未完成，不能称局部25ms／UI1ms或真实宿主统计资格已通过。原生K01～K03仍按基线复现，未在算法阶段夹带修复。
+
+## 视觉候选实施 P3（2026-11-17，本机原型资格）
+
+有界批量读回与分阶段CPU查询仍仅`cfg(test)`。当前20项视觉常规测试、137条渐进读取与完整源等价；与P2冻结输出的全部行为字段一致，仅实际耗时不作相等要求。最终完整显示器3840×2160 D2D/DComp/Present竞争下，四场景×1000暖查询×三会话全部正确：查询P95最高19.156ms，owner事件P95最高0.231ms；实际连续显示间隔P95增量约−0.1µs。105次offscreen D2D／取色交错、格式／容量／取消／Map错误分支、105次冷staging／Query与60s静止资源平台通过；不等于产品冷启动或完整会话E15已通过。CPU缓冲保守容量上界最高15096688 bytes，显式GPU atlas 4MiB；产品分配守卫仍在P4。
+
+解锁后完整回归capture593／99 ignored、media8、geometry10、native-baseline11、selection-target3、真实窗口3及9项原生／GPU定向测试全部通过。P0 golden未改，工程检查原始命令／退出码见final-engineering-check.json。此前Screen-saver桌面中的三项错误5及OCCLUDED失败记录保留，未把CPU提交间隔冒充显示间隔。本机单卡资格不外推其他厂商／HDR，P4完整产品链和P5独立统计尚未实施。原始失败及通过证据见[P3记录](acceptance/visual-candidate-p3/README.md)、[覆盖审核](acceptance/visual-candidate-p3/coverage-audit.md)与[阶段状态](acceptance/visual-candidate-p3/stage-gate.json)。

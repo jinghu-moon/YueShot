@@ -1,0 +1,222 @@
+{
+  "scope": "P3 isolated idle SDR development; not UI/contention/independent qualification",
+  "rows": [
+    {
+      "session": 0,
+      "fixture": "T01.png",
+      "n": 1000,
+      "p50_us": 1388,
+      "p95_us": 1658,
+      "p99_us": 2006,
+      "max_us": 3027,
+      "p99_95pct_order_stat_interval_us": [
+        1884,
+        2257
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 63,
+      "owner_max_us": 608,
+      "first_use_us": 20002,
+      "extra_bytes_max": 0
+    },
+    {
+      "session": 0,
+      "fixture": "T21.png",
+      "n": 1000,
+      "p50_us": 14821,
+      "p95_us": 19255,
+      "p99_us": 20915,
+      "max_us": 23755,
+      "p99_95pct_order_stat_interval_us": [
+        20746,
+        21772
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 171,
+      "owner_max_us": 1326,
+      "first_use_us": 13504,
+      "extra_bytes_max": 512000
+    },
+    {
+      "session": 0,
+      "fixture": "T10.png",
+      "n": 1000,
+      "p50_us": 9539,
+      "p95_us": 12507,
+      "p99_us": 13736,
+      "max_us": 16174,
+      "p99_95pct_order_stat_interval_us": [
+        13281,
+        14462
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 118,
+      "owner_max_us": 710,
+      "first_use_us": 13468,
+      "extra_bytes_max": 282560
+    },
+    {
+      "session": 0,
+      "fixture": "T10-8k.png",
+      "n": 1000,
+      "p50_us": 16724,
+      "p95_us": 20211,
+      "p99_us": 22132,
+      "max_us": 24897,
+      "p99_95pct_order_stat_interval_us": [
+        21305,
+        22689
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 141,
+      "owner_max_us": 868,
+      "first_use_us": 23162,
+      "extra_bytes_max": 832064
+    },
+    {
+      "session": 1,
+      "fixture": "T01.png",
+      "n": 1000,
+      "p50_us": 1520,
+      "p95_us": 2568,
+      "p99_us": 3505,
+      "max_us": 4819,
+      "p99_95pct_order_stat_interval_us": [
+        3138,
+        4615
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 64,
+      "owner_max_us": 291,
+      "first_use_us": 3440,
+      "extra_bytes_max": 0
+    },
+    {
+      "session": 1,
+      "fixture": "T21.png",
+      "n": 1000,
+      "p50_us": 15406,
+      "p95_us": 20095,
+      "p99_us": 22096,
+      "max_us": 25451,
+      "p99_95pct_order_stat_interval_us": [
+        21398,
+        22814
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 167,
+      "owner_max_us": 835,
+      "first_use_us": 17557,
+      "extra_bytes_max": 512000
+    },
+    {
+      "session": 1,
+      "fixture": "T10.png",
+      "n": 1000,
+      "p50_us": 9424,
+      "p95_us": 12628,
+      "p99_us": 14230,
+      "max_us": 18279,
+      "p99_95pct_order_stat_interval_us": [
+        13670,
+        14977
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 123,
+      "owner_max_us": 927,
+      "first_use_us": 20767,
+      "extra_bytes_max": 282560
+    },
+    {
+      "session": 1,
+      "fixture": "T10-8k.png",
+      "n": 1000,
+      "p50_us": 16807,
+      "p95_us": 20341,
+      "p99_us": 22248,
+      "max_us": 24214,
+      "p99_95pct_order_stat_interval_us": [
+        21724,
+        22967
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 142,
+      "owner_max_us": 749,
+      "first_use_us": 29541,
+      "extra_bytes_max": 832064
+    },
+    {
+      "session": 2,
+      "fixture": "T01.png",
+      "n": 1000,
+      "p50_us": 1451,
+      "p95_us": 2393,
+      "p99_us": 3150,
+      "max_us": 4282,
+      "p99_95pct_order_stat_interval_us": [
+        2973,
+        3582
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 73,
+      "owner_max_us": 226,
+      "first_use_us": 5495,
+      "extra_bytes_max": 0
+    },
+    {
+      "session": 2,
+      "fixture": "T21.png",
+      "n": 1000,
+      "p50_us": 15297,
+      "p95_us": 19844,
+      "p99_us": 22184,
+      "max_us": 25624,
+      "p99_95pct_order_stat_interval_us": [
+        21348,
+        23759
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 168,
+      "owner_max_us": 784,
+      "first_use_us": 20242,
+      "extra_bytes_max": 512000
+    },
+    {
+      "session": 2,
+      "fixture": "T10.png",
+      "n": 1000,
+      "p50_us": 9192,
+      "p95_us": 12219,
+      "p99_us": 13232,
+      "max_us": 15013,
+      "p99_95pct_order_stat_interval_us": [
+        12997,
+        14099
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 110,
+      "owner_max_us": 975,
+      "first_use_us": 20394,
+      "extra_bytes_max": 282560
+    },
+    {
+      "session": 2,
+      "fixture": "T10-8k.png",
+      "n": 1000,
+      "p50_us": 15223,
+      "p95_us": 19348,
+      "p99_us": 21381,
+      "max_us": 24363,
+      "p99_95pct_order_stat_interval_us": [
+        20650,
+        22844
+      ],
+      "p99_interval_method": "binomial(n,0.99) equal-tail ranks; within-session IID assumption, across-session variation retained separately",
+      "owner_p95_us": 146,
+      "owner_max_us": 946,
+      "first_use_us": 33371,
+      "extra_bytes_max": 832064
+    }
+  ],
+  "warning": "isolated device only; no display/contention qualification; process cold startup not measured"
+}

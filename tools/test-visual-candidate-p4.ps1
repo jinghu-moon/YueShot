@@ -21,7 +21,7 @@ $report = [ordered]@{
     userAcceptance = 'Deferred by explicit user instruction; not counted as passed'
 }
 $suites = @(
-    @{ Name = 'visual-reference'; Filter = 'visual'; Passed = 33; Ignored = 31; All = $false },
+    @{ Name = 'visual-reference'; Filter = 'visual'; Passed = 34; Ignored = 32; All = $false },
     @{ Name = 'product-replays'; Filter = 'visual_replay'; Passed = 29; Ignored = 0; All = $true },
     @{ Name = 'owner-lifetimes'; Filter = 'owner_lifetime'; Passed = 5; Ignored = 0; All = $false },
     @{ Name = 'transfer-faults'; Filter = 'visual_transfer_formats_capacity_and_map_failures_preserve_lifecycle'; Passed = 1; Ignored = 0; All = $true }

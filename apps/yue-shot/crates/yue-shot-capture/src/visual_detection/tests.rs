@@ -3,6 +3,116 @@ use serde_json::{Value, json};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
+/// Explicit, offline reproduction of a supplied screenshot. This is a diagnostic,
+/// not a geometry assertion or an acceptance result. Never loads images implicitly.
+#[test]
+#[ignore = "requires YUESHOT_VISUAL_PROBE_PNG and YUESHOT_VISUAL_PROBE_POINTS=x,y;x,y"]
+fn visual_diagnose_supplied_png() {
+    let path = std::env::var_os("YUESHOT_VISUAL_PROBE_PNG").expect("explicit PNG path required");
+    let mut decoder = png::Decoder::new(std::io::Cursor::new(std::fs::read(path).unwrap()));
+    decoder.set_transformations(png::Transformations::EXPAND | png::Transformations::ALPHA);
+    let mut reader = decoder.read_info().unwrap();
+    let mut pixels = vec![0; reader.output_buffer_size().unwrap()];
+    let info = reader.next_frame(&mut pixels).unwrap();
+    assert_eq!(info.color_type, png::ColorType::Rgba);
+    pixels.truncate(info.buffer_size());
+    let size = [info.width as usize, info.height as usize];
+    let read = |rect: Rect| {
+        let mut bytes = Vec::with_capacity(rect.area() as usize * 4);
+        for y in rect.top..rect.bottom {
+            let at = (y as usize * size[0] + rect.left as usize) * 4;
+            bytes.extend_from_slice(&pixels[at..at + rect.width() as usize * 4]);
+        }
+        bytes
+    };
+    for pair in std::env::var("YUESHOT_VISUAL_PROBE_POINTS")
+        .unwrap()
+        .split(';')
+    {
+        let (x, y) = pair.split_once(',').expect("x,y required");
+        let point = Point::new(x.parse().unwrap(), y.parse().unwrap());
+        let roi = progressive::Query::initial_region(size, point).unwrap();
+        let mut query = progressive::Query::new(size, point, roi, read(roi)).unwrap();
+        let start = Instant::now();
+        let result = loop {
+            match query.step() {
+                progressive::Step::Read(regions) => query
+                    .apply(regions.into_iter().map(|r| (r, read(r))).collect())
+                    .unwrap(),
+                progressive::Step::Complete(result) => break serde_json::to_value(result).unwrap(),
+                progressive::Step::Unavailable(reason) => break json!({"unavailable":reason}),
+            }
+        };
+        println!(
+            "VISUAL_PNG_PROBE {}",
+            json!({"size":size,"point":[point.x,point.y],"result":result,"passes":query.passes,"extraBytes":query.extra_bytes,"stageUs":query.stage_us,"elapsedUs":start.elapsed().as_micros()})
+        );
+    }
+}
+
+#[test]
+fn visual_progressive_embedded_targets_change_with_seed() {
+    let (tile_size, tile) = decode("T01.png");
+    for (size, origin) in [([1440, 1000], [628, 343]), ([3840, 2160], [1600, 600])] {
+        let mut pixels = [245, 247, 251, 255].repeat(size[0] * size[1]);
+        for y in 0..tile_size[1] {
+            let to = ((origin[1] + y) * size[0] + origin[0]) * 4;
+            let from = y * tile_size[0] * 4;
+            pixels[to..to + tile_size[0] * 4].copy_from_slice(&tile[from..from + tile_size[0] * 4]);
+        }
+        let read = |rect: Rect| {
+            let mut bytes = Vec::with_capacity(rect.area() as usize * 4);
+            for y in rect.top..rect.bottom {
+                let at = (y as usize * size[0] + rect.left as usize) * 4;
+                bytes.extend_from_slice(&pixels[at..at + rect.width() as usize * 4]);
+            }
+            bytes
+        };
+        let offset = |r: Rect| {
+            Rect::new(
+                r.left + origin[0] as i32,
+                r.top + origin[1] as i32,
+                r.right + origin[0] as i32,
+                r.bottom + origin[1] as i32,
+            )
+        };
+        let blue = offset(Rect::new(41, 31, 141, 101));
+        let light = offset(Rect::new(240, 40, 340, 110));
+        for (x, y, expected) in [
+            (91, 66, Some(blue)),
+            (290, 75, Some(light)),
+            (20, 20, None),
+            (210, 170, None),
+        ] {
+            let point = Point::new(origin[0] as i32 + x, origin[1] as i32 + y);
+            let roi = progressive::Query::initial_region(size, point).unwrap();
+            let mut query = progressive::Query::new(size, point, roi, read(roi)).unwrap();
+            let result = loop {
+                match query.step() {
+                    progressive::Step::Read(regions) => query
+                        .apply(regions.into_iter().map(|r| (r, read(r))).collect())
+                        .unwrap(),
+                    progressive::Step::Complete(result) => break result,
+                    progressive::Step::Unavailable(reason) => {
+                        panic!("embedded target unavailable: {size:?}/{point:?}: {reason:?}")
+                    }
+                }
+            };
+            assert_eq!(result.completion, Completion::Complete);
+            if let Some(expected) = expected {
+                assert_eq!(result.candidates.first().map(|c| c.rect), Some(expected));
+            } else {
+                assert!(
+                    !result
+                        .candidates
+                        .iter()
+                        .any(|c| c.rect == blue || c.rect == light)
+                );
+            }
+        }
+    }
+}
+
 #[test]
 fn visual_replay_each_algorithm_allocation_site_fails_without_partial_publication() {
     let (size, pixels) = decode("T21.png");

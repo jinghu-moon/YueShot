@@ -1,0 +1,18 @@
+{
+  "sha256": "5390d6c3d85663a9b56003685c58a5a21150b5e7b64cbff18bb9a92ad0589792",
+  "bytes": 18277888,
+  "diagnosticStringsPresent": true,
+  "visualAtlasPresent": true,
+  "dependencyFiles": [
+    {
+      "file": "target/release/deps/yue_shot_capture-4d011ec1917b0c96.d",
+      "pipeline": true,
+      "worker": true
+    },
+    {
+      "file": "target/release/deps/yue_shot_capture-878b3c805f9bb035.d",
+      "pipeline": true,
+      "worker": true
+    }
+  ]
+}

@@ -84,10 +84,12 @@ impl VisualPipeline {
 
     pub fn request(&mut self, source: SelectionSource, owner: WindowCandidate, point: Point) {
         if owner.identity.creation_token == 0 {
+            log::info!(target: "yueshot.event", "capture.visual status=owner_unverified");
             self.invalidate();
             return;
         }
         if self.disabled == Some(source) {
+            log::info!(target: "yueshot.event", "capture.visual status=source_disabled");
             return;
         }
         let same = |key: Key| key.source == source && key.owner == owner && key.point == point;
@@ -116,6 +118,7 @@ impl VisualPipeline {
             self.published = None;
         }
         self.metrics.record_visual_submitted();
+        log::info!(target: "yueshot.event", "capture.visual status=submitted request={}", key.request);
         self.queued = Some(key);
     }
 
@@ -163,6 +166,7 @@ impl VisualPipeline {
         if let Some(active) = &self.active
             && active.started.elapsed() >= Duration::from_millis(100)
         {
+            log::info!(target: "yueshot.event", "capture.visual status=stall request={}", active.key.request);
             self.disabled = Some(active.key.source);
             self.invalidate();
         }
@@ -178,6 +182,7 @@ impl VisualPipeline {
                 } if self.active.as_ref().is_some_and(|a| a.key == key) => {
                     // Query + 2MiB explicit worker stack + conservative owner/atlas metadata.
                     if buffer_bound + 4 * 1_048_576 > 16 * 1_048_576 {
+                        log::info!(target: "yueshot.event", "capture.visual status=buffer_budget request={}", key.request);
                         self.disabled = Some(key.source);
                         self.invalidate();
                     } else {
@@ -197,6 +202,7 @@ impl VisualPipeline {
                                             .begin(source, regions)
                                     });
                                 if result.is_err() {
+                                    log::info!(target: "yueshot.event", "capture.visual status=transfer_begin_failed request={}", key.request);
                                     self.invalidate();
                                 }
                             }
@@ -237,6 +243,7 @@ impl VisualPipeline {
                                         self.published.as_ref().unwrap().rectangles.is_empty(),
                                         buffer_bound + 4 * 1_048_576,
                                     );
+                                    log::info!(target: "yueshot.event", "capture.visual status=completed request={} candidates={} elapsed_us={}", key.request, self.published.as_ref().unwrap().rectangles.len(), key.submitted.elapsed().as_micros());
                                     self.cache = Some((key.source, coverage));
                                     self.active = None;
                                     changed = true;
@@ -245,10 +252,11 @@ impl VisualPipeline {
                                 }
                             }
                             Step::Unavailable(reason) => {
-                                log::debug!("visual query unavailable: {reason:?}");
+                                log::info!(target: "yueshot.event", "capture.visual status=unavailable request={} reason={reason:?}", key.request);
                                 self.unavailable();
                             }
-                            _ => {
+                            Step::Complete(result) => {
+                                log::info!(target: "yueshot.event", "capture.visual status=incomplete request={} reason={:?}", key.request, result.completion);
                                 self.unavailable();
                             }
                         }
@@ -260,6 +268,7 @@ impl VisualPipeline {
         if let Some(active) = &self.active
             && active.started.elapsed() >= Duration::from_millis(100)
         {
+            log::info!(target: "yueshot.event", "capture.visual status=stall request={}", active.key.request);
             // Four times the 25ms qualification budget is a stall cut-off, not a relaxed latency gate.
             self.disabled = Some(active.key.source);
             self.invalidate();
@@ -268,6 +277,7 @@ impl VisualPipeline {
             let transfer = self.transfer.as_mut().unwrap();
             match transfer.submit_slice() {
                 Err(_) => {
+                    log::info!(target: "yueshot.event", "capture.visual status=transfer_submit_failed");
                     self.invalidate();
                 }
                 Ok(false) => {
@@ -284,6 +294,7 @@ impl VisualPipeline {
                         return changed;
                     }
                     Some(Err(_)) => {
+                        log::info!(target: "yueshot.event", "capture.visual status=transfer_map_failed");
                         if let Some(active) = &self.active {
                             self.disabled = Some(active.key.source);
                             self.invalidate();
@@ -335,6 +346,7 @@ impl VisualPipeline {
             if descriptor.format() != yue_media::PixelFormat::Bgra8Unorm
                 || descriptor.encoding() != yue_media::pixels::PixelEncoding::Srgb
             {
+                log::info!(target: "yueshot.event", "capture.visual status=unsupported_format");
                 self.disabled = Some(key.source);
                 return changed;
             }
@@ -374,6 +386,7 @@ impl VisualPipeline {
                     .ok_or_else(|| "missing visual source/atlas".to_owned())
                     .and_then(|(source, transfer)| transfer.begin(source, regions));
                 if result.is_err() {
+                    log::info!(target: "yueshot.event", "capture.visual status=initial_transfer_failed request={}", key.request);
                     self.disabled = Some(key.source);
                     self.invalidate();
                     return changed;

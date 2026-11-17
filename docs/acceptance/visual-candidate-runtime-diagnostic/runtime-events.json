@@ -1,0 +1,80 @@
+[
+  {
+    "timestampMs": 1794910634277,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=submitted request=1"
+  },
+  {
+    "timestampMs": 1794910634702,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=submitted request=2"
+  },
+  {
+    "timestampMs": 1794910634714,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=unavailable request=2 reason=BudgetExceeded"
+  },
+  {
+    "timestampMs": 1794910647572,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=submitted request=3"
+  },
+  {
+    "timestampMs": 1794910647673,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=stall request=3"
+  },
+  {
+    "timestampMs": 1794910647704,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=transfer_map_failed"
+  },
+  {
+    "timestampMs": 1794910654376,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=submitted request=4"
+  },
+  {
+    "timestampMs": 1794910654476,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=stall request=4"
+  },
+  {
+    "timestampMs": 1794910654508,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=transfer_map_failed"
+  },
+  {
+    "timestampMs": 1794910657722,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=submitted request=5"
+  },
+  {
+    "timestampMs": 1794910657755,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=unavailable request=5 reason=BudgetExceeded"
+  },
+  {
+    "timestampMs": 1794910729223,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=submitted request=6"
+  },
+  {
+    "timestampMs": 1794910729249,
+    "level": "INFO",
+    "stage": "yueshot.event",
+    "message": "capture.visual status=unavailable request=6 reason=BudgetExceeded"
+  }
+]

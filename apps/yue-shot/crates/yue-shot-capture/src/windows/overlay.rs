@@ -832,7 +832,9 @@ impl OverlayController {
             refinement,
             deep_target: None,
             combined_target: None,
-            visual: super::visual_pipeline::VisualPipeline::new(thread_id, metrics.clone()).ok(),
+            visual: super::visual_pipeline::VisualPipeline::new(thread_id, metrics.clone())
+                .inspect_err(|_| log::info!(target: "yueshot.event", "capture.visual status=worker_initialization_failed"))
+                .ok(),
             deep_levels: None,
             hint: None,
             hint_taught: false,

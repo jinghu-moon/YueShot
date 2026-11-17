@@ -98,6 +98,11 @@ impl OverlayController {
                 )
             });
         if next != self.combined_target {
+            if self.visual.as_ref().is_some_and(|v| v.published.is_some()) {
+                log::info!(target: "yueshot.event", "capture.visual status=fused origin={:?} native_kind={:?}",
+                    next.as_ref().and_then(|t| t.path.iter().find(|l| l.rect == t.screen_bounds)).map(|l| l.origin),
+                    self.deep_target.as_ref().and_then(|t| t.path.last()).map(|l| l.kind));
+            }
             self.combined_target = next;
             if let Some(combined) = &self.combined_target {
                 self.deep_levels = Some(LevelChain::new(combined.path.len()));

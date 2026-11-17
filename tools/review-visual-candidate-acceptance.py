@@ -15,11 +15,11 @@ import yueshot_visual_fixtures as fixtures
 
 ROOT = Path(__file__).resolve().parent.parent
 COUNTS = {
-    'visual-reference': (33, 31), 'product-replays': (29, 0),
+    'visual-reference': (34, 32), 'product-replays': (29, 0),
     'owner-lifetimes': (5, 0), 'transfer-faults': (1, 0),
 }
 BASELINE_COUNTS = {
-    'capture': (611, 122), 'media': (8, 0),
+    'capture': (612, 123), 'media': (8, 0),
     'geometry': (10, 0), 'native-baseline': (11, 18),
 }
 PENDING = [

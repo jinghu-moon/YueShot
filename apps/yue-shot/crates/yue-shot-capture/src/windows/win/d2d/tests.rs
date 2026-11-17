@@ -3038,6 +3038,15 @@ fn render_masked_frame(radius: i32) -> (Vec<u8>, u32) {
 /// 同上，但可以打开遮罩模糊、或换成棋盘底（量模糊用）。模糊开启时遮罩走
 /// `draw_bitmap_through`（PushLayer + 几何掩码）那条路径，而不是四条直边带。
 fn render_masked_with(radius: i32, mask_blur: bool, checker: bool) -> (Vec<u8>, u32) {
+    render_masked_shape(radius, mask_blur, checker, false)
+}
+
+fn render_masked_shape(
+    radius: i32,
+    mask_blur: bool,
+    checker: bool,
+    native_circle: bool,
+) -> (Vec<u8>, u32) {
     let device =
         super::GraphicsDevice::create().expect("this test needs a D3D11 device (docs/31 D-14)");
     let (width, height) = (400u32, 300u32);
@@ -3075,6 +3084,37 @@ fn render_masked_with(radius: i32, mask_blur: bool, checker: bool) -> (Vec<u8>, 
     view.show_handles = false;
     view.show_size_label = false;
     view.cursor_visible = false;
+    if native_circle && radius > 0 {
+        use ::windows::Win32::Graphics::Direct2D::Common::D2D1_FILL_MODE_ALTERNATE;
+        use ::windows::core::Interface;
+        let factory = unsafe { renderer.d2d.GetFactory() }.unwrap();
+        let outer: super::ID2D1Geometry =
+            unsafe { factory.CreateRectangleGeometry(&to_d2d(view.frame)) }
+                .unwrap()
+                .cast()
+                .unwrap();
+        let r = radius.min(crate::geometry::radius_cap(
+            view.selection.width(),
+            view.selection.height(),
+        )) as f32;
+        let inner: super::ID2D1Geometry = unsafe {
+            factory.CreateRoundedRectangleGeometry(&super::D2D1_ROUNDED_RECT {
+                rect: to_d2d(view.selection),
+                radiusX: r,
+                radiusY: r,
+            })
+        }
+        .unwrap()
+        .cast()
+        .unwrap();
+        let ring = unsafe {
+            factory.CreateGeometryGroup(D2D1_FILL_MODE_ALTERNATE, &[Some(outer), Some(inner)])
+        }
+        .unwrap()
+        .cast()
+        .unwrap();
+        renderer.mask_ring = Some((view.frame, view.selection, r as i32, ring));
+    }
     renderer.draw_to(&target_bitmap, &view).unwrap();
     let pixels = renderer.device().read_back_bgra(&target.texture).unwrap();
     (pixels, width)
@@ -3423,3 +3463,6 @@ fn with_every_label_item_off_no_badge_is_painted_and_no_menu_can_open() {
         "with every item off nothing is painted where the badge used to be"
     );
 }
+
+#[path = "smooth_corner_tests.rs"]
+mod smooth_corner_tests;

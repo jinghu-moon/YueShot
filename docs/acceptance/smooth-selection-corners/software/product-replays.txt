@@ -1,0 +1,55 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.20s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 32 tests
+test visual_detection::tests::visual_replay_each_algorithm_allocation_site_fails_without_partial_publication ... ok
+test window_detection::visual::tests::contracts::visual_replay_demo_q07_nested_duplicate_crossing_stage_vectors ... DEMO_FUSION q07_vectors=4 stage_only=true
+ok
+test window_detection::visual::tests::contracts::visual_replay_demo_t11_t20_q09_native_policy_vectors ... DEMO_FUSION native_policy_vectors=38 stage_only=true
+ok
+test window_detection::visual::tests::contracts::visual_replay_demo_t12_physical_dpi_origin_and_occlusion_vectors ... ok
+test window_detection::visual::tests::visual_replay_fusion_allocation_failure_keeps_native_fallback_available ... ok
+test window_detection::visual::tests::visual_replay_nested_single_pixel_layers_reachable_crossings_not_in_chain ... ok
+test window_detection::visual::tests::visual_replay_semantic_defaults_and_equal_geometry_keep_native_kind ... ok
+test window_detection::visual::tests::visual_replay_source_owner_occlusion_and_frozen_bounds_fail_closed ... ok
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_e08_second_session_rejects_old_answers_and_remains_operable ... ok
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_demo_t13_t14_t23_controller_event_contracts ... DEMO_EVENTS case=T13 wheel_steps=0 boundary=qualified_result
+DEMO_EVENTS case=T14 wheel_steps=0 boundary=qualified_result
+DEMO_EVENTS case=T23 wheel_steps=3 boundary=qualified_result
+DEMO_EVENTS T13_arrival_permutations=24 source=qualified_result
+DEMO_EVENTS T13_unsafe_refresh_rejections=7
+ok
+test windows::overlay::native_baseline::visual_replay::contracts::visual_replay_display_and_power_messages_retire_inflight_sources ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_cached_native_path_requeries_visual_on_new_dwell ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_confirms_visual_pixels_and_protects_native_text ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_controller_manual_choice_and_changed_owner_cannot_drift ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t15_phase_and_shift_late_completion_matrix ... DEMO_EVENTS T15_scenarios=8 actual_controller=true completion_from_real_pixels=true
+ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t16_analysis_does_not_change_export_or_source ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t17_failures_preserve_native_and_manual_and_retire_old_preview ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_demo_t19_and_q13_similar_pixels_reach_product_default ... DEMO_PRODUCT T19_T21_Q13_queries=16 detection_and_fusion=true
+ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_distant_clutter_cannot_restore_the_broad_native_preview ... ok
+test windows::overlay::native_baseline::visual_replay::visual_replay_missing_visual_worker_preserves_native_and_manual_controller ... ok
+test windows::visual_pipeline::tests::visual_replay_hung_map_cancel_and_shutdown_do_not_wait_for_gpu_completion ... VISUAL_GRAPHICS_SHUTDOWN fault=-2005270518 cancel_us=0 cpu_join_and_drop_us=231
+VISUAL_GRAPHICS_SHUTDOWN fault=-2005270523 cancel_us=0 cpu_join_and_drop_us=443
+ok
+test windows::visual_pipeline::tests::visual_replay_latest_query_stays_bounded_across_thousand_moves_and_cancel ... ok
+test windows::visual_pipeline::tests::visual_replay_local_target_survives_failed_expansion_and_seed_change ... ok
+test windows::visual_pipeline::tests::visual_replay_optional_expansion_timeout_keeps_only_current_verified_pixels ... ok
+test windows::visual_pipeline::tests::visual_replay_owner_allocation_failures_never_publish_partial_results ... ok
+test windows::visual_pipeline::tests::visual_replay_product_pipeline_queries_reuses_pixels_and_rejects_retired_source ... ok
+test windows::visual_pipeline::tests::visual_replay_query_budget_failure_does_not_disable_other_points_in_same_frame ... ok
+test windows::visual_pipeline::tests::visual_replay_request_exhaustion_and_late_reply_keys_fail_closed ... ok
+test windows::visual_pipeline::tests::visual_replay_timeout_cancel_drain_blocks_reuse_until_safe_completion ... ok
+test windows::visual_worker::tests::visual_replay_cancel_during_poll_releases_cpu_pixels_before_idle ... VISUAL_SHUTDOWN cpu_only_us=51
+ok
+test windows::win::d3d11::visual_transfer::tests::visual_replay_demo_q05_actual_read_coverage_and_bounded_requery ... DEMO_READ_COVERAGE id="Q05-full" read_count=1 actual_read_bytes=196608 requested_extra_bytes=0 denied=false source_unchanged=true
+DEMO_READ_COVERAGE id="Q05-crop" read_count=1 actual_read_bytes=102400 requested_extra_bytes=12288 denied=true source_unchanged=true
+DEMO_READ_COVERAGE id="Q05-recover" read_count=53 actual_read_bytes=147456 requested_extra_bytes=45056 denied=false source_unchanged=true
+ok
+test windows::win::d3d11::visual_transfer::tests::visual_replay_demo_t22_partitioned_raw_reads_preserve_pixels_evidence_and_d2d ... DEMO_TRANSFER T22 partitions=9 raw_bytes_exact=true evidence_exact=true source_unchanged=true d2d_output_exact=true compute_shader=false
+ok
+
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 720 filtered out; finished in 12.02s
+

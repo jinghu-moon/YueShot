@@ -1,0 +1,6 @@
+{
+  "command": "git diff --cached --check (excluding immutable raw test *.txt logs)",
+  "reason": "Preserve original libtest trailing whitespace and terminal newlines.",
+  "exitCode": 0,
+  "rawOutputExitCode": 2
+}

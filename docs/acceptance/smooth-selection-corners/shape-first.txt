@@ -1,0 +1,34 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 20s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 6 tests
+test artifact::tests::smooth_corner_export_matches_independent_quartic_samples_and_preserves_rgb ... ok
+test geometry::rounded_frame_tests::smooth_corner_grips_follow_the_quartic_diagonal_and_radius_cap ... ok
+test selection_shape::tests::smooth_corner_cubics_are_monotone_symmetric_and_g2 ... ok
+test selection_shape::tests::smooth_corner_cubics_follow_the_analytic_boundary_with_subpixel_error ... SMOOTH_CORNER maximum_coordinate_error_at_128px=0.0012996480213871564
+ok
+
+thread 'windows::win::d2d::tests::smooth_corner_tests::smooth_corner_d2d_path_matches_analytic_boundaries_in_all_four_corners' (13900) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\smooth_corner_tests.rs:40:21:
+assertion `left == right` failed: r=1 (-79.32708407280164,579.998046875)
+  left: true
+ right: false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::win::d2d::tests::smooth_corner_tests::smooth_corner_d2d_path_matches_analytic_boundaries_in_all_four_corners ... FAILED
+test windows::win::d2d::tests::smooth_corner_tests::smooth_corner_rendered_mask_matches_export_and_outline_cache_tracks_radius ... SMOOTH_CORNER mask_export_max_channel_error r=0 error=0
+SMOOTH_CORNER mask_export_max_channel_error r=1 error=5.0431366
+
+thread 'windows::win::d2d::tests::smooth_corner_tests::smooth_corner_rendered_mask_matches_export_and_outline_cache_tracks_radius' (35064) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\smooth_corner_tests.rs:80:9:
+r=2 error=11.12941
+SMOOTH_CORNER mask_export_max_channel_error r=2 error=11.12941
+FAILED
+
+failures:
+
+failures:
+    windows::win::d2d::tests::smooth_corner_tests::smooth_corner_d2d_path_matches_analytic_boundaries_in_all_four_corners
+    windows::win::d2d::tests::smooth_corner_tests::smooth_corner_rendered_mask_matches_export_and_outline_cache_tracks_radius
+
+test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 743 filtered out; finished in 0.56s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

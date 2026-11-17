@@ -1,0 +1,17 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 28s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+test artifact::tests::selection_corner_characterization ... CORNER_ALPHA 20 20 0 fcf1802e908b55dae2745976eeabf25e1e252f6d0487a5e5cad898ce0715e695
+CORNER_ALPHA 24 40 6 58d2898611227d54ece1ecfae05c38f4b2757ced80fe3b9301c946cdae292725
+CORNER_ALPHA 100 70 16 ecc3c6cb3d3880a5a3ac8b336cd6d71319532798fded2b2ed47a258f24e89209
+CORNER_ALPHA 512 512 128 d9691c3c3fcb7b17767096469d2f7f31eb16551dcb7a46a14bcadc3218bef6b4
+CORNER_HANDLE 0 Point { x: 0, y: 0 }
+CORNER_HANDLE 10 Point { x: 3, y: 3 }
+CORNER_HANDLE 48 Point { x: 14, y: 14 }
+CORNER_HANDLE 60 Point { x: 18, y: 18 }
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 742 filtered out; finished in 0.00s
+

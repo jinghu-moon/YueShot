@@ -1,0 +1,11 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 23s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 2 tests
+test selection_shape::tests::smooth_corner_cubics_are_monotone_symmetric_and_g2 ... ok
+test selection_shape::tests::smooth_corner_cubics_follow_the_analytic_boundary_with_subpixel_error ... SMOOTH_CORNER maximum_coordinate_error_at_128px=0.0012996480213871564
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 743 filtered out; finished in 0.00s
+

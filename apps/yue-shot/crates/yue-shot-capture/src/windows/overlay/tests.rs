@@ -1497,3 +1497,19 @@ fn a_rounded_selection_narrows_the_countdown_region_to_a_rounded_ring() {
         _ => panic!("圆角选区应走圆角环"),
     }
 }
+
+#[test]
+fn smooth_corner_countdown_clamps_to_the_same_radius_as_the_drawn_selection() {
+    use crate::windows::win::window::WindowRegion;
+    let selection = Rect::new(100, 100, 200, 170);
+    for dpi in [96, 120, 144, 192] {
+        let pieces = super::session::countdown_window_pieces(selection, None, dpi, 128);
+        match pieces[0] {
+            WindowRegion::RoundRing { outer, radius, .. } => {
+                let reach = selection.left - outer.left;
+                assert_eq!(radius - reach, crate::geometry::radius_cap(100, 70));
+            }
+            _ => panic!("non-zero radius must retain the shaped band"),
+        }
+    }
+}

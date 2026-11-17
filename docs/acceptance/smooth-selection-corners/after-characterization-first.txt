@@ -1,0 +1,14 @@
+
+running 1 test
+test artifact::tests::selection_corner_characterization ... CORNER_ALPHA 20 20 0 fcf1802e908b55dae2745976eeabf25e1e252f6d0487a5e5cad898ce0715e695
+CORNER_ALPHA 24 40 6 5ffd362b44e6bd4975bb918e30b8f9757c6113afe9fa2347951d389a54c30015
+CORNER_ALPHA 100 70 16 4348b772de77dd513269f118135e0cd548733f3af69a5d78f1f4ba695938bf63
+CORNER_ALPHA 512 512 128 a5da145b8bcfcc9d3dc932acccaedebf8261bd7df96b8d6bd678e1971ecaf28b
+CORNER_HANDLE 0 Point { x: 0, y: 0 }
+CORNER_HANDLE 10 Point { x: 2, y: 2 }
+CORNER_HANDLE 48 Point { x: 8, y: 8 }
+CORNER_HANDLE 60 Point { x: 10, y: 10 }
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 750 filtered out; finished in 0.00s
+

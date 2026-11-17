@@ -1,0 +1,47 @@
+docs/acceptance/smooth-selection-corners/after-characterization-first.txt:14: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/before-artifact.txt:15: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/before-blurred-mask.txt:8: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/before-characterization.txt:17: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/before-gdi.txt:6: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/before-geometry.txt:11: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/before-mask.txt:9: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/blurred-mask-regression.txt:8: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/capture-regression.txt:738: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/smooth-selection-corners/capture-regression.txt:765: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/curve-final.txt:11: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/engineering-check.txt:103: trailing whitespace.
++test instance::tests::a_second_process_transfers_capture_without_becoming_a_writer ... 
+docs/acceptance/smooth-selection-corners/engineering-check.txt:117: trailing whitespace.
++test instance::tests::isolated_roots_can_run_independently_and_crash_releases_the_writer_lock ... 
+docs/acceptance/smooth-selection-corners/engineering-check.txt:1140: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/smooth-selection-corners/engineering-check.txt:1510: trailing whitespace.
++ 
+docs/acceptance/smooth-selection-corners/final-source/blurred.txt:8: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/capture.txt:738: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/smooth-selection-corners/final-source/capture.txt:765: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/engineering.txt:103: trailing whitespace.
++test instance::tests::a_second_process_transfers_capture_without_becoming_a_writer ... 
+docs/acceptance/smooth-selection-corners/final-source/engineering.txt:117: trailing whitespace.
++test instance::tests::isolated_roots_can_run_independently_and_crash_releases_the_writer_lock ... 
+docs/acceptance/smooth-selection-corners/final-source/engineering.txt:1140: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/smooth-selection-corners/final-source/mask.txt:9: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/shape.txt:25: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/software/owner-lifetimes.txt:12: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/software/product-replays.txt:55: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/software/transfer-faults.txt:9: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/software/visual-reference.txt:92: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/source-contract.txt:14: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/final-source/taskbar.txt:9: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/mask-regression.txt:9: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/shape-final.txt:25: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/shape-sixth.txt:25: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/software/owner-lifetimes.txt:12: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/software/product-replays.txt:55: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/software/transfer-faults.txt:9: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/software/visual-reference.txt:92: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/source-contract.txt:14: new blank line at EOF.
+docs/acceptance/smooth-selection-corners/taskbar-regression.txt:9: new blank line at EOF.

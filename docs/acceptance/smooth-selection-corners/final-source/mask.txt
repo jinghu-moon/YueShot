@@ -1,0 +1,9 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.20s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 2 tests
+test windows::win::d2d::tests::the_mask_hole_follows_the_rounded_selection ... ok
+test windows::win::d2d::tests::the_mask_ring_cache_does_not_keep_a_stale_shape ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 750 filtered out; finished in 0.54s
+

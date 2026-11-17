@@ -1,0 +1,11 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.28s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 4 tests
+test geometry::rounded_frame_tests::a_corner_grip_sits_on_the_arc_and_moves_out_with_the_radius ... ok
+test geometry::rounded_frame_tests::the_cap_is_a_quarter_of_the_short_side ... ok
+test geometry::rounded_frame_tests::the_session_snapshot_carries_the_panel_radius ... ok
+test geometry::rounded_frame_tests::the_whole_corner_region_grabs_the_corner_grip ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 738 filtered out; finished in 0.00s
+

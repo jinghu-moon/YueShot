@@ -1,0 +1,41 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 27s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 9 tests
+test artifact::tests::smooth_corner_export_cost_diagnostic ... SMOOTH_CORNER_EXPORT samples=300 radius=128 circle_p95_ns=30400 smooth_p95_ns=19300 old_scratch_bytes=16384 new_scratch_bytes=0
+ok
+test artifact::tests::smooth_corner_export_matches_independent_quartic_samples_and_preserves_rgb ... ok
+test geometry::rounded_frame_tests::smooth_corner_grips_follow_the_quartic_diagonal_and_radius_cap ... ok
+test selection_shape::tests::smooth_corner_cubics_are_monotone_symmetric_and_g2 ... ok
+test selection_shape::tests::smooth_corner_cubics_follow_the_analytic_boundary_with_subpixel_error ... SMOOTH_CORNER maximum_coordinate_error_at_128px=0.0012996480213871564
+ok
+test windows::overlay::tests::smooth_corner_countdown_clamps_to_the_same_radius_as_the_drawn_selection ... ok
+
+thread 'windows::win::d2d::tests::smooth_corner_tests::smooth_corner_d2d_path_matches_analytic_boundaries_in_all_four_corners' (35888) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\smooth_corner_tests.rs:13:9:
+assertion `left == right` failed
+  left: [-80.0, -60.000004, 560.0, 580.0]
+ right: [-80.0, -60.0, 560.0, 580.0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test windows::win::d2d::tests::smooth_corner_tests::smooth_corner_d2d_path_matches_analytic_boundaries_in_all_four_corners ... FAILED
+test windows::win::d2d::tests::smooth_corner_tests::smooth_corner_rendered_mask_matches_export_and_outline_cache_tracks_radius ... SMOOTH_CORNER mask_export_max_channel_error r=0 error=0 outside=121 worst=(0, 0, 0.0, 0.0, 0.0)
+SMOOTH_CORNER mask_export_max_channel_error r=1 error=5.874054 outside=121 worst=(0, 0, 0.9529412, 195.87405, 190.0)
+SMOOTH_CORNER mask_export_max_channel_error r=2 error=9.457809 outside=121 worst=(0, 199, 0.7019608, 174.54219, 184.0)
+SMOOTH_CORNER mask_export_max_channel_error r=16 error=10.126144 outside=121 worst=(0, 194, 0.18431373, 134.12614, 124.0)
+SMOOTH_CORNER mask_export_max_channel_error r=48 error=10.126144 outside=121 worst=(1, 181, 0.18431373, 134.12614, 124.0)
+SMOOTH_CORNER mask_export_max_channel_error r=128 error=10.264648 outside=121 worst=(278, 22, 0.8117647, 183.73535, 194.0)
+
+thread 'windows::win::d2d::tests::smooth_corner_tests::smooth_corner_rendered_mask_matches_export_and_outline_cache_tracks_radius' (32996) panicked at apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\smooth_corner_tests.rs:112:5:
+mask/export coverage: [(0, 0.0, 6.9375), (1, 5.874054, 6.9375), (2, 9.457809, 6.9375), (16, 10.126144, 6.9375), (48, 10.126144, 6.9375), (128, 10.264648, 6.9375)]
+FAILED
+test windows::win::window::tests::smooth_corner_gdi_holes_match_quartic_pixel_centres_and_leave_other_regions_intact ... ok
+
+failures:
+
+failures:
+    windows::win::d2d::tests::smooth_corner_tests::smooth_corner_d2d_path_matches_analytic_boundaries_in_all_four_corners
+    windows::win::d2d::tests::smooth_corner_tests::smooth_corner_rendered_mask_matches_export_and_outline_cache_tracks_radius
+
+test result: FAILED. 7 passed; 2 failed; 0 ignored; 0 measured; 743 filtered out; finished in 0.96s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

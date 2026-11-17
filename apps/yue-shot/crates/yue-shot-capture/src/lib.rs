@@ -34,6 +34,7 @@ pub mod events;
 pub mod geometry;
 pub mod keymap;
 pub mod monitor_cache;
+mod selection_shape;
 // Shared font resources belong to yue-shot-overlay-ui, alongside the other native UI primitives.
 pub mod ports;
 pub mod preferences;

@@ -19,7 +19,7 @@ COUNTS = {
     'owner-lifetimes': (5, 0), 'transfer-faults': (1, 0),
 }
 BASELINE_COUNTS = {
-    'capture': (616, 126), 'media': (8, 0),
+    'capture': (623, 129), 'media': (8, 0),
     'geometry': (10, 0), 'native-baseline': (11, 19),
 }
 PENDING = [

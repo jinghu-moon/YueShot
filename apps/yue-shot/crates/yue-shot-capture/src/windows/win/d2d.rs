@@ -77,6 +77,7 @@ use yue_shot_overlay_ui::panel::{Glyph, PanelTheme, Segment, SegmentState, Tag, 
 mod color;
 #[cfg(test)]
 mod hdr_tests;
+mod selection_path;
 
 /// The font family used for the size label, per the tasklist (§6.3) — the same two families the
 /// overlay's typeface falls back to.
@@ -443,6 +444,9 @@ pub struct OverlayRenderer {
     mask_brush: Option<ID2D1SolidColorBrush>,
     /// 圆角洞的"框减去圆角洞"几何（帧、洞、半径变化时重建）。见 `rounded_hole_geometry`。
     mask_ring: Option<(Rect, Rect, i32, ID2D1Geometry)>,
+    /// Native rounded rectangles needed no path allocation per paint. Cache the
+    /// replacement path so idle rendering still creates no selection geometry.
+    selection_outline: Option<(Rect, i32, ID2D1Geometry)>,
     /// `rgba(255,255,255,0.10)` — lifts the hovered window out of the dark mask.
     hover_fill_brush: Option<ID2D1SolidColorBrush>,
     /// Accent wash at low alpha — marks the automatic-snap preview.
@@ -680,6 +684,7 @@ impl OverlayRenderer {
             countdown_brush: None,
             mask_brush: None,
             mask_ring: None,
+            selection_outline: None,
             hover_fill_brush: None,
             preview_fill_brush: None,
             preview_stroke_brush: None,
@@ -1429,15 +1434,7 @@ impl OverlayRenderer {
             .map_err(|error| super::hresult("CreateRectangleGeometry", &error))?
             .cast()
             .map_err(|error| super::hresult("cast to ID2D1Geometry", &error))?;
-        let rounded = D2D1_ROUNDED_RECT {
-            rect: to_d2d(hole),
-            radiusX: radius as f32,
-            radiusY: radius as f32,
-        };
-        let inner: ID2D1Geometry = unsafe { factory.CreateRoundedRectangleGeometry(&rounded) }
-            .map_err(|error| super::hresult("CreateRoundedRectangleGeometry", &error))?
-            .cast()
-            .map_err(|error| super::hresult("cast to ID2D1Geometry", &error))?;
+        let inner = selection_path::geometry(&factory, hole, radius)?;
         // Alternate fill: the rounded hole inside the frame rect cancels out, leaving the band.
         // (`ID2D1Factory` in this windows crate exposes `CreateGeometryGroup`, not
         // `CreateCombinedGeometry`.)
@@ -1850,7 +1847,9 @@ impl OverlayRenderer {
             return Ok(());
         }
         let metrics = self.metrics;
-        let border = self.require_brush(&self.border_brush, "border brush")?;
+        let border = self
+            .require_brush(&self.border_brush, "border brush")?
+            .clone();
         // 圆角跟着选区走（docs/23 §14.55.21）：半径 0 就是原来的直角框，半径越大弧越明显。
         // 半径上限与手柄布局、图像遮罩共用 `geometry::radius_cap`。
         let frame_radius = view.corner_radius.min(crate::geometry::radius_cap(
@@ -1859,17 +1858,32 @@ impl OverlayRenderer {
         ));
         if frame_radius > 0 {
             let inset = (metrics.border_width / 2.0).round() as i32;
-            self.stroke_round(
-                Rect::new(
-                    selection.left + inset,
-                    selection.top + inset,
-                    selection.right - inset,
-                    selection.bottom - inset,
-                ),
-                (frame_radius - inset).max(0),
-                &border,
-                metrics.border_width,
+            let bounds = Rect::new(
+                selection.left + inset,
+                selection.top + inset,
+                selection.right - inset,
+                selection.bottom - inset,
             );
+            let radius = (frame_radius - inset).max(0);
+            if self
+                .selection_outline
+                .as_ref()
+                .is_none_or(|(rect, r, _)| *rect != bounds || *r != radius)
+            {
+                let factory = unsafe { self.d2d.GetFactory() }
+                    .map_err(|e| super::hresult("GetFactory(selection outline)", &e))?;
+                self.selection_outline = Some((
+                    bounds,
+                    radius,
+                    selection_path::geometry(&factory, bounds, radius)?,
+                ));
+            }
+            if let Some((_, _, geometry)) = &self.selection_outline {
+                unsafe {
+                    self.d2d
+                        .DrawGeometry(geometry, &border, metrics.border_width, None);
+                }
+            }
         } else {
             unsafe {
                 self.d2d.DrawRectangle(
@@ -3568,6 +3582,7 @@ impl OverlayRenderer {
         self.countdown_brush = None;
         self.mask_brush = None;
         self.mask_ring = None;
+        self.selection_outline = None;
         self.preview_fill_brush = None;
         self.preview_stroke_brush = None;
         self.badge_line_brush = None;

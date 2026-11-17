@@ -1,0 +1,12 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.22s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 5 tests
+test windows::top_level_provider::lifetime::tests::owner_lifetime_capability_and_allocation_failure_leave_no_tag ... ok
+test windows::top_level_provider::lifetime::tests::owner_lifetime_capacity_and_invalid_handle_fail_closed ... ok
+test windows::top_level_provider::lifetime::tests::owner_lifetime_destroy_does_not_transfer_property_to_next_window ... ok
+test windows::top_level_provider::lifetime::tests::owner_lifetime_providers_reset_and_drop_are_isolated ... ok
+test windows::top_level_provider::lifetime::tests::owner_lifetime_stable_until_property_loss_then_new_tag ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 747 filtered out; finished in 0.02s
+

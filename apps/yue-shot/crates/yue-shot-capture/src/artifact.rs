@@ -182,7 +182,7 @@ pub const MAX_CORNER_RADIUS_PX: u32 = 128;
 /// radius of zero returns before touching a byte, so the no-rounding path is byte-identical
 /// to the readback.
 ///
-/// Coverage comes from 4x4 supersampling inside the radius square: the aliasing of a mask
+/// Coverage comes from 8x8 supersampling only in boundary pixels: the aliasing of a mask
 /// this small is exactly what would make a rounded window corner look like a staircase.
 pub fn round_corners(bgra: &mut [u8], width: u32, height: u32, radius: u32) {
     visit_corners(width, height, radius, |index, cov| {
@@ -247,31 +247,26 @@ fn visit_corners(width: u32, height: u32, radius: u32, mut apply: impl FnMut(usi
         return;
     }
     let r = radius as f32;
-    let samples = 4u32;
-    let mut coverage = vec![255u8; (radius * radius) as usize];
+    let samples = 8u32;
     for y in 0..radius {
         for x in 0..radius {
-            let mut inside = 0u32;
-            for sy in 0..samples {
-                for sx in 0..samples {
-                    // Sub-pixel centre, measured from the corner's outer edge.
-                    let px = x as f32 + (sx as f32 + 0.5) / samples as f32;
-                    let py = y as f32 + (sy as f32 + 0.5) / samples as f32;
-                    // Distance from the corner circle's centre (r, r): inside the round
-                    // means inside the quarter disc, not merely inside the corner block.
-                    let dx = r - px;
-                    let dy = r - py;
-                    if dx * dx + dy * dy <= r * r {
-                        inside += 1;
+            // Monotone corner boundary: one exact check proves full coverage;
+            // the opposite corner proves zero. Only crossing pixels need AA.
+            let cov = if crate::selection_shape::contains_corner(x as f32, y as f32, r) {
+                255
+            } else if !crate::selection_shape::contains_corner(x as f32 + 1., y as f32 + 1., r) {
+                0
+            } else {
+                let mut inside = 0u32;
+                for sy in 0..samples {
+                    for sx in 0..samples {
+                        let px = x as f32 + (sx as f32 + 0.5) / samples as f32;
+                        let py = y as f32 + (sy as f32 + 0.5) / samples as f32;
+                        inside += u32::from(crate::selection_shape::contains_corner(px, py, r));
                     }
                 }
-            }
-            coverage[(y * radius + x) as usize] = ((inside * 255) / (samples * samples)) as u8;
-        }
-    }
-    for y in 0..radius {
-        for x in 0..radius {
-            let cov = coverage[(y * radius + x) as usize];
+                ((inside * 255) / (samples * samples)) as u8
+            };
             if cov == 255 {
                 continue;
             }
@@ -461,6 +456,166 @@ mod tests {
         assert_eq!(clipped, Rect::new(0, 0, 10, 10));
     }
     #[test]
+    #[ignore = "Release paired export benchmark; legacy circle formula is test-only, never a product path"]
+    fn smooth_corner_export_cost_diagnostic() {
+        fn circle(pixels: &mut [u8]) {
+            let radius = 128u32;
+            let mut coverage = vec![255; (radius * radius) as usize];
+            for y in 0..radius {
+                for x in 0..radius {
+                    let mut inside = 0u32;
+                    for sy in 0..4 {
+                        for sx in 0..4 {
+                            let dx = radius as f32 - (x as f32 + (sx as f32 + 0.5) / 4.);
+                            let dy = radius as f32 - (y as f32 + (sy as f32 + 0.5) / 4.);
+                            inside += u32::from(dx * dx + dy * dy <= (radius * radius) as f32);
+                        }
+                    }
+                    coverage[(y * radius + x) as usize] = (inside * 255 / 16) as u8;
+                }
+            }
+            for y in 0..radius {
+                for x in 0..radius {
+                    let cov = coverage[(y * radius + x) as usize];
+                    if cov == 255 {
+                        continue;
+                    }
+                    for (px, py) in [(x, y), (511 - x, y), (x, 511 - y), (511 - x, 511 - y)] {
+                        let alpha = &mut pixels[((py * 512 + px) * 4 + 3) as usize];
+                        *alpha = (u16::from(*alpha) * u16::from(cov) / 255) as u8;
+                    }
+                }
+            }
+        }
+        let mut pixels = vec![255; 512 * 512 * 4];
+        circle(&mut pixels);
+        assert_eq!(
+            blake3::hash(&pixels).to_hex().as_str(),
+            "d9691c3c3fcb7b17767096469d2f7f31eb16551dcb7a46a14bcadc3218bef6b4"
+        );
+        let mut times = [Vec::new(), Vec::new()];
+        for iteration in 0..310 {
+            // Alternate order to reduce systematic warm-cache/frequency bias.
+            for index in [iteration % 2, 1 - iteration % 2] {
+                pixels.fill(255);
+                let started = std::time::Instant::now();
+                if index == 0 {
+                    circle(std::hint::black_box(&mut pixels));
+                } else {
+                    super::round_corners(std::hint::black_box(&mut pixels), 512, 512, 128);
+                }
+                let elapsed = started.elapsed().as_nanos();
+                std::hint::black_box(&pixels);
+                if iteration >= 10 {
+                    times[index].push(elapsed);
+                }
+            }
+        }
+        for t in &mut times {
+            t.sort_unstable();
+        }
+        let old = times[0][284];
+        let new = times[1][284];
+        println!(
+            "SMOOTH_CORNER_EXPORT samples=300 radius=128 circle_p95_ns={old} smooth_p95_ns={new} old_scratch_bytes=16384 new_scratch_bytes=0"
+        );
+        assert!(
+            new <= old * 5 / 4 + 50000,
+            "export regression: {new} vs {old}"
+        );
+    }
+
+    #[test]
+    fn selection_corner_characterization() {
+        for (width, height, radius, expected) in [
+            (
+                20,
+                20,
+                0,
+                "fcf1802e908b55dae2745976eeabf25e1e252f6d0487a5e5cad898ce0715e695",
+            ),
+            (
+                24,
+                40,
+                6,
+                "5ffd362b44e6bd4975bb918e30b8f9757c6113afe9fa2347951d389a54c30015",
+            ),
+            (
+                100,
+                70,
+                16,
+                "4348b772de77dd513269f118135e0cd548733f3af69a5d78f1f4ba695938bf63",
+            ),
+            (
+                512,
+                512,
+                128,
+                "a5da145b8bcfcc9d3dc932acccaedebf8261bd7df96b8d6bd678e1971ecaf28b",
+            ),
+        ] {
+            let mut pixels = vec![255; (width * height * 4) as usize];
+            super::round_corners(&mut pixels, width, height, radius);
+            let hash = blake3::hash(&pixels);
+            println!("CORNER_ALPHA {width} {height} {radius} {hash}");
+            assert_eq!(hash.to_hex().as_str(), expected);
+        }
+        let rect = Rect::new(0, 0, 400, 300);
+        for (radius, expected) in [(0, 0), (10, 2), (48, 8), (60, 10)] {
+            assert_eq!(
+                crate::geometry::corner_handle_anchor(
+                    rect,
+                    radius,
+                    crate::geometry::Handle::TopLeft
+                ),
+                Point::new(expected, expected)
+            );
+            println!(
+                "CORNER_HANDLE {radius} {:?}",
+                crate::geometry::corner_handle_anchor(
+                    rect,
+                    radius,
+                    crate::geometry::Handle::TopLeft
+                )
+            );
+        }
+    }
+
+    #[test]
+    fn smooth_corner_export_matches_independent_quartic_samples_and_preserves_rgb() {
+        for radius in [0u32, 1, 2, 3, 5, 16, 32, 128] {
+            let (width, height) = (radius.max(1) * 4, radius.max(1) * 5);
+            let mut pixels = [17, 31, 59, 173].repeat((width * height) as usize);
+            super::round_corners(&mut pixels, width, height, radius);
+            for y in 0..height {
+                for x in 0..width {
+                    let px = x.min(width - 1 - x);
+                    let py = y.min(height - 1 - y);
+                    let mut inside = 64;
+                    if px < radius && py < radius {
+                        inside = 0;
+                        for sy in 0..8 {
+                            for sx in 0..8 {
+                                let dx = (f64::from(radius)
+                                    - f64::from(px)
+                                    - (f64::from(sx) + 0.5) / 8.)
+                                    / f64::from(radius);
+                                let dy = (f64::from(radius)
+                                    - f64::from(py)
+                                    - (f64::from(sy) + 0.5) / 8.)
+                                    / f64::from(radius);
+                                inside += u32::from(dx.powi(4) + dy.powi(4) <= 1.);
+                            }
+                        }
+                    }
+                    let expected = (173 * (inside * 255 / 64) / 255) as u8;
+                    let pixel = &pixels[((y * width + x) * 4) as usize..][..4];
+                    assert_eq!(pixel, &[17, 31, 59, expected], "r={radius} ({x},{y})");
+                }
+            }
+        }
+    }
+
+    #[test]
     fn rounding_a_corner_only_touches_the_corner() {
         use super::round_corners;
         let (w, h) = (20u32, 20u32);
@@ -473,7 +628,7 @@ mod tests {
         assert_eq!(pixels, before, "半径 0 必须逐字节不变");
 
         round_corners(&mut pixels, w, h, 6);
-        assert_eq!(pixels[3], 0, "左上角整像素落在圆外 ⇒ 全透明");
+        assert_eq!(pixels[3], 23, "五像素四阶超椭圆在首像素覆盖6/64");
         let centre = (((h / 2) * w + w / 2) * 4 + 3) as usize;
         assert_eq!(pixels[centre], 255, "中心不透明");
         // 圆弧穿过的那些格子要出现中间 alpha —— 抗锯齿的证据。别赌某一格：扫角块，

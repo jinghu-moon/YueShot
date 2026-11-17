@@ -1,0 +1,9 @@
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.20s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 2 tests
+test window_detection::snapshot::tests::taskbar_and_tray_hosts_reach_native_refinement_with_real_owner_bounds ... ok
+test windows::overlay::native_baseline::taskbar_tray_controller_replay_selects_and_confirms_native_children ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 750 filtered out; finished in 3.05s
+

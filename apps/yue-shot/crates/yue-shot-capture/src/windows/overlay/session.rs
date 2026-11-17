@@ -1336,6 +1336,12 @@ pub(super) fn countdown_window_pieces(
     if selection.is_empty() {
         return Vec::new();
     }
+    let radius = radius
+        .min(crate::geometry::radius_cap(
+            selection.width(),
+            selection.height(),
+        ))
+        .max(0);
     let scale = dpi.max(96) as f32 / 96.0;
     // 选框环：外框外扩、内框内缩；环宽要够放框线与手柄圆点。
     let reach = (COUNTDOWN_RING_REACH_DIP * scale).round().max(1.0) as i32;

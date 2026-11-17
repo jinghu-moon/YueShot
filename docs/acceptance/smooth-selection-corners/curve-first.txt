@@ -1,0 +1,11 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0432]: unresolved imports `windows::Win32::Graphics::Direct2D::D2D1_FIGURE_BEGIN_FILLED`, `windows::Win32::Graphics::Direct2D::D2D1_FIGURE_END_CLOSED`
+ --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\selection_path.rs:7:5
+  |
+7 |     D2D1_FIGURE_BEGIN_FILLED, D2D1_FIGURE_END_CLOSED, ID2D1Factory,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^ no `D2D1_FIGURE_END_CLOSED` in `Win32::Graphics::Direct2D`
+  |     |
+  |     no `D2D1_FIGURE_BEGIN_FILLED` in `Win32::Graphics::Direct2D`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `yue-shot-capture` (lib test) due to 1 previous error

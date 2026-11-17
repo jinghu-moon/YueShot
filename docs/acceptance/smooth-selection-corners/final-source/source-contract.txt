@@ -1,0 +1,14 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 24.13s
+     Running tests\source_contract.rs (target\release\deps\source_contract-d86c1e20c505c473.exe)
+
+running 6 tests
+test a_source_change_during_readback_is_rejected ... ok
+test band_materialization_preserves_fp16_and_refuses_mixed_generations ... ok
+test equal_layout_with_a_different_generation_is_rejected ... ok
+test readback_must_match_the_frozen_color_definition ... ok
+test rounded_fp16_keeps_hdr_rgb_and_multiplies_associated_color ... ok
+test selection_preserves_fp16_bits_encoding_and_generation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

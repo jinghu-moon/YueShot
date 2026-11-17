@@ -61,7 +61,7 @@ pub enum WindowRegion {
     /// A rounded frame band: the arcs follow the selection's own corners (docs/23 §14.55.22).
     ///
     /// `radius` is the **outer** band radius; the hole's radius is derived from the band width,
-    /// so the two arcs stay concentric however wide the band is.
+    /// so both boundaries use the same continuous-corner definition.
     RoundRing {
         outer: Rect,
         inner: Rect,
@@ -79,6 +79,79 @@ pub enum WindowRegion {
     },
 }
 
+/// Build the selection's binary GDI shape from the same quartic boundary as
+/// D2D/export. One ExtCreateRegion call replaces circle-only CreateRoundRectRgn;
+/// at most 2r+1 scanline rectangles, coalesced where the cut is unchanged.
+fn selection_region(rect: Rect, radius: i32) -> windows_sys::Win32::Graphics::Gdi::HRGN {
+    use windows_sys::Win32::Foundation::RECT;
+    use windows_sys::Win32::Graphics::Gdi::{
+        CreateRectRgn, ExtCreateRegion, RDH_RECTANGLES, RGNDATAHEADER,
+    };
+    let radius = radius.max(0).min(rect.width() / 2).min(rect.height() / 2);
+    if radius <= 0 || rect.is_empty() {
+        return unsafe { CreateRectRgn(rect.left, rect.top, rect.right, rect.bottom) };
+    }
+    let mut rectangles: Vec<RECT> = Vec::with_capacity((radius * 2 + 1) as usize);
+    let mut add_row = |top, bottom, cut| {
+        let left = rect.left + cut;
+        let right = rect.right - cut;
+        if let Some(previous) = rectangles.last_mut()
+            && previous.left == left
+            && previous.right == right
+            && previous.bottom == top
+        {
+            previous.bottom = bottom;
+        } else {
+            rectangles.push(RECT {
+                left,
+                top,
+                right,
+                bottom,
+            });
+        }
+    };
+    let cut = |y| {
+        (crate::selection_shape::boundary_inset(f64::from(y) + 0.5, f64::from(radius)) - 0.5)
+            .ceil()
+            .max(0.) as i32
+    };
+    for y in 0..radius {
+        add_row(rect.top + y, rect.top + y + 1, cut(y));
+    }
+    if rect.height() > radius * 2 {
+        add_row(rect.top + radius, rect.bottom - radius, 0);
+    }
+    for y in (0..radius).rev() {
+        add_row(rect.bottom - y - 1, rect.bottom - y, cut(y));
+    }
+    let header_bytes = std::mem::size_of::<RGNDATAHEADER>();
+    let rectangle_bytes = std::mem::size_of_val(rectangles.as_slice());
+    let bytes = header_bytes + rectangle_bytes;
+    let header = RGNDATAHEADER {
+        dwSize: header_bytes as u32,
+        iType: RDH_RECTANGLES,
+        nCount: rectangles.len() as u32,
+        nRgnSize: rectangle_bytes as u32,
+        rcBound: RECT {
+            left: rect.left,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.bottom,
+        },
+    };
+    // RGNDATA's variable-length buffer follows its header. Header-aligned backing
+    // storage keeps the FFI pointer aligned; all fields have valid integer bits.
+    let mut data = vec![header; bytes.div_ceil(header_bytes)];
+    unsafe {
+        std::ptr::copy_nonoverlapping(
+            rectangles.as_ptr().cast::<u8>(),
+            data.as_mut_ptr().cast::<u8>().add(header_bytes),
+            rectangle_bytes,
+        );
+        ExtCreateRegion(std::ptr::null(), bytes as u32, data.as_ptr().cast())
+    }
+}
+
 /// Combine `pieces` into one region for `SetWindowRgn`.
 ///
 /// `None` when every piece was empty (there would be nothing to show). On success the caller owns
@@ -87,7 +160,7 @@ pub fn region_from_pieces(
     pieces: &[WindowRegion],
 ) -> Option<windows_sys::Win32::Graphics::Gdi::HRGN> {
     use windows_sys::Win32::Graphics::Gdi::{
-        CombineRgn, CreateRectRgn, CreateRoundRectRgn, DeleteObject, RGN_DIFF, RGN_OR,
+        CombineRgn, CreateRectRgn, DeleteObject, RGN_DIFF, RGN_OR,
     };
     unsafe {
         let combined = CreateRectRgn(0, 0, 0, 0);
@@ -112,30 +185,13 @@ pub fn region_from_pieces(
                         continue;
                     }
                     let band_width = (outer.width() - inner.width()).max(0) / 2;
-                    let outer_diameter = (radius.max(0) * 2).min(outer.width()).min(outer.height());
                     let inner_radius = (radius.max(0) - band_width).max(0);
-                    let inner_diameter = (inner_radius * 2).min(inner.width()).min(inner.height());
-                    // `CreateRoundRectRgn` 的圆角参数是椭圆的**直径**，不是半径。
-                    let band = CreateRoundRectRgn(
-                        outer.left,
-                        outer.top,
-                        outer.right + 1,
-                        outer.bottom + 1,
-                        outer_diameter.max(1),
-                        outer_diameter.max(1),
-                    );
+                    let band = selection_region(outer, radius);
                     if band.is_null() {
                         continue;
                     }
                     if !inner.is_empty() && inner.width() > 0 && inner.height() > 0 {
-                        let hole = CreateRoundRectRgn(
-                            inner.left,
-                            inner.top,
-                            inner.right + 1,
-                            inner.bottom + 1,
-                            inner_diameter,
-                            inner_diameter,
-                        );
+                        let hole = selection_region(inner, inner_radius);
                         if !hole.is_null() {
                             CombineRgn(band, band, hole, RGN_DIFF);
                             DeleteObject(hole);
@@ -156,19 +212,7 @@ pub fn region_from_pieces(
                         continue;
                     }
                     if !inner.is_empty() && inner.width() > 0 && inner.height() > 0 {
-                        // `CreateRoundRectRgn`'s corner argument is the ellipse *diameter*.
-                        let diameter = (radius.max(0) * 2)
-                            .min(inner.width())
-                            .min(inner.height())
-                            .max(1);
-                        let hole = CreateRoundRectRgn(
-                            inner.left,
-                            inner.top,
-                            inner.right + 1,
-                            inner.bottom + 1,
-                            diameter,
-                            diameter,
-                        );
+                        let hole = selection_region(inner, radius);
                         if !hole.is_null() {
                             CombineRgn(band, band, hole, RGN_DIFF);
                             DeleteObject(hole);
@@ -991,6 +1035,58 @@ mod tests {
         assert_ne!(unsafe { SetWindowRgn(raw, std::ptr::null_mut(), 1) }, 0);
         assert_eq!(unsafe { GetWindowRgn(raw, probe) }, 0, "还原后没有区域");
         unsafe { DeleteObject(probe) };
+    }
+
+    #[test]
+    fn smooth_corner_gdi_holes_match_quartic_pixel_centres_and_leave_other_regions_intact() {
+        use windows_sys::Win32::Graphics::Gdi::{DeleteObject, PtInRegion};
+        let outer = Rect::new(-100, -100, 200, 200);
+        let inner = Rect::new(-40, -20, 60, 60);
+        for radius in [0, 1, 2, 16, 128] {
+            let region = region_from_pieces(&[WindowRegion::RoundedHole {
+                outer,
+                inner,
+                radius,
+            }])
+            .unwrap();
+            let r = f64::from(radius.min(40));
+            for y in inner.top - 1..=inner.bottom {
+                for x in inner.left - 1..=inner.right {
+                    let px = f64::from((x - inner.left).min(inner.right - 1 - x)) + 0.5;
+                    let py = f64::from((y - inner.top).min(inner.bottom - 1 - y)) + 0.5;
+                    let in_hole = inner.contains(Point::new(x, y))
+                        && (r == 0.
+                            || px >= r
+                            || py >= r
+                            || ((r - px) / r).powi(4) + ((r - py) / r).powi(4) <= 1.);
+                    assert_eq!(
+                        unsafe { PtInRegion(region, x, y) } != 0,
+                        !in_hole,
+                        "r={radius} ({x},{y})"
+                    );
+                }
+            }
+            unsafe {
+                DeleteObject(region);
+            }
+        }
+        // Verify subtraction/union with the superellipse, not only a hole's shape.
+        let ring = region_from_pieces(&[
+            WindowRegion::RoundRing {
+                outer: Rect::new(0, 0, 200, 200),
+                inner: Rect::new(20, 20, 180, 180),
+                radius: 60,
+            },
+            WindowRegion::Rect(Rect::new(250, 20, 270, 40)),
+        ])
+        .unwrap();
+        assert_eq!(unsafe { PtInRegion(ring, 0, 0) }, 0);
+        assert_ne!(unsafe { PtInRegion(ring, 100, 5) }, 0);
+        assert_eq!(unsafe { PtInRegion(ring, 100, 100) }, 0);
+        assert_ne!(unsafe { PtInRegion(ring, 260, 30) }, 0);
+        unsafe {
+            DeleteObject(ring);
+        }
     }
 
     /// 圆角洞：弧与方角之间那块楔形必须落在区域里（否则遮罩在那里留白，docs/23 §14.55.23）。

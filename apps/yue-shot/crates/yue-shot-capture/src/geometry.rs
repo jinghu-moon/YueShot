@@ -122,18 +122,15 @@ pub fn radius_cap(width: i32, height: i32) -> i32 {
     (width.min(height).max(0) / 4).min(crate::region::RADIUS_MAX_PX)
 }
 
-/// 角手柄的锚点：有圆角时骑在各自圆弧的 45° 中点，没有圆角时就是几何角点。
-///
-/// 圆弧中心在 `角点内移 r` 处，45° 点再沿对角线出来 `r·(1 − √2/2)` ≈ `0.293 r`，
-/// 所以在 (left, top) 这类角上，锚点 = `角点 + (r − r·√2/2)`。
+/// 角手柄锚点位于四阶超椭圆的对角中点；内移 r·(1 − 2^(-1/4))。
+/// 与选框和导出遮罩共用形状，半径 0 时仍是几何角点。
 pub fn corner_handle_anchor(rect: Rect, radius: i32, handle: Handle) -> Point {
     let corner = handle.anchor(rect);
     let radius = radius.min(radius_cap(rect.width(), rect.height())).max(0);
     if radius == 0 {
         return corner;
     }
-    let offset = (radius as f32 * std::f32::consts::FRAC_1_SQRT_2).round() as i32;
-    let inner = radius - offset;
+    let inner = crate::selection_shape::diagonal_inset(radius);
     let dx = if corner.x == rect.left { inner } else { -inner };
     let dy = if corner.y == rect.top { inner } else { -inner };
     Point::new(corner.x + dx, corner.y + dy)
@@ -3425,10 +3422,10 @@ mod rounded_frame_tests {
         );
         let small = corner_handle_anchor(rect, 10, corner);
         let large = corner_handle_anchor(rect, 60, corner);
-        // 弧点向框内移动，且随半径单调（45° 处内移 r·(1−√2/2) ≈ 0.293r）。
+        // 弧点向框内移动，且随半径单调（对角处内移 r·(1−2^(-1/4)) ≈ 0.159r）。
         assert!(
             small.x > 0 && small.x < 10,
-            "10 的半径应内移约 3：{small:?}"
+            "10 的半径应内移约 2：{small:?}"
         );
         assert!(large.x > small.x, "半径越大越往内：{large:?} vs {small:?}");
         assert!(large.x < 60, "始终在框内：{large:?}");
@@ -3436,6 +3433,42 @@ mod rounded_frame_tests {
         let top_right = corner_handle_anchor(rect, 60, Handle::TopRight);
         assert_eq!(top_right.y, large.y);
         assert_eq!(400 - top_right.x, large.x);
+    }
+
+    #[test]
+    fn smooth_corner_grips_follow_the_quartic_diagonal_and_radius_cap() {
+        for (width, height) in [(3, 3), (100, 70), (400, 300), (4096, 2160)] {
+            let rect = Rect::new(-200, -100, width - 200, height - 100);
+            for requested in [0, 1, 16, 48, 128, i32::MAX] {
+                let radius = requested.min(radius_cap(width, height));
+                let inset = (f64::from(radius) * (1. - 2f64.powf(-0.25))).round() as i32;
+                for handle in [
+                    Handle::TopLeft,
+                    Handle::TopRight,
+                    Handle::BottomLeft,
+                    Handle::BottomRight,
+                ] {
+                    let expected = match handle {
+                        Handle::TopLeft => super::Point::new(rect.left + inset, rect.top + inset),
+                        Handle::TopRight => super::Point::new(rect.right - inset, rect.top + inset),
+                        Handle::BottomLeft => {
+                            super::Point::new(rect.left + inset, rect.bottom - inset)
+                        }
+                        _ => super::Point::new(rect.right - inset, rect.bottom - inset),
+                    };
+                    assert_eq!(corner_handle_anchor(rect, requested, handle), expected);
+                    if width >= 100 {
+                        assert_eq!(
+                            SelectionSnapshot::new(rect, 144)
+                                .with_radius(requested)
+                                .hit_test(expected, 144),
+                            SelectionGeometry::Resize(handle),
+                            "{rect:?} {requested} {handle:?}"
+                        );
+                    }
+                }
+            }
+        }
     }
 
     #[test]

@@ -18,6 +18,7 @@ struct Active {
     key: Key,
     started: Instant,
     initial: bool,
+    local_verified: bool,
 }
 
 pub(crate) struct VisualPipeline {
@@ -146,6 +147,15 @@ impl VisualPipeline {
     }
 
     fn unavailable(&mut self) {
+        if self.active.as_ref().is_some_and(|a| a.local_verified) {
+            // Ancestor discovery is optional after a complete ROI result. Its
+            // failure cannot turn already verified geometry into missing evidence.
+            self.active = None;
+            let verified = self.published.take();
+            self.invalidate();
+            self.published = verified;
+            return;
+        }
         if self.active.take().is_some() || self.queued.is_some() {
             self.metrics.record_visual_retired(true);
         }
@@ -167,13 +177,67 @@ impl VisualPipeline {
             && active.started.elapsed() >= Duration::from_millis(100)
         {
             log::info!(target: "yueshot.event", "capture.visual status=stall request={}", active.key.request);
-            self.disabled = Some(active.key.source);
-            self.invalidate();
+            if !active.local_verified {
+                self.disabled = Some(active.key.source);
+            }
+            self.unavailable();
         }
         let mut changed = false;
         if let Some(reply) = self.worker.take() {
             self.awaiting = false;
             match reply {
+                Reply::Local {
+                    key,
+                    result,
+                    coverage,
+                    buffer_bound,
+                } if self.active.as_ref().is_some_and(|a| a.key == key) => {
+                    if buffer_bound + 4 * 1_048_576 > 16 * 1_048_576 {
+                        self.unavailable();
+                    } else if let Some(frame) = frame.filter(|f| {
+                        f.frame.source == key.source.pixels
+                            && capture_generation == key.source.capture_generation
+                    }) {
+                        let origin = frame.monitor.layout.to_screen(Point::new(0, 0));
+                        let mut rectangles = Vec::new();
+                        if !crate::visual_detection::allocation::reserve(
+                            &mut rectangles,
+                            result.candidates.len(),
+                            "published_rectangles",
+                        ) {
+                            self.invalidate();
+                            return false;
+                        }
+                        rectangles.extend(result.candidates.into_iter().map(|c| {
+                            Rect::new(
+                                c.rect.left + origin.x,
+                                c.rect.top + origin.y,
+                                c.rect.right + origin.x,
+                                c.rect.bottom + origin.y,
+                            )
+                        }));
+                        self.published = Some(VisualSnapshot {
+                            source: key.source,
+                            owner: key.owner,
+                            point: Point::new(key.point.x + origin.x, key.point.y + origin.y),
+                            rectangles,
+                        });
+                        self.active.as_mut().unwrap().local_verified = true;
+                        self.metrics.record_visual_completed(
+                            key.submitted.elapsed(),
+                            false,
+                            buffer_bound + 4 * 1_048_576,
+                        );
+                        self.cache = Some((key.source, coverage));
+                        log::info!(target: "yueshot.event", "capture.visual status=local_verified request={} candidates={} elapsed_us={}", key.request, self.published.as_ref().unwrap().rectangles.len(), key.submitted.elapsed().as_micros());
+                        changed = true;
+                        if !self.send(Work::Advance(key)) {
+                            self.unavailable();
+                        }
+                    } else {
+                        self.invalidate();
+                    }
+                }
                 Reply::Step {
                     key,
                     step,
@@ -183,8 +247,10 @@ impl VisualPipeline {
                     // Query + 2MiB explicit worker stack + conservative owner/atlas metadata.
                     if buffer_bound + 4 * 1_048_576 > 16 * 1_048_576 {
                         log::info!(target: "yueshot.event", "capture.visual status=buffer_budget request={}", key.request);
-                        self.disabled = Some(key.source);
-                        self.invalidate();
+                        if !self.active.as_ref().unwrap().local_verified {
+                            self.disabled = Some(key.source);
+                        }
+                        self.unavailable();
                     } else {
                         match step {
                             Step::Read(regions) => {
@@ -203,7 +269,7 @@ impl VisualPipeline {
                                     });
                                 if result.is_err() {
                                     log::info!(target: "yueshot.event", "capture.visual status=transfer_begin_failed request={}", key.request);
-                                    self.invalidate();
+                                    self.unavailable();
                                 }
                             }
                             Step::Complete(result) if result.completion == Completion::Complete => {
@@ -218,7 +284,7 @@ impl VisualPipeline {
                                         result.candidates.len(),
                                         "published_rectangles",
                                     ) {
-                                        self.invalidate();
+                                        self.unavailable();
                                         return false;
                                     }
                                     rectangles.extend(result.candidates.into_iter().map(|c| {
@@ -229,6 +295,22 @@ impl VisualPipeline {
                                             c.rect.bottom + origin.y,
                                         )
                                     }));
+                                    let local_verified =
+                                        self.active.as_ref().unwrap().local_verified;
+                                    if local_verified && let Some(local) = &self.published {
+                                        for &rect in local.rectangles.iter().rev() {
+                                            rectangles.retain(|&r| r != rect);
+                                            if !crate::visual_detection::allocation::reserve(
+                                                &mut rectangles,
+                                                1,
+                                                "published_rectangles",
+                                            ) {
+                                                self.unavailable();
+                                                return changed;
+                                            }
+                                            rectangles.insert(0, rect);
+                                        }
+                                    }
                                     self.published = Some(VisualSnapshot {
                                         source: key.source,
                                         owner: key.owner,
@@ -238,11 +320,13 @@ impl VisualPipeline {
                                         ),
                                         rectangles,
                                     });
-                                    self.metrics.record_visual_completed(
-                                        key.submitted.elapsed(),
-                                        self.published.as_ref().unwrap().rectangles.is_empty(),
-                                        buffer_bound + 4 * 1_048_576,
-                                    );
+                                    if !local_verified {
+                                        self.metrics.record_visual_completed(
+                                            key.submitted.elapsed(),
+                                            self.published.as_ref().unwrap().rectangles.is_empty(),
+                                            buffer_bound + 4 * 1_048_576,
+                                        );
+                                    }
                                     log::info!(target: "yueshot.event", "capture.visual status=completed request={} candidates={} elapsed_us={}", key.request, self.published.as_ref().unwrap().rectangles.len(), key.submitted.elapsed().as_micros());
                                     self.cache = Some((key.source, coverage));
                                     self.active = None;
@@ -270,15 +354,17 @@ impl VisualPipeline {
         {
             log::info!(target: "yueshot.event", "capture.visual status=stall request={}", active.key.request);
             // Four times the 25ms qualification budget is a stall cut-off, not a relaxed latency gate.
-            self.disabled = Some(active.key.source);
-            self.invalidate();
+            if !active.local_verified {
+                self.disabled = Some(active.key.source);
+            }
+            self.unavailable();
         }
         if !self.awaiting && self.transfer.as_ref().is_some_and(|t| t.pending()) {
             let transfer = self.transfer.as_mut().unwrap();
             match transfer.submit_slice() {
                 Err(_) => {
                     log::info!(target: "yueshot.event", "capture.visual status=transfer_submit_failed");
-                    self.invalidate();
+                    self.unavailable();
                 }
                 Ok(false) => {
                     self.send(Work::Pace {
@@ -296,8 +382,10 @@ impl VisualPipeline {
                     Some(Err(_)) => {
                         log::info!(target: "yueshot.event", "capture.visual status=transfer_map_failed");
                         if let Some(active) = &self.active {
-                            self.disabled = Some(active.key.source);
-                            self.invalidate();
+                            if !active.local_verified {
+                                self.disabled = Some(active.key.source);
+                            }
+                            self.unavailable();
                         } else {
                             // A cancelled batch just drained. Keep the newest queued query.
                             self.transfer = None;
@@ -360,6 +448,7 @@ impl VisualPipeline {
                     key,
                     started: key.submitted,
                     initial: false,
+                    local_verified: false,
                 });
                 if !self.send(Work::Restart(key)) {
                     self.invalidate();
@@ -395,6 +484,7 @@ impl VisualPipeline {
                     key,
                     started: key.submitted,
                     initial: true,
+                    local_verified: false,
                 });
                 self.send(Work::Pace {
                     micros: if self.active.is_some() { 250 } else { 15_000 },
@@ -418,6 +508,103 @@ impl VisualPipeline {
 mod tests {
     use super::*;
     use crate::window_detection::WindowIdentity;
+
+    #[test]
+    #[ignore = "L3 real GPU/worker; dense distant pixels cannot erase a verified local result"]
+    fn visual_replay_local_target_survives_failed_expansion_and_seed_change() {
+        let (size, mut pixels, point, target) =
+            crate::visual_detection::tests::distant_clutter_scene();
+        for p in pixels.as_chunks_mut::<4>().0 {
+            p.swap(0, 2);
+        }
+        let frame =
+            super::super::providers::test_gpu_frozen_frame(size[0] as u32, size[1] as u32, pixels);
+        let source = SelectionSource {
+            capture_generation: 1,
+            pixels: frame.frame.source,
+        };
+        let owner = WindowCandidate::new(
+            WindowIdentity::new(101, 103, 107, 1),
+            frame.monitor.layout.bounds,
+            0,
+            1,
+        );
+        let metrics = crate::diagnostics::WindowDetectionMetrics::new();
+        let mut pipeline = VisualPipeline::new(0, metrics.clone()).unwrap();
+        for point in [point, Point::new(point.x + 10, point.y + 10)] {
+            pipeline.retire_for_cursor(point, point, Some(owner.identity));
+            pipeline.request(source, owner, point);
+            let deadline = Instant::now() + Duration::from_secs(3);
+            let mut saw_local = false;
+            loop {
+                pipeline.pump(Some(&frame), 1);
+                if let Some(snapshot) = &pipeline.published {
+                    assert_eq!(snapshot.point, point);
+                    assert_eq!(snapshot.rectangles.first(), Some(&target));
+                    saw_local = true;
+                }
+                if pipeline.idle() {
+                    break;
+                }
+                assert!(Instant::now() < deadline);
+                std::thread::sleep(Duration::from_micros(100));
+            }
+            assert!(saw_local && pipeline.published.is_some());
+            assert!(pipeline.disabled.is_none());
+        }
+        assert_eq!(metrics.reading().visual_completed, 2);
+        assert_eq!(metrics.reading().visual_unavailable, 0);
+    }
+
+    #[test]
+    fn visual_replay_optional_expansion_timeout_keeps_only_current_verified_pixels() {
+        let frame = super::super::providers::test_frozen_frame(640, 640);
+        let source = SelectionSource {
+            capture_generation: 1,
+            pixels: frame.frame.source,
+        };
+        let owner = WindowCandidate::new(
+            WindowIdentity::new(101, 103, 107, 1),
+            frame.monitor.layout.bounds,
+            0,
+            1,
+        );
+        let point = Point::new(100, 100);
+        let mut pipeline =
+            VisualPipeline::new(0, crate::diagnostics::WindowDetectionMetrics::new()).unwrap();
+        let key = Key {
+            request: 1,
+            source,
+            owner,
+            point,
+            submitted: Instant::now() - Duration::from_millis(200),
+        };
+        pipeline.active = Some(Active {
+            key,
+            started: key.submitted,
+            initial: false,
+            local_verified: true,
+        });
+        pipeline.published = Some(VisualSnapshot {
+            source,
+            owner,
+            point,
+            rectangles: vec![Rect::new(80, 80, 120, 120)],
+        });
+        pipeline.pump(Some(&frame), 1);
+        assert!(pipeline.published.is_some() && pipeline.disabled.is_none());
+        pipeline.retire_for_cursor(
+            Point::new(101, 100),
+            Point::new(101, 100),
+            Some(owner.identity),
+        );
+        assert!(
+            pipeline.published.is_none(),
+            "verified local result leaked to another seed"
+        );
+        pipeline.invalidate();
+        assert!(pipeline.published.is_none());
+    }
 
     fn fixture() -> (FrozenFrame, SelectionSource, WindowCandidate) {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -718,6 +905,7 @@ mod tests {
                 key,
                 started: key.submitted,
                 initial: false,
+                local_verified: false,
             });
             let mut late = key;
             match mutate {
@@ -784,6 +972,7 @@ mod tests {
             key,
             started: key.submitted,
             initial: false,
+            local_verified: false,
         });
         pipeline.worker.publish_for_replay(Reply::Step {
             key,

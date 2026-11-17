@@ -289,7 +289,6 @@ pub(super) fn scan_peaks(image: Image<'_>, point: Point, side: usize) -> (Vec<i3
 /// A: three row/column strips find bounded peaks and trace their corners. Sampling beyond
 /// the owned coverage is impossible. Full-frame test input is owned CPU memory;
 /// physical strip/edge transfer batching is measured separately by readback probe.
-#[cfg(test)]
 pub fn seed(image: Image<'_>, point: Point) -> Detection {
     if image.coverage.is_empty() {
         return finish(image, Vec::new(), point, 64, Completion::Complete);

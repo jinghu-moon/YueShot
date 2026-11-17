@@ -113,6 +113,92 @@ fn visual_progressive_embedded_targets_change_with_seed() {
     }
 }
 
+pub(crate) fn distant_clutter_scene() -> ([usize; 2], Vec<u8>, Point, Rect) {
+    let size = [3840, 2160];
+    let point = Point::new(1900, 1050);
+    let roi = progressive::Query::initial_region(size, point).unwrap();
+    // Dense distant alternating structure is unrelated to the complete local box.
+    let mut pixels = Vec::with_capacity(size[0] * size[1] * 4);
+    for y in 0..size[1] as i32 {
+        for x in 0..size[0] as i32 {
+            let value = if roi.contains(Point::new(x, y)) {
+                232
+            } else if (x / 8 + y / 8) % 2 == 0 {
+                16
+            } else {
+                240
+            };
+            pixels.extend_from_slice(&[value, value, value, 255]);
+        }
+    }
+    let target = Rect::new(1850, 1015, 1950, 1085);
+    for y in target.top..target.bottom {
+        for x in target.left..target.right {
+            let at = (y as usize * size[0] + x as usize) * 4;
+            pixels[at..at + 4].copy_from_slice(&[40, 80, 200, 255]);
+        }
+    }
+    (size, pixels, point, target)
+}
+
+#[test]
+fn visual_progressive_distant_clutter_must_not_erase_a_local_target() {
+    let (size, pixels, point, target) = distant_clutter_scene();
+    let roi = progressive::Query::initial_region(size, point).unwrap();
+    let read = |r: Rect| {
+        let mut bytes = Vec::new();
+        for y in r.top..r.bottom {
+            let at = (y as usize * size[0] + r.left as usize) * 4;
+            bytes.extend_from_slice(&pixels[at..at + r.width() as usize * 4]);
+        }
+        bytes
+    };
+    let mut query = progressive::Query::new(size, point, roi, read(roi)).unwrap();
+    let local = query.local().expect("complete owned ROI result");
+    assert_eq!(local.completion, Completion::Complete);
+    assert_eq!(local.candidates.first().map(|c| c.rect), Some(target));
+    let completion = loop {
+        match query.step() {
+            progressive::Step::Read(regions) => query
+                .apply(regions.into_iter().map(|r| (r, read(r))).collect())
+                .unwrap(),
+            progressive::Step::Complete(result) => break result.completion,
+            progressive::Step::Unavailable(reason) => break reason,
+        }
+    };
+    // Full-source expansion still exceeds the original budget. Its independent
+    // failure must not prevent a fully validated local result from being used.
+    assert_eq!(completion, Completion::BudgetExceeded);
+    assert_eq!(local.candidates.first().map(|c| c.rect), Some(target));
+}
+
+#[test]
+fn visual_local_missing_probe_halo_cannot_be_treated_as_source_boundary() {
+    let size = [1024, 1024];
+    let point = Point::new(700, 450);
+    let roi = progressive::Query::initial_region(size, point).unwrap();
+    let target = Rect::new(450, 400, 900, 500);
+    let mut pixels = [232, 232, 232, 255].repeat(size[0] * size[1]);
+    for y in target.top..target.bottom {
+        for x in target.left..target.right {
+            let at = (y as usize * size[0] + x as usize) * 4;
+            pixels[at..at + 4].copy_from_slice(&[40, 80, 200, 255]);
+        }
+    }
+    let full = proposals::seed(Image::new(size, &pixels).unwrap(), point);
+    assert!(full.candidates.iter().any(|c| c.rect == target));
+    let mut initial = Vec::new();
+    for y in roi.top..roi.bottom {
+        let at = (y as usize * size[0] + roi.left as usize) * 4;
+        initial.extend_from_slice(&pixels[at..at + roi.width() as usize * 4]);
+    }
+    let mut query = progressive::Query::new(size, point, roi, initial).unwrap();
+    assert!(
+        query.local().unwrap().candidates.is_empty(),
+        "missing outer samples were treated as verified evidence"
+    );
+}
+
 #[test]
 fn visual_replay_each_algorithm_allocation_site_fails_without_partial_publication() {
     let (size, pixels) = decode("T21.png");
@@ -1199,6 +1285,18 @@ fn visual_progressive_batches_preserve_full_reference_and_report_all_costs() {
             let roi = progressive::Query::initial_region(size, point).unwrap();
             let mut query = progressive::Query::new(size, point, roi, read(roi)).unwrap();
             let expected = proposals::seed(Image::new(size, &rgba).unwrap(), point);
+            if let Some(local) = query.local() {
+                assert_eq!(local.completion, Completion::Complete);
+                assert!(
+                    local.candidates.iter().all(|candidate| expected
+                        .candidates
+                        .iter()
+                        .any(|full| full.rect == candidate.rect)),
+                    "local query invented geometry: {} / {}",
+                    case["id"],
+                    q["id"]
+                );
+            }
             let started = Instant::now();
             let mut copies = 1;
             let mut batches = 1;

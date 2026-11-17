@@ -41,6 +41,56 @@ pub struct Query {
 }
 
 impl Query {
+    /// A complete, independently validated query over the already owned ROI.
+    /// No read is requested outside it, and a clipped edge cannot qualify.
+    /// Full-source ancestor discovery remains a separate continuation.
+    pub fn local(&mut self) -> Option<proposals::Detection> {
+        if self.roi == Rect::new(0, 0, self.size[0] as i32, self.size[1] as i32) {
+            return None;
+        }
+        let size = self.size;
+        let roi = self.roi;
+        let point = self.point;
+        let cell = RefCell::new(&mut *self);
+        let pixel = |p| {
+            let q = cell.borrow();
+            if !roi.contains(p) {
+                return None;
+            }
+            let at = ((p.y - roi.top) * roi.width() + p.x - roi.left) as usize * 4;
+            Some(q.initial[at..at + 4].try_into().unwrap())
+        };
+        let no_read = |_: Rect| {};
+        let no_pending = || false;
+        let failed = |reason| cell.borrow_mut().failure = Some(reason);
+        let image = Image::from_reader(size, &pixel)
+            .unwrap()
+            .with_coverage(roi)
+            .unwrap()
+            .with_prefetch(&no_read, &no_pending, &failed);
+        let mut result = proposals::seed(image, point);
+        // A local image edge is not a frozen-source edge. Require the entire
+        // probe halo to be owned, rather than validating with truncated scales.
+        let source_bounds = Rect::new(0, 0, size[0] as i32, size[1] as i32);
+        result.candidates.retain(|c| {
+            roi.contains_rect(
+                Rect::new(
+                    c.rect.left - PROBE_RADIUS,
+                    c.rect.top - PROBE_RADIUS,
+                    c.rect.right + PROBE_RADIUS + 1,
+                    c.rect.bottom + PROBE_RADIUS + 1,
+                )
+                .intersect(source_bounds),
+            )
+        });
+        cell.borrow_mut().record_buffers(0);
+        if cell.borrow().failure.is_some() || result.completion != Completion::Complete {
+            None
+        } else {
+            Some(result)
+        }
+    }
+
     /// Reuse owned pixels for a new seed, never a previous seed's candidate chain.
     pub fn restart(&mut self, point: Point) -> bool {
         if !self.roi.contains(point) || !self.pending.is_empty() || self.failure.is_some() {

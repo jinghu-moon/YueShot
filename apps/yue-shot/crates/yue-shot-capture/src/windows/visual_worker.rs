@@ -51,12 +51,19 @@ pub(crate) enum Work {
         micros: u32,
     },
     Reset,
+    Advance(Key),
 }
 
 // A single preallocated mailbox slot: boxing adds a fallible allocation per reply
 // solely to save fewer than 256 bytes in that one slot.
 #[allow(clippy::large_enum_variant)]
 pub(crate) enum Reply {
+    Local {
+        key: Key,
+        result: crate::visual_detection::proposals::Detection,
+        coverage: Rect,
+        buffer_bound: usize,
+    },
     Step {
         key: Key,
         step: Step,
@@ -117,6 +124,7 @@ impl VisualWorker {
                 let mut cache_source = None;
                 while let Ok(work) = receive.recv() {
                     let mut message = None;
+                    let mut local_due = false;
                     let key = match work {
                         Work::Reset => {
                             query = None;
@@ -124,6 +132,7 @@ impl VisualWorker {
                             message = Some(Reply::Idle);
                             None
                         }
+                        Work::Advance(key) => Some(key),
                         Work::Pace { micros } => {
                             if generation.load(Ordering::Acquire) == 0 {
                                 query = None;
@@ -146,6 +155,7 @@ impl VisualWorker {
                             region,
                             pixels,
                         } => {
+                            local_due = true;
                             query = None;
                             cache_source = Some(key.source);
                             match Query::new(size, key.point, region, pixels) {
@@ -162,6 +172,7 @@ impl VisualWorker {
                             Some(key)
                         }
                         Work::Restart(key) => {
+                            local_due = true;
                             if cache_source != Some(key.source)
                                 || query.as_mut().is_none_or(|q| !q.restart(key.point))
                             {
@@ -204,13 +215,25 @@ impl VisualWorker {
                         if message.is_none()
                             && let Some(q) = &mut query
                         {
-                            let step = q.step();
-                            message = Some(Reply::Step {
-                                key,
-                                step,
-                                coverage: q.coverage(),
-                                buffer_bound: q.peak_buffer_bound,
-                            });
+                            if local_due
+                                && let Some(result) = q.local()
+                                && !result.candidates.is_empty()
+                            {
+                                message = Some(Reply::Local {
+                                    key,
+                                    result,
+                                    coverage: q.coverage(),
+                                    buffer_bound: q.peak_buffer_bound,
+                                });
+                            } else {
+                                let step = q.step();
+                                message = Some(Reply::Step {
+                                    key,
+                                    step,
+                                    coverage: q.coverage(),
+                                    buffer_bound: q.peak_buffer_bound,
+                                });
+                            }
                         }
                         if generation.load(Ordering::Acquire) != key.request {
                             query = None;

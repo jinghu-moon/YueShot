@@ -3,6 +3,56 @@ use super::*;
 use crate::window_detection::TargetOrigin;
 mod contracts;
 
+#[test]
+#[ignore = "L3 controller and real GPU; late broad native answer and failed expansion keep local preview"]
+fn visual_replay_distant_clutter_cannot_restore_the_broad_native_preview() {
+    let (size, mut pixels, point, target) = crate::visual_detection::tests::distant_clutter_scene();
+    for p in pixels.as_chunks_mut::<4>().0 {
+        p.swap(0, 2);
+    }
+    let frame =
+        crate::windows::providers::test_gpu_frozen_frame(size[0] as u32, size[1] as u32, pixels);
+    let mut replay = replay_from_frame(frame, point);
+    let owner = replay.hover_target.unwrap().owner;
+    let broad = PathLevel::new(Rect::new(1800, 950, 2100, 1200), LevelKind::Unknown);
+    answer(
+        &mut replay,
+        vec![PathLevel::window(owner.screen_bounds), broad],
+    );
+    replay.request_visual();
+    let deadline = Instant::now() + Duration::from_secs(3);
+    let mut verified = false;
+    loop {
+        replay.on_visual_ready();
+        if replay.preview_is_visual() {
+            verified = true;
+            assert_eq!(replay.preview_target, Some(target));
+            // The same broad native provider completion arrives after local pixels.
+            answer(
+                &mut replay,
+                vec![PathLevel::window(owner.screen_bounds), broad],
+            );
+        }
+        if verified {
+            assert_eq!(
+                replay.preview_target,
+                Some(target),
+                "preview jumped back to the native container"
+            );
+        }
+        if replay.visual.as_ref().unwrap().idle() {
+            break;
+        }
+        assert!(Instant::now() < deadline);
+        std::thread::sleep(Duration::from_micros(100));
+    }
+    assert!(verified && replay.preview_is_visual());
+    let selected = replay.gesture.snap_preview().unwrap();
+    assert!(replay.confirm_snap_preview());
+    replay.confirmation(replay.confirm_request.unwrap(), selected.target, true);
+    assert_eq!(replay.session.selection(), target);
+}
+
 fn fixture_replay() -> Replay {
     fixture_named("T01", Point::new(91, 66))
 }
@@ -168,6 +218,24 @@ fn visual_replay_product_controller_latency_diagnostic() {
                     let preview = replay.preview_for_cursor().unwrap();
                     hot_times.push(hot.elapsed().as_nanos());
                     assert_eq!(preview.0.origin, TargetOrigin::Visual);
+                }
+                // A verified ROI now precedes optional ancestor discovery. Drain
+                // that same query before measuring a fresh query, rather than
+                // timing a deduplicated request against its existing preview.
+                while !replay.visual.as_ref().unwrap().idle() {
+                    if let Some(render) = &mut render {
+                        render.pump();
+                    }
+                    replay.on_visual_ready();
+                    assert!(
+                        started.elapsed() < Duration::from_secs(2),
+                        "ancestor continuation stalled"
+                    );
+                    if let Some(render) = &render {
+                        render.wait();
+                    } else {
+                        std::thread::sleep(Duration::from_micros(100));
+                    }
                 }
                 iteration += 1;
             }

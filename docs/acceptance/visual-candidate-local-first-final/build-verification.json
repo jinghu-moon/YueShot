@@ -1,0 +1,27 @@
+{
+  "sha256": "8d8f0fc1f5fdea4f6ef0f0d3a4d2b0c613779f61a773d3459847851813a85aaa",
+  "bytes": 18286592,
+  "diagnosticStringsPresent": true,
+  "localVerifiedPresent": true,
+  "visualAtlasPresent": true,
+  "dependencyFiles": [
+    {
+      "file": "target/release/deps/yue_shot_capture-43e0b0553d2f2a09.d",
+      "pipeline": true,
+      "worker": true,
+      "progressive": true
+    },
+    {
+      "file": "target/release/deps/yue_shot_capture-4d011ec1917b0c96.d",
+      "pipeline": true,
+      "worker": true,
+      "progressive": true
+    },
+    {
+      "file": "target/release/deps/yue_shot_capture-878b3c805f9bb035.d",
+      "pipeline": true,
+      "worker": true,
+      "progressive": true
+    }
+  ]
+}

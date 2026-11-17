@@ -10,7 +10,7 @@ pub(super) mod proposals;
 #[cfg(test)]
 pub(super) mod reads;
 #[cfg(test)]
-mod tests;
+pub(crate) mod tests;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum Completion {
@@ -103,7 +103,6 @@ impl<'a> Image<'a> {
         }
     }
 
-    #[cfg(test)]
     fn pending_reads(self) -> bool {
         self.pending.is_some_and(|pending| pending())
     }
@@ -117,7 +116,6 @@ impl<'a> Image<'a> {
         }
     }
 
-    #[cfg(test)]
     pub fn with_coverage(self, coverage: Rect) -> Result<Self, Completion> {
         if coverage.is_empty() || !self.coverage.contains_rect(coverage) {
             return Err(Completion::Failed);
@@ -307,13 +305,17 @@ fn sample_positions_limit(image: Image<'_>, start: i32, end: i32, maximum: usize
     positions
 }
 
+// Largest 3*d sample (d=4), plus bilinear rounding. This is evidence
+// geometry, not another tunable detection threshold.
+const PROBE_RADIUS: i32 = 13;
+
 fn request_probe(image: Image<'_>, position: [f32; 2], inward: [f32; 2]) {
     let x = position[0].floor() as i32;
     let y = position[1].floor() as i32;
     image.request(if inward[0] != 0.0 {
-        Rect::new(x - 13, y - 1, x + 14, y + 2)
+        Rect::new(x - PROBE_RADIUS, y - 1, x + PROBE_RADIUS + 1, y + 2)
     } else {
-        Rect::new(x - 1, y - 13, x + 2, y + 14)
+        Rect::new(x - 1, y - PROBE_RADIUS, x + 2, y + PROBE_RADIUS + 1)
     });
 }
 

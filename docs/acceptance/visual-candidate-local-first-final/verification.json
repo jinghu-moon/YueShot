@@ -1,0 +1,47 @@
+{
+  "softwareChecksPassed": true,
+  "capturePassed": 615,
+  "captureIgnored": 125,
+  "productReplaysPassed": 32,
+  "realUserAcceptance": "pending",
+  "latency": [
+    {
+      "fixture": "T01",
+      "actual_samples": 100,
+      "p95_ns": 327100,
+      "owner_p95_ns": 100,
+      "hot_p95_ns": 400
+    },
+    {
+      "fixture": "T21",
+      "actual_samples": 100,
+      "p95_ns": 1039400,
+      "owner_p95_ns": 100,
+      "hot_p95_ns": 900
+    },
+    {
+      "fixture": "T10",
+      "actual_samples": 100,
+      "p95_ns": 513500,
+      "owner_p95_ns": 100,
+      "hot_p95_ns": 500
+    },
+    {
+      "fixture": "T10-8k",
+      "actual_samples": 100,
+      "p95_ns": 246500,
+      "owner_p95_ns": 100,
+      "hot_p95_ns": 400
+    }
+  ],
+  "hashes": {
+    "before-distant-clutter.txt": "a90d4543ea4193de8d07337263e8687953244760467255d16681b5c8f80bb09d",
+    "build.txt": "8f810e95612a3330da53782af1895b923b7806ac08315107e7ddf2fe6ebf6d64",
+    "capture-regression.txt": "2da8d3dc65cf723fd924d9236d28c368d417a5d1371e806914fcf779c1100b0c",
+    "latency.txt": "63131ff5ba518133c1072423de192e6f1af8528e92517d8149fee50792c85ae0",
+    "owner-lifetimes.txt": "d815a60d509347ce83080350c2732a4cb19dd3fd31d549c81363c898a719dd85",
+    "product-replays.txt": "1de61256ffd5998255ce0d084f2699a634cfb4bdf766a39d2d8a926634eeaa79",
+    "transfer-faults.txt": "78981f818dc04e77f1b8cb38f810a441ad1127a8cc2bbaba335df45e185544ad",
+    "visual-reference.txt": "7a039241587ed161f0afea45c682b9e06f6f69acc0ec0d462a589ac9c318c025"
+  }
+}

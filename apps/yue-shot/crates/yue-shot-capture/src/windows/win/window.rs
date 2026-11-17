@@ -111,7 +111,10 @@ fn selection_region(rect: Rect, radius: i32) -> windows_sys::Win32::Graphics::Gd
         }
     };
     let cut = |y| {
-        (crate::selection_shape::boundary_inset(f64::from(y) + 0.5, f64::from(radius)) - 0.5)
+        (yue_shot_model::geometry::selection_shape::boundary_inset(
+            f64::from(y) + 0.5,
+            f64::from(radius),
+        ) - 0.5)
             .ceil()
             .max(0.) as i32
     };

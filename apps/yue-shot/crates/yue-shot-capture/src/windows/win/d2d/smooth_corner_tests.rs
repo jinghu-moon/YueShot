@@ -211,3 +211,79 @@ fn write_png(directory: &str, name: &str, width: u32, height: u32, mut pixels: V
         .write_image_data(&pixels)
         .unwrap();
 }
+
+#[test]
+#[ignore = "GPU checkerboard drag sequence; own targets only, no desktop capture"]
+fn smooth_corner_changing_drag_bounds_keep_blur_in_all_corner_wedges_before_release() {
+    let device = super::super::GraphicsDevice::create().unwrap();
+    let mut renderer = OverlayRenderer::new(std::sync::Arc::new(device), 96).unwrap();
+    let (width, height) = (400, 300);
+    let background = checkerboard_bgra(width, height, 4);
+    renderer.update_frame(width, height, &background).unwrap();
+    renderer.ensure_back_buffer(width, height).unwrap();
+    let target = renderer
+        .device()
+        .create_render_target_texture(width, height, yue_media::PixelFormat::Bgra8Unorm)
+        .unwrap();
+    let context = renderer.device().create_d2d_context().unwrap();
+    let bitmap = super::super::super::d3d11::create_bitmap_from_texture(
+        &context,
+        &target.texture,
+        D2D1_BITMAP_OPTIONS_TARGET,
+        D2D1_ALPHA_MODE_PREMULTIPLIED,
+    )
+    .unwrap();
+    let mut view = RenderView::new(Rect::new(0, 0, 400, 300));
+    view.corner_radius = 48;
+    view.show_chrome = false;
+    view.show_handles = false;
+    view.show_size_label = false;
+    view.cursor_visible = false;
+    for rect in [
+        Rect::new(40, 40, 300, 240),
+        Rect::new(40, 40, 220, 180),
+        Rect::new(20, 30, 320, 270),
+    ] {
+        view.selection = rect;
+        // The controller's transition tests prove that manual drag clears this
+        // animated preview before supplying the first frame to this renderer.
+        view.preview_bounds = None;
+        view.mask_blur = false;
+        renderer.draw_to(&bitmap, &view).unwrap();
+        let sharp = renderer.device().read_back_bgra(&target.texture).unwrap();
+        view.mask_blur = true;
+        renderer.draw_to(&bitmap, &view).unwrap();
+        let moving = renderer.device().read_back_bgra(&target.texture).unwrap();
+        // Repaint the unchanged bounds after release; cache state must not affect pixels.
+        renderer.draw_to(&bitmap, &view).unwrap();
+        let released = renderer.device().read_back_bgra(&target.texture).unwrap();
+        assert_eq!(moving, released, "release changed mask pixels");
+        let center = rect.center();
+        assert_eq!(
+            pixel_at(&moving, width, center.x as u32, center.y as u32),
+            pixel_at(&background, width, center.x as u32, center.y as u32)
+        );
+        for (x, y) in [
+            (rect.left + 1, rect.top + 1),
+            (rect.right - 2, rect.top + 1),
+            (rect.left + 1, rect.bottom - 2),
+            (rect.right - 2, rect.bottom - 2),
+        ] {
+            let a = pixel_at(&sharp, width, x as u32, y as u32)[0];
+            let b = pixel_at(&moving, width, x as u32, y as u32)[0];
+            assert!(
+                (i32::from(a) - i32::from(b)).abs() > 12,
+                "unblurred wedge {rect:?} ({x},{y}): sharp={a}, blurred={b}"
+            );
+        }
+        if let Ok(directory) = std::env::var("YUESHOT_CORNER_EVIDENCE") {
+            write_png(
+                &directory,
+                &format!("drag-{}x{}.png", rect.width(), rect.height()),
+                width,
+                height,
+                moving,
+            );
+        }
+    }
+}

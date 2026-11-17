@@ -5,6 +5,9 @@
 //! monitor origin. Keeping the maths in a dependency-free crate means DPI,
 //! multi-monitor and handle behaviour stay unit-testable without a window station.
 
+/// Shared continuous screenshot corner geometry.
+pub mod selection_shape;
+
 /// Point in physical pixels. `x`/`y` may be negative for monitors left of or above
 /// the primary display.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]

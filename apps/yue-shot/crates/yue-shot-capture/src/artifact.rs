@@ -185,10 +185,15 @@ pub const MAX_CORNER_RADIUS_PX: u32 = 128;
 /// Coverage comes from 8x8 supersampling only in boundary pixels: the aliasing of a mask
 /// this small is exactly what would make a rounded window corner look like a staircase.
 pub fn round_corners(bgra: &mut [u8], width: u32, height: u32, radius: u32) {
-    visit_corners(width, height, radius, |index, cov| {
-        let index = index * 4 + 3;
-        bgra[index] = (u16::from(bgra[index]) * u16::from(cov) / 255) as u8;
-    });
+    yue_shot_model::geometry::selection_shape::visit_corner_coverage(
+        width,
+        height,
+        radius,
+        |index, cov| {
+            let index = index * 4 + 3;
+            bgra[index] = (u16::from(bgra[index]) * u16::from(cov) / 255) as u8;
+        },
+    );
 }
 
 /// Round a source-format buffer without changing its RGB precision or encoding.
@@ -201,8 +206,11 @@ pub fn round_pixel_corners(pixels: PixelBuffer, radius: u32) -> CaptureResult<Pi
     let descriptor = pixels.descriptor();
     let mut bytes = pixels.into_bytes();
     let associated = descriptor.alpha() == AlphaMode::Premultiplied;
-    visit_corners(width, height, radius, |index, cov| {
-        match descriptor.format() {
+    yue_shot_model::geometry::selection_shape::visit_corner_coverage(
+        width,
+        height,
+        radius,
+        |index, cov| match descriptor.format() {
             yue_media::PixelFormat::Bgra8Unorm => {
                 let pixel = &mut bytes[index * 4..][..4];
                 for channel in if associated {
@@ -224,8 +232,8 @@ pub fn round_pixel_corners(pixels: PixelBuffer, radius: u32) -> CaptureResult<Pi
                     );
                 }
             }
-        }
-    });
+        },
+    );
     let descriptor = PixelDescriptor::new(
         descriptor.format(),
         descriptor.encoding(),
@@ -238,48 +246,6 @@ pub fn round_pixel_corners(pixels: PixelBuffer, radius: u32) -> CaptureResult<Pi
     .map_err(|message| CaptureError::EncodeFailed(message.into()))?;
     PixelBuffer::from_tight(width, height, descriptor, bytes)
         .map_err(|message| CaptureError::EncodeFailed(message.into()))
-}
-
-fn visit_corners(width: u32, height: u32, radius: u32, mut apply: impl FnMut(usize, u8)) {
-    // 与框的绘制、手柄布局共用一个上限（docs/23 §14.55.21）。
-    let radius = radius.min(crate::geometry::radius_cap(width as i32, height as i32) as u32);
-    if radius == 0 || width == 0 || height == 0 {
-        return;
-    }
-    let r = radius as f32;
-    let samples = 8u32;
-    for y in 0..radius {
-        for x in 0..radius {
-            // Monotone corner boundary: one exact check proves full coverage;
-            // the opposite corner proves zero. Only crossing pixels need AA.
-            let cov = if crate::selection_shape::contains_corner(x as f32, y as f32, r) {
-                255
-            } else if !crate::selection_shape::contains_corner(x as f32 + 1., y as f32 + 1., r) {
-                0
-            } else {
-                let mut inside = 0u32;
-                for sy in 0..samples {
-                    for sx in 0..samples {
-                        let px = x as f32 + (sx as f32 + 0.5) / samples as f32;
-                        let py = y as f32 + (sy as f32 + 0.5) / samples as f32;
-                        inside += u32::from(crate::selection_shape::contains_corner(px, py, r));
-                    }
-                }
-                ((inside * 255) / (samples * samples)) as u8
-            };
-            if cov == 255 {
-                continue;
-            }
-            for (x, y) in [
-                (x, y),
-                (width - 1 - x, y),
-                (x, height - 1 - y),
-                (width - 1 - x, height - 1 - y),
-            ] {
-                apply(y as usize * width as usize + x as usize, cov);
-            }
-        }
-    }
 }
 
 /// Validate the selection against the frozen frame, clipping it to the frame.

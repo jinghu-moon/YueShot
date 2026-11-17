@@ -632,6 +632,19 @@ impl OverlayController {
                 // 拖拽后发布）都自动带上，不再由调用点各填一次（docs/23 §14.55.21）。
                 let mut prepared = prepared;
                 prepared.corner_radius = self.corner_radius_px as i32;
+                // A kept selection and a confirmed export share one pixel contract:
+                // source-format RGB with the corner alpha already applied exactly once.
+                // Pinning must never infer whether a buffer was published before/after save.
+                prepared.pixels = match crate::artifact::round_pixel_corners(
+                    Arc::unwrap_or_clone(prepared.pixels),
+                    self.corner_radius_px,
+                ) {
+                    Ok(pixels) => pixels.into(),
+                    Err(error) => {
+                        log::debug!("[yue-shot][capture] kept corner mask failed: {error}");
+                        return;
+                    }
+                };
                 if let Ok(mut shared) = self.shared.lock() {
                     shared.selection = Some(Arc::new(prepared));
                     shared.selection_session_id = Some(self.session_id());

@@ -1,0 +1,68 @@
+    Checking bytemuck v1.25.2
+    Checking serde v1.0.229
+    Checking zerofrom v0.1.8
+    Checking futures-util v0.3.34
+    Checking ref-cast v1.0.27
+    Checking thiserror v2.0.21
+    Checking windows-sys v0.59.0
+    Checking yoke v0.8.3
+    Checking num-complex v0.4.6
+    Checking tiny-skia-path v0.12.0
+    Checking rgb v0.8.53
+    Checking qoi v0.4.1
+    Checking zerovec v0.11.8
+    Checking zerotrie v0.2.5
+    Checking chrono v0.4.45
+    Checking serde_urlencoded v0.7.1
+    Checking schemars v1.2.2
+    Checking string_cache v0.8.9
+    Checking markdown v1.0.0
+    Checking lsp-types v0.97.0
+    Checking yue-media v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-media)
+    Checking yue-geometry v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-geometry)
+    Checking markup5ever v0.12.1
+    Checking pulp v0.22.3 (D:\100_Projects\110_Daily\YueShot\vendor\pulp)
+    Checking usvg v0.49.0
+    Checking tiny-skia v0.12.0
+    Checking tinystr v0.8.4
+    Checking potential_utf v0.1.6
+    Checking yue-pin-model v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin-model)
+    Checking icu_collections v2.3.0
+    Checking icu_locale_core v2.3.0
+    Checking gpui-pre-shared-string v0.3.9
+    Checking xml5ever v0.18.1
+    Checking html5ever v0.27.0
+    Checking icu_provider v2.3.1
+    Checking resvg v0.49.0
+    Checking markup5ever_rcdom v0.3.0
+    Checking icu_normalizer v2.3.0
+    Checking icu_properties v2.3.0
+    Checking futures-executor v0.3.34
+    Checking futures v0.3.34
+    Checking gpui-pre-scheduler v0.3.9
+    Checking idna_adapter v1.2.2
+    Checking idna v1.1.0
+    Checking url v2.5.8
+    Checking gpui-pre-http-client v0.3.9
+    Checking exr v1.74.2
+    Checking image v0.25.10
+    Checking gpui-pre v0.3.9 (D:\100_Projects\110_Daily\YueShot\vendor\yue-ui\vendor\gpui-pre)
+    Checking gpui-pre-windows v0.3.9 (D:\100_Projects\110_Daily\YueShot\vendor\yue-ui\vendor\gpui-pre-windows)
+    Checking gpui-kit-assets v0.8.0
+    Checking gpui-base v0.8.0 (D:\100_Projects\110_Daily\YueShot\vendor\yue-ui\vendor\gpui-base)
+    Checking gpui-pre-platform v0.3.9
+    Checking gpui-kit v0.8.0
+    Checking yue-component-icons v0.1.0 (D:\100_Projects\110_Daily\YueShot\vendor\yue-ui\crates\yue-component-icons)
+    Checking yue-component v0.1.0 (D:\100_Projects\110_Daily\YueShot\vendor\yue-ui\crates\yue-component)
+    Checking yue-pin v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin)
+error: using `chunks_exact` with a constant chunk size
+   --> crates\yue-pin\src\screenshot_tests.rs:324:19
+    |
+324 |     path.vertices.chunks_exact(3).any(|triangle| {
+    |                   ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+    = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: could not compile `yue-pin` (lib test) due to 1 previous error

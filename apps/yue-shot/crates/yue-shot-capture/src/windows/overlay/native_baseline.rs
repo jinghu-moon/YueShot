@@ -1063,3 +1063,88 @@ fn capture_lifecycle_resource_probe(with_visual: bool, controlled: bool) {
         json!({"event":"shutdown", "visual_workers_balanced":true,"owner_shutdown_us":shutdown_started.elapsed().as_micros()})
     );
 }
+
+#[test]
+fn manual_drag_clears_animated_preview_before_first_frame_and_keeps_click_confirmation() {
+    let mut replay = Replay::new();
+    replay.preview(target(101), Rect::new(4, 4, 60, 44));
+    replay.on_left_down(POINT { x: 8, y: 8 });
+    // A pending click must retain its preview for click-to-confirm.
+    assert!(replay.preview_rect.is_some());
+    replay.on_mouse_move(POINT { x: 48, y: 36 });
+    assert!(replay.gesture.snap_preview().is_none());
+    assert!(
+        replay.preview_rect.is_none(),
+        "stale hover hole masks the dragging selection"
+    );
+    assert!(replay.preview_target.is_none());
+    replay.advance_preview_animation();
+    assert!(
+        replay.preview_rect.is_none(),
+        "animation must not resurrect the stale hole"
+    );
+    let dragged = replay.session.selection();
+    assert_eq!(dragged, Rect::new(8, 8, 48, 36));
+    replay.on_left_up();
+    assert_eq!(replay.session.selection(), dragged);
+    assert!(replay.preview_rect.is_none());
+}
+
+#[test]
+fn kept_selection_applies_corner_alpha_once_before_pin_handoff() {
+    let mut replay = Replay::new();
+    replay.corner_radius_px = 6;
+    replay.session.set_corner_radius(6);
+    replay.on_left_down(POINT { x: 8, y: 8 });
+    replay.on_mouse_move(POINT { x: 48, y: 36 });
+    replay.on_left_up();
+    let kept = replay.shared.lock().unwrap().selection.clone().unwrap();
+    assert_eq!(kept.corner_radius, 6);
+    for y in 0..28usize {
+        for x in 0..40usize {
+            let dx = x.min(39 - x) as f64;
+            let dy = y.min(27 - y) as f64;
+            let mut inside = 64u32;
+            if dx < 6. && dy < 6. {
+                inside = 0;
+                for sy in 0..8 {
+                    for sx in 0..8 {
+                        let a = (6. - dx - (f64::from(sx) + 0.5) / 8.) / 6.;
+                        let b = (6. - dy - (f64::from(sy) + 0.5) / 8.) / 6.;
+                        inside += u32::from(a.powi(4) + b.powi(4) <= 1.);
+                    }
+                }
+            }
+            let p = &kept.pixels.as_bytes()[(y * 40 + x) * 4..][..4];
+            assert_eq!(&p[..3], &[8 + x as u8, 8 + y as u8, 0], "RGB changed");
+            assert_eq!(
+                p[3],
+                (inside * 255 / 64) as u8,
+                "corner ({x},{y}) is unmasked or double-masked"
+            );
+        }
+    }
+}
+
+#[test]
+fn editing_a_selection_discards_preview_and_its_animation_immediately() {
+    let mut replay = Replay::new();
+    replay.on_left_down(POINT { x: 8, y: 8 });
+    replay.on_mouse_move(POINT { x: 52, y: 40 });
+    replay.on_left_up();
+    replay.preview(target(101), Rect::new(4, 4, 60, 44));
+    // This small fixture has overlapping interior handle hit areas. Grab an
+    // unambiguous corner instead of pretending its centre is a move target.
+    assert_eq!(
+        replay.session.pointer_hit(Point::new(8, 8)),
+        SelectionGeometry::Resize(Handle::TopLeft)
+    );
+    replay.on_left_down(POINT { x: 8, y: 8 });
+    assert!(replay.gesture.snap_preview().is_none());
+    assert!(replay.preview_rect.is_none());
+    replay.advance_preview_animation();
+    assert!(replay.preview_rect.is_none());
+    replay.on_mouse_move(POINT { x: 10, y: 9 });
+    replay.on_left_up();
+    assert_eq!(replay.session.selection(), Rect::new(10, 9, 52, 40));
+}

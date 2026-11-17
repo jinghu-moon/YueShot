@@ -1,0 +1,8 @@
+   Compiling yue-geometry v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-geometry)
+   Compiling yue-shot-model v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-model)
+   Compiling yue-shot-overlay-ui v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-overlay-ui)
+   Compiling yue-pin v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin)
+   Compiling yue-shot-storage v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-storage)
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+   Compiling yue-shot v0.1.4 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot)
+    Finished `release` profile [optimized + debuginfo] target(s) in 3m 27s

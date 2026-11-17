@@ -1,0 +1,172 @@
+[
+  {
+    "name": "xtask-check",
+    "program": "cargo",
+    "arguments": [
+      "xtask",
+      "check"
+    ],
+    "started": "2026-11-17T21:34:11.5702815+08:00",
+    "finished": "2026-11-17T21:38:05.5585713+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "pin-native-gpu",
+    "program": "cargo",
+    "arguments": [
+      "test",
+      "-p",
+      "yue-pin",
+      "--features",
+      "headless-tests",
+      "--locked",
+      "--lib",
+      "native_hdr_surface",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "started": "2026-11-17T21:38:05.5818108+08:00",
+    "finished": "2026-11-17T21:38:13.8429911+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "pin",
+    "program": "cargo",
+    "arguments": [
+      "test",
+      "-p",
+      "yue-pin",
+      "--features",
+      "headless-tests",
+      "--locked",
+      "--lib",
+      "--",
+      "--test-threads=1"
+    ],
+    "started": "2026-11-17T21:38:13.8468712+08:00",
+    "finished": "2026-11-17T21:38:29.3732033+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "geometry",
+    "program": "cargo",
+    "arguments": [
+      "test",
+      "-p",
+      "yue-geometry",
+      "--locked",
+      "--lib",
+      "--",
+      "--nocapture"
+    ],
+    "started": "2026-11-17T21:38:29.3756543+08:00",
+    "finished": "2026-11-17T21:38:30.5055406+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "gpu-corners",
+    "program": "cargo",
+    "arguments": [
+      "test",
+      "-p",
+      "yue-shot-capture",
+      "--locked",
+      "--lib",
+      "smooth_corner",
+      "--",
+      "--include-ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "started": "2026-11-17T21:38:30.5182504+08:00",
+    "finished": "2026-11-17T21:38:39.8522186+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "blurred-mask",
+    "program": "cargo",
+    "arguments": [
+      "test",
+      "-p",
+      "yue-shot-capture",
+      "--locked",
+      "--lib",
+      "the_blurred_mask_follows",
+      "--",
+      "--ignored",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "started": "2026-11-17T21:38:39.8545801+08:00",
+    "finished": "2026-11-17T21:38:40.7812181+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "controller",
+    "program": "cargo",
+    "arguments": [
+      "test",
+      "-p",
+      "yue-shot-capture",
+      "--locked",
+      "--lib",
+      "native_baseline",
+      "--",
+      "--test-threads=1"
+    ],
+    "started": "2026-11-17T21:38:40.7835040+08:00",
+    "finished": "2026-11-17T21:38:41.3185225+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "pin-clippy",
+    "program": "cargo",
+    "arguments": [
+      "clippy",
+      "-p",
+      "yue-pin",
+      "-p",
+      "yue-geometry",
+      "--features",
+      "yue-pin/headless-tests",
+      "--all-targets",
+      "--locked",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "started": "2026-11-17T21:38:41.3202793+08:00",
+    "finished": "2026-11-17T21:38:42.6252767+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "p4-runner",
+    "program": "pwsh",
+    "arguments": [
+      "-NoProfile",
+      "-File",
+      "tools/test-visual-candidate-p4.ps1",
+      "-EvidenceDirectory",
+      "docs/acceptance/corner-border-drag-mask/final-source-3/p4"
+    ],
+    "started": "2026-11-17T21:38:42.6280158+08:00",
+    "finished": "2026-11-17T21:40:26.5868567+08:00",
+    "exitCode": 0
+  },
+  {
+    "name": "release-build",
+    "program": "cargo",
+    "arguments": [
+      "build",
+      "-p",
+      "yue-shot",
+      "--release",
+      "--locked"
+    ],
+    "started": "2026-11-17T21:40:26.5954392+08:00",
+    "finished": "2026-11-17T21:40:29.6497034+08:00",
+    "exitCode": 101
+  }
+]

@@ -21,26 +21,89 @@ pub(crate) fn origin(window: &Window) -> Option<(i32, i32)> {
 }
 
 pub(crate) fn round_screenshot(window: &Window, dimensions: (i32, i32), radius: i32) {
-    use windows_sys::Win32::Graphics::Gdi::{CreateRoundRectRgn, DeleteObject, SetWindowRgn};
+    use windows_sys::Win32::Graphics::Gdi::{DeleteObject, SetWindowRgn};
     let Some(hwnd) = hwnd(window) else { return };
     unsafe {
         if radius <= 0 {
             SetWindowRgn(hwnd, std::ptr::null_mut(), 0);
             return;
         }
-        let diameter = radius.saturating_mul(2).min(dimensions.0.min(dimensions.1));
-        let region = CreateRoundRectRgn(
-            0,
-            0,
-            dimensions.0.saturating_add(1),
-            dimensions.1.saturating_add(1),
-            diameter,
-            diameter,
-        );
+        let region = screenshot_region(dimensions, radius);
         if !region.is_null() && SetWindowRgn(hwnd, region, 0) == 0 {
             DeleteObject(region);
         }
         // On success Windows owns and releases the HRGN.
+    }
+}
+
+// Preserve every pixel that can receive partial curve coverage. A centre-only
+// binary clip would cut the antialiased outer hairline again.
+fn screenshot_region(
+    dimensions: (i32, i32),
+    radius: i32,
+) -> windows_sys::Win32::Graphics::Gdi::HRGN {
+    use windows_sys::Win32::Foundation::RECT;
+    use windows_sys::Win32::Graphics::Gdi::{
+        CreateRectRgn, ExtCreateRegion, RDH_RECTANGLES, RGNDATAHEADER,
+    };
+    unsafe {
+        let (width, height) = dimensions;
+        let radius = radius.min(width / 2).min(height / 2);
+        if radius <= 0 {
+            return CreateRectRgn(0, 0, width, height);
+        }
+        let mut rows = Vec::<RECT>::with_capacity((2 * radius + 1) as usize);
+        let cut = |y: i32| {
+            yue_geometry::selection_shape::boundary_inset(f64::from(y + 1), f64::from(radius))
+                .floor()
+                .max(0.) as i32
+        };
+        for y in 0..radius {
+            rows.push(RECT {
+                left: cut(y),
+                top: y,
+                right: width - cut(y),
+                bottom: y + 1,
+            });
+        }
+        if height > 2 * radius {
+            rows.push(RECT {
+                left: 0,
+                top: radius,
+                right: width,
+                bottom: height - radius,
+            });
+        }
+        for y in (0..radius).rev() {
+            rows.push(RECT {
+                left: cut(y),
+                top: height - y - 1,
+                right: width - cut(y),
+                bottom: height - y,
+            });
+        }
+        let header_size = std::mem::size_of::<RGNDATAHEADER>();
+        let row_size = std::mem::size_of_val(rows.as_slice());
+        let bytes = header_size + row_size;
+        let header = RGNDATAHEADER {
+            dwSize: header_size as u32,
+            iType: RDH_RECTANGLES,
+            nCount: rows.len() as u32,
+            nRgnSize: row_size as u32,
+            rcBound: RECT {
+                left: 0,
+                top: 0,
+                right: width,
+                bottom: height,
+            },
+        };
+        let mut data = vec![header; bytes.div_ceil(header_size)];
+        std::ptr::copy_nonoverlapping(
+            rows.as_ptr().cast::<u8>(),
+            data.as_mut_ptr().cast::<u8>().add(header_size),
+            row_size,
+        );
+        ExtCreateRegion(std::ptr::null(), bytes as u32, data.as_ptr().cast())
     }
 }
 
@@ -291,6 +354,46 @@ pub(crate) fn open(path: &str, reveal: bool) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::clamp_position;
+
+    #[test]
+    fn screenshot_region_preserves_partial_hairline_pixels_and_drops_empty_corners() {
+        use windows_sys::Win32::Graphics::Gdi::{DeleteObject, PtInRegion};
+        for (width, height, radius) in [
+            (3, 3, 1),
+            (66, 34, 9),
+            (130, 66, 17),
+            (642, 322, 81),
+            (2582, 2582, 1282),
+        ] {
+            let region = super::screenshot_region((width, height), radius);
+            assert!(!region.is_null());
+            for y in 0..radius {
+                for x in 0..radius {
+                    // Independent analytic test: any interior area of this pixel
+                    // must survive the conservative binary HWND region.
+                    let dx = (f64::from(radius - x - 1) / f64::from(radius)).max(0.);
+                    let dy = (f64::from(radius - y - 1) / f64::from(radius)).max(0.);
+                    let expected = dx.powi(4) + dy.powi(4) < 1.;
+                    for (x, y) in [
+                        (x, y),
+                        (width - 1 - x, y),
+                        (x, height - 1 - y),
+                        (width - 1 - x, height - 1 - y),
+                    ] {
+                        assert_eq!(
+                            unsafe { PtInRegion(region, x, y) } != 0,
+                            expected,
+                            "r={radius} at ({x},{y})"
+                        );
+                    }
+                }
+            }
+            unsafe {
+                DeleteObject(region);
+            }
+        }
+    }
+
     #[test]
     fn placement_flips_and_clamps_on_negative_monitors() {
         assert_eq!(

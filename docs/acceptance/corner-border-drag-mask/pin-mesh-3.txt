@@ -1,0 +1,19 @@
+   Compiling yue-pin v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.20s
+     Running unittests src\lib.rs (target\debug\deps\yue_pin-15530aebe17376f4.exe)
+
+running 1 test
+
+thread 'screenshot::tests::border_mesh_covers_all_four_curves_at_each_zoom_and_dpi_without_filling_image' (20080) panicked at crates\yue-pin\src\screenshot_tests.rs:369:21:
+border fills translucent source radius=0 zoom=2 scale=1 bounds=Bounds { origin: Point { x: 0px (scaled), y: 0px (scaled) }, size: Size { 129px (scaled) × 65px (scaled) } } expected=130x66
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test screenshot::tests::border_mesh_covers_all_four_curves_at_each_zoom_and_dpi_without_filling_image ... FAILED
+
+failures:
+
+failures:
+    screenshot::tests::border_mesh_covers_all_four_curves_at_each_zoom_and_dpi_without_filling_image
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 79 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p yue-pin --lib`

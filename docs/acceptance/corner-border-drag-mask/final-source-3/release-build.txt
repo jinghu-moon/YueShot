@@ -1,0 +1,48 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+   Compiling yue-pin v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin)
+error[E0433]: cannot find `selection_shape` in `geometry`
+   --> apps\yue-shot\crates\yue-shot-capture\src\artifact.rs:188:31
+    |
+188 |     yue_shot_model::geometry::selection_shape::visit_corner_coverage(
+    |                               ^^^^^^^^^^^^^^^ could not find `selection_shape` in `geometry`
+
+error[E0433]: cannot find `selection_shape` in `geometry`
+   --> apps\yue-shot\crates\yue-shot-capture\src\artifact.rs:209:31
+    |
+209 |     yue_shot_model::geometry::selection_shape::visit_corner_coverage(
+    |                               ^^^^^^^^^^^^^^^ could not find `selection_shape` in `geometry`
+
+error[E0433]: cannot find `selection_shape` in `geometry`
+   --> apps\yue-shot\crates\yue-shot-capture\src\geometry.rs:133:43
+    |
+133 |     let inner = yue_shot_model::geometry::selection_shape::diagonal_inset(radius);
+    |                                           ^^^^^^^^^^^^^^^ could not find `selection_shape` in `geometry`
+
+error[E0433]: cannot find `selection_shape` in `geometry`
+  --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\selection_path.rs:47:58
+   |
+47 |                 for segment in yue_shot_model::geometry::selection_shape::corner_cubics() {
+   |                                                          ^^^^^^^^^^^^^^^ could not find `selection_shape` in `geometry`
+
+error[E0433]: cannot find `selection_shape` in `geometry`
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\window.rs:114:36
+    |
+114 |         (yue_shot_model::geometry::selection_shape::boundary_inset(
+    |                                    ^^^^^^^^^^^^^^^ could not find `selection_shape` in `geometry`
+
+error[E0433]: cannot find `selection_shape` in `yue_geometry`
+  --> crates\yue-pin\src\platform.rs:57:27
+   |
+57 |             yue_geometry::selection_shape::boundary_inset(f64::from(y + 1), f64::from(radius))
+   |                           ^^^^^^^^^^^^^^^ could not find `selection_shape` in `yue_geometry`
+
+error[E0433]: cannot find `selection_shape` in `yue_geometry`
+   --> crates\yue-pin\src\screenshot.rs:273:46
+    |
+273 |                 for segment in yue_geometry::selection_shape::corner_cubics() {
+    |                                              ^^^^^^^^^^^^^^^ could not find `selection_shape` in `yue_geometry`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `yue-pin` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `yue-shot-capture` (lib) due to 5 previous errors

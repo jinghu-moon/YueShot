@@ -8,7 +8,7 @@ $destination = [IO.Path]::GetFullPath((Join-Path $root $EvidenceDirectory))
 if (Test-Path -LiteralPath $destination) { throw 'Use a new evidence directory; prior evidence is immutable.' }
 New-Item -ItemType Directory -Path $destination | Out-Null
 $hashes = [ordered]@{}
-$files = @(Get-ChildItem apps/yue-shot/crates/yue-shot-capture/src -Recurse -Filter '*.rs' -File)
+$files = @(Get-ChildItem -LiteralPath apps/yue-shot/crates/yue-shot-capture/src, crates/yue-geometry/src -Recurse -Filter '*.rs' -File)
 $files += Get-Item Cargo.lock, $PSCommandPath
 foreach ($file in $files) {
     $name = $file.FullName.Substring($root.Length + 1).Replace('\', '/')

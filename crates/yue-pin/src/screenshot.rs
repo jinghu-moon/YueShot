@@ -48,6 +48,10 @@ impl ScreenshotView {
         let PinContent::Image(pixels) = snapshot.content() else {
             unreachable!("validated screenshot")
         };
+        let radius = radius
+            .clamp(0, 128)
+            .min(pixels.width() as i32 / 4)
+            .min(pixels.height() as i32 / 4);
         let pixels = pixels.clone();
         let prepare = cx.spawn_in(window, async move |this, cx| {
             let prepared = cx
@@ -221,6 +225,65 @@ impl ScreenshotView {
     }
 }
 
+/// Fill a ring between two quartic contours. Even-odd fill keeps the image
+/// interior transparent, including translucent HDR pixels. No inner background.
+fn screenshot_border(
+    outer: Bounds<Pixels>,
+    inner: Bounds<Pixels>,
+    radius: Pixels,
+    inset: Pixels,
+    scale: f32,
+) -> anyhow::Result<Path<Pixels>> {
+    let mut path = PathBuilder::default().with_style(PathStyle::Fill(
+        FillOptions::default()
+            .with_fill_rule(FillRule::EvenOdd)
+            .with_tolerance(0.005 / scale),
+    ));
+    for (bounds, r) in [
+        (
+            outer,
+            if radius > px(0.) {
+                radius + inset
+            } else {
+                px(0.)
+            },
+        ),
+        (inner, radius),
+    ] {
+        let r = r.min(bounds.size.width / 2.).min(bounds.size.height / 2.);
+        path.move_to(point(bounds.left() + r, bounds.top()));
+        let centers = [
+            point(bounds.right() - r, bounds.top() + r),
+            point(bounds.right() - r, bounds.bottom() - r),
+            point(bounds.left() + r, bounds.bottom() - r),
+            point(bounds.left() + r, bounds.top() + r),
+        ];
+        for (corner, center) in centers.into_iter().enumerate() {
+            let transform = |[x, y]: [f32; 2]| {
+                let (x, y) = match corner {
+                    0 => (y, -x),
+                    1 => (x, y),
+                    2 => (-y, x),
+                    _ => (-x, -y),
+                };
+                center + point(r * x, r * y)
+            };
+            path.line_to(transform([1., 0.]));
+            if r > px(0.) {
+                for segment in yue_geometry::selection_shape::corner_cubics() {
+                    path.cubic_bezier_to(
+                        transform(segment[3]),
+                        transform(segment[1]),
+                        transform(segment[2]),
+                    );
+                }
+            }
+        }
+        path.close();
+    }
+    path.build()
+}
+
 impl Render for ScreenshotView {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         #[cfg(all(test, feature = "headless-tests"))]
@@ -269,29 +332,31 @@ impl Render for ScreenshotView {
                     |_, _, _| (),
                     move |bounds, _, window, cx| {
                         if let Some(image) = &image {
-                            // The outer hairline never covers source pixels. Rounded
-                            // transparent corners are handled by the native GPU shader.
-                            window.paint_quad(quad(
-                                bounds,
-                                Corners::all(radius + inset),
-                                transparent_black(),
-                                Edges::all(inset),
-                                gpui_kit::Hsla::from(gpui_kit::rgb(
-                                    yue_component::current_theme(cx).border_default(),
-                                )),
-                                BorderStyle::Solid,
-                            ));
                             let image_bounds =
                                 Bounds::new(bounds.origin + point(inset, inset), image_size);
-                            let painted = image
-                                .paint(
-                                    bounds,
-                                    image_bounds,
-                                    radius,
-                                    ImagePreviewSampling::Smooth,
-                                    window,
-                                )
-                                .map_err(|e| e.to_string());
+                            // The captured pixels already contain the quartic alpha.
+                            // Draw a closed ring outside it, with the same corner controls;
+                            // neither a circular quad nor a second circular image clip fits.
+                            let painted =
+                                screenshot_border(bounds, image_bounds, radius, inset, scale)
+                                    .map_err(|e| e.to_string())
+                                    .and_then(|path| {
+                                        window.paint_path(
+                                            path,
+                                            gpui_kit::Hsla::from(gpui_kit::rgb(
+                                                yue_component::current_theme(cx).border_default(),
+                                            )),
+                                        );
+                                        image
+                                            .paint(
+                                                bounds,
+                                                image_bounds,
+                                                px(0.),
+                                                ImagePreviewSampling::Smooth,
+                                                window,
+                                            )
+                                            .map_err(|e| e.to_string())
+                                    });
                             if visible && !sent.replace(true) {
                                 // This is an upload/paint acknowledgement, never an
                                 // acknowledgement of an empty window or a decode alone.

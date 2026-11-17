@@ -1,0 +1,46 @@
+   Compiling yue-geometry v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-geometry)
+   Compiling yue-shot-overlay-ui v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-overlay-ui)
+   Compiling yue-shot-model v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-model)
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+error[E0433]: cannot find module or crate `yue_geometry` in this scope
+   --> apps\yue-shot\crates\yue-shot-capture\src\artifact.rs:188:5
+    |
+188 |     yue_geometry::selection_shape::visit_corner_coverage(width, height, radius, |index, cov| {
+    |     ^^^^^^^^^^^^ use of unresolved module or unlinked crate `yue_geometry`
+    |
+    = help: if you wanted to use a crate named `yue_geometry`, use `cargo add yue_geometry` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `yue_geometry` in this scope
+   --> apps\yue-shot\crates\yue-shot-capture\src\artifact.rs:204:5
+    |
+204 |     yue_geometry::selection_shape::visit_corner_coverage(width, height, radius, |index, cov| {
+    |     ^^^^^^^^^^^^ use of unresolved module or unlinked crate `yue_geometry`
+    |
+    = help: if you wanted to use a crate named `yue_geometry`, use `cargo add yue_geometry` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `yue_geometry` in this scope
+   --> apps\yue-shot\crates\yue-shot-capture\src\geometry.rs:133:17
+    |
+133 |     let inner = yue_geometry::selection_shape::diagonal_inset(radius);
+    |                 ^^^^^^^^^^^^ use of unresolved module or unlinked crate `yue_geometry`
+    |
+    = help: if you wanted to use a crate named `yue_geometry`, use `cargo add yue_geometry` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `yue_geometry` in this scope
+  --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\d2d\selection_path.rs:47:32
+   |
+47 |                 for segment in yue_geometry::selection_shape::corner_cubics() {
+   |                                ^^^^^^^^^^^^ use of unresolved module or unlinked crate `yue_geometry`
+   |
+   = help: if you wanted to use a crate named `yue_geometry`, use `cargo add yue_geometry` to add it to your `Cargo.toml`
+
+error[E0433]: cannot find module or crate `yue_geometry` in this scope
+   --> apps\yue-shot\crates\yue-shot-capture\src\windows\win\window.rs:114:10
+    |
+114 |         (yue_geometry::selection_shape::boundary_inset(f64::from(y) + 0.5, f64::from(radius)) - 0.5)
+    |          ^^^^^^^^^^^^ use of unresolved module or unlinked crate `yue_geometry`
+    |
+    = help: if you wanted to use a crate named `yue_geometry`, use `cargo add yue_geometry` to add it to your `Cargo.toml`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `yue-shot-capture` (lib test) due to 5 previous errors

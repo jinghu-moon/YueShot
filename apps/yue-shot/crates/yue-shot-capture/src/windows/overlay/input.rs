@@ -158,8 +158,9 @@ impl OverlayController {
                 MoveOutcome::Pending => {}
                 MoveOutcome::ManualDragStarted { press_point } => {
                     // Crossing the drag threshold turns the pending press into a free
-                    // drag anchored at the press point. The snap preview is already gone:
-                    // the press replaced it.
+                    // drag anchored at the press point. Clear its painted/animated copy
+                    // in the same transition, before the next frame chooses a mask hole.
+                    self.sync_preview_rect();
                     self.session.begin_drag(
                         press_point,
                         ResizeMode::Handle(Handle::BottomRight),
@@ -295,6 +296,8 @@ impl OverlayController {
         if let PressOutcome::BeginEdit(mode) = outcome {
             // Grabbing a handle or the interior of a selection is deliberate: the drag
             // starts immediately, with no threshold.
+            self.gesture.clear_preview();
+            self.sync_preview_rect();
             self.session.begin_drag(point, mode, false);
             self.disarm_dwell();
         }

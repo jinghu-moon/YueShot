@@ -42,7 +42,9 @@ const HALF: [[[f64; 2]; 4]; 4] = [
     ],
 ];
 
-pub(crate) fn corner_cubics() -> [[[f32; 2]; 4]; 8] {
+/// Eight normalized cubic segments forming one continuous quartic corner.
+/// Apply a rotation and scale to place it on a rectangle.
+pub fn corner_cubics() -> [[[f32; 2]; 4]; 8] {
     std::array::from_fn(|i| {
         std::array::from_fn(|j| {
             let [x, y] = if i < 4 {
@@ -59,11 +61,13 @@ pub(crate) fn corner_cubics() -> [[[f32; 2]; 4]; 8] {
     })
 }
 
-pub(crate) fn diagonal_inset(radius: i32) -> i32 {
+/// Distance from a rectangle corner to its quartic diagonal grip.
+pub fn diagonal_inset(radius: i32) -> i32 {
     (f64::from(radius) * (1. - DIAGONAL)).round() as i32
 }
 
-pub(crate) fn contains_corner(x: f32, y: f32, radius: f32) -> bool {
+/// Whether a local point lies inside a positive-radius quartic corner.
+pub fn contains_corner(x: f32, y: f32, radius: f32) -> bool {
     let dx = ((radius - x) / radius).max(0.);
     let dy = ((radius - y) / radius).max(0.);
     let dx2 = dx * dx;
@@ -73,10 +77,60 @@ pub(crate) fn contains_corner(x: f32, y: f32, radius: f32) -> bool {
 
 /// Analytic scanline boundary for GDI's binary window regions. The native
 /// region cannot carry alpha, so it includes pixels whose centres are inside.
-pub(crate) fn boundary_inset(y: f64, radius: f64) -> f64 {
+pub fn boundary_inset(y: f64, radius: f64) -> f64 {
     let dy = (radius - y) / radius;
     let dy2 = dy * dy;
     radius * (1. - (1. - dy2 * dy2).max(0.).sqrt().sqrt())
+}
+
+/// Visit only non-opaque pixels in the four quartic corners, using 8x8 coverage.
+/// Indices address a tightly packed width-by-height image. Radius is capped at
+/// 128 source pixels and one quarter of the shorter side, matching capture.
+pub fn visit_corner_coverage(
+    width: u32,
+    height: u32,
+    radius: u32,
+    mut apply: impl FnMut(usize, u8),
+) {
+    // 与框的绘制、手柄布局共用一个上限（docs/23 §14.55.21）。
+    let radius = radius.min(128).min(width / 4).min(height / 4);
+    if radius == 0 || width == 0 || height == 0 {
+        return;
+    }
+    let r = radius as f32;
+    let samples = 8u32;
+    for y in 0..radius {
+        for x in 0..radius {
+            // Monotone corner boundary: one exact check proves full coverage;
+            // the opposite corner proves zero. Only crossing pixels need AA.
+            let cov = if contains_corner(x as f32, y as f32, r) {
+                255
+            } else if !contains_corner(x as f32 + 1., y as f32 + 1., r) {
+                0
+            } else {
+                let mut inside = 0u32;
+                for sy in 0..samples {
+                    for sx in 0..samples {
+                        let px = x as f32 + (sx as f32 + 0.5) / samples as f32;
+                        let py = y as f32 + (sy as f32 + 0.5) / samples as f32;
+                        inside += u32::from(contains_corner(px, py, r));
+                    }
+                }
+                ((inside * 255) / (samples * samples)) as u8
+            };
+            if cov == 255 {
+                continue;
+            }
+            for (x, y) in [
+                (x, y),
+                (width - 1 - x, y),
+                (x, height - 1 - y),
+                (width - 1 - x, height - 1 - y),
+            ] {
+                apply(y as usize * width as usize + x as usize, cov);
+            }
+        }
+    }
 }
 
 #[cfg(test)]

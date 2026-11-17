@@ -1,0 +1,9 @@
+   Compiling yue-pin v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.99s
+     Running unittests src\lib.rs (target\debug\deps\yue_pin-15530aebe17376f4.exe)
+
+running 1 test
+test screenshot::tests::border_mesh_covers_all_four_curves_at_each_zoom_and_dpi_without_filling_image ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 79 filtered out; finished in 0.19s
+

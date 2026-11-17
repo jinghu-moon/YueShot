@@ -44,7 +44,7 @@ pub(super) fn geometry(
             };
             sink.AddLine(transform([1., 0.]));
             if radius > 0 {
-                for segment in crate::selection_shape::corner_cubics() {
+                for segment in yue_shot_model::geometry::selection_shape::corner_cubics() {
                     sink.AddBezier(&D2D1_BEZIER_SEGMENT {
                         point1: transform(segment[1]),
                         point2: transform(segment[2]),

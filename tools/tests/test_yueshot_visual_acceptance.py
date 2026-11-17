@@ -60,6 +60,17 @@ class VisualAcceptanceTests(unittest.TestCase):
             manifest = {'sourceSha256': {p.relative_to(root).as_posix(): review.digest(p)
                                         for p in (rust, lock)}}
             self.assertEqual(review.current_sources(manifest, root), 2)
+            geometry = root / 'crates/yue-geometry/src/selection_shape.rs'
+            geometry.parent.mkdir(parents=True)
+            geometry.write_text('shared corner', encoding='utf8')
+            with self.assertRaisesRegex(ValueError, 'inventory changed'):
+                review.current_sources(manifest, root)
+            manifest['sourceSha256'][geometry.relative_to(root).as_posix()] = review.digest(geometry)
+            self.assertEqual(review.current_sources(manifest, root), 3)
+            geometry.write_text('changed shared corner', encoding='utf8')
+            with self.assertRaisesRegex(ValueError, 'hash changed'):
+                review.current_sources(manifest, root)
+            geometry.write_text('shared corner', encoding='utf8')
             rust.write_text('changed', encoding='utf8')
             with self.assertRaisesRegex(ValueError, 'hash changed'):
                 review.current_sources(manifest, root)

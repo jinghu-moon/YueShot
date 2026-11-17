@@ -33,7 +33,10 @@ impl PinSelection {
         }
     }
 
-    /// Set the captured corner radius in source-image physical pixels; negative values become 0.
+    /// Describe the captured corner radius in source-image physical pixels.
+    /// The image must already carry its antialiased corner alpha; this value
+    /// positions the surrounding border without applying another image mask.
+    /// Negative values become 0.
     pub fn radius(mut self, radius: i32) -> Self {
         self.radius = radius.max(0);
         self

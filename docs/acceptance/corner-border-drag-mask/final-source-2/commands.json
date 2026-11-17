@@ -1,0 +1,11 @@
+{
+  "name": "xtask-check",
+  "program": "cargo",
+  "arguments": [
+    "xtask",
+    "check"
+  ],
+  "started": "2026-11-17T21:28:05.5895045+08:00",
+  "finished": "2026-11-17T21:31:58.2353555+08:00",
+  "exitCode": 1
+}

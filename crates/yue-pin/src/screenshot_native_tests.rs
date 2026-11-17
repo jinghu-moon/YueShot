@@ -126,11 +126,16 @@ fn native_hdr_surface_keeps_placement_alpha_focus_and_releases_its_render_image(
             AlphaMode::Straight,
         )
         .unwrap();
-        let bytes = [-0.25_f32, 12.5, 0.5, 0.5]
+        let mut bytes = [-0.25_f32, 12.5, 0.5, 0.5]
             .into_iter()
             .flat_map(|v| half::f16::from_f32(v).to_le_bytes())
             .collect::<Vec<_>>()
             .repeat(64 * 32);
+        yue_geometry::selection_shape::visit_corner_coverage(64, 32, 8, |index, coverage| {
+            bytes[index * 8 + 6..index * 8 + 8].copy_from_slice(
+                &half::f16::from_f32(0.5 * f32::from(coverage) / 255.).to_le_bytes(),
+            );
+        });
         let pixels = Arc::new(PixelBuffer::from_tight(64, 32, descriptor, bytes).unwrap());
         let original = pixels.clone();
         let image = PinImage::from_pixels(PixelSource::new(descriptor, 91), pixels).unwrap();
@@ -237,6 +242,29 @@ fn native_hdr_surface_keeps_placement_alpha_focus_and_releases_its_render_image(
                         }
                     };
                     check(alpha(0, 0) < 0.01, "rounded outer corner is opaque");
+                    let width = target.size().width.0 as usize;
+                    let height = target.size().height.0 as usize;
+                    let mut arc_alpha = [0f32; 4];
+                    for y in b as usize..8 {
+                        for x in b as usize..8 {
+                            for (corner, (x, y)) in [
+                                (x, y),
+                                (width - 1 - x, y),
+                                (x, height - 1 - y),
+                                (width - 1 - x, height - 1 - y),
+                            ]
+                            .into_iter()
+                            .enumerate()
+                            {
+                                arc_alpha[corner] = arc_alpha[corner].max(alpha(x, y));
+                            }
+                        }
+                    }
+                    eprintln!("native curved-border maximum alpha per corner: {arc_alpha:?}");
+                    check(
+                        arc_alpha.iter().all(|a| *a > 0.55),
+                        "one or more curved border segments are missing over a 0.5-alpha source",
+                    );
                     check(
                         (alpha(
                             target.size().width.0 as usize / 2,

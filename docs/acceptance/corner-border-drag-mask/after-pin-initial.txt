@@ -1,0 +1,28 @@
+   Compiling yue-geometry v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-geometry)
+   Compiling yue-pin v0.1.0 (D:\100_Projects\110_Daily\YueShot\crates\yue-pin)
+error[E0433]: cannot find `selection_shape` in `yue_geometry`
+  --> crates\yue-pin\src\image_preview.rs:35:27
+   |
+35 |             yue_geometry::selection_shape::visit_corner_coverage(
+   |                           ^^^^^^^^^^^^^^^ could not find `selection_shape` in `yue_geometry`
+
+error[E0433]: cannot find `selection_shape` in `yue_geometry`
+  --> crates\yue-pin\src\image_preview.rs:58:27
+   |
+58 |             yue_geometry::selection_shape::visit_corner_coverage(
+   |                           ^^^^^^^^^^^^^^^ could not find `selection_shape` in `yue_geometry`
+
+error[E0433]: cannot find `selection_shape` in `yue_geometry`
+  --> crates\yue-pin\src\platform.rs:41:27
+   |
+41 |             yue_geometry::selection_shape::boundary_inset(f64::from(y + 1), f64::from(radius))
+   |                           ^^^^^^^^^^^^^^^ could not find `selection_shape` in `yue_geometry`
+
+error[E0433]: cannot find `selection_shape` in `yue_geometry`
+   --> crates\yue-pin\src\screenshot.rs:276:46
+    |
+276 |                 for segment in yue_geometry::selection_shape::corner_cubics() {
+    |                                              ^^^^^^^^^^^^^^^ could not find `selection_shape` in `yue_geometry`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `yue-pin` (lib test) due to 4 previous errors

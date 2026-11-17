@@ -130,7 +130,7 @@ pub fn corner_handle_anchor(rect: Rect, radius: i32, handle: Handle) -> Point {
     if radius == 0 {
         return corner;
     }
-    let inner = crate::selection_shape::diagonal_inset(radius);
+    let inner = yue_shot_model::geometry::selection_shape::diagonal_inset(radius);
     let dx = if corner.x == rect.left { inner } else { -inner };
     let dy = if corner.y == rect.top { inner } else { -inner };
     Point::new(corner.x + dx, corner.y + dy)

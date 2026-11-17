@@ -19,8 +19,8 @@ COUNTS = {
     'owner-lifetimes': (5, 0), 'transfer-faults': (1, 0),
 }
 BASELINE_COUNTS = {
-    'capture': (623, 129), 'media': (8, 0),
-    'geometry': (10, 0), 'native-baseline': (11, 19),
+    'capture': (624, 130), 'media': (8, 0),
+    'geometry': (12, 0), 'native-baseline': (14, 20),
 }
 PENDING = [
     'V01-V07 visible F5/F7/save/pin, native protection and full interaction timing',
@@ -51,9 +51,10 @@ def contained(base, relative):
 
 def current_sources(manifest, root):
     hashes = manifest['sourceSha256']
-    source_prefix = 'apps/yue-shot/crates/yue-shot-capture/src/'
-    actual = {p.relative_to(root).as_posix() for p in (root / source_prefix).rglob('*.rs')}
-    recorded = {p for p in hashes if p.startswith(source_prefix) and p.endswith('.rs')}
+    source_prefixes = ('apps/yue-shot/crates/yue-shot-capture/src/', 'crates/yue-geometry/src/')
+    actual = {p.relative_to(root).as_posix()
+              for prefix in source_prefixes for p in (root / prefix).rglob('*.rs')}
+    recorded = {p for p in hashes if p.startswith(source_prefixes) and p.endswith('.rs')}
     require(actual == recorded, 'Source inventory changed, including added/deleted modules')
     checked = 0
     for name, expected in hashes.items():

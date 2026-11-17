@@ -1,0 +1,87 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.54s
+     Running unittests src\lib.rs (target\debug\deps\yue_pin-15530aebe17376f4.exe)
+
+running 80 tests
+test image_preview::contract_tests::associated_bgra_is_unassociated_exactly_once_before_display ... ok
+test image_preview::contract_tests::associated_linear_sdr_is_unassociated_without_changing_white_definition ... ok
+test image_preview::contract_tests::bgra_rows_keep_their_original_top_down_order ... ok
+test image_preview::contract_tests::hdr_display_does_not_clip_finite_highlights_to_eight_bit_white ... ok
+test image_preview::contract_tests::independent_display_preparations_never_replace_shared_source_identity ... ok
+test image_preview::contract_tests::padded_bgra_source_never_leaks_padding_into_the_display ... ok
+test image_preview::contract_tests::padded_fp16_rows_reach_the_same_hdr_display_resource ... ok
+test image_preview::contract_tests::relative_linear_sdr_is_not_relabelled_as_absolute_scrgb ... ok
+test image_preview::contract_tests::sixteen_bit_sdr_alpha_is_retained_above_eight_bit_precision ... ok
+test image_preview::contract_tests::source_edge_limit_rejects_preparation_instead_of_silently_truncating_pixels ... ok
+test image_preview::contract_tests::texture_edge_budget_uses_an_exact_source_and_then_an_explicit_proxy ... ok
+test image_preview::contract_tests::the_sdr_png_copy_round_trips_every_byte_code_and_alpha ... ok
+test image_preview::contract_tests::transparent_straight_hdr_keeps_hidden_rgb_in_the_immutable_source ... ok
+test image_preview::contract_tests::zero_alpha_associated_bgra_is_normalized_without_a_divide_by_zero ... ok
+test image_preview::tests::dimensions_are_rejected_before_decoding_pixel_data ... ok
+test image_preview::tests::local_file_preview_keeps_original_pixels_and_alpha ... ok
+test image_preview::tests::long_image_proxy_keeps_copy_pixels_and_original_dimensions ... ok
+test image_preview::tests::pq_file_decodes_and_renders_hdr_without_an_sdr_intermediate ... ok
+test image_preview::tests::render_converts_channels_once_without_changing_source_or_alpha ... ok
+test image_preview::tests::render_preserves_extended_rgb_and_normalizes_associated_alpha_once ... ok
+test image_preview::tests::sixteen_bit_sdr_has_an_explicit_eight_bit_copy_derivative ... ok
+test image_preview::tests::thumbnail_is_derived_and_does_not_replace_original_pixels ... ok
+test manager::tests::clipboard_images_fit_the_monitor_without_mutating_original_pixels ... ok
+test manager::tests::empty_selection_is_rejected_before_a_window_or_id_is_allocated ... ok
+test manager::tests::exhausted_ids_never_wrap_or_become_reusable ... ok
+test manager::tests::hdr_screenshot_is_admitted_without_consuming_its_source_at_window_creation ... ok
+test manager::tests::ids_start_at_one_and_both_window_kinds_share_the_same_sequence ... ok
+test manager::tests::image_copy_commands_retain_the_exact_shared_original_source ... ok
+test manager::tests::mismatched_selection_dimensions_never_reinterpret_original_pixels ... ok
+test manager::tests::valid_selections_keep_negative_origins_and_source_radius ... ok
+test platform::tests::placement_flips_and_clamps_on_negative_monitors ... ok
+test platform::tests::screenshot_region_preserves_partial_hairline_pixels_and_drops_empty_corners ... ok
+test screenshot::native_tests::native_hdr_surface_keeps_placement_alpha_focus_and_releases_its_render_image ... ignored, creates small nonactivating F6 windows; exercises own HWNDs and own GPU targets only
+test screenshot::native_tests::native_twenty_hdr_windows_release_sources_and_do_not_render_while_idle ... ignored, Release own-window 20-cycle lifecycle and idle-render probe; no system input
+test screenshot::tests::border_mesh_covers_all_four_curves_at_each_zoom_and_dpi_without_filling_image ... ok
+test screenshot::tests::cancelled_receipts_release_the_claim_once_without_late_consumption ... ok
+test screenshot::tests::double_click_closes_the_production_surface_and_retains_an_undo_source ... ok
+test screenshot::tests::dpi_updates_preserve_source_pixel_geometry_and_rounding ... ok
+test screenshot::tests::duplicate_receipts_commit_and_release_the_source_claim_only_once ... ok
+test screenshot::tests::failed_receipts_release_the_claim_once_without_late_consumption ... ok
+test screenshot::tests::first_successful_paint_commits_once_and_keeps_the_shared_hdr_source ... ok
+test screenshot::tests::hiding_pending_preparation_defers_its_commit_until_it_is_shown ... ok
+test screenshot::tests::rejected_preparation_does_not_commit_or_add_an_empty_undo_item ... ok
+test screenshot::tests::screenshot_border_follows_the_export_contour_without_a_second_circular_clip ... ok
+test screenshot::tests::wheel_events_zoom_about_the_cursor_without_rebuilding_the_display_resource ... ok
+test screenshot_geometry::tests::a_cumulative_drag_would_lose_the_cursor ... ok
+test screenshot_geometry::tests::a_high_precision_wheel_accumulates_until_a_whole_notch ... ok
+test screenshot_geometry::tests::a_step_is_one_tenth ... ok
+test screenshot_geometry::tests::a_step_up_then_down_returns_to_the_same_value ... ok
+test screenshot_geometry::tests::a_zoom_limit_consumes_notches_so_reversal_is_immediate ... ok
+test screenshot_geometry::tests::border_is_one_dip_rounded_with_a_floor_of_one_pixel ... ok
+test screenshot_geometry::tests::cursor_anchoring_is_translation_invariant_on_negative_desktops ... ok
+test screenshot_geometry::tests::dpi_changes_only_chrome_and_not_source_image_physical_dimensions ... ok
+test screenshot_geometry::tests::dragging_keeps_the_window_under_the_cursor ... ok
+test screenshot_geometry::tests::every_tenth_is_reachable_without_accumulated_float_drift ... ok
+test screenshot_geometry::tests::image_point_outside_the_image_is_none ... ok
+test screenshot_geometry::tests::invalid_nan_zoom_returns_to_one_to_one ... ok
+test screenshot_geometry::tests::nonpositive_zoom_is_the_minimum_including_negative_zero ... ok
+test screenshot_geometry::tests::one_wheel_message_can_carry_several_notches ... ok
+test screenshot_geometry::tests::opposite_partial_wheel_motion_cancels_without_a_zoom_jump ... ok
+test screenshot_geometry::tests::positive_infinite_zoom_stops_at_the_upper_limit ... ok
+test screenshot_geometry::tests::scaled_dimension_never_collapses_or_overflows ... ok
+test screenshot_geometry::tests::source_radius_scales_with_image_zoom_and_never_becomes_negative ... ok
+test screenshot_geometry::tests::the_badge_spells_the_zoom_the_way_the_magnifier_does ... ok
+test screenshot_geometry::tests::tiny_images_keep_one_physical_pixel_at_minimum_zoom ... ok
+test screenshot_geometry::tests::wheel_accepts_the_full_negative_platform_delta_without_overflow ... ok
+test screenshot_geometry::tests::wheel_accepts_the_full_positive_platform_delta_without_per_notch_work ... ok
+test screenshot_geometry::tests::window_size_is_image_times_zoom_plus_border ... ok
+test screenshot_geometry::tests::zero_wheel_motion_does_not_snap_a_valid_fractional_start_zoom ... ok
+test screenshot_geometry::tests::zoom_stops_at_its_bounds ... ok
+test screenshot_geometry::tests::zooming_around_a_border_cursor_leaves_the_window_where_it_was ... ok
+test screenshot_geometry::tests::zooming_keeps_the_pixel_under_the_cursor_still ... ok
+test table::interaction_tests::header_only_table_has_no_selectable_body ... ok
+test table::interaction_tests::keyboard_keeps_selected_cell_visible_and_clamps_at_edges ... ok
+test table::interaction_tests::large_table_scrolls_both_axes_freezes_first_column_and_resizes ... ok
+test table::interaction_tests::maximum_width_table_only_materializes_visible_columns ... ok
+test table::tests::only_unambiguous_finite_numbers_use_numeric_alignment ... ok
+test view::logic_tests::collection_parent_uses_complete_windows_path_components ... ok
+test view::tests::hdr_view_retains_shared_source_and_sends_explicit_copy_intents ... ok
+test view::tests::production_pin_selection_copy_files_and_close_flow ... ok
+
+test result: ok. 78 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 14.75s
+

@@ -1,0 +1,1559 @@
+{
+  "scope": "Running rebuilt product diagnostic events; not a visible geometry or export acceptance",
+  "events": [
+    {
+      "timestampMs": 1794912215842,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=1"
+    },
+    {
+      "timestampMs": 1794912215845,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=1 candidates=1 elapsed_us=2868"
+    },
+    {
+      "timestampMs": 1794912215845,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=None"
+    },
+    {
+      "timestampMs": 1794912215855,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=1 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912215931,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912217936,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=2"
+    },
+    {
+      "timestampMs": 1794912217940,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=2 candidates=1 elapsed_us=4405"
+    },
+    {
+      "timestampMs": 1794912217940,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912217952,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=2 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912218754,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=3"
+    },
+    {
+      "timestampMs": 1794912218757,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=3 candidates=1 elapsed_us=3180"
+    },
+    {
+      "timestampMs": 1794912218757,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912218770,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=3 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912219244,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=4"
+    },
+    {
+      "timestampMs": 1794912219247,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=4 candidates=1 elapsed_us=2965"
+    },
+    {
+      "timestampMs": 1794912219247,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912219257,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=4 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912219480,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=5"
+    },
+    {
+      "timestampMs": 1794912219483,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=5 candidates=1 elapsed_us=3134"
+    },
+    {
+      "timestampMs": 1794912219483,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912219495,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=5 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912220174,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=6"
+    },
+    {
+      "timestampMs": 1794912220190,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=6 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912221567,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=7"
+    },
+    {
+      "timestampMs": 1794912221571,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=7 candidates=1 elapsed_us=3375"
+    },
+    {
+      "timestampMs": 1794912221571,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912221581,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=7 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912222436,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=8"
+    },
+    {
+      "timestampMs": 1794912222439,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=8 candidates=1 elapsed_us=3429"
+    },
+    {
+      "timestampMs": 1794912222439,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912222452,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=8 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912223430,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=9"
+    },
+    {
+      "timestampMs": 1794912223446,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=9 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912223591,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=10"
+    },
+    {
+      "timestampMs": 1794912223609,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=10 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912224381,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=11"
+    },
+    {
+      "timestampMs": 1794912224398,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=11 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912224819,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=12"
+    },
+    {
+      "timestampMs": 1794912224839,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=12 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912226485,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=13"
+    },
+    {
+      "timestampMs": 1794912226595,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=14"
+    },
+    {
+      "timestampMs": 1794912226613,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=14 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912227325,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=15"
+    },
+    {
+      "timestampMs": 1794912227367,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=15 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912227451,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=16"
+    },
+    {
+      "timestampMs": 1794912227498,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=16 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912228046,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=17"
+    },
+    {
+      "timestampMs": 1794912228090,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=17 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912228533,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=18"
+    },
+    {
+      "timestampMs": 1794912228562,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=18 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912229399,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=19"
+    },
+    {
+      "timestampMs": 1794912229434,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=19 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912230028,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=20"
+    },
+    {
+      "timestampMs": 1794912230060,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=20 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912230311,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=21"
+    },
+    {
+      "timestampMs": 1794912230339,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=21 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912230942,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=22"
+    },
+    {
+      "timestampMs": 1794912230972,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=22 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912231684,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=23"
+    },
+    {
+      "timestampMs": 1794912231808,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=24"
+    },
+    {
+      "timestampMs": 1794912231838,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=completed request=24 candidates=0 elapsed_us=29405"
+    },
+    {
+      "timestampMs": 1794912231838,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Accessibility) native_kind=Some(Pane)"
+    },
+    {
+      "timestampMs": 1794912232616,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=25"
+    },
+    {
+      "timestampMs": 1794912232628,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=completed request=25 candidates=0 elapsed_us=11916"
+    },
+    {
+      "timestampMs": 1794912232746,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Accessibility) native_kind=Some(Pane)"
+    },
+    {
+      "timestampMs": 1794912233012,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=26"
+    },
+    {
+      "timestampMs": 1794912233019,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=completed request=26 candidates=0 elapsed_us=7005"
+    },
+    {
+      "timestampMs": 1794912233019,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Accessibility) native_kind=Some(Pane)"
+    },
+    {
+      "timestampMs": 1794912233435,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=27"
+    },
+    {
+      "timestampMs": 1794912233435,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=27 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912234131,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=28"
+    },
+    {
+      "timestampMs": 1794912234176,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=incomplete request=28 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912234819,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=29"
+    },
+    {
+      "timestampMs": 1794912234824,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=transfer_map_failed"
+    },
+    {
+      "timestampMs": 1794912235136,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=30"
+    },
+    {
+      "timestampMs": 1794912235164,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=30 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912236078,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=31"
+    },
+    {
+      "timestampMs": 1794912236112,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=31 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912237263,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=32"
+    },
+    {
+      "timestampMs": 1794912237284,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=32 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912238282,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=33"
+    },
+    {
+      "timestampMs": 1794912238303,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=33 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912238377,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=34"
+    },
+    {
+      "timestampMs": 1794912238398,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=34 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912239231,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=35"
+    },
+    {
+      "timestampMs": 1794912239251,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=35 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912239373,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=36"
+    },
+    {
+      "timestampMs": 1794912239391,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=36 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912240458,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=37"
+    },
+    {
+      "timestampMs": 1794912240482,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=37 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912240633,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=38"
+    },
+    {
+      "timestampMs": 1794912240656,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=38 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912241497,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=39"
+    },
+    {
+      "timestampMs": 1794912241519,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=39 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912241877,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=40"
+    },
+    {
+      "timestampMs": 1794912241908,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=40 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912244716,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=41"
+    },
+    {
+      "timestampMs": 1794912244719,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=41 candidates=1 elapsed_us=3165"
+    },
+    {
+      "timestampMs": 1794912244719,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Text)"
+    },
+    {
+      "timestampMs": 1794912244731,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=41 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912244783,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912245141,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=42"
+    },
+    {
+      "timestampMs": 1794912245143,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=42 candidates=1 elapsed_us=2712"
+    },
+    {
+      "timestampMs": 1794912245143,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912245153,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=42 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912245785,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=43"
+    },
+    {
+      "timestampMs": 1794912245788,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=43 candidates=1 elapsed_us=3014"
+    },
+    {
+      "timestampMs": 1794912245788,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912245799,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=43 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912247206,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=44"
+    },
+    {
+      "timestampMs": 1794912247220,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=44 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912247397,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=45"
+    },
+    {
+      "timestampMs": 1794912247410,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=45 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912247775,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=46"
+    },
+    {
+      "timestampMs": 1794912247779,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=46 candidates=1 elapsed_us=3635"
+    },
+    {
+      "timestampMs": 1794912247779,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912247790,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=46 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912249585,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=47"
+    },
+    {
+      "timestampMs": 1794912249589,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=47 candidates=1 elapsed_us=3718"
+    },
+    {
+      "timestampMs": 1794912249589,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912249599,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=47 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912250277,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=48"
+    },
+    {
+      "timestampMs": 1794912250282,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=48 candidates=1 elapsed_us=4290"
+    },
+    {
+      "timestampMs": 1794912250282,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912250296,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=48 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912250997,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=49"
+    },
+    {
+      "timestampMs": 1794912251001,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=49 candidates=1 elapsed_us=4266"
+    },
+    {
+      "timestampMs": 1794912251001,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912251017,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=49 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912252207,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=50"
+    },
+    {
+      "timestampMs": 1794912252212,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=50 candidates=1 elapsed_us=4296"
+    },
+    {
+      "timestampMs": 1794912252212,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912252223,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=50 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912252443,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=51"
+    },
+    {
+      "timestampMs": 1794912252447,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=51 candidates=1 elapsed_us=4071"
+    },
+    {
+      "timestampMs": 1794912252447,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912252459,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=51 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912252759,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=52"
+    },
+    {
+      "timestampMs": 1794912252763,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=52 candidates=1 elapsed_us=4255"
+    },
+    {
+      "timestampMs": 1794912252763,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912252778,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=52 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912253905,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=53"
+    },
+    {
+      "timestampMs": 1794912253909,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=53 candidates=1 elapsed_us=4392"
+    },
+    {
+      "timestampMs": 1794912253909,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912253923,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=53 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912260838,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=54"
+    },
+    {
+      "timestampMs": 1794912260841,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=54 candidates=2 elapsed_us=3390"
+    },
+    {
+      "timestampMs": 1794912260841,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=None"
+    },
+    {
+      "timestampMs": 1794912260852,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=54 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912260929,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912261907,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=55"
+    },
+    {
+      "timestampMs": 1794912261910,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=55 candidates=2 elapsed_us=2975"
+    },
+    {
+      "timestampMs": 1794912261910,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912261921,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=55 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912261987,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912262749,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=56"
+    },
+    {
+      "timestampMs": 1794912262752,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=56 candidates=2 elapsed_us=3537"
+    },
+    {
+      "timestampMs": 1794912262752,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912262765,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=56 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912263768,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=57"
+    },
+    {
+      "timestampMs": 1794912263771,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=57 candidates=2 elapsed_us=3806"
+    },
+    {
+      "timestampMs": 1794912263771,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912263784,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=57 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912263836,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912264443,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=58"
+    },
+    {
+      "timestampMs": 1794912264446,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=58 candidates=2 elapsed_us=2673"
+    },
+    {
+      "timestampMs": 1794912264446,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912264456,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=58 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912265308,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=59"
+    },
+    {
+      "timestampMs": 1794912265313,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=59 candidates=2 elapsed_us=4233"
+    },
+    {
+      "timestampMs": 1794912265313,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912265324,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=59 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912265367,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912266782,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=60"
+    },
+    {
+      "timestampMs": 1794912266785,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=60 candidates=1 elapsed_us=3532"
+    },
+    {
+      "timestampMs": 1794912266785,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Accessibility) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912266796,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=60 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912266953,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=61"
+    },
+    {
+      "timestampMs": 1794912266956,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=61 candidates=1 elapsed_us=3579"
+    },
+    {
+      "timestampMs": 1794912266956,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Accessibility) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912266968,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=61 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912267961,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=62"
+    },
+    {
+      "timestampMs": 1794912267967,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=62 candidates=2 elapsed_us=5916"
+    },
+    {
+      "timestampMs": 1794912267967,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912267981,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=62 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912268047,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912268669,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=63"
+    },
+    {
+      "timestampMs": 1794912268673,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=63 candidates=2 elapsed_us=4331"
+    },
+    {
+      "timestampMs": 1794912268673,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912268685,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=63 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912269515,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=64"
+    },
+    {
+      "timestampMs": 1794912269519,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=64 candidates=2 elapsed_us=4100"
+    },
+    {
+      "timestampMs": 1794912269519,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912269532,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=64 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912269581,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912270048,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=65"
+    },
+    {
+      "timestampMs": 1794912270052,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=local_verified request=65 candidates=2 elapsed_us=4443"
+    },
+    {
+      "timestampMs": 1794912270052,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=fused origin=Some(Visual) native_kind=Some(Group)"
+    },
+    {
+      "timestampMs": 1794912270067,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=65 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912280551,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=66"
+    },
+    {
+      "timestampMs": 1794912280563,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=66 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912281683,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=67"
+    },
+    {
+      "timestampMs": 1794912281698,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=67 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912283521,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=68"
+    },
+    {
+      "timestampMs": 1794912283537,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=68 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912283679,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=69"
+    },
+    {
+      "timestampMs": 1794912283692,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=69 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912284794,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=70"
+    },
+    {
+      "timestampMs": 1794912284808,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=70 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912284965,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=71"
+    },
+    {
+      "timestampMs": 1794912284979,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=71 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912285485,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=72"
+    },
+    {
+      "timestampMs": 1794912285499,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=72 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912285797,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=73"
+    },
+    {
+      "timestampMs": 1794912285810,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=73 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912286411,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=74"
+    },
+    {
+      "timestampMs": 1794912286426,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=74 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912287260,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=75"
+    },
+    {
+      "timestampMs": 1794912287280,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=75 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912289559,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=76"
+    },
+    {
+      "timestampMs": 1794912289574,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=76 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912290722,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=77"
+    },
+    {
+      "timestampMs": 1794912290742,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=77 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912291443,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=78"
+    },
+    {
+      "timestampMs": 1794912291460,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=78 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912291568,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=79"
+    },
+    {
+      "timestampMs": 1794912291584,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=79 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912292688,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=80"
+    },
+    {
+      "timestampMs": 1794912292709,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=80 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912293382,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=81"
+    },
+    {
+      "timestampMs": 1794912293404,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=81 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912294118,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=82"
+    },
+    {
+      "timestampMs": 1794912294135,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=82 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912294998,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=83"
+    },
+    {
+      "timestampMs": 1794912295014,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=83 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912295957,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=84"
+    },
+    {
+      "timestampMs": 1794912295973,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=84 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912296191,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=85"
+    },
+    {
+      "timestampMs": 1794912296207,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=85 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912296472,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=86"
+    },
+    {
+      "timestampMs": 1794912296489,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=86 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912296770,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=87"
+    },
+    {
+      "timestampMs": 1794912296790,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=87 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912297290,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=88"
+    },
+    {
+      "timestampMs": 1794912297307,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=88 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912298391,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=89"
+    },
+    {
+      "timestampMs": 1794912298407,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=89 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912299113,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=90"
+    },
+    {
+      "timestampMs": 1794912299131,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=90 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912299235,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=91"
+    },
+    {
+      "timestampMs": 1794912299255,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=91 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912300020,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=92"
+    },
+    {
+      "timestampMs": 1794912300040,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=92 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912300993,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=93"
+    },
+    {
+      "timestampMs": 1794912301007,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=93 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912301137,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=94"
+    },
+    {
+      "timestampMs": 1794912301152,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=94 reason=BudgetExceeded"
+    },
+    {
+      "timestampMs": 1794912302095,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=submitted request=95"
+    },
+    {
+      "timestampMs": 1794912302116,
+      "level": "INFO",
+      "stage": "yueshot.event",
+      "message": "capture.visual status=unavailable request=95 reason=BudgetExceeded"
+    }
+  ]
+}

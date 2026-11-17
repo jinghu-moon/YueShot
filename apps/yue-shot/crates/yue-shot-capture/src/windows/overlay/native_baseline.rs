@@ -514,6 +514,91 @@ fn answer(replay: &mut Replay, path: Vec<PathLevel>) {
 }
 
 #[test]
+#[ignore = "L3 hidden renderer; shell classification and native controller replay, no live shell queries"]
+fn taskbar_tray_controller_replay_selects_and_confirms_native_children() {
+    use crate::monitor_cache::MonitorCache;
+    use crate::window_detection::{
+        CheapProbe, DwmRead, Exclusions, TargetOrigin, candidates_from_classified, classify,
+    };
+    for class in [
+        "Shell_TrayWnd",
+        "Shell_SecondaryTrayWnd",
+        "NotifyIconOverflowWindow",
+        "TopLevelWindowForOverflowXamlIsland",
+        "Windows.UI.Core.CoreWindow",
+        "XamlExplorerHostIslandWindow",
+    ] {
+        for bounds in [Rect::new(0, 32, 64, 48), Rect::new(4, 16, 60, 48)] {
+            for kind in [LevelKind::Button, LevelKind::Image] {
+                let mut replay = Replay::build(true);
+                let monitors = MonitorCache::from_bounds([Rect::new(0, 0, 64, 48)]);
+                let classified = classify(
+                    &[
+                        CheapProbe::new(201, 7, class, 0x0800_0080),
+                        CheapProbe::new(101, 8, "App", 0),
+                    ],
+                    &[
+                        DwmRead::new(201, false, Some(bounds)),
+                        DwmRead::new(101, false, Some(Rect::new(0, 0, 64, 48))),
+                    ],
+                    &Exclusions::new(),
+                    &monitors,
+                );
+                replay.snapshot =
+                    WindowSnapshot::new(17, candidates_from_classified(&classified, 17), monitors);
+                replay.cursor = Point::new(12, 38);
+                let screen = replay.cursor_screen().unwrap();
+                let owner = replay
+                    .snapshot
+                    .hit_test(screen)
+                    .expect("shell host was filtered out");
+                assert_eq!(owner.identity().hwnd, 201, "{class}");
+                // No lifetime tag is required to query or confirm native controls.
+                assert_eq!(owner.identity().creation_token, 0);
+                replay.hover_target = Some(owner);
+                replay.drive_refinement(screen, Some(owner));
+                let job = replay
+                    .refine
+                    .on_dwell_due()
+                    .expect("native query was not scheduled");
+                assert_eq!(job.window, owner.identity());
+                let child = PathLevel::new(Rect::new(8, 34, 24, 46), kind);
+                replay.apply_refinement_result(RefinementResult {
+                    request: job.request,
+                    epoch: job.epoch,
+                    elapsed: Duration::ZERO,
+                    outcome: RefinementOutcome::Target(Box::new(DeepTarget {
+                        window: job.window,
+                        screen_bounds: child.rect,
+                        path: vec![PathLevel::window(bounds), child],
+                        stop_reason: crate::window_detection::deep::StopReason::Complete,
+                    })),
+                });
+                let preview = replay.gesture.snap_preview().unwrap();
+                assert_eq!(preview.selection, child.rect);
+                assert_eq!(preview.target.origin, TargetOrigin::Accessibility);
+                assert_eq!(preview.target.kind, Some(kind));
+                assert_eq!(preview.target.owner, owner.owner);
+                assert!(replay.step_deep_level(-1));
+                assert_eq!(replay.preview_target, Some(bounds));
+                assert!(replay.step_deep_level(1));
+                let selected = replay.gesture.snap_preview().unwrap();
+                assert_eq!(selected.selection, child.rect);
+                assert!(replay.confirm_snap_preview());
+                let request = replay.confirm_request.unwrap();
+                replay.confirmation(request, selected.target, true);
+                assert_eq!(replay.session.state(), CaptureState::Selected);
+                assert_eq!(replay.session.selection(), child.rect);
+                let shared = replay.shared.lock().unwrap();
+                let output = shared.selection.as_ref().unwrap();
+                assert_eq!(output.region, child.rect);
+                assert_eq!(output.pixels.as_bytes().len(), 16 * 12 * 4);
+            }
+        }
+    }
+}
+
+#[test]
 #[ignore = "L3: real D3D11/D2D renderer on a hidden window; injected native answers, no desktop capture"]
 fn native_baseline_controller_preview_replacement_and_manual_path_trace() {
     use crate::monitor_cache::MonitorCache;

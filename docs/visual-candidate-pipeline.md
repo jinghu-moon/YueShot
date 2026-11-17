@@ -37,6 +37,8 @@
 
 **用户复测后的修正（2026-11-17）**：整素材吸附反馈暴露两件独立事实。旧Release捕获库缓存不含当前视觉模块，普通增量构建仍判Fresh；定向清理重编译已核验，缓存失效机制待确认。正确运行产物的日志又证实全源查询出现BudgetExceeded／100ms stall；4K远处纹理＋清晰局部框的回放复现这一算法问题。依据F03、F08、F09及D02、D09、D12，改为先对已持有ROI执行完整四边验证，再异步继续全源祖先发现。ROI探针邻域必须完整持有（含最大12px多尺度探针及双线性舍入），不把ROI边当源边。局部完整候选可发布；外扩失败不撤回它，不伪称外层完整；换点／换源／换owner／确认仍按原gate清理。新增`Reply::Local`／`Work::Advance`仅为在同一worker继续前让owner获得已验证结果，`Active::local_verified`区分初始失败与可选外扩失败；去掉它们会恢复“等远处查完才可用／外扩失败导致跳回容器”的问题。原预算、阈值及Text/Image保护不变。[运行诊断](acceptance/visual-candidate-runtime-diagnostic/README.md)保留原失败；局部优先修正的验证以新批次为准，历史P4/P5证据不自动升级为当前源码通过。
 
+**任务栏／托盘入口修正（2026-11-17）**：用户确认100×70视觉区域稳定后，发现任务栏／托盘子元素无法吸附。代码事实是原`window_detection/provider.rs`的八项Shell类名黑名单使这些宿主在`snapshot.rs::passes_cheap_policy`处被排除，后续`overlay/hover.rs::drive_refinement`得不到正确owner；初始提交`5a3bd82`已存在该规则，不能归因于本轮视觉接入。现收窄为`DESKTOP_BACKGROUND_CLASSES`／`is_desktop_background_class`，只排除`Progman`／`WorkerW`；任务栏、托盘及UWP/XAML可见宿主复用原生窗口／UIA/MSAA链。原有“排除Shell宿主”的描述以本段及当前代码为准；无owner桌面视觉仍非目标。新增分类、负坐标副屏／侧边任务栏及隐藏控制器子元素确认回放，不改变像素算法和具体原生类型保护；真实Shell返回及可见操作待用户验收。[根因、前后对照与本轮验证](acceptance/taskbar-tray-selection/README.md)。
+
 ## 1. 项目基础情况
 
 ### 1.1 调研范围与证据边界

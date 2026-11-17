@@ -1,0 +1,5 @@
+{
+  "finished": "2026-11-17T19:28:06.1607479+08:00",
+  "exitCode": 0,
+  "command": "python -m unittest discover -s tools/tests -p 'test_yueshot_*.py'"
+}

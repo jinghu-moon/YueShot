@@ -1,0 +1,5 @@
+{
+  "finished": "2026-11-17T19:33:23.0584191+08:00",
+  "command": "cargo build -p yue-shot --release --locked",
+  "exitCode": 0
+}

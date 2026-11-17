@@ -1,4 +1,4 @@
-//! Detection provider contract, exclusion sets and shell-surface policy
+//! Detection provider contract, exclusion sets and desktop-background policy
 //! (docs/14 §5.2, §5.3, §7).
 //!
 //! The provider talks **only** in virtual-desktop physical pixels. It never receives
@@ -150,36 +150,19 @@ impl Exclusions {
     }
 }
 
-/// Shell surfaces that look like ordinary windows but are never "the window the user
-/// pointed at": the desktop, the taskbars and the XAML islands hosting their flyouts.
+/// Desktop background hosts are not selectable window owners. Taskbars, tray
+/// flyouts and UWP/XAML hosts remain ordinary candidates: their visible child
+/// controls need this owner to reach native accessibility refinement.
 ///
-/// This is an **exact** name list, not a prefix or style test. A style-based
-/// rule (`WS_EX_TOOLWINDOW`, `WS_EX_NOACTIVATE`) would also discard browser popups,
-/// developer tool windows and floating palettes that are genuinely visible and
-/// genuinely screenshot-able (docs/14 §5.3).
-///
-/// `Windows.UI.Core.CoreWindow` covers UWP hosts; the two `*OverflowWindow*` /
-/// `*OverflowXamlIsland` entries come from the reference implementation's list and
-/// cover the tray overflow flyout, which is a top-level window on current Windows.
-pub const SHELL_SURFACE_CLASSES: [&str; 8] = [
-    "Progman",
-    "WorkerW",
-    "Shell_TrayWnd",
-    "Shell_SecondaryTrayWnd",
-    "NotifyIconOverflowWindow",
-    "TopLevelWindowForOverflowXamlIsland",
-    "Windows.UI.Core.CoreWindow",
-    "XamlExplorerHostIslandWindow",
-];
+/// Match exact class names, never styles: tool/no-activate windows can be visible
+/// capture targets. The original docs/14 shell-wide exclusion was too broad.
+pub const DESKTOP_BACKGROUND_CLASSES: [&str; 2] = ["Progman", "WorkerW"];
 
-/// Whether a window class name is a shell surface that must be skipped.
-///
-/// Win32 class names are compared case-insensitively by the system itself, so the
-/// comparison here is too; it stays exact otherwise (no prefixes, no wildcards).
-pub fn is_shell_surface_class(class_name: &str) -> bool {
-    SHELL_SURFACE_CLASSES
+/// Win32 class names are case-insensitive; prefixes and wildcards do not match.
+pub fn is_desktop_background_class(class_name: &str) -> bool {
+    DESKTOP_BACKGROUND_CLASSES
         .iter()
-        .any(|surface| surface.eq_ignore_ascii_case(class_name))
+        .any(|background| background.eq_ignore_ascii_case(class_name))
 }
 
 /// Produces and re-validates window targets.
@@ -261,18 +244,23 @@ mod tests {
     }
 
     #[test]
-    fn shell_surfaces_are_matched_exactly() {
-        for class in SHELL_SURFACE_CLASSES {
-            assert!(is_shell_surface_class(class), "{class}");
+    fn desktop_background_classes_are_matched_exactly() {
+        for class in DESKTOP_BACKGROUND_CLASSES {
+            assert!(is_desktop_background_class(class), "{class}");
             // Win32 compares class names case-insensitively.
             assert!(
-                is_shell_surface_class(&class.to_ascii_lowercase()),
+                is_desktop_background_class(&class.to_ascii_lowercase()),
                 "{class}"
             );
         }
-        // Real application windows are not shell surfaces, even when the name starts
-        // with the same letters: the match is exact, not a prefix test.
+        // Visible shell/application hosts stay eligible; matching is exact, not a prefix test.
         for class in [
+            "Shell_TrayWnd",
+            "Shell_SecondaryTrayWnd",
+            "NotifyIconOverflowWindow",
+            "TopLevelWindowForOverflowXamlIsland",
+            "Windows.UI.Core.CoreWindow",
+            "XamlExplorerHostIslandWindow",
             "Chrome_WidgetWin_1",
             "CascadiaWindow",
             "ProgmanChild",
@@ -280,17 +268,17 @@ mod tests {
             "Notepad",
             "",
         ] {
-            assert!(!is_shell_surface_class(class), "{class}");
+            assert!(!is_desktop_background_class(class), "{class}");
         }
     }
 
     #[test]
-    fn tool_window_and_no_activate_styles_are_not_shell_surfaces() {
+    fn tool_window_and_no_activate_styles_are_not_desktop_backgrounds() {
         // The policy is name based on purpose: a tool window or a no-activate palette
         // is still a legitimate snap target (docs/14 §5.3). Styles never appear in
         // this decision, so a name-only helper is enough to pin the behaviour.
-        assert!(!is_shell_surface_class("Chrome_SystemMessageWindow"));
-        assert!(!is_shell_surface_class("DevTools_FloatingPanel"));
+        assert!(!is_desktop_background_class("Chrome_SystemMessageWindow"));
+        assert!(!is_desktop_background_class("DevTools_FloatingPanel"));
     }
 
     #[test]

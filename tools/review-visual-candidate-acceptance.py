@@ -19,8 +19,8 @@ COUNTS = {
     'owner-lifetimes': (5, 0), 'transfer-faults': (1, 0),
 }
 BASELINE_COUNTS = {
-    'capture': (615, 125), 'media': (8, 0),
-    'geometry': (10, 0), 'native-baseline': (11, 18),
+    'capture': (616, 126), 'media': (8, 0),
+    'geometry': (10, 0), 'native-baseline': (11, 19),
 }
 PENDING = [
     'V01-V07 visible F5/F7/save/pin, native protection and full interaction timing',

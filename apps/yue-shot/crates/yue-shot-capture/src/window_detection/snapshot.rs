@@ -5,7 +5,7 @@
 //!
 //! ```text
 //! platform: EnumWindows            -> Vec<CheapProbe>   (user-mode checks only)
-//! capture : pass 1 policy filter   -> Vec<CheapProbe>   (exclusions, shell surfaces)
+//! capture : pass 1 policy filter   -> Vec<CheapProbe>   (exclusions, desktop backgrounds)
 //! platform: DwmGetWindowAttribute  -> Vec<DwmRead>      (batched, after the callback)
 //! capture : pass 2 policy filter   -> candidates        (cloaked, empty, off-screen)
 //! ```
@@ -15,7 +15,7 @@
 //! tests in `crate::windows::win::window`.
 
 use super::model::{SnapshotEpoch, WindowCandidate, WindowIdentity};
-use super::provider::{Exclusions, is_shell_surface_class};
+use super::provider::{Exclusions, is_desktop_background_class};
 use crate::geometry::Rect;
 use crate::monitor_cache::MonitorCache;
 
@@ -27,8 +27,8 @@ use crate::monitor_cache::MonitorCache;
 pub struct CheapProbe {
     pub hwnd: isize,
     pub process_id: u32,
-    /// Class name as reported by `GetClassNameW`. Kept as text so the shell-surface
-    /// blacklist can be matched exactly; the hash used for identity is derived once in
+    /// Class name as reported by `GetClassNameW`. Kept as text so the desktop-background
+    /// exclusion list can be matched exactly; the hash used for identity is derived once in
     /// [`WindowIdentity`] construction.
     pub class_name: String,
     /// `GWL_EXSTYLE`. The click-through test already ran in the callback; the raw
@@ -95,7 +95,7 @@ pub fn class_name_hash(class_name: &str) -> u64 {
 ///
 /// * SnapClip's own surfaces ([`Exclusions`]) — by handle, and by process as a
 ///   fallback for windows created after the last snapshot;
-/// * shell surfaces (desktop, taskbars, their flyout islands) by exact class name.
+/// * desktop background hosts by exact class name; taskbars/flyouts stay eligible.
 ///
 /// Styles are deliberately *not* consulted here beyond the click-through test that
 /// already ran in the enumeration callback: `WS_EX_TOOLWINDOW` and `WS_EX_NOACTIVATE`
@@ -104,7 +104,7 @@ pub fn passes_cheap_policy(probe: &CheapProbe, exclusions: &Exclusions) -> bool 
     if exclusions.excludes(probe.hwnd, probe.process_id) {
         return false;
     }
-    !is_shell_surface_class(&probe.class_name)
+    !is_desktop_background_class(&probe.class_name)
 }
 
 /// Pass 2: turn a DWM read into a usable screen rectangle, or reject the window.
@@ -219,7 +219,7 @@ mod tests {
     }
 
     #[test]
-    fn pass_one_rejects_our_own_windows_and_shell_surfaces() {
+    fn pass_one_rejects_our_own_windows_and_desktop_backgrounds() {
         let mut exclusions = Exclusions::new();
         exclusions.exclude_hwnd(0x10);
         exclusions.exclude_process(999);
@@ -239,13 +239,8 @@ mod tests {
             &CheapProbe::new(0x30, 999, "SomeToolbarClass", 0),
             &exclusions
         ));
-        // Shell surfaces.
-        for class in [
-            "Progman",
-            "WorkerW",
-            "Shell_TrayWnd",
-            "XamlExplorerHostIslandWindow",
-        ] {
+        // Desktop backgrounds; visible taskbar/tray hosts are tested below.
+        for class in ["Progman", "WorkerW"] {
             assert!(
                 !passes_cheap_policy(&probe(0x40, class), &exclusions),
                 "{class}"
@@ -263,6 +258,59 @@ mod tests {
         let no_activate = CheapProbe::new(0x51, 12, "Chrome_SystemMessageWindow", 0x0800_0000);
         assert!(passes_cheap_policy(&tool, &exclusions));
         assert!(passes_cheap_policy(&no_activate, &exclusions));
+    }
+
+    #[test]
+    fn taskbar_and_tray_hosts_reach_native_refinement_with_real_owner_bounds() {
+        // A bottom taskbar lies outside the work area but inside display bounds.
+        // The tray flyout overlaps an ordinary app; shell ownership must win there.
+        let monitors = MonitorCache::from_bounds([rect(-1920, 0, 0, 1080), rect(0, 0, 1920, 1080)]);
+        let app = CheapProbe::new(0x100, 100, "App", 0);
+        for class in [
+            "Shell_TrayWnd",
+            "Shell_SecondaryTrayWnd",
+            "NotifyIconOverflowWindow",
+            "TopLevelWindowForOverflowXamlIsland",
+            "Windows.UI.Core.CoreWindow",
+            "XamlExplorerHostIslandWindow",
+        ] {
+            for bounds in [
+                rect(0, 1032, 1920, 1080),
+                rect(1600, 800, 1900, 1032),
+                rect(-1920, 1032, 0, 1080),
+                rect(0, 0, 48, 1080),
+            ] {
+                let host = CheapProbe::new(0x200, 200, class, 0x0800_0080);
+                let probes = [host.clone(), app.clone()];
+                let reads = [
+                    DwmRead::new(host.hwnd, false, Some(bounds)),
+                    DwmRead::new(app.hwnd, false, Some(rect(-1920, 0, 1920, 1080))),
+                ];
+                let classified = classify(&probes, &reads, &Exclusions::new(), &monitors);
+                let snapshot = super::super::WindowSnapshot::new(
+                    7,
+                    candidates_from_classified(&classified, 7),
+                    monitors.clone(),
+                );
+                let point = crate::geometry::Point::new(bounds.left + 20, bounds.top + 20);
+                let target = snapshot
+                    .hit_test(point)
+                    .expect("visible shell host must be available");
+                assert_eq!(
+                    target.identity().hwnd,
+                    host.hwnd,
+                    "{class} was lost before native refinement"
+                );
+                assert_eq!(target.owner.screen_bounds, bounds);
+                let mut excluded = Exclusions::new();
+                excluded.exclude_hwnd(host.hwnd);
+                assert!(!passes_cheap_policy(&host, &excluded));
+                assert_eq!(
+                    passes_dwm_policy(&DwmRead::new(host.hwnd, true, Some(bounds)), &monitors),
+                    None
+                );
+            }
+        }
     }
 
     #[test]

@@ -1,0 +1,18 @@
+docs/acceptance/taskbar-tray-selection/after-taskbar.txt:10: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/capture-regression-final.txt:730: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/taskbar-tray-selection/capture-regression-final.txt:756: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/capture-regression.txt:729: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/taskbar-tray-selection/capture-regression.txt:755: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/engineering-check.txt:103: trailing whitespace.
++test instance::tests::a_second_process_transfers_capture_without_becoming_a_writer ... 
+docs/acceptance/taskbar-tray-selection/engineering-check.txt:117: trailing whitespace.
++test instance::tests::isolated_roots_can_run_independently_and_crash_releases_the_writer_lock ... 
+docs/acceptance/taskbar-tray-selection/engineering-check.txt:1131: trailing whitespace.
++test windows::win::wgc::tests::winrt_activation_keeps_the_implicit_apartment ... 
+docs/acceptance/taskbar-tray-selection/software/owner-lifetimes.txt:12: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/software/product-replays.txt:55: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/software/transfer-faults.txt:9: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/software/visual-reference.txt:92: new blank line at EOF.
+docs/acceptance/taskbar-tray-selection/taskbar-final.txt:9: new blank line at EOF.

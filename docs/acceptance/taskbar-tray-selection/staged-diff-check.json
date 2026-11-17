@@ -1,0 +1,6 @@
+{
+  "rawOutputExitCode": 2,
+  "reason": "Preserve exact test output including libtest trailing spaces and blank final lines.",
+  "exitCode": 0,
+  "command": "git diff --cached --check (source/docs/JSON; exclude immutable raw *.txt outputs)"
+}

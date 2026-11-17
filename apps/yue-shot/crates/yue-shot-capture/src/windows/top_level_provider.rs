@@ -97,7 +97,7 @@ impl WindowProvider for TopLevelWindowProvider {
         let handles: Vec<isize> = probes.iter().map(|probe| probe.hwnd).collect();
         let reads = win32::read_dwm_batch(&handles);
 
-        // Policy passes (exclusions, shell surfaces, cloaked, off-screen) run on plain
+        // Policy passes (exclusions, desktop backgrounds, cloaked, off-screen) run on plain
         // data; the epoch is stamped last so no candidate can carry a future value.
         let classified = classify(&probes, &reads, exclusions, &self.monitors);
         self.lifetimes

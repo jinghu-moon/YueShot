@@ -1,0 +1,21 @@
+   Compiling yue-shot-capture v0.1.0 (D:\100_Projects\110_Daily\YueShot\apps\yue-shot\crates\yue-shot-capture)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1m 06s
+     Running unittests src\lib.rs (target\release\deps\yue_shot_capture-878b3c805f9bb035.exe)
+
+running 1 test
+
+thread 'window_detection::snapshot::tests::taskbar_and_tray_hosts_reach_native_refinement_with_real_owner_bounds' (38072) panicked at apps\yue-shot\crates\yue-shot-capture\src\window_detection\snapshot.rs:287:17:
+assertion `left == right` failed: Shell_TrayWnd was lost before native refinement
+  left: 256
+ right: 512
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test window_detection::snapshot::tests::taskbar_and_tray_hosts_reach_native_refinement_with_real_owner_bounds ... FAILED
+
+failures:
+
+failures:
+    window_detection::snapshot::tests::taskbar_and_tray_hosts_reach_native_refinement_with_real_owner_bounds
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 740 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p yue-shot-capture --lib`

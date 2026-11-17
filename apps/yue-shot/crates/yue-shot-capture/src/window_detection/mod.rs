@@ -64,7 +64,7 @@ pub use model::{
     EpochCounter, HoverValidity, LevelKind, PathLevel, RequestGate, RequestId, SelectionSource,
     SelectionTarget, SnapshotEpoch, TargetOrigin, WindowCandidate, WindowIdentity, WindowSnapshot,
 };
-pub use provider::{Exclusions, WindowDetectionError, WindowProvider, is_shell_surface_class};
+pub use provider::{Exclusions, WindowDetectionError, WindowProvider, is_desktop_background_class};
 pub use snapshot::{
     CheapProbe, ClassifiedWindow, DwmRead, candidates_from_classified, class_name_hash, classify,
     identity_for, passes_cheap_policy, passes_dwm_policy,
